@@ -1,0 +1,1967 @@
+---
+title: 第9章 向量检索算法
+date: 2026-10-12 04:00:00
+categories:
+  - 决策推理
+tags:
+  - 决策推理
+layout: false
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第9章 向量检索算法</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+/* Modern monospace stack — avoids the ugly Courier New fallback on Windows. */
+:root {
+  --mono: "Cascadia Code", "JetBrains Mono", "Fira Code", "Source Code Pro",
+          Consolas, "SF Mono", Menlo, "DejaVu Sans Mono", monospace;
+}
+code {
+  font-family: var(--mono);
+  background: #eee8d8; color: #8a4b1e;
+  padding: 1px 5px; border-radius: 4px; font-size: 0.9em;
+}
+pre {
+  font-family: var(--mono);
+  background: #2d2a26; color: #ece6da;
+  padding: 14px 16px; border-radius: var(--radius);
+  overflow-x: auto; line-height: 1.6; font-size: 0.9em;
+  border: 1px solid #3d3934; tab-size: 2;
+}
+pre code {
+  background: none; color: inherit; padding: 0; font-size: 1em; border-radius: 0;
+}
+/* kp/exp spans inside <pre> must inherit the light code color, not their own dark color */
+pre .kp, pre .exp { color: inherit; }
+
+/* ── Long display formulas: scroll inside their column, never overflow ── */
+mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+/* ── Checkpoint self-test ── */
+.checkpoint {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius);
+  padding: 10px 16px; margin: 18px 0;
+  font-size: 0.95em;
+}
+.checkpoint::before {
+  content: '🧠 自测：';
+  font-weight: 700; color: #1e40af;
+}
+.checkpoint .cp-answer { margin-top: 10px; border-top: 1px dashed #bfdbfe; padding-top: 8px; }
+.checkpoint .cp-answer summary {
+  cursor: pointer; color: #1e40af; font-weight: 600; user-select: none;
+  list-style: none;
+}
+.checkpoint .cp-answer summary::before { content: '💡 '; }
+.checkpoint .cp-answer summary::-webkit-details-marker { display: none; }
+.checkpoint .cp-answer[open] summary { margin-bottom: 6px; }
+.checkpoint .cp-answer ol, .checkpoint .cp-answer p { font-weight: 400; color: var(--ink); }
+
+/* ── TL;DR summary ── */
+.tldr {
+  background: #fefce8; border-left: 3px solid #eab308;
+  padding: 8px 14px; margin: 10px 0;
+  font-weight: 600; font-size: 0.95em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  body { max-width: 100%; padding: 12px 10px 40px; font-size: 11pt; }
+  h1 { font-size: 1.3em; }
+  h2 { font-size: 1.12em; }
+  table { font-size: 0.85em; }
+  td, th { padding: 4px 6px; }
+  pre { font-size: 0.85em; padding: 6px; }
+}
+@media (max-width: 400px) {
+  body { padding: 8px 6px 32px; font-size: 10.5pt; }
+}
+
+/* === Interactive Test Styles === */
+
+/* ── Score box ── */
+#score-box {
+  display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border);
+}
+#score-box .score-num { font-size: 2.2em; font-weight: 700; }
+#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+
+/* ── Question card ── */
+.q-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s;
+}
+.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
+
+.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.q-text { margin-bottom: 8px; font-size: 0.98em; }
+
+/* ── Options (compact) ── */
+.option {
+  display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5;
+}
+.option:hover            { background: #f0ede0; }
+.option input            { margin-right: 6px; }
+.option.selected         { border-color: var(--accent); background: #eff6ff; }
+.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
+
+/* ── Textareas (compact) ── */
+.q-textarea {
+  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical;
+}
+.q-textarea:focus { outline: none; border-color: var(--accent); }
+.q-code {
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 0.88em; line-height: 1.5; background: #1e1e2e; color: #e0e0e0;
+  tab-size: 4; white-space: pre;
+}
+.q-code:focus { border-color: var(--accent); }
+
+/* ── Partial-credit badge ── */
+.badge-partial { background: #fef3c7; color: #92400e; }
+.q-card.partial { border-color: #f59e0b; }
+
+/* ── Result after grading ── */
+.result {
+  display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
+}
+.result .badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px;
+}
+.badge-ok  { background: var(--correct-bg); color: #166534; }
+.badge-no  { background: var(--wrong-bg); color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+
+.result .explanation { margin-top: 4px; color: var(--ink); }
+.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+
+/* ── Grading button ── */
+.grading-bar { text-align: center; margin: 20px 0; }
+.grading-bar button {
+  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
+}
+.grading-bar button:hover     { background: var(--accent-hover); }
+.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
+
+/* ── Fill-in-blank inputs ── */
+.fill-input {
+  border: 1px solid var(--card-border); border-radius: 3px;
+  padding: 2px 8px; font-family: inherit; font-size: 0.95em;
+  background: #fefcf5; width: 140px; vertical-align: middle;
+  transition: border-color .12s;
+}
+.fill-input:focus { outline: none; border-color: var(--accent); }
+.fill-input.fill-ok { border-color: var(--correct); background: var(--correct-bg); }
+.fill-input.fill-no { border-color: var(--wrong); background: var(--wrong-bg); }
+/* stacked blanks (fill questions whose blank markers aren't in the text) */
+.fill-blank-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+.fill-blank-row .fill-input { flex: 1; min-width: 0; width: auto; }
+.fill-tag { font-weight: 600; font-size: 0.9em; color: var(--ink-light); white-space: nowrap; }
+
+/* ── Pasted image preview ── */
+.paste-img-wrap {
+  margin-top: 6px; position: relative; display: inline-block; max-width: 100%;
+}
+.paste-img-wrap img {
+  max-width: 100%; max-height: 240px; border-radius: 4px;
+  border: 1px solid var(--divider); display: block;
+}
+.paste-img-remove {
+  position: absolute; top: 3px; right: 3px; width: 20px; height: 20px;
+  background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 50%;
+  cursor: pointer; font-size: 12px; line-height: 20px; text-align: center; padding: 0;
+}
+
+/* ── AI批改 save-for-grading button ── */
+.save-bar { text-align: center; margin: 10px 0 4px; }
+.save-bar button {
+  font-size: 0.95em; padding: 7px 22px; background: #7c5ccc;
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600;
+}
+.save-bar button:hover { background: #6748b4; }
+
+/* ── Grade export modal ── */
+#epa-grade-modal {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.62);
+  z-index: 9998; align-items: center; justify-content: center;
+}
+#epa-grade-modal.open { display: flex; }
+.epa-grade-dialog {
+  background: #fff; border-radius: 10px; padding: 24px 28px; max-width: 560px;
+  width: 90vw; box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+}
+.epa-grade-dialog h3 { margin: 0 0 10px; font-size: 1.1em; }
+.epa-grade-dialog p {
+  color: var(--ink-light); font-size: 0.93em; margin: 0 0 12px; line-height: 1.6;
+}
+.epa-grade-cmd {
+  background: #1e1e2e; color: #e0e0e0; border-radius: 6px; padding: 10px 14px;
+  font-family: "Consolas","Monaco","Courier New",monospace; font-size: 0.88em;
+  word-break: break-all; margin-bottom: 12px; user-select: all; white-space: pre-wrap;
+}
+.epa-grade-dialog-btns { display: flex; gap: 10px; justify-content: flex-end; }
+.epa-grade-dialog-btns button {
+  padding: 7px 18px; border-radius: 6px; border: none; cursor: pointer;
+  font-size: 0.93em; font-weight: 600;
+}
+.btn-copy { background: var(--accent); color: #fff; }
+.btn-copy:hover { background: var(--accent-hover); }
+.btn-close-modal { background: #e5e5e5; color: var(--ink); }
+.btn-close-modal:hover { background: #d5d5d5; }
+
+
+
+/* ── Combined page: top tab bar (清单 | 题目) ──
+   Sticky so 清单/测试 switching stays reachable after scrolling. This replaces
+   the old floating FAB, which was pinned bottom-right and permanently covered
+   (and click-blocked) the bottom-right slide card of the PPT 对照 rail. */
+#epa-tabs { position: sticky; top: 4px; z-index: 1000;
+  display: flex; gap: 0; justify-content: center; margin: 6px auto 22px;
+  max-width: 520px; border: 1px solid var(--divider); border-radius: 10px; overflow: hidden;
+  background: var(--paper); box-shadow: 0 2px 10px rgba(0,0,0,0.10); }
+#epa-tabs .tab-btn { flex: 1; padding: 10px 18px; cursor: pointer; border: none;
+  background: var(--paper-dark); color: var(--ink-light); font-size: 1.02em; font-weight: 600;
+  font-family: inherit; transition: background .15s, color .15s; }
+#epa-tabs .tab-btn + .tab-btn { border-left: 1px solid var(--divider); }
+#epa-tabs .tab-btn.active { background: var(--accent); color: #fff; }
+#epa-tabs .tab-btn:not(.active):hover { background: #efe7d3; color: var(--ink); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+/* keep the test readable/centered even though the body is wide for the rail */
+#panel-test { max-width: 980px; margin: 0 auto; }
+/* When the tab bar is pinned at the top, drop the sticky slide rail below it so
+   the bar never covers the first slide card. `top` only affects the PINNED
+   position — initial layout still top-aligns the rail with the notes column. */
+.kn-rail { top: 60px; max-height: calc(100vh - 74px); }
+@media print { #epa-tabs { position: static; display: none; } .tab-panel { display: block !important; } }
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">ExamPass Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第9章 向量检索算法</h1><div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
+<div class="toc">
+<h2>目录</h2>
+<ul>
+<li><a href="#s79162011">1 时序数据增强</a></li>
+  <li><a href="#s18318751">1.1 DBA与DTW算法 必考</a></li>
+  <li><a href="#s88310332">1.2 STL算法 了解</a></li>
+  <li><a href="#s36349383">1.3 时域增强方法 高频</a></li>
+  <li><a href="#s54579293">1.4 Auto Augment与α剪枝自动增强 重点</a></li>
+  <li><a href="#s74446607">1.5 Time GAN 重点</a></li>
+<li><a href="#s50967558">2 AutoML超参调优</a></li>
+  <li><a href="#s48246313">2.1 算法超参数 了解</a></li>
+  <li><a href="#s88165651">2.2 超参优化算法 重点</a></li>
+<li><a href="#s33029148">3 AI分布式训练加速算法</a></li>
+  <li><a href="#s18807815">3.1 分布式训练的优势 高频</a></li>
+  <li><a href="#s26809800">3.2 并行模式 必考</a></li>
+  <li><a href="#s52780569">3.3 内存优化与通信 重点</a></li>
+<li><a href="#s35874884">4 AI模型压缩算法</a></li>
+  <li><a href="#s83641319">4.1 模型量化 必考</a></li>
+  <li><a href="#s24097005">4.2 剪枝与NAS 重点</a></li>
+  <li><a href="#s51726514">4.3 蒸馏 了解</a></li>
+<li><a href="#s86951823">5 随机梯度优化算法与数学基础</a></li>
+  <li><a href="#s52238033">5.1 凸函数与下降法 重点</a></li>
+  <li><a href="#s28103009">5.2 适应性随机梯度方法 高频</a></li>
+  <li><a href="#s31041002">5.3 凸集 了解</a></li>
+<li><a href="#s76800186">6 AI方法与模型分类</a></li>
+  <li><a href="#s65509871">6.1 模型划分维度 高频</a></li>
+<li><a href="#s33504129">常见ML算法的超参数及优化算法选择 必考</a></li>
+<li><a href="#s53540930">时间序列分析 重点</a></li>
+  <li><a href="#s14039574">什么是时间序列数据？</a></li>
+<li><a href="#s17631411">知识蒸馏 高频</a></li>
+  <li><a href="#s85209115">蒸馏算法：自蒸馏</a></li>
+<li><a href="#s46757624">随机平均梯度方法（SAG）与线性收敛原理 必考</a></li>
+  <li><a href="#s45966342">随机平均梯度（SAG）</a></li>
+  <li><a href="#s58827147">随机梯度方法线性收敛原理——方差减少</a></li>
+<li><a href="#s88857797">超参数优化的基本概念 重点</a></li>
+<li><a href="#s75666333">内存优化算法 高频</a></li>
+  <li><a href="#s87011833">计算加速与通信优化小结</a></li>
+<li><a href="#s84032777">超参数搜索算法 必考</a></li>
+  <li><a href="#s19438524">网格搜索</a></li>
+  <li><a href="#s31489864">随机搜索</a></li>
+  <li><a href="#s89613868">贝叶斯优化</a></li>
+<li><a href="#s37946866">时序数据增强方法概览 重点</a></li>
+<li><a href="#s30684348">数学优化基础 了解</a></li>
+<li><a href="#s17452277">模型量化 了解</a></li>
+<li><a href="#s59417599">数据受限场景下的建模 了解</a></li>
+<li><a href="#s15386393">4.1 数据量受限场景下的建模问题</a></li>
+  <li><a href="#s17230659">4.1.1 主要挑战</a></li>
+  <li><a href="#s46925502">4.1.2 关键技术</a></li>
+<li><a href="#s24173433">4.2 CV数据仿真</a></li>
+<li><a href="#s29051194">4.3 基于产品演进的建模思路 - 多种下游任务场景下的建模问题</a></li>
+  <li><a href="#s49292213">4.3.1 自监督大模型的优势 必考</a></li>
+<li><a href="#s24255041">4.4 时序数据自动增强—α剪枝自动增强 高频</a></li>
+<li><a href="#s61568956">5. 标注不完备场景下的建模问题 - 主动学习</a></li>
+  <li><a href="#s89987877">5.1 整体过程</a></li>
+  <li><a href="#s47424040">5.2 选择待标注高价值样本的策略</a></li>
+  <li><a href="#s69956035">5.3 实际业务问题中应用主动学习的限制</a></li>
+<li><a href="#s51629255">6. 原始问题需求分析</a></li>
+  <li><a href="#s78099985">6.1 原始需求分析中加入AI需求分析过程</a></li>
+<li><a href="#s75679780">7. 选择题汇总与考点解析</a></li>
+  <li><a href="#s70449592">2.1.21 昇腾 Ascend310P NPU 的 AI Core 支持的数值类型 了解</a></li>
+  <li><a href="#s33460281">2.1.22 数据增加方法 高频</a></li>
+  <li><a href="#s54582044">2.1.23 自监督学习 必考</a></li>
+  <li><a href="#s19071084">2.1.24 数学优化问题的要素</a></li>
+  <li><a href="#s35697555">2.1.25 α剪枝增强使用的步骤 重点</a></li>
+  <li><a href="#s26614196">2.1.26 主动学习</a></li>
+  <li><a href="#s22892295">2.1.27 原始问题需求分析</a></li>
+  <li><a href="#s46569186">2.1.28 AI 算法目标 重点</a></li>
+  <li><a href="#s59649789">2.1.29 说法错误 高频</a></li>
+  <li><a href="#s73816877">2.1.30 大规模机器学习中凸优化问题中的线性收敛率</a></li>
+  <li><a href="#s52904744">2.1.31 PyTorch(1.8.0 版本)支持的技术 重点</a></li>
+  <li><a href="#s79169335">2.1.32 对训练数据直接在原始数据域进行基础数据增强的方法 高频</a></li>
+  <li><a href="#s73630841">2.1.33 2个超参数优化算法的时间复杂度</a></li>
+  <li><a href="#s45159088">2.1.34 内存足够大的情况下使用数据并行，通信优化的收益最大的场景</a></li>
+  <li><a href="#s86786666">2.1.35 条件数的描述 重点</a></li>
+  <li><a href="#s21013048">2.1.36 量化分辨率 高频</a></li>
+  <li><a href="#s56654248">2.1.37 低精度(fp16 混合精度)训练 必考</a></li>
+  <li><a href="#s32795408">2.1.38 树模型相对更常用的剪枝算法</a></li>
+<li><a href="#s80923423">2.1 单选题</a></li>
+  <li><a href="#s90235376">2.1.39 STL 算法关键要素 重点</a></li>
+  <li><a href="#s80812936">2.1.40 自蒸馏算法使用的原因 高频</a></li>
+<li><a href="#s70829774">2.2 多选题</a></li>
+  <li><a href="#s23350155">2.2.1 时序数据增强（基于自相关性） 重点</a></li>
+  <li><a href="#s89613236">2.2.2 监督学习和无监督学习 必考</a></li>
+  <li><a href="#s55935366">2.2.3 知识蒸馏算法 重点</a></li>
+  <li><a href="#s89076053">2.2.4 DBSCAN 中的超参数 eps 适合采用的超参数算法 高频</a></li>
+  <li><a href="#s55772957">2.2.5 数据并行训练流程 重点</a></li>
+  <li><a href="#s73737502">2.2.6 Data Free 蒸馏 重点</a></li>
+  <li><a href="#s19743360">2.2.7 生成式模型 高频</a></li>
+  <li><a href="#s88560285">2.2.8 AI算法模型与传统软件方法 重点</a></li>
+  <li><a href="#s21172207">2.2.9 数据增强子策略中的缩放操作 了解</a></li>
+  <li><a href="#s44863459">2.2.10 时域增强算法 重点</a></li>
+  <li><a href="#s70283294">2.2.11 PSO 和 GA 高频</a></li>
+  <li><a href="#s88311527">2.2.12 数学优化手段解决实际问题的流程 了解</a></li>
+  <li><a href="#s61916536">2.2.13 适应性随机梯度方法 了解</a></li>
+  <li><a href="#s19325000">2.2.14 深度神经网络加速训练改善泛化的经典trick 了解</a></li>
+  <li><a href="#s22351228">2.2.15 盘古大模型训练中采用的技术 了解</a></li>
+  <li><a href="#s90331665">2.2.16 模型剪枝的评估准则 了解</a></li>
+  <li><a href="#s23507626">2.2.17 时态特征 了解</a></li>
+<li><a href="#s58410513">知识补充：自蒸馏算法详解 重点</a></li>
+<li><a href="#s73895042">常见ML算法的超参数及优化算法选择 高频</a></li>
+<li><a href="#s35231031">分布式训练流程 重点</a></li>
+<li><a href="#s36997956">生成式模型和判别式模型 必考</a></li>
+<li><a href="#s77338100">AI算法模型与传统软件方法对比 重点</a></li>
+<li><a href="#s66652105">时序数据自动增强 了解</a></li>
+<li><a href="#s37946866">时序数据增强方法概览 重点</a></li>
+<li><a href="#s84036629">数学优化与AI算法题目汇总</a></li>
+  <li><a href="#s58517176">1.1 数学优化简介 高频</a></li>
+  <li><a href="#s14535228">4.3 小结 了解</a></li>
+<li><a href="#s14752551">算法差异与优化基础</a></li>
+  <li><a href="#s82686663">算法差异 (PSO vs GA)</a></li>
+  <li><a href="#s84498116">数学优化手段解决实际问题的完整流程</a></li>
+<li><a href="#s18394368">适应性随机梯度方法与深度学习Trick</a></li>
+  <li><a href="#s53088157">适应性随机梯度方法</a></li>
+  <li><a href="#s41276262">深度神经网络中加速训练改善泛化的经典trick</a></li>
+<li><a href="#s43957233">盘古大模型与剪枝评估</a></li>
+  <li><a href="#s91609393">盘古大模型训练技术</a></li>
+  <li><a href="#s39294883">针对每个场景对模型单独进行剪枝的评估准则</a></li>
+  <li><a href="#s35057257">时态特征识别</a></li>
+<li><a href="#s62904044">分布式训练基础</a></li>
+  <li><a href="#s82385093">同步训练和异步训练</a></li>
+  <li><a href="#s78207923">通信集合原语</a></li>
+  <li><a href="#s25558802">流水线并行（模型并行）</a></li>
+<li><a href="#s47756136">真题考点汇总</a></li>
+  <li><a href="#s71056058">知识蒸馏</a></li>
+  <li><a href="#s90153551">学习率调节方式</a></li>
+  <li><a href="#s63486297">样本类别不均衡场景下的算法模型设计</a></li>
+  <li><a href="#s52952638">混合比特量化的自动采样方法</a></li>
+  <li><a href="#s17868032">分布式训练与通信</a></li>
+  <li><a href="#s97273676">成本函数</a></li>
+  <li><a href="#s57813510">PyTorch 1.10 支持情况</a></li>
+  <li><a href="#s32645158">数据增强</a></li>
+  <li><a href="#s31288244">需求分析与遗传算法</a></li>
+  <li><a href="#s13797703">贝叶斯优化与多保真优化</a></li>
+  <li><a href="#s20831387">条件数与SignSGD</a></li>
+  <li><a href="#s89652675">TimeGAN与半监督学习</a></li>
+  <li><a href="#s86807578">粒子群算法与相关性蒸馏</a></li>
+  <li><a href="#s46295433">基于搜索的剪枝算法</a></li>
+  <li><a href="#s61775364">异步训练与多对多通信</a></li>
+  <li><a href="#s43575576">CPU offloading</a></li>
+<li><a href="#s67674014">深度生成模型与TimeGAN 重点</a></li>
+<li><a href="#s34891529">内存优化与CPU Offloading 高频</a></li>
+  <li><a href="#s79155441">题目：CPU Offloading 不正确的是</a></li>
+  <li><a href="#s60381937">知识点补充：内存优化——CPU Offloading / Paging</a></li>
+  <li><a href="#s27017313">内存优化概述</a></li>
+<li><a href="#s72472780">模型量化算法：训练后量化（PTQ） 重点</a></li>
+  <li><a href="#s20778610">Data-free 训练后量化</a></li>
+  <li><a href="#s73429924">Label-free 训练后量化</a></li>
+<li><a href="#s84972117">时序数据自动增强 高频</a></li>
+  <li><a href="#s77026343">问题背景</a></li>
+  <li><a href="#s30399077">α剪枝自动增强</a></li>
+  <li><a href="#s21501626">时序数据增强方法概览</a></li>
+<li><a href="#s32750166">强化学习基础 必考</a></li>
+<li><a href="#s89285794">题目汇总 了解</a></li>
+  <li><a href="#s57949919">3.2.3 BO-SMAC 正确的是</a></li>
+  <li><a href="#s64600025">3.2.4 α剪枝自动增强算法</a></li>
+  <li><a href="#s72947997">3.2.5 属于高阶时序数据增强方法的是</a></li>
+  <li><a href="#s15553504">3.2.6 支持并行训练库包括</a></li>
+  <li><a href="#s68404360">3.2.7 关于复杂系统的分析原则正确的是</a></li>
+  <li><a href="#s71374760">3.2.8 关于高斯回归过程正确的是</a></li>
+  <li><a href="#s53330645">3.2.9 量化能够提升模型的推理性能</a></li>
+  <li><a href="#s75892825">3.2.10 BO-TPE 流程包括</a></li>
+  <li><a href="#s23652541">3.2.11 凸集描述正确的是</a></li>
+  <li><a href="#s54861276">3.2.12 全局最优解和局部最优解</a></li>
+  <li><a href="#s51755738">3.2.13 强化学习正确的是</a></li>
+  <li><a href="#s65331277">3.2.14 模型并行正确的是</a></li>
+  <li><a href="#s59927712">3.2.15 Data-free 训练后的量化包含</a></li>
+  <li><a href="#s64982067">3.2.16 大模型监督学习的特点</a></li>
+<li><a href="#s64886009">附录：关键知识点详解 重点</a></li>
+  <li><a href="#s14849415">BO-SMAC 算法</a></li>
+</ul>
+</div>
+<h2 id="s79162011">1 时序数据增强</h2>
+
+<h3 id="s18318751">1.1 DBA与DTW算法 <span class="tag-must">必考</span></h3>
+<p>在时序数据增强中，<span class="kp">DBA (Dynamic Time Warping Barycenter Averaging)</span> 是一种基于 DTW 的平均算法。<span class="kp">动态时间规整 (DTW)</span> 算法用于解决序列长短不一或时间步不对齐时的相似度计算问题。它通过对时间序列线性放缩达到更好的对齐效果，允许一对多映射，适用于复杂时间序列。</p>
+<p><span class="kp">DTW算法步骤</span>：1. 计算两个序列各个点之间的距离矩阵；2. 寻找一条从矩阵左上角到右下角的路径，使得路径上的元素和最小。路径长度计算性质：当前路径长度 = 前一步的路径长度 + 当前元素的大小。路径上某元素的前一个元素只能是左边、上面或左上方的相邻元素。</p>
+<div class="tldr">核心要点：DTW通过动态规划寻找最短路径来对齐时间序列，计算距离时需构建距离矩阵并从左上角递推至右下角。</div>
+<blockquote>易错：计算DTW距离时，路径的前驱节点只能是左、上、左上三个方向，不能随意跳跃；且需注意距离矩阵的构建与累加规则。</blockquote>
+<div class="checkpoint">进行DBA数据增强时，拿到两条时间序列样本A={1,1,3,3,2,4}和B={1,3,2,2,4,4}，采用DTW方法对齐，他们间的距离是多少？<details class="cp-answer"><summary>参考答案</summary>距离为0。通过构建距离矩阵并寻找最短路径，可以得出路径上元素和为0。</details></div>
+
+<h3 id="s88310332">1.2 STL算法 <span class="tag-info">了解</span></h3>
+<p><span class="kp">STL算法</span>的关键要素包括：趋势、季节和残差。方差不属于STL算法的关键要素。</p>
+
+<h3 id="s36349383">1.3 时域增强方法 <span class="tag-freq">高频</span></h3>
+<p>时序数据增强算法中，属于时域增强的有：<span class="kp">Flipping</span>（翻转）、<span class="kp">DBA</span> 和 <span class="kp">Window warping</span>（窗口扭曲）。AAFT不属于时域增强。</p>
+
+<h3 id="s54579293">1.4 Auto Augment与α剪枝自动增强 <span class="tag-key">重点</span></h3>
+<p>在设计数据增强子策略（如缩放操作）时，需要设计样本被缩放的幅度以及按概率选择样本进行缩放增强。</p>
+<p><span class="kp">α剪枝自动增强</span>是时序数据增强的“千人千面”，实现样本级增强，为每个时序样本选择最合适的增强策略。其流程为：1. 对样本执行多个增强策略；2. 将增强样本输入网络计算loss；3. 排序与修剪，筛选 Top α loss 样本和 Bottom α loss 样本；4. 汇总选出的增强样本。</p>
+<div class="tldr">核心要点：α剪枝自动增强选择预测误差最大和最小的样本进行汇总，以平衡模型对难易样本的更新。</div>
+
+<h3 id="s74446607">1.5 Time GAN <span class="tag-key">重点</span></h3>
+<p>在应用 Time GAN 进行医疗数据增强时，属于时态特征的有体温、血压；而性别、年龄属于静态特征。</p>
+<p><span class="kp">Time GAN关键模块</span>包括：Embedding function 和 Recovery function（采用Embedding降低特征维度，通过Recovery复原特征）；Sequence Generator 和 Discriminator（生成器生成数据，判别器使用双向RNN识别真实与生成数据）。</p>
+<p>Time GAN在进行特征降维模型训练时应用的损失函数是 <span class="kp">Reconstruction Loss</span>（重建损失）。判别器使用的是无监督损失，生成器在监督学习中使用监督损失。</p>
+<div class="tldr">核心要点：Time GAN通过Embedding和Recovery网络降维与复原，结合生成器与判别器进行对抗训练，特征降维使用Reconstruction Loss。</div>
+
+<h2 id="s50967558">2 AutoML超参调优</h2>
+
+<h3 id="s48246313">2.1 算法超参数 <span class="tag-info">了解</span></h3>
+<p>算法超参数是指在训练前需要设定的参数，如DNN中的learning-rate、Random Forest中的max_depth、Kmeans中的n_clusters。DNN中神经元的weights属于模型参数，不属于超参数。</p>
+
+<h3 id="s88165651">2.2 超参优化算法 <span class="tag-key">重点</span></h3>
+<p>超参优化算法中，<span class="kp">随机搜索</span>的时间复杂度最低。网格搜索耗时且可能错过全局最优；随机搜索也可能错过全局最优；贝叶斯类优化算法（如BO-GP, BO-SMAC）需要先建立代理模型，再通过采集函数选择下一个优化点。</p>
+<blockquote>易错：GA（遗传）算法对种子的初始值不敏感，而模拟退火等算法可能对初始值敏感。</blockquote>
+<p><span class="kp">多保真优化算法</span>是为了加快每次超参的评估速度，节约评估资源。保真度越大，评估越准确但时间越长；保真度越小，评估越快但准确度可能较低。多保真是用低保真对空间进行快速探索，高保真找到最优组合。</p>
+<p>对于DBSCAN中的超参数eps（连续型超参），适合采用BO-SMAC、BO-TPE、BOHB等基于树的贝叶斯优化算法。</p>
+
+<h2 id="s33029148">3 AI分布式训练加速算法</h2>
+
+<h3 id="s18807815">3.1 分布式训练的优势 <span class="tag-freq">高频</span></h3>
+<p>分布式训练的优势包括：克服单卡内存不足、提高batch size以适配大batch优化器（如LAMB, LARS）、减少中小模型训练时间。分布式训练不能在相同训练参数下提高训练结果的精度。</p>
+<div class="tldr">核心要点：分布式训练主要用于加速训练和支撑大模型，并不直接提升模型精度。</div>
+
+<h3 id="s26809800">3.2 并行模式 <span class="tag-must">必考</span></h3>
+<p><span class="kp">数据并行</span>：每个NPU上拷贝一份模型，把数据分散到不同NPU上。</p>
+<p><span class="kp">模型并行</span>：几个NPU共同维护一份模型，共同计算一个minibatch的梯度。</p>
+<p><span class="kp">流水线并行</span>：属于模型并行，通过人为引入microbatch来增加资源利用率，可以提高模型并行的效率。</p>
+<p><span class="kp">Tensor并行</span>：属于模型并行，将模型同一层分布到不同的NPU上。</p>
+<p><span class="kp">优化器并行</span>：将优化器状态分布到不同NPU上以通过通信换取内存。</p>
+<p><span class="kp">混合和自动并行</span>：混合了多种并行策略；自动并行通过构建通信、计算模型，解决最小化训练花销问题来自动切分。</p>
+<blockquote>易错：数据并行不能和模型并行同时使用是错误的，两者可以混合使用。流水线并行不止一种固定部署方式。</blockquote>
+
+<h3 id="s52780569">3.3 内存优化与通信 <span class="tag-key">重点</span></h3>
+<p><span class="kp">重计算</span>：通过计算 activation 以减小显存占用的方法。后向传播时丢弃部分 activation 节约显存，反向传播时重新计算（计算换内存）。大约保留 O(√N) 的 activation 能较好平衡内存与计算时间。</p>
+<p>其他内存优化方法包括：稀疏化、低秩分解、CPU offloading。</p>
+<p>多对多通信方式包括：AllReduce、AllGather、AlltoAll。Broadcast属于一对多通信。</p>
+<p>梯度压缩能减少通信量，深度扩增是实现稀疏化的一种方式。分布式训练中可以通过将计算和通信重叠减少训练时间。DeepSpeed是基于PyTorch的分布式训练框架（非TensorFlow）。</p>
+<p>盘古大模型训练中采用的技术包括：数据并行、重计算、流水线并行、优化器并行。</p>
+
+<h2 id="s35874884">4 AI模型压缩算法</h2>
+
+<h3 id="s83641319">4.1 模型量化 <span class="tag-must">必考</span></h3>
+<p><span class="kp">量化感知训练 (QAT)</span>：模型通过伪量化与微调训练，更新模型权重参数，使模型对量化更友好。通常权重采用 per-channel 量化，激活采用 per-tensor 量化。前向计算涉及 round 取整与 clip 截断，反向计算引入梯度估计（如STE方法）可能造成梯度失配。QAT阶段模型权重通常是可训练的。</p>
+<p><span class="kp">训练后量化 (PTQ)</span>：针对推理部署场景，预训练模型通过量化节省资源或加速推理。PTQ仅依赖少量无标注数据集或无数据集的校准。分为静态量化和动态量化。</p>
+<ul>
+<li><span class="kp">静态量化</span>（离线量化）：离线计算好量化参数，然后执行模型量化与在线推理。分为离线校准（计算量化参数，权重不依赖校准数据，激活分为Data-free和Label-free）和在线量化推理。</li>
+<li><span class="kp">动态量化</span>：在线执行模型量化与推理。</li>
+</ul>
+<div class="tldr">核心要点：QAT需要训练数据微调，更新权重；PTQ仅依赖少量无标注数据或无数据进行校准，不更新权重。静态量化需要离线校准。</div>
+<blockquote>易错：量化感知训练中，模型权重通常是可训练的，并非冻结不予以更新。量化分辨率影响量化精度，对于数值分布集中的区域，需要设置较大的量化分辨率。</blockquote>
+
+<h3 id="s24097005">4.2 剪枝与NAS <span class="tag-key">重点</span></h3>
+<p>剪枝方法中，<span class="kp">滤波器剪枝</span>（Filter Pruning）在常规CPU中推理时，既能压缩模型大小又能缩短模型推理时间。细粒度、向量、组合剪枝通常需要专用硬件支持才能加速。</p>
+<p><span class="kp">网络结构搜索 (NAS)</span>的三个关键技术：1. 搜索空间（定义层数、操作类型、超参数等）；2. 搜索策略（如探索-开发策略）；3. 性能评估策略（直接评估或间接评估）。在NAS中应用权值共享技术的主要原因是提升搜索效率，避免训练大量模型。</p>
+
+<h3 id="s51726514">4.3 蒸馏 <span class="tag-info">了解</span></h3>
+<p>蒸馏算法主要包括：多教师蒸馏、助教蒸馏、自蒸馏、Data-free 蒸馏。</p>
+
+<h2 id="s86951823">5 随机梯度优化算法与数学基础</h2>
+
+<h3 id="s52238033">5.1 凸函数与下降法 <span class="tag-key">重点</span></h3>
+<p>凸函数的例子包括 f(x) = x²、f(x) = eˣ、f(x) = |x|。f(x) = x³ 不是凸函数。</p>
+<p><span class="kp">梯度下降</span>是在梯度不为0时，每次迭代严格减少函数值的方法（属于下降法）。牛顿法也是下降法。</p>
+<p>在大规模机器学习的凸优化问题中，SAG、SVRG、SAGA能有线性收敛率，而Mini-batch SGD不能有线性收敛率。</p>
+<p>机器学习优化的关键视角：过低的优化误差没有必要；成本函数是简单函数的平均；测试误差比训练误差更为重要。</p>
+
+<h3 id="s28103009">5.2 适应性随机梯度方法 <span class="tag-freq">高频</span></h3>
+<p>适应性随机梯度方法会让每个参数拥有自己的学习率。典型的适应性方法包括：<span class="kp">Adam</span>、<span class="kp">RMSProp</span>、<span class="kp">Adagrad</span>。SGD不属于适应性方法。</p>
+<p>深度神经网络中加速训练改善泛化的经典trick包括：权重初始化、数据增强、学习率调节方法、学习率Warmup。</p>
+
+<h3 id="s31041002">5.3 凸集 <span class="tag-info">了解</span></h3>
+<p><span class="kp">凸集</span>：对集合中的任意2个点，如果它们之间的线段上的点也属于该集合，则该集合为凸集。</p>
+<p><span class="kp">凸包</span>：集合中所有点的凸组合构成的集合。</p>
+<p>常见的凸集包括：范数球、<span class="kp">范数锥</span>、多面体等。范数锥是凸集。</p>
+
+<h2 id="s76800186">6 AI方法与模型分类</h2>
+
+<h3 id="s65509871">6.1 模型划分维度 <span class="tag-freq">高频</span></h3>
+<p>AI方法可以从不同角度划分为不同的类别：</p>
+<ul>
+<li><span class="kp">按照业务问题划分</span>：回归模型、分类模型</li>
+<li><span class="kp">按照模型构造划分</span>：参数模型、非参数模型</li>
+<li><span class="kp">按照学习对象划分</span>：生成式模型、判别式模型</li>
+<li><span class="kp">按照学习方法划分</span>：监督学习、无监督学习、半监督学习、自监督学习、强化学习</li>
+</ul>
+<div class="tldr">核心要点：生成式模型和判别式模型是按照学习对象来进行划分的；监督学习是按照学习方法划分的。</div>
+
+<h2 id="s33504129">常见ML算法的超参数及优化算法选择 <span class="tag-must">必考</span></h2>
+<p>在机器学习中，不同算法具有不同的<span class="kp">必选超参数</span>和<span class="kp">可选超参数</span>，并对应不同的<span class="kp">优化算法</span>。常见算法的超参数配置如下：</p>
+<table border="1">
+  <tr><th>ML算法</th><th>必选超参数</th><th>可选超参数</th><th>优化算法</th></tr>
+  <tr><td>KNN</td><td>n_neighbors</td><td>weights, p, algorithm</td><td>BOs, Hyperband</td></tr>
+  <tr><td>SVM</td><td>C, kernel, epsilon (for SVR)</td><td>gamma, coef0, degree</td><td>BO-TPE, SMAC, BOHB</td></tr>
+  <tr><td>XGBoost</td><td>n_estimators, max_depth, learning_rate, subsample, colsample_bytree</td><td>min_child_weight, gamma, alpha, lambda</td><td>GA, PSO, BO-TPE, SMAC, BOHB</td></tr>
+  <tr><td>K-means</td><td>n_clusters</td><td>init, n_init, max_iter</td><td>BOs, Hyperband</td></tr>
+  <tr><td>DBSCAN</td><td>eps, min_samples</td><td>—</td><td>BO-TPE, SMAC, BOHB</td></tr>
+  <tr><td>PCA</td><td>n_components</td><td>svd_solver</td><td>BOs, Hyperband</td></tr>
+  <tr><td>Deep learning</td><td>number of hidden layers, units_per_layer, loss, optimizer, Activation, learning rate, dropout rate, epochs, batch size, early stop patience</td><td>number of frozen layers (if transfer learning is used)</td><td>PSO, BOHB</td></tr>
+  <tr><td>RF & ET</td><td>n_estimators, max_depth, criterion, min_samples_split, min_samples_leaf, max_features</td><td>splitter, min_weight_fraction_leaf, max_leaf_nodes</td><td>GA, PSO, BO-TPE, SMAC, BOHB</td></tr>
+</table>
+<blockquote>易错：DNN中神经元的weights是模型训练得到的参数，而不是超参数；Random Forest中的max_depth、DNN中的learning-rate、Kmeans中的n_clusters都是超参数。</blockquote>
+<div class="checkpoint">下列哪项不属于模型的超参数？<br>A. Random Forest中的max_depth<br>B. DNN中的learning-rate<br>C. DNN中神经元的weights<br>D. Kmeans中的n_clusters<details class="cp-answer"><summary>参考答案</summary>C</details></div>
+
+<h2 id="s53540930">时间序列分析 <span class="tag-key">重点</span></h2>
+<h3 id="s14039574">什么是时间序列数据？</h3>
+<p><span class="kp">时序数据</span>是指将统一统计指标的数值按其发生的时间先后顺序排列而成的数列。时序数据分析应用广泛，主要包括：</p>
+<ul>
+  <li><span class="kp">时间序列分类</span>：如心电图诊断（正常窦性心律、窦性心动过速、窦性心动过缓、窦性心律不齐）、食品光谱分析。</li>
+  <li><span class="kp">时间序列预测</span>：如无线业务量预测、信道预测、股市分析、销售预测等。涉及Lookback Period、Horizon nH、Forecast Period、Horizon H等概念。</li>
+  <li><span class="kp">时间序列异常检测</span>：如KPI故障诊断、设备维护。</li>
+</ul>
+<blockquote>易错：人脸识别属于空间图像领域的应用，不属于时间序列分析应用。语音识别、KPI故障诊断、业务量预测均涉及时序数据。</blockquote>
+<div class="checkpoint">下列不属于时间序列分析应用的是？<br>A. 人脸识别<br>B. KPI故障诊断<br>C. 语音识别<br>D. 业务量预测<details class="cp-answer"><summary>参考答案</summary>A</details></div>
+
+<h2 id="s17631411">知识蒸馏 <span class="tag-freq">高频</span></h2>
+<h3 id="s85209115">蒸馏算法：自蒸馏</h3>
+<p><span class="kp">自蒸馏算法</span>是指模型的深层特征作为Teacher模型，对浅层特征进行蒸馏的算法。在不同深度的resblock块后增加Bottlenecks、FC Layers、Softmax层作为独立的预测输出模块，蒸馏时使用深层特征对浅层输出特征进行蒸馏（如Softmax1学习Softmax2，Softmax2学习Softmax3）。</p>
+<div class="tldr">核心要点：自蒸馏方式相较于非自蒸馏方式抗噪能力更强，收敛效果更好，且能一定程度上缓解梯度消失的问题。</div>
+<blockquote>易错：自蒸馏策略并非在所有场景都具有优势，不能绝对化。</blockquote>
+<div class="checkpoint">在使用模型深层特征作为Teacher蒸馏模型浅层特征的“自蒸馏”算法中，以下描述不正确的是？<br>A. 自蒸馏方式相较于非自蒸馏的方式收敛效果更好<br>B. 自蒸馏方式相较于非自蒸馏的方式的抗噪能力更强<br>C. 自蒸馏的方式能够一定程度上缓解梯度消失的问题<br>D. 自蒸馏策略相比其他蒸馏策略在所有场景都具有优势<details class="cp-answer"><summary>参考答案</summary>D</details></div>
+
+<h2 id="s46757624">随机平均梯度方法（SAG）与线性收敛原理 <span class="tag-must">必考</span></h2>
+<h3 id="s45966342">随机平均梯度（SAG）</h3>
+<p><span class="kp">随机平均梯度方法（SAG）</span>是改进版的随机梯度方法，其重要特征是能线性收敛。在内存中保留所有样本函数最近一次计算的梯度值，有放回地随机选择一个样本索引，每次迭代只更新被选中样本对应的梯度，其余保持不变，然后取平均值作为梯度估计。这被称为"Lazy"梯度评估。</p>
+<p>SAG更新公式为：$\theta_t = \theta_{t-1} - \frac{\gamma_t}{n} \sum_{i=1}^n y_i^t$，其中当$i = i(t)$时$y_i^t = f_i'(\theta_{t-1})$，否则$y_i^t = y_i^{t-1}$。</p>
+
+<h3 id="s58827147">随机梯度方法线性收敛原理——方差减少</h3>
+<p>核心原理是通过引入另一个已知期望的随机变量$Y$的样本，来减少原随机变量$X$的样本方差。定义新随机变量$Z_{\alpha} = \alpha(X - Y) + \mathbb{E}Y$。当$\alpha=1$时为无偏估计；当$\alpha<1$时存在潜在偏差，但方差会减小。</p>
+<table border="1">
+  <tr><th>算法</th><th>是否无偏</th><th>循环层数</th><th>是否需要存储梯度</th><th>方差减少方式</th></tr>
+  <tr><td>SAG</td><td>有偏</td><td>一层</td><td>是</td><td>利用历史梯度平均</td></tr>
+  <tr><td>SVRG</td><td>无偏</td><td>两层</td><td>否</td><td>利用快照点梯度修正</td></tr>
+  <tr><td>SAGA</td><td>无偏</td><td>一层</td><td>是</td><td>利用历史梯度+无偏修正</td></tr>
+</table>
+<blockquote>易错：并非所有减少随机梯度方差的方法都是无偏的。SAG是有偏更新，其关于随机选择样本的期望并不等于完整梯度；而SVRG和SAGA是无偏的。需要存储梯度的方法（如SAG、SAGA）一般只需一层循环，不需要存储梯度的方法（如SVRG）需要两层循环。</blockquote>
+<div class="checkpoint">关于随机平均梯度方法线性收敛的原理，下列不正确的是？<br>A. 代表性的随机梯度方法中，需要存储梯度的方法一般只有一层循环<br>B. 随机平均梯度方法通过利用历史中最近计算的梯度来减少随机梯度的方差<br>C. 在减少随机梯度方差的方法中，随机梯度对梯度的估计都是无偏的<br>D. 代表性的随机梯度方法中，不需要存储梯度的方法需要两层循环<details class="cp-answer"><summary>参考答案</summary>C</details></div>
+
+<h2 id="s88857797">超参数优化的基本概念 <span class="tag-key">重点</span></h2>
+<p><span class="kp">超参数</span>是在模型开始学习之前设置的参数，而不是通过训练得到的参数数据。它们控制模型的学习过程，而非从数据中学习。超参数通常基于人的经验设置，同时受硬件条件制约。在训练过程中，参数会更新，而超参数往往是恒定的。</p>
+<p>常见超参数包括：<span class="kp">优化器</span>（如Adam）、<span class="kp">学习率</span>（步长过大难以收敛，过小收敛慢）、<span class="kp">激活函数</span>（如ReLU、sigmoid）等。</p>
+<blockquote>易错：支持向量机中的"支持向量"是训练后得到的模型参数，不是人为设定的超参数。SVM中的C和sigma才是超参数。</blockquote>
+<div class="checkpoint">下面的描述哪个是不正确的？<br>A. 支持向量机算法中的C和sigma都是超参数<br>B. 超参数来源于人的经验，会受到硬件的制约<br>C. 超参数是人为手动设置的，比如支持向量机中的支持向量就是超参数<br>D. 参数是通过模型训练得到的，超参数是人为设定得到的<details class="cp-answer"><summary>参考答案</summary>C</details></div>
+
+<h2 id="s75666333">内存优化算法 <span class="tag-freq">高频</span></h2>
+<p>减少内存占用可以用来增大batch size，或在模型并行时支撑更大的模型。常见的内存优化方法包括：</p>
+<ul>
+  <li><span class="kp">重计算</span>：后向传播时丢弃部分activation以节约显存，反向传播时重新计算。即"通过计算换内存"。大约保留$O(\sqrt{N})$的activation能取得较好的平衡。</li>
+  <li><span class="kp">CPU offloading/paging</span>：将额外的activation暂时存于CPU，需要时取回。通过NPU-CPU通信换取内存。</li>
+  <li><span class="kp">ZeRO-offload</span>：将优化器状态（如Adam的一阶、二阶动量）由NPU上传至CPU，并在CPU中进一步切分以节约内存。</li>
+  <li><span class="kp">模型优化</span>：如Inplace GELU和inplace LayerNorm可减少activation所需内存。</li>
+</ul>
+<blockquote>易错：重计算是"通过计算换取内存"的方法，而CPU offloading是"通过通信换取内存"，梯度压缩是"通过精度换取通信量"。</blockquote>
+<div class="checkpoint">以下方法中，通过计算换取内存的是？<br>A. CPU offloading<br>B. 重计算<br>C. 梯度压缩<br>D. 低秩分解<details class="cp-answer"><summary>参考答案</summary>B</details></div>
+
+<h3 id="s87011833">计算加速与通信优化小结</h3>
+<p><span class="kp">计算加速</span>包括：低精度训练（fp16等）、稀疏化训练、低秩训练（矩阵拆分减少参数量）。</p>
+<p><span class="kp">通信优化</span>包括：基础通信优化（通信与计算overlap）、梯度压缩（减少通信量）、Error feedback分布式优化器（减少梯度压缩造成的精度损失）。</p>
+
+<h2 id="s84032777">超参数搜索算法 <span class="tag-must">必考</span></h2>
+<h3 id="s19438524">网格搜索</h3>
+<p><span class="kp">网格搜索</span>在参数列表中进行穷举搜索，遍历每种可能的超参数组合。常用于优化三个或者更少数量的超参数。优点是简单易实现；缺点是计算复杂度呈指数增长、非常耗时，不适用于连续型参数，且无法利用先前的搜索经验。</p>
+
+<h3 id="s31489864">随机搜索</h3>
+<p><span class="kp">随机搜索</span>在超参数搜索空间中随机采样固定数量的超参数组合。实际情况中，所有超参数可能不都是同等重要的，适合的参数往往在一个完整分布中的一小块部分。随机搜索大大提高了找到合适参数的可能性。优点是简单、速度快、能并行；缺点是优化结果无法保证，无法利用之前的执行结果，可能会错过全局最优值。</p>
+<blockquote>易错：并非所有超参数都同等重要。对于某些重要参数，随机搜索比网格搜索能探索更多不同的取值。GA算法对种子的初始值并不敏感，而网格搜索和随机搜索都可能错过全局最优值。</blockquote>
+<div class="checkpoint">对于每个超参数，如果设置得不好，都会对训练产生巨大的负面影响，因此所有超参数都同等重要，要调整好。对还是错？<details class="cp-answer"><summary>参考答案</summary>错。所有超参数并非同等重要。</details></div>
+<div class="checkpoint">下面哪种超参优化的算法描述是错误的？<br>A. 随机搜索的缺点是可能会错过全局最优值<br>B. 网格搜索算法的缺点是耗时，而且可能会错过全局最优值<br>C. 贝叶斯类优化算法需要先建立一个代理模型，再通过采集函数选择下一个优化点<br>D. GA 算法对种子的初始值比较敏感<details class="cp-answer"><summary>参考答案</summary>D</details></div>
+
+<h3 id="s89613868">贝叶斯优化</h3>
+<p><span class="kp">贝叶斯优化（BO算法）</span>是一种黑盒优化算法，用于求解表达式未知的函数的极值问题。它通过寻找一个代理函数来优化，赋予代理函数概率分布，根据先验知识使用采集函数评估如何选择新的采样点，获得新采样点后更新先验知识，继续迭代最终求得全局最优解。</p>
+
+<h2 id="s37946866">时序数据增强方法概览 <span class="tag-key">重点</span></h2>
+<p>时序数据增强主要分为以下几类：</p>
+<ul>
+  <li><span class="kp">时域数据增强</span>：直接从原始输入时间序列进行增强，如转换、增加噪声等。方法包括Window warping、Flipping、Window slicing、noise injection、perturbing、DTW + Barycenter Averaging (DBA)。</li>
+  <li><span class="kp">频域数据增强</span>：把数据从时域转化为频域（如傅里叶变换），再对振幅、相位采用加噪等算法。方法包括AAFT、IAAFT、APP。</li>
+  <li><span class="kp">时频域数据增强</span>：综合时域和频域进行数据增强。方法包括STFT、Spec Augment。</li>
+</ul>
+<blockquote>易错：Spec Augment是自动语音识别(ASR)中典型的数据增强算法，它增强的数据维度是时域和频域（时频域）。</blockquote>
+<div class="checkpoint">Spec Augment 增强数据维度是？<br>A. 时域<br>B. 频域<br>C. 时域和频域<details class="cp-answer"><summary>参考答案</summary>C</details></div>
+
+<h2 id="s30684348">数学优化基础 <span class="tag-info">了解</span></h2>
+<p><span class="kp">优化</span>是从变量的约束条件所限定的集合中找到使某个目标函数最小/最大的解的过程。其三部曲包括：根据实际问题建模得到数学优化问题、明确最优性条件等理论关切、设计优化算法求解。连续数学优化基本形式为在满足$f_{i}(x) \leq b_{i}$约束下最小化$f_{0}(x)$。</p>
+
+<h2 id="s17452277">模型量化 <span class="tag-info">了解</span></h2>
+<p><span class="kp">模型量化</span>是一项重要的模型压缩功能，通过减少AI模型参数容量、降低计算复杂度，达到节省资源开销或加速模型运行的目的。主流AI计算设备基本都支持低精度计算（如INT8/FP16算力显著高于FP32），有助于实现模型量化与计算加速。</p>
+
+<h2 id="s59417599">数据受限场景下的建模 <span class="tag-info">了解</span></h2>
+<p>在数据量受限场景下，建模问题的一种直接解决方法是<span class="kp">增加数据</span>，通过数据增强等手段扩大数据集，提升模型鲁棒性。</p>
+
+<h2 id="s15386393">4.1 数据量受限场景下的建模问题</h2>
+
+<h3 id="s17230659">4.1.1 主要挑战</h3>
+<p><span class="kp">数据采集</span>的代价、成本较大；多样性无法保证，模型泛化能力较弱；各种corner case难以获得，需要通过<span class="kp">数据仿真</span>与合成方法生成。</p>
+
+<h3 id="s46925502">4.1.2 关键技术</h3>
+<p><span class="tag-key">重点</span> <strong>关键技术①：数据采集、压缩能力、存储能力</strong></p>
+<p>包括实际数据、数据增强、仿真数据。</p>
+<p><span class="tag-key">重点</span> <strong>关键技术②：数据生成技术、数据合成技术、风格迁移</strong></p>
+<p>损失函数为：$$Loss = ||X-X'||$$</p>
+<p><span class="tag-key">重点</span> <strong>关键技术③：物理仿真数据</strong></p>
+<p>通过实际数据+数据增强+仿真数据相结合的方式，解决数据问题，提供满足业务发展诉求的数据资产；形成闭环的数据验证工具链，能够快速进行研发闭环验证。</p>
+<div class="tldr">解决数据受限问题的核心在于结合实际数据、数据增强和仿真数据，并构建闭环验证工具链。</div>
+
+<h2 id="s24173433">4.2 CV数据仿真</h2>
+<p>通过CG技术为CV算法提供训练数据是业界的趋势，类似Tesla采用Houdini进行建模，生成偶发性场景进行自动驾驶验证或者训练。</p>
+
+<h2 id="s29051194">4.3 基于产品演进的建模思路 - 多种下游任务场景下的建模问题</h2>
+<p>商用产品需要持续更新迭代，AI系统需要面对场景的不断扩展和延伸，如何构建持续演进的AI系统成为关键问题。</p>
+
+<h3 id="s49292213">4.3.1 自监督大模型的优势 <span class="tag-must">必考</span></h3>
+<ul>
+<li>预训练自监督，无需标注，数据标注成本低</li>
+<li>天然的多任务属性，下游不同任务可以共用无标注领域数据</li>
+<li>泛化能力优于监督学习模型</li>
+<li>减少维护代价，下游任务变化，仅需标注少量数据</li>
+<li>大模型算力、训练数据、模型结构设计能力门槛高，容易形成技术断裂点，是目前各个AI巨头公司发展的方向。</li>
+</ul>
+<p>通过数据增强方法获得同一个数据的不同view，不同的view之间的交叉熵作为损失函数，进行大模型的预训练，从而获得基于多维时序振动特征的特征提取大模型，可以减轻单个数据集过拟合。</p>
+<ul>
+<li><strong>后端特征提取器 / 前端任务分类器</strong></li>
+<li><strong>时序多维数据</strong>：遮蔽、裁剪、Multi_crops、缩放、加噪</li>
+<li><strong>无标签数据</strong></li>
+<li><strong>光纤传感大模型</strong>：200B级参数，Few shot learning</li>
+<li><strong>XX领域大模型</strong>：200B级参数</li>
+</ul>
+<div class="tldr">大模型训练依赖：TB级数据 + PB级算力 = 大模型 200B级参数。内存调度能力，分布式计算能力，通讯调度能力，调优能力，是算法、数据、框架、资源调度等全栈和全流程的综合能力。</div>
+
+<h2 id="s24255041">4.4 时序数据自动增强—α剪枝自动增强 <span class="tag-freq">高频</span></h2>
+<p><strong>问题背景</strong>：自动数据增强按数据集探索最优策略，所有样本采用相同增强策略，忽略了样本间的差异性。</p>
+<p><span class="kp">α剪枝自动增强</span>：时序数据增强的千人千面，样本级增强，为每个时序样本选择最合适的增强策略。</p>
+<p><strong>算法流程</strong>：</p>
+<ol>
+<li><strong>Augment sample</strong>：Sample -> Aug0, Aug1, Aug2 ... AugN-1, AugN</li>
+<li><strong>Evaluate and calculate loss</strong>：Augmented samples -> Neural Network -> o0, o1, o2 ... oN-1, oN -> l0, l1, l2 ... lN-1, lN</li>
+<li><strong>Rank and trim</strong>：l1, lN, l0 ... l2, lN-1 -> AugN, Aug0 ... Aug2</li>
+</ol>
+<p><strong>执行步骤</strong>：增强样本 -> loss计算 -> 增强样本选择 -> 增强样本汇总。</p>
+<blockquote>易错：α剪枝自动增强筛选Top α loss样本和Bottom α loss样本。对MLP模型而言，loss较小样本对模型更新信息小，loss较大样本对模型更新贡献度大，但这会导致更新后的模型在容易样本上性能受损。注意它不是只选择最难样本进行数据增强。</blockquote>
+<div class="checkpoint">α剪枝自动增强的执行步骤包括哪些？<details class="cp-answer"><summary>参考答案</summary>1. 增强样本；2. loss计算；3. 增强样本选择；4. 增强样本汇总。</details></div>
+
+<h2 id="s61568956">5. 标注不完备场景下的建模问题 - 主动学习</h2>
+
+<h3 id="s89987877">5.1 整体过程</h3>
+<ol>
+<li>从未标注样本中选择部分样本，由专家进行标注</li>
+<li>专家完成标注，生成已标注样本</li>
+<li>基于已标注样本训练算法模型</li>
+<li>算法模型对未标注数据进行预测，并且按照某种原则选择未标注样本给专家进行标注</li>
+<li>专家完成标注，更新已标注样本</li>
+<li>重新更新模型，重复上述过程</li>
+</ol>
+
+<h3 id="s47424040">5.2 选择待标注高价值样本的策略</h3>
+<ul>
+<li>Margin sampling</li>
+<li>Least confident</li>
+<li>Entropy</li>
+</ul>
+<p>通过不同任务，选择合适的策略进行待标注样本的选择。</p>
+
+<h3 id="s69956035">5.3 实际业务问题中应用主动学习的限制</h3>
+<ol>
+<li>现实的业务数据集可能有大量的噪声，并且领域专家也难以标注，因此主动学习的实际应用有很大的限制。</li>
+<li>现在深度学习需要的样本数量庞大，并且训练的轮次很多，因此主动学习的迭代过程代价随之增加。</li>
+<li>传统的主动学习都是 task specific，而缺乏更加普适性的方法。</li>
+<li>主动学习将数据工程和模型训练过程变成一种迭代式的方法，在工业界应用存在一定的障碍。</li>
+</ol>
+<blockquote>易错：主动学习在选择未标注样本时，是按照某种原则（如Margin sampling、Least confident、Entropy）选择高价值样本，而不是随机选择。</blockquote>
+
+<h2 id="s51629255">6. 原始问题需求分析</h2>
+
+<h3 id="s78099985">6.1 原始需求分析中加入AI需求分析过程</h3>
+<ul>
+<li><span class="kp">原始需求 (IR)</span>：描述的是客户的诉求或者分解的业务问题，体现不同客户对产品的要求。</li>
+<li><span class="kp">系统需求 (SR)</span>：系统/产品视角，描述需求。</li>
+<li><span class="kp">分配需求 (AR)</span>：内部模块视角，分配需求，各模块进行具体需求实现。</li>
+</ul>
+<p>一般情况下，原始需求中，无法直接推导出AI的算法需求，按照系统需求分析方法进行分解。系统需求分析时，需要考虑是否具有系统级的AI需求。分配需求是具体到模块或者子系统的需求，因此涉及到具体需求实现，而AI方法实际上是实现层面的方法论，因此在AR层面进行AI的需求分解是比较合适的。</p>
+<blockquote>易错：系统需求（SR）是系统/产品视角，分配需求（AR）才是内部模块视角。需求分解层级顺序为：原始需求（IR）-系统需求（SR）-分配需求（AR）。</blockquote>
+
+<h2 id="s75679780">7. 选择题汇总与考点解析</h2>
+
+<h3 id="s70449592">2.1.21 昇腾 Ascend310P NPU 的 AI Core 支持的数值类型 <span class="tag-info">了解</span></h3>
+<p>昇腾Ascend310P NPU的AI Core支持FP16和INT8两种数值类型。</p>
+<div class="checkpoint">昇腾Ascend310P NPU的AI Core支持哪两种数值类型？<details class="cp-answer"><summary>参考答案</summary>FP16、INT8。</details></div>
+
+<h3 id="s33460281">2.1.22 数据增加方法 <span class="tag-freq">高频</span></h3>
+<blockquote>易错：原始的GAN训练困难，且生成方向不可控，不适合直接用于大批量生成样本方便后端任务训练。可采用真实数据、仿真数据和数据增强结合的方式，或使用CG技术、背景和特性入侵模型生成样本。</blockquote>
+
+<h3 id="s54582044">2.1.23 自监督学习 <span class="tag-must">必考</span></h3>
+<blockquote>易错：自监督学习预训练无需标注，下游不同任务可以共用无标注领域数据，泛化能力优于监督学习模型，减少维护代价。选项C“下游不同任务不可以共用无标注领域数据”是错误的。</blockquote>
+
+<h3 id="s19071084">2.1.24 数学优化问题的要素</h3>
+<p>一个完整定义的数学优化问题包括变量、约束条件和目标函数，不包括常量。</p>
+
+<h3 id="s35697555">2.1.25 α剪枝增强使用的步骤 <span class="tag-key">重点</span></h3>
+<blockquote>易错：α剪枝自动增强的执行步骤包括对每个样本执行N种增强策略、预测误差计算、选择增强样本和汇总。它不是“选择最难样本进行数据增强”，而是筛选Top α loss和Bottom α loss样本。</blockquote>
+
+<h3 id="s26614196">2.1.26 主动学习</h3>
+<blockquote>易错：主动学习是按照某种原则（如不确定性等）选择未标注样本给专家标注，而不是随机选择。</blockquote>
+
+<h3 id="s22892295">2.1.27 原始问题需求分析</h3>
+<blockquote>易错：系统需求（SR）是系统/产品视角，分配需求（AR）是内部模块视角。AI的需求分解通常更适合在分配需求（AR）层面进行。</blockquote>
+
+<h3 id="s46569186">2.1.28 AI 算法目标 <span class="tag-key">重点</span></h3>
+<p>算法目标的定义包括：评价方式、准确率目标、性能目标、算力目标等，不包括数据数量。从需求转化为AI算法定义需回答Why（是否需要用AI解决）、What（需要做到什么样的程度）、How（如何达成）。</p>
+
+<h3 id="s59649789">2.1.29 说法错误 <span class="tag-freq">高频</span></h3>
+<blockquote>易错：DeepSpeed 是基于 PyTorch 的分布式训练框架，而非 TensorFlow。深度扩增是实现稀疏化的一种方式，计算和通信重叠能减少训练时间，梯度压缩能减少通信量。</blockquote>
+
+<h3 id="s73816877">2.1.30 大规模机器学习中凸优化问题中的线性收敛率</h3>
+<p>在SAG之后的线性收敛算法包括SAGA、SVRG、SDCA、MISO、Finito等。Mini-batch SGD不能有线性收敛率。</p>
+
+<h3 id="s52904744">2.1.31 PyTorch(1.8.0 版本)支持的技术 <span class="tag-key">重点</span></h3>
+<p>PyTorch 1.8.0版本支持数据并行、重计算、低精度训练，但不支持流水线并行、Tensor并行、ZeRO（>1.9.0支持）、混合并行、自动并行、稀疏化和低秩分解。</p>
+
+<h3 id="s79169335">2.1.32 对训练数据直接在原始数据域进行基础数据增强的方法 <span class="tag-freq">高频</span></h3>
+<blockquote>易错：AAFT (Amplitude Adjusted Fourier Transform) 属于频域数据增强方法，不属于时域（原始数据域）基础数据增强方法。时域增强方法包括Window warping、Flipping、Window slicing、Noise injection、Perturbing、DBA等。</blockquote>
+
+<h3 id="s73630841">2.1.33 2个超参数优化算法的时间复杂度</h3>
+<p>当有2个超参数存在时，随机搜索的时间复杂度最低，为O(n)。网格搜索为O(n^k)，BO-GP为O(n^3)。</p>
+
+<h3 id="s45159088">2.1.34 内存足够大的情况下使用数据并行，通信优化的收益最大的场景</h3>
+<p>假定内存足够大的情况下使用数据并行，大模型训练且卡间带宽有限的场景中通信优化的收益最大。</p>
+
+<h3 id="s86786666">2.1.35 条件数的描述 <span class="tag-key">重点</span></h3>
+<p>条件数 $\kappa = L/\mu \geqslant 1$，定义在强凸平滑函数上。条件数越小说明函数的可解性越好，条件数越大说明函数的可解性越差。</p>
+
+<h3 id="s21013048">2.1.36 量化分辨率 <span class="tag-freq">高频</span></h3>
+<p>对于数值分布集中的区域，需要设置较大的量化分辨率（即量化区间宽度较小），以精细区分数值分布。这种说法是正确的。</p>
+
+<h3 id="s56654248">2.1.37 低精度(fp16 混合精度)训练 <span class="tag-must">必考</span></h3>
+<blockquote>易错：PyTorch 1.6+ 已通过 torch.amp 支持 fp16 低精度训练，且支持 Automatic Mixed Precision (AMP)。低精度训练可能带来 underflow 问题，可通过 loss scaling 解决。fp16 计算更加亲和 NPU 的 AI Core。</blockquote>
+
+<h3 id="s32795408">2.1.38 树模型相对更常用的剪枝算法</h3>
+<p>树模型剪枝分为预剪枝和后剪枝。后剪枝方法（如REP、PEP、CCP）相对更常用，因为在预剪枝方法中精确地估计何时停止树增长很困难。</p>
+
+<h2 id="s80923423">2.1 单选题</h2>
+
+<h3 id="s90235376">2.1.39 STL 算法关键要素 <span class="tag-key">重点</span></h3>
+<p>STL算法（分解为trend/seasonality/residual，调整基础、趋势和季节性的权重，重构确定性部分，对residual进行随机性调整）。不属于STL算法关键要素的是<span class="kp">方差</span>。</p>
+<div class="tldr">STL算法的关键要素包括：残差、季节、趋势。</div>
+<blockquote>易错：STL算法分解的三个核心部分是趋势、季节性和残差，不包括方差。</blockquote>
+<div class="checkpoint">不属于STL算法关键要素的是？<details class="cp-answer"><summary>参考答案</summary>D. 方差</details></div>
+
+<h3 id="s80812936">2.1.40 自蒸馏算法使用的原因 <span class="tag-freq">高频</span></h3>
+<p>在AI模型压缩领域，关于自蒸馏算法使用的原因描述不正确的是：通常来说学生模型本身就可以很好地提供相应蒸馏知识，没有必要构建教师模型。</p>
+<div class="tldr">自蒸馏的原因包括：好的教师教出好学生并迭代自我增强；避免构建大教师模型的开销；挖掘训练中间过程的模型参数信息。</div>
+<div class="checkpoint">关于自蒸馏算法使用的原因描述不正确的是？<details class="cp-answer"><summary>参考答案</summary>C. 通常来说学生模型本身就可以很好地提供相应蒸馏知识，没有必要构建教师模型</details></div>
+
+<h2 id="s70829774">2.2 多选题</h2>
+
+<h3 id="s23350155">2.2.1 时序数据增强（基于自相关性） <span class="tag-key">重点</span></h3>
+<p>在对时序数据进行增强时，基于时序数据的<span class="kp">自相关性</span>，给初始点一个扰动，后续数据点随之扰动，属于此思想的方法有LGT和MAR。</p>
+<p><strong>高阶时序数据增强概览：</strong></p>
+<ul>
+<li><p><span class="kp">基于统计生成模型</span>：用统计学方法模拟时序数据（基于自相关性，给初始点扰动，后续随之扰动）。方法：LGT (local and global trend) / MAR (mixture of autoregressive models)。</p></li>
+<li><p><span class="kp">基于分解的时序数据增强</span>：把时序数据分解为某些成分，再对每个成分设计增强方法。方法：STL算法。</p></li>
+<li><p><span class="kp">基于学习方法的时序数据增强</span>：从数据中学得数据增强方式。方法：GAN / Automated Data Augmentation / Embedding Space。</p></li>
+</ul>
+<div class="checkpoint">基于时序数据的自相关性进行增强的方法有？<details class="cp-answer"><summary>参考答案</summary>A. LGT, B. MAR</details></div>
+
+<h3 id="s89613236">2.2.2 监督学习和无监督学习 <span class="tag-must">必考</span></h3>
+<p><strong>无监督学习</strong>：根据类别未知（没有被标记）的训练样本解决模式识别中的各种问题。可进一步分为两类：<span class="kp">聚类</span>（将对象分组，使同组对象相似性最大）和<span class="kp">关联</span>（查找大型数据库中变量之间的关系，如市场篮子分析）。</p>
+<p><strong>监督学习</strong>：训练数据既有特征又有标签，通过训练找到特征和标签之间的联系。可分为<span class="kp">回归算法</span>（描述输入输出间严格关系，需连续值标注）和<span class="kp">分类算法</span>（输出类别，标注也是类别）。</p>
+<p><strong>半监督学习</strong>：使用大量未标记数据和小量标记数据进行模式识别。典型假设包括：平滑假设、聚类假设、流形假设。</p>
+<p><strong>自监督学习</strong>：对于无标签数据，通过设计辅助任务来挖掘数据自身的表征特性作为监督信息。如NLP中的Masked Language Modeling和句子序列预测，CV中的MAE。</p>
+<blockquote>易错：平滑假设、流形假设和聚类假设是半监督学习的经典假设，不是监督学习的假设。半监督学习使用大量未标注数据和小量标注数据，不是大量标注和小量无标注。</blockquote>
+<div class="checkpoint">关于监督学习和无监督学习说法不正确的是？<details class="cp-answer"><summary>参考答案</summary>A. 平滑假设、流形假设和聚类假设都是监督学习的经典假设; D. 半监督学习使用大量标注数据和小量的无标注数据学习</details></div>
+
+<h3 id="s55935366">2.2.3 知识蒸馏算法 <span class="tag-key">重点</span></h3>
+<p>在知识蒸馏领域，蒸馏算法主要包括多教师蒸馏、Data-Free 蒸馏、自蒸馏、助教蒸馏。</p>
+<p><strong>知识蒸馏分类：</strong></p>
+<ul>
+<li><p>基于响应值的蒸馏：硬标签和软标签区别，蒸馏温度的意义</p></li>
+<li><p>基于中间层特征的蒸馏</p></li>
+<li><p>基于相关性的蒸馏</p></li>
+</ul>
+<div class="checkpoint">蒸馏算法主要包括？<details class="cp-answer"><summary>参考答案</summary>A. 多教师蒸馏, B. Data-Free 蒸馏, C. 自蒸馏, D. 助教蒸馏</details></div>
+
+<h3 id="s89076053">2.2.4 DBSCAN 中的超参数 eps 适合采用的超参数算法 <span class="tag-freq">高频</span></h3>
+<p>DBSCAN中的超参数eps适合采用的超参优化算法有BO-TPE、BO-SMAC、BOHB。</p>
+<div class="checkpoint">DBSCAN中的超参数eps适合采用哪种超参优化算法？<details class="cp-answer"><summary>参考答案</summary>A. BO-TPE, B. BO-SMAC, D. BOHB</details></div>
+
+<h3 id="s55772957">2.2.5 数据并行训练流程 <span class="tag-key">重点</span></h3>
+<p>采用数据并行时的训练流程包括：指定设备(NPU)、准备数据、准备模型、训练。</p>
+<div class="checkpoint">采用数据并行时，训练流程包括？<details class="cp-answer"><summary>参考答案</summary>A. 训练, B. 指定设备(NPU), C. 准备模型, D. 准备数据</details></div>
+
+<h3 id="s73737502">2.2.6 Data Free 蒸馏 <span class="tag-key">重点</span></h3>
+<p>关于Data Free蒸馏，正确的说法有：DeepInversion是一种数据生成的策略；DeepDream是一种数据生成的策略；当只有教师模型无法得到训练数据时，通过教师模型生成或恢复训练数据来用于蒸馏的方式称为Data Free蒸馏。</p>
+<blockquote>易错：DeepInversion利用Teacher模型的BN层的running mean和running variance信息，而不是DeepDream。DeepDream利用图像的total variance罚项和L2范数罚项。</blockquote>
+<div class="checkpoint">关于Data Free蒸馏描述正确的是？<details class="cp-answer"><summary>参考答案</summary>A. DeepInversion是"Data Free蒸馏"中一种数据生成的策略; C. DeepDream是"Data Free蒸馏"中一种数据生成的策略; D. 当我们只有一个教师模型而无法得到训练数据，通过已训练好的教师模型生成或恢复训练数据来用于蒸馏的方式称为"Data Free蒸馏"</details></div>
+
+<h3 id="s19743360">2.2.7 生成式模型 <span class="tag-freq">高频</span></h3>
+<p>关于生成式模型说法正确的有：生成式模型学习的是输入和输出的联合分布；生成式模型容易受一些异常数据影响，从而得出错误的分布。</p>
+<blockquote>易错：高斯混合模型、马尔可夫模型属于生成式模型，但决策树属于判别式模型。生成式模型较小的过拟合可能，泛化能力较好，而不是容易过拟合。</blockquote>
+<div class="checkpoint">关于生成式模型说法正确的有哪些？<details class="cp-answer"><summary>参考答案</summary>B. 生成式模型学习的是输入和输出的联合分布; C. 生成式模型容易受一些异常数据影响，从而得出错误的分布</details></div>
+
+<h3 id="s88560285">2.2.8 AI算法模型与传统软件方法 <span class="tag-key">重点</span></h3>
+<p>关于AI算法模型与传统软件方法描述正确的有：AI算法通过数据来提取知识或者规则，传统软件方法不依赖于数据；AI算法模型主要是基于概率的推理模型，不适合有着极高精度要求的场景。</p>
+<blockquote>易错：传统软件方法适合规则容易描述的问题，对于开放场景无法适应；AI算法适合规则难以描述、搜索空间庞大、数据易获取的场景。</blockquote>
+<div class="checkpoint">关于AI算法模型与传统软件方法描述正确的有哪些？<details class="cp-answer"><summary>参考答案</summary>B. AI算法通过数据来提取知识或者规则，传统软件方法不依赖于数据; D. AI算法模型主要是基于概率的推理模型，不适合有着极高精度要求的场景</details></div>
+
+<h3 id="s21172207">2.2.9 数据增强子策略中的缩放操作 <span class="tag-info">了解</span></h3>
+<p>在设计数据增强子策略时包含缩放操作，需要设计样本被缩放的幅度、按概率选择样本进行缩放增强。</p>
+<div class="checkpoint">设计数据增强子策略时包含缩放操作，需要设计些什么？<details class="cp-answer"><summary>参考答案</summary>B. 样本被缩放的幅度, D. 按概率选择样本进行缩放增强</details></div>
+
+<h3 id="s44863459">2.2.10 时域增强算法 <span class="tag-key">重点</span></h3>
+<p>时序数据增强算法中，属于时域增强的算法有Flipping、DBA、Window warping。</p>
+<blockquote>易错：AAFT属于频域数据增强算法。</blockquote>
+<div class="checkpoint">属于时域增强的算法有？<details class="cp-answer"><summary>参考答案</summary>A. Flipping, B. DBA, D. Window warping</details></div>
+
+<h3 id="s70283294">2.2.11 PSO 和 GA <span class="tag-freq">高频</span></h3>
+<p>关于PSO（粒子群优化）和GA（遗传算法），两者都可以并行化；PSO有记忆，GA无记忆；两者都属于随机搜索算法；两者都属于全局优化方法。</p>
+<div class="checkpoint">关于PSO和GA说法正确的有？<details class="cp-answer"><summary>参考答案</summary>A. 两者都可以并行化, B. PSO有记忆，GA无记忆, C. 两者都属于随机搜索算法, D. 两者都属于全局优化方法</details></div>
+
+<h3 id="s88311527">2.2.12 数学优化手段解决实际问题的流程 <span class="tag-info">了解</span></h3>
+<div class="checkpoint">使用数学优化手段解决实际问题的完整流程包含的必要步骤有？<details class="cp-answer"><summary>参考答案</summary>A. 根据实际问题建模, B. 明确最优性条件、存在性、唯一性, C. 设计优化算法, D. 求解优化问题</details></div>
+
+<h3 id="s61916536">2.2.13 适应性随机梯度方法 <span class="tag-info">了解</span></h3>
+<div class="checkpoint">属于适应性随机梯度方法的有？<details class="cp-answer"><summary>参考答案</summary>A. AdaGrad, B. RMSProp, D. Adam</details></div>
+
+<h3 id="s19325000">2.2.14 深度神经网络加速训练改善泛化的经典trick <span class="tag-info">了解</span></h3>
+<div class="checkpoint">深度神经网络中可以帮助加速训练改善泛化的经典trick有？<details class="cp-answer"><summary>参考答案</summary>A. Batch Normalization, B. Dropout, C. Learning Rate Decay, D. Data Augmentation</details></div>
+
+<h3 id="s22351228">2.2.15 盘古大模型训练中采用的技术 <span class="tag-info">了解</span></h3>
+<div class="checkpoint">盘古大模型训练中采用的技术有？<details class="cp-answer"><summary>参考答案</summary>A. 模型并行, B. 数据并行, C. 混合精度, D. 梯度累加</details></div>
+
+<h3 id="s90331665">2.2.16 模型剪枝的评估准则 <span class="tag-info">了解</span></h3>
+<div class="checkpoint">针对每个场景对模型单独进行剪枝的评估准则有？<details class="cp-answer"><summary>参考答案</summary>A. 精度损失评估, B. 计算量评估, C. 访存评估</details></div>
+
+<h3 id="s23507626">2.2.17 时态特征 <span class="tag-info">了解</span></h3>
+<div class="checkpoint">属于时态特征的有？<details class="cp-answer"><summary>参考答案</summary>B. 周期性特征, C. 趋势性特征</details></div>
+
+<h2 id="s58410513">知识补充：自蒸馏算法详解 <span class="tag-key">重点</span></h2>
+<p><span class="kp">自蒸馏</span>指的是自己蒸馏到自己，Teacher Model就是Student Model的集成版本。</p>
+<p><strong>自蒸馏原因：</strong></p>
+<ul>
+<li><p>构建大的教师模型成本较大。</p></li>
+<li><p>在训练过程中，中间过程的模型参数可能有值得我们挖掘的信息。</p></li>
+<li><p>好的教师可以教出更好的学生，而好的学生可以进一步集成为更好的教师，通过迭代可以进行自我增强。</p></li>
+</ul>
+<p><strong>自蒸馏算法（不同时刻的模型作为Teacher模型）：</strong></p>
+<p>在Epoch T时刻，选择Epoch T-1时刻的模型作为自己的Teacher模型进行蒸馏。图中 $\alpha_t$ 为蒸馏loss的权重。在训练初期，模型精度较差，$\alpha_t$ 较小，模型训练更依赖数据硬标签；随着epoch增加，教师的软标签越来越可信，则 $\alpha_t$ 也变大。</p>
+<p><strong>算法流程描述：</strong></p>
+<ul>
+<li><p><strong>Input X</strong></p></li>
+<li><p><strong>Teacher (Epoch t - 1)</strong>: 产生 Prediction P(X)</p></li>
+<li><p><strong>Hard target Y</strong></p></li>
+<li><p><strong>Progressive Self-Knowledge Distillation</strong>: 结合两者 $\alpha_t P(X) + (1 - \alpha_t) Y$</p></li>
+<li><p><strong>Student (Epoch t)</strong>: 接收上述信息并计算 Loss</p></li>
+</ul>
+<div class="tldr">自蒸馏通过利用模型自身训练过程中的中间状态作为教师，避免了构建大模型的开销，并通过权重 $\alpha_t$ 动态调整软硬标签的比重。</div>
+
+<h2 id="s73895042">常见ML算法的超参数及优化算法选择 <span class="tag-freq">高频</span></h2>
+<table>
+<thead>
+<tr>
+<th>ML算法</th>
+<th>必选超参</th>
+<th>可选超参数</th>
+<th>优化算法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KNN</td>
+<td>n_neighbors</td>
+<td>weights, p, algorithm</td>
+<td>BOs, Hyperband</td>
+</tr>
+<tr>
+<td>SVM</td>
+<td>C, kernel, epsilon (for SVR)</td>
+<td>gamma, coef0, degree</td>
+<td>BO-TPE, SMAC, BOHB</td>
+</tr>
+<tr>
+<td>XGBoost</td>
+<td>n_estimators, max_depth, learning_rate, subsample, colsample_bytree</td>
+<td>min_child_weight, gamma, alpha, lambda</td>
+<td>GA, PSO, BO-TPE, SMAC, BOHB</td>
+</tr>
+<tr>
+<td>K-means</td>
+<td>n_clusters</td>
+<td>init, n_init, max_iter</td>
+<td>BOs, Hyperband</td>
+</tr>
+<tr>
+<td>DBSCAN</td>
+<td>eps, min_samples</td>
+<td>-</td>
+<td>BO-TPE, SMAC, BOHB</td>
+</tr>
+<tr>
+<td>PCA</td>
+<td>n_components</td>
+<td>svd_solver</td>
+<td>BOs, Hyperband</td>
+</tr>
+<tr>
+<td>Deep learning</td>
+<td>number of hidden layers, units_per_layer, loss, optimizer, Activation, learning rate, dropout rate, epochs, batch size, early stop patience</td>
+<td>number of frozen layers (if transfer learning is used)</td>
+<td>PSO, BOHB</td>
+</tr>
+<tr>
+<td>RF &amp; ET</td>
+<td>n_estimators, max_depth, criterion, min_samples_split, min_samples_leaf, max_features</td>
+<td>splitter, min_weight_fraction_leaf, max_leaf_nodes</td>
+<td>GA, PSO, BO-TPE, SMAC, BOHB</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="s35231031">分布式训练流程 <span class="tag-key">重点</span></h2>
+<p>训练流程主要包括以下四个步骤：</p>
+<ol>
+<li><p><span class="kp">指定设备</span>：多卡初始化NPU集群，单卡指定NPU。</p></li>
+<li><p><span class="kp">准备数据</span>：多卡使用分布式数据采样器，单卡使用数据采样器。</p></li>
+<li><p><span class="kp">准备模型</span>：多卡使用DDP包裹模型，单卡直接准备模型。</p></li>
+<li><p><span class="kp">训练</span>：单卡与多卡相同。</p></li>
+</ol>
+
+<h2 id="s36997956">生成式模型和判别式模型 <span class="tag-must">必考</span></h2>
+<p>分类模型从学习的对象来区分，可以分成生成式模型和判别式模型。</p>
+<p><strong>生成式模型</strong>：学习的对象是输入x和输出y的联合分布 $p(x, y) = p(y) \times p(x|y)$。强调数据自身分布。典型模型：朴素贝叶斯法、高斯混合模型、马尔可夫模型等。优点是较小的过拟合可能，泛化能力较好；缺点是鲁棒性较差，容易受异常数据影响，需要大量数据计算。</p>
+<p><strong>判别式模型</strong>：学习的对象是输入x的条件下，输出y的条件分布 $p(y|x)$。强调数据边界。典型模型：线性回归、k近邻法、决策树、最大熵模型、支持向量机等。优点是在小数据集上表现较好，计算量小；缺点是更容易过拟合。</p>
+<div class="tldr">生成式模型学习联合概率分布 $p(x,y)$，判别式模型学习条件概率分布 $p(y|x)$。</div>
+
+<h2 id="s77338100">AI算法模型与传统软件方法对比 <span class="tag-key">重点</span></h2>
+<p>传统软件算法：明确规则 → 整体结构类似树模型 → 软件工程师直接通过IF ELSE + 循环编写业务软件代码。</p>
+<p>AI算法：数据 → 训练代码 → 生成 → AI算法工程师编写训练代码，从数据中生成业务模型。</p>
+<table>
+<thead>
+<tr>
+<th>评估维度</th>
+<th>选择AI算法</th>
+<th>选择传统软件方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据获取的难易程度</td>
+<td>容易</td>
+<td>困难</td>
+</tr>
+<tr>
+<td>规则描述的难易程度</td>
+<td>困难</td>
+<td>容易</td>
+</tr>
+<tr>
+<td>搜索空间大小</td>
+<td>庞大</td>
+<td>中等以下</td>
+</tr>
+<tr>
+<td>安全性、可靠性要求</td>
+<td>中等以下</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>影响问题的因素</td>
+<td>外部因素为主</td>
+<td>内部因素为主</td>
+</tr>
+</tbody>
+</table>
+<div class="tldr">AI适合数据容易获取，规则难以描述，并且结果受到复杂的物理世界的规律影响，并且不要求极高的可靠性（99.99%）的场景。</div>
+
+<h2 id="s66652105">时序数据自动增强 <span class="tag-info">了解</span></h2>
+<p>时序数据增强策略众多，往往组合不同增强策略能产生更好的效果。Google针对图像领域设计出自动数据增强方法（AutoAugment），通过强化学习、元学习或者进化搜索自动搜索最佳数据增强策略（单个增强方法被执行的概率和增强幅度）。UC Berkeley提出PBA算法优化搜索空间，Google提出RandAugment降低搜索空间大小。这些方法可迁移至时间序列数据领域。</p>
+
+<h2 id="s37946866">时序数据增强方法概览 <span class="tag-key">重点</span></h2>
+<p><strong>基础时序数据增强</strong></p>
+<ul>
+<li><p><span class="kp">时域数据增强</span>：直接从原始输入时间序列进行增强，对原始数据进行转换、增加噪声等。方法：Window warping / Flipping / Window slicing / Noise injection / Perturbing / DTW + Barycenter Averaging (DBA)。</p></li>
+<li><p><span class="kp">频域数据增强</span>：把数据从时域转化为频域（如傅里叶变换），再对振幅、相位采用加噪等增强算法。方法：AAFT, IAAFT, APP。</p></li>
+<li><p><span class="kp">时频域数据增强</span>：综合时域+频域进行数据增强。方法：STFT, Spec Augment。</p></li>
+</ul>
+
+<h2 id="s84036629">数学优化与AI算法题目汇总</h2>
+
+<h3 id="s58517176">1.1 数学优化简介 <span class="tag-freq">高频</span></h3>
+<p><span class="kp">优化三要素</span>：优化是从变量的约束条件所限定的集合中找到使某个目标函数最小/最大的解的过程。</p>
+<p><strong>重要性</strong>：通过优化创建好的资产组合去规避风险提升回报；通过优化获得好的神经网络参数实现人工智能；大自然通过最小化能量达到热平衡。</p>
+<p><strong>三部曲</strong>：完整的优化过程包括根据实际问题建模得到一个数学优化问题，明确该优化问题解的最优性条件、存在性、唯一性等理论关切，和设计优化算法求解该优化问题等三个步骤。</p>
+<p><strong>基本形式</strong>：目标函数 minimize $f_0(x)$，约束条件 subject to $f_i(x) \le b_i, i = 1, \dots, m.$</p>
+
+<h3 id="s14535228">4.3 小结 <span class="tag-info">了解</span></h3>
+<p><strong>算法共性：</strong></p>
+<ul>
+<li><p>都属于仿生算法；</p></li>
+<li><p>都属于全局优化方法；</p></li>
+<li><p>都属于随机搜索算法；</p></li>
+<li><p>都隐含并行性。</p></li>
+</ul>
+
+<h2 id="s14752551">算法差异与优化基础</h2>
+<h3 id="s82686663">算法差异 (PSO vs GA)</h3>
+<p>根据个体的适配信息进行搜索，因此不受函数约束条件的限制，如连续性、可导性等；对高维复杂问题，往往会遇到早熟收敛和收敛性能差的缺点，都无法保证收敛到最优点。</p>
+<p><span class="kp">PSO</span>有记忆，所有粒子都保存好的解的知识，而<span class="kp">GA</span>无记忆性，以前的知识随着种群的改变而改变。</p>
+<p>PSO中的粒子仅仅通过当前搜索到最优点进行共享信息，所以很大程度上这是一种单共享项信息机制，而GA中，染色体之间相互共享信息，使得整个种群都向最优区域移动。</p>
+<p>GA的编码技术和遗传操作比较简单，而PSO相对于GA没有交叉和变异操作，粒子只是通过内部速度进行更新，因此原理更简单、参数更少、实现更容易。</p>
+
+<h3 id="s84498116">数学优化手段解决实际问题的完整流程</h3>
+<p><span class="tag-must">必考</span> 用数学优化手段解决实际问题有一个完整地流程。该流程包含的必要步骤包括：分析解的最优性条件、设计优化算法找到最优解、根据实际问题建模得到一个数学优化问题、分析解的存在性和唯一性。</p>
+<div class="tldr">数学优化流程包含：建模、分析存在性唯一性、分析最优性条件、设计算法找最优解。</div>
+<div class="checkpoint">Q52：用数学优化手段解决实际问题有一个完整地流程。该流程包含如下哪些必要的步骤？<details class="cp-answer"><summary>参考答案</summary>ABCD</details></div>
+
+<h2 id="s18394368">适应性随机梯度方法与深度学习Trick</h2>
+<h3 id="s53088157">适应性随机梯度方法</h3>
+<p><span class="tag-freq">高频</span> 适应性随机梯度方法会让每个参数拥有自己的学习率。包括：<span class="kp">Adagrad</span>、<span class="kp">Adadelta</span>、<span class="kp">RMSprop</span>、<span class="kp">Adam</span>。</p>
+<div class="checkpoint">Q53：适应性随机梯度方法会让每个参数拥有自己的学习率。下面哪些方法是适应性随机梯度方法？<details class="cp-answer"><summary>参考答案</summary>ABD</details></div>
+
+<h3 id="s41276262">深度神经网络中加速训练改善泛化的经典trick</h3>
+<p><span class="tag-key">重点</span> 深度神经网络中经典的trick包括：数据增强、学习率调节方法、学习率Warmup、权重初始化。</p>
+<div class="tldr">深度学习中的随机梯度下降方法起作用的三个关键因素：Mini-batch、动量和权重衰减。适应性随机梯度方法使每一个参数的更新都有自己的学习率。随机梯度方法通常与一些trick结合去改善神经网络的泛化能力。</div>
+<div class="checkpoint">Q54：深度神经网络中有哪些经典的trick可以帮助我们加速训练改善泛化？<details class="cp-answer"><summary>参考答案</summary>ABCD</details></div>
+
+<h2 id="s43957233">盘古大模型与剪枝评估</h2>
+<h3 id="s91609393">盘古大模型训练技术</h3>
+<p><span class="tag-key">重点</span> 盘古大模型训练中采用的技术包括：重计算、流水线并行、优化器并行、数据并行。</p>
+<p>盘古大模型的并行方式采用了数据并行、Tensor并行、流水线并行和优化器并行。在内存优化上使用了重计算。</p>
+<p>盘古-α模型共64个decoder layer，切了16个Pipeline stage，算子级模型并行切了8路，这样共128卡运行一个模型。2048卡，数据并行度是16。在数据并行维度同时叠加了Optimizer模型并行。</p>
+<p>重计算是以每个decoder layer为单位，decoder内部都会重计算，另外decoder内，算子级模型并行触发的通信不会重计算。</p>
+<div class="checkpoint">Q55：盘古大模型训练中采用的技术包括？<details class="cp-answer"><summary>参考答案</summary>ABCD</details></div>
+
+<h3 id="s39294883">针对每个场景对模型单独进行剪枝的评估准则</h3>
+<p><span class="tag-freq">高频</span> 针对每个场景对模型单独进行剪枝的评估准则包括：利用子空间聚类的思想对滤波器产生的特征层进行聚类来消除滤波器的冗余；将滤波器经过激活层后输出的特征层当中数值为0所占百分比作为该滤波器重要性的评估依据；对于每一层滤波器输出的特征层，先将特征层进行池化输出为向量，而后对各个特征向量进行PCA分析，去掉信息含量少的特征层对应的滤波器。</p>
+<p><span class="kp">参数驱动的评估准则</span>：利用谱聚类的思想，先对各层滤波器进行谱聚类，聚类之后根据滤波器的贡献进行排序，贡献小的滤波器会被剪枝。</p>
+<p><span class="kp">数据驱动的评估准则</span>：包括APoZ、HRank、特征层聚类、PFA。</p>
+<blockquote>易错：只单独考虑深度网络某一层或相邻两层滤波器的重要性并裁剪掉看似不重要的滤波器，可能会对后续层甚至更深层的响应输出产生影响，而且误差会逐层累积。</blockquote>
+<div class="checkpoint">Q56：某神经网络模型能够适用于多个场景，请问以下哪些描述的剪枝评估准则可以针对每个场景对模型单独进行剪枝？<details class="cp-answer"><summary>参考答案</summary>ABC</details></div>
+
+<h3 id="s35057257">时态特征识别</h3>
+<p>在应用Time GAN进行医疗数据增强时，属于时态特征的有体温、血压。年龄、性别属于静态特征。</p>
+<div class="checkpoint">Q57：在应用Time GAN进行医疗数据增强时，属于时态特征的有？<details class="cp-answer"><summary>参考答案</summary>BC</details></div>
+
+<h2 id="s62904044">分布式训练基础</h2>
+<h3 id="s82385093">同步训练和异步训练</h3>
+<p>假设其余条件一致，相同epochs，异步训练花费时间少，但精度可能会低于同步训练。原因是异步训练的梯度存在延时问题，即更新模型时用到的是老旧的梯度，而非当前模型的梯度。</p>
+<p>解决异步训练中的梯度延时问题的方法：从算法层面对延时梯度进行处理，如delay compensation；采用半异步训练，通过在异步训练中适当的同步以减小延时梯度的影响。</p>
+
+<h3 id="s78207923">通信集合原语</h3>
+<p>分布式训练常用的集合通信，相关接口可在torch.distributed中找到：</p>
+<p><span class="kp">点对点通信</span>：Send, Receive</p>
+<p><span class="kp">一对多通信</span>：Broadcast, Scatter</p>
+<p><span class="kp">多对一通信</span>：Gather, Reduce</p>
+<p><span class="kp">多对多通信</span>：AllGather, AlltoAll, AllReduce</p>
+
+<h3 id="s25558802">流水线并行（模型并行）</h3>
+<p>流水线并行是纵向模型并行的提升版，在解决大模型训练的内存问题的同时，提高了NPU的资源利用率，加速了训练。大部分流水线并行都是通过把mini-batch细分为micro-batches人为制造pipeline的可能性。</p>
+<p>假设共M个micro-batch，N个设备，并假设每个NPU前向传播需要1单位时间，GPipe前向传播时间总体为N+M-1，其中每个NPU工作时间为M，因此资源利用率为M/(N+M-1)。反向传播效率计算方法类似，总体效率为M/(N+M-1)。</p>
+<blockquote>易错：一般医疗数据问题中，年龄是静态特征，脉搏呼吸等随时间快速变化属于时态特征。</blockquote>
+
+<h2 id="s47756136">真题考点汇总</h2>
+<h3 id="s71056058">知识蒸馏</h3>
+<p><span class="tag-must">必考</span> 知识蒸馏领域，模型容量越大，往往模型精度越高。学生模型选择教师模型时，尽可能寻找容量大、精度高的模型作为教师模型：错误。</p>
+<blockquote>易错：随着教师模型容量增大，学生模型的精度随教师模型容量变大先增大后减小。并不是教师模型精度越高，蒸馏效果越好。当教师模型容量与学生模型gap过大时，需要引入合适大小的助教模型进行蒸馏。</blockquote>
+
+<h3 id="s90153551">学习率调节方式</h3>
+<p>每经过若干个epochs成倍减少学习率属于多阶段学习率。</p>
+<p><span class="kp">固定学习率</span>：最简单，但泛化能力较差。</p>
+<p><span class="kp">多阶段学习率</span>：每过一定的step数，将学习率减少一定比例。</p>
+<p><span class="kp">即时变化学习率</span>：每经过一次迭代或者epoch，以一定的方式平滑减少学习率，如线性学习率、余弦学习率。</p>
+
+<h3 id="s63486297">样本类别不均衡场景下的算法模型设计</h3>
+<p>实际业务问题中，过采样是数据方法。欠采样是数据方法。少样本迁移是模型方法。多模型融合是模型方法。</p>
+<p><span class="kp">数据方法</span>：欠采样（ENN、Tomek Link、NearMiss）、过采样（SMOTE、Borderline-SMOTE、ADASYN、Mixup）、数据生成。</p>
+<p><span class="kp">模型方法</span>：多模型融合、损失函数设计（类别加权Loss、Focal loss、GHM loss）、自监督+少样本迁移、对比学习。</p>
+
+<h3 id="s52952638">混合比特量化的自动采样方法</h3>
+<p>适合做混合比特量化的自动采样方法是进化搜索。</p>
+<p>混合比特量化基于不同的量化比特数设置进行模型量化，并为不同group选择合适的量化比特数。混合比特的搜索方法包括贪心搜索、进化搜索、强化学习搜索、基于Hessian信息的优化搜索、可微分搜索等。</p>
+
+<h3 id="s17868032">分布式训练与通信</h3>
+<p>单卡内存有限的情况下进行大样本的分布式训练，不可以考虑error feedback，可以尝试tensor并行、流水线并行、优化器并行。</p>
+<p>确定性和随机方法比较：不正确的是“都是无偏的”。随机方法满足的假设打破一致性的下界。</p>
+<p>不属于量化误差的是Relu激活函数的使用。量化误差包括clip截断、Round取整。</p>
+<p>流水线并行通信：通信量与micro-batch大小无关。</p>
+<p>All reduce：不采用优化器并行，数据并行需要all reduce。</p>
+
+<h3 id="s97273676">成本函数</h3>
+<p>成本函数不正确的是“成本函数都是凸函数”。常用的成本函数一般是凸函数。回归问题常用least square函数，分类问题常用logistic成本函数。</p>
+
+<h3 id="s57813510">PyTorch 1.10 支持情况</h3>
+<p>PyTorch 1.10 不支持混合并行。支持数据并行、ZeRO、低精度训练、重计算、Error feedback。</p>
+
+<h3 id="s32645158">数据增强</h3>
+<p>Auto Augment 流程不包含“为每个样本都执行所有增强策略”。流程包括：选择一个增强策略S、用策略S训练一个子网络得到验证精度R、用R更新控制器。</p>
+<p>用α剪枝自动增强中增强样本：选择预测误差大和误差小的样本，保证困难样本和容易样本的平衡性。</p>
+<p>时序数据增强描述不正确的是“STL是基于统计的方法”。STFT是时频域数据增强方法，DBA是时域时序数据增强方法，α剪枝算法是基于学习方法的时序数据增强。</p>
+<p>α剪枝自动增强算法是样本级自适应的，为每个时序样本选择最合适的增强策略。</p>
+
+<h3 id="s31288244">需求分析与遗传算法</h3>
+<p>原始需求出发，分析是否具有AI需求：一般原始需求无法直接推导出AI需求。</p>
+<p>不是遗传算法的优点的是“可并行实现，在多处理器或分布式环境下能够快速地搜索出最优解”。GA算法并行化较难。</p>
+
+<h3 id="s13797703">贝叶斯优化与多保真优化</h3>
+<p>需要代理函数的算法是BO-SMAC。BO-GP代理函数为高斯过程，BO-SMAC为随机森林，BO-TPE为TPE。</p>
+<p>数学问题的集合不正确的是“最优解可出现在集合之外”。该集合为变量的可行域。</p>
+<p>多保真优化算法包括：Hyperband、BOHB、Halving。</p>
+
+<h3 id="s20831387">条件数与SignSGD</h3>
+<p>关于条件数不正确的是“条件数越小说明函数可解性越差”。条件数是平滑性常数与强凸性常数的比值，大于等于1，越小说明可解性越好。</p>
+<p>有关SignSGD的说法正确的是“数据并行下，单步耗时可能高于SGD”。</p>
+
+<h3 id="s89652675">TimeGAN与半监督学习</h3>
+<p>有关TimeGAN不正确的是“Embedding Function恢复得到的原始维度数据”。Sequence Discriminator评判生成数据和真实数据的分布。</p>
+<p>关于半监督和自监督正确的是“流形假设是半监督学习的典型假设”。自监督学习通过设计辅助任务来挖掘数据自身的表征特性作为监督信息。</p>
+
+<h3 id="s86807578">粒子群算法与相关性蒸馏</h3>
+<p>不是粒子群的步骤的是“将选择、交叉和突变的遗传因子应用到种群中，产生新一代”。</p>
+<p>基于相关性蒸馏的特点是“更加关注不同数据样本之间的关系”。</p>
+
+<h3 id="s46295433">基于搜索的剪枝算法</h3>
+<p>基于搜索的剪枝算法包括：Network Adjustment、ABCPruner、MetaPruning、DMCP。</p>
+<p><span class="kp">ABCPruner</span>使用人工蜂群算法寻找最优的剪枝结构，寻找每层的通道数量。</p>
+<p><span class="kp">MetaPruning</span>使用元学习自动进行通道剪枝，为每层搜索通道的数量。</p>
+<p><span class="kp">NetworkAdjustment</span>将模型准确率当成是关于计算量FLOPs的一个方程。</p>
+<p><span class="kp">DMCP</span>将剪枝建模成一个可微分的马尔可夫过程。</p>
+
+<h3 id="s61775364">异步训练与多对多通信</h3>
+<p>用于解决异步训练中梯度延时的方法包括：delay compensation等相关算法、半异步训练。</p>
+<p>属于多对多通信的有：AlltoAll、AllReduce、AllGather。</p>
+
+<h3 id="s43575576">CPU offloading</h3>
+<p>CPU offloading 不正确的是“将优化器状态放到CPU上”和“通过计算换通信”。CPU offloading用于缓解大模型训练NPU显存不足的问题。</p>
+
+<h2 id="s67674014">深度生成模型与TimeGAN <span class="tag-key">重点</span></h2>
+<p>深度生成模型能生成高维数据，在图像领域数据增强有广泛应用，典型代表为<span class="kp">生成对抗网络（GAN）</span>。在时间序列数据领域，DGM同样可以合成时间序列样本，如循环GAN和循环条件GAN，产生真实的实值多维时间序列数据。</p>
+<p>这些方法考虑到了时序数据的每个时间步的相互影响（时态特征），但没有考虑静态特征，因此提出了<span class="kp">TimeGAN</span>。TimeGAN提出时序数据应该有两种特征：第一个是<span class="kp">静态特征S</span>，不会因为时间而改变的特征，例如性别；第二个是<span class="kp">时态特征X</span>，该特征随时间而改变，例如生命特征（包括脉搏、呼吸、体温、血压等数据）。</p>
+<div class="tldr">让模型学习真实训练数据的分布，随机输入一个向量，经过模型输出一个数据，这个数据的分布与真实数据的分布相似，从而让生成数据与真实数据非常相像。</div>
+<div class="checkpoint">TimeGAN认为时序数据应该包含哪两种特征？<details class="cp-answer"><summary>参考答案</summary>静态特征S（不随时间改变）和时态特征X（随时间改变）。</details></div>
+
+<h2 id="s34891529">内存优化与CPU Offloading <span class="tag-freq">高频</span></h2>
+<h3 id="s79155441">题目：CPU Offloading 不正确的是</h3>
+<p>选项：A、用于缓解大模型训练NPU显存不足的问题；B、GPU V100训练ResNet18一般无需CPU Offloading；C、将优化器状态放到CPU上；D、通过计算换通信。</p>
+<p>正确答案：CD</p>
+<h3 id="s60381937">知识点补充：内存优化——CPU Offloading / Paging</h3>
+<p><span class="kp">CPU offloading</span> 是减少 activation（激活值）所需显存的另一种方式。将额外的 activation 暂时存放于 CPU，需要时再从 CPU 取回。</p>
+<div class="tldr">通过 NPU-CPU 通信换取内存空间，即以通信换内存。CPU-offloading 可以与重计算技术共同使用，进一步提升显存利用率。</div>
+<h3 id="s27017313">内存优化概述</h3>
+<p><span class="kp">重计算</span>：重新计算部分 activation 以节约内存。</p>
+<p><span class="kp">CPU offloading</span>：将 activation 从 NPU 移动到 CPU 以节约内存。</p>
+<p><span class="kp">ZeRO offloading</span>：将优化器状态从 NPU 移动到 CPU 以节约内存。</p>
+<div class="checkpoint">CPU Offloading 是通过什么方式换取内存空间的？<details class="cp-answer"><summary>参考答案</summary>通过 NPU-CPU 通信换取内存空间（以通信换内存）。</details></div>
+
+<h2 id="s72472780">模型量化算法：训练后量化（PTQ） <span class="tag-key">重点</span></h2>
+<h3 id="s20778610">Data-free 训练后量化</h3>
+<p>不依赖真实数据，对模型进行量化参数的离线校准，包括：</p>
+<p><span class="kp">基于假设分布与统计</span>：为模型输入随机数据，根据 Activation 的假设分布与统计，计算量化参数。假设激活分布服从正态分布（如 BN 层输出），采用 3σ 统计确定量化的饱和截断区间。</p>
+<p><span class="kp">基于伪样本生成</span>：借助预训练模型提供的内蕴信息与预测信息，构建并训练样本生成模型（如基于 GAN），以生成用于离线校准的伪样本。伪样本合成质量影响量化效果，并存在一定的时间成本；模型量化参数的微调可与生成模型的训练一同进行。</p>
+<h3 id="s73429924">Label-free 训练后量化</h3>
+<p>依赖少量无标注数据，对模型进行量化参数的离线校准。校准数据集可以选取一部分训练数据，或者其他与场景域一致或相关的数据。常见算法包括 <span class="kp">Absmax 算法</span>、<span class="kp">Min-Max EMA 算法</span>、<span class="kp">KL 算法</span>等。</p>
+<div class="checkpoint">Data-free 训练后量化包含哪两种方法？<details class="cp-answer"><summary>参考答案</summary>基于假设分布与统计、基于伪样本生成。</details></div>
+
+<h2 id="s84972117">时序数据自动增强 <span class="tag-freq">高频</span></h2>
+<h3 id="s77026343">问题背景</h3>
+<p>自动数据增强按数据集探索最优策略，所有样本采用相同增强策略，忽略了样本间的差异性。</p>
+<h3 id="s30399077">α剪枝自动增强</h3>
+<p><span class="kp">α剪枝自动增强</span>：时序数据增强的千人千面，样本级增强，为每个时序样本选择最合适的增强策略。</p>
+<p>流程步骤：1. Augment sample（增强样本）；2. Evaluate and calculate loss（评估并计算 loss）；3. Rank and trim（排序和修剪，筛选 Top α loss 样本和 Bottom α loss 样本）；4. 增强样本汇总。</p>
+<blockquote>易错：对 MLP 模型而言，loss 较小样本对模型更新信息小，loss 较大样本对模型更新贡献度大，然而这样会导致更新后的模型在容易样本上性能受损。</blockquote>
+<h3 id="s21501626">时序数据增强方法概览</h3>
+<p><span class="kp">基于统计生成模型</span>：核心思想是用统计学方法模拟时序数据（基于时序数据的自相关性，给初始点一个扰动，后续数据点随之扰动）。方法包括 MAR（mixture of autoregressive models）。</p>
+<p><span class="kp">基于分解的时序数据增强</span>：核心思想是把时序数据分解为某些成分，再对每个成分设计增强方法。方法包括 STL 算法（分解为 trend/seasonality/residual，调整基础、趋势和季节性的权重，重构确定性部分，对 residual 进行随机性调整）。</p>
+<p><span class="kp">基于学习方法的时序数据增强</span>：核心思想是从数据中学得数据增强方式。方法包括 GAN / Automated Data Augmentation / Embedding Space（在 encoding space 上增加扰动）。</p>
+
+<h2 id="s32750166">强化学习基础 <span class="tag-must">必考</span></h2>
+<p>基础的强化学习本质上是一个<span class="kp">马尔可夫决策过程（MDP）</span>，再叠加机器学习成为一个具备学习能力的 MDP 过程。</p>
+<p>强化学习的核心要素包括 Reinforcement（Re：重复，Inforce：强化，增强），模拟的是人和动物的学习过程，类似仿生学的过程。</p>
+<div class="tldr">强化学习本质：1. 强化学习马尔科夫决策过程；2. 迭代式过程；3. 解决探索-利用之间的矛盾。</div>
+<p>强化学习的适用范围：智能体、状态、奖赏、动作、环境。理论上只要能够形成反馈的环境都适合使用强化学习方法。</p>
+<blockquote>易错：强化学习不适用的场景包括：1. 环境无法给出反馈或者无法及时给出反馈；2. 反馈的状态错误或者不准确；3. 环境快速变化，需要能够快速获得准确的应对；4. 试错成本高的场景。</blockquote>
+<div class="checkpoint">强化学习的本质是什么？<details class="cp-answer"><summary>参考答案</summary>1. 强化学习马尔科夫决策过程；2. 迭代式过程；3. 解决探索-利用之间的矛盾。</details></div>
+
+<h2 id="s89285794">题目汇总 <span class="tag-info">了解</span></h2>
+<h3 id="s57949919">3.2.3 BO-SMAC 正确的是</h3>
+<p>选项：A、适合处理高维输入参数、同时适合离散和连续输入参数；B、探索能力强；C、不易过拟合；D、训练快、易实现。</p>
+<p>正确答案：ABCD</p>
+<h3 id="s64600025">3.2.4 α剪枝自动增强算法</h3>
+<p>选项：A、为每个时序样本选择最合适的增强策略；B、计算每个生成样本的loss；C、保留loss最小样本；D、保留loss最大样本。</p>
+<p>正确答案：ABCD</p>
+<blockquote>易错：考察α剪枝算法流程：样本级增强算法，对每个样本执行多个增强策略并选优，需要完全掌握算法原理。</blockquote>
+<h3 id="s72947997">3.2.5 属于高阶时序数据增强方法的是</h3>
+<p>选项：A、基于统计生成模型；B、频域数据增强；C、基于学习方法的时序数据增强；D、时域数据增强。</p>
+<p>正确答案：AC</p>
+<h3 id="s15553504">3.2.6 支持并行训练库包括</h3>
+<p>选项：A、torch.DistributedDataParallel；B、DeepSpeed；C、OpenMPI；D、Megatron。</p>
+<p>正确答案：ABD</p>
+<h3 id="s68404360">3.2.7 关于复杂系统的分析原则正确的是</h3>
+<p>选项：A、系统目标可分解为功能目标、性能目标、可靠性目标；B、相比传统软件，AI系统往往增加了可靠性目标；C、功能目标由功能实体组合来实现；D、复杂系统分目标建立关键功能和模块。</p>
+<p>正确答案：ACD</p>
+<h3 id="s71374760">3.2.8 关于高斯回归过程正确的是</h3>
+<p>选项：A、使用高斯过程对数据进行回归的非参数模型。B、假设2022年，每日天气各自符合一个特定的多元高斯分布（温度、湿度、风力），则全年天气情况是一个高斯过程。C、假设一个区域下方有煤炭，假设每个点能挖掘的煤炭量符合一个特定的一元高斯分布，则该区域煤炭挖掘量是一个高斯过程。D、BO-GP是代理函数为高斯过程回归算法，是贝叶斯优化算法中效果最优的，在各种场合下都适用。</p>
+<p>正确答案：ABC</p>
+<h3 id="s53330645">3.2.9 量化能够提升模型的推理性能</h3>
+<p>选项：A、量化的数据加载更快；B、量化改变了模型结构；C、量化增加了模型精度；D、NPU的INT8算力比FP16高。</p>
+<p>正确答案：AD</p>
+<blockquote>易错：原卷标注 ABC 及“ABC错”均存在争议；通常认为量化不改变模型结构（B错），但会使精度降低而非增加（C错），故选 AD。</blockquote>
+<h3 id="s75892825">3.2.10 BO-TPE 流程包括</h3>
+<p>选项：A、计算观测点之间的协方差矩阵；B、生成g(x)和l(x)；C、生成采样点，通过计算log(g(x))-log(l(x))最小值；D、训练集分为好、坏两类。</p>
+<p>正确答案：BCD</p>
+<blockquote>易错：原卷标注 ABCD 有误，真题答案为 BCD。BO-TPE 流程图：1. t = 0；2. 判断 t < T？否：结束；是：将结果加入训练集；3. 切分训练集为好、坏两类；4. 评估超参；5. 拟合两个 KDE g(x), l(x)；6. 生成采样点，并求出 log(g(x)) - log(l(x)) 最小的点作为下个迭代的超参。</blockquote>
+<h3 id="s23652541">3.2.11 凸集描述正确的是</h3>
+<p>选项：A、凸集任意两个点之间的线段上的点也属于该集合；B、一个凸包是点的凸组合；C、范数球不是凸集；D、多面体是半平面（即线性不等式）和超平面（即线性等式）的交集。</p>
+<p>正确答案：ABD</p>
+<h3 id="s54861276">3.2.12 全局最优解和局部最优解</h3>
+<p>选项：A、凸优化问题的局部最优解与全局最优解等价；B、全局最优解是优化的终极目标；C、全局最优解一般多项式时间可解；D、在一般优化问题中两者不等价。</p>
+<p>正确答案：ABD</p>
+<blockquote>易错：C 为错误选项，全局最优解在一般优化问题（非凸）中通常无法在多项式时间内找到。</blockquote>
+<h3 id="s51755738">3.2.13 强化学习正确的是</h3>
+<p>选项：A、不适用环境快速变化的；B、能适用于试错成本高的场景；C、理论上只要能够形成反馈的环境都适合使用强化学习方法；D、本质上是一个马尔科夫决策过程。</p>
+<p>正确答案：ACD</p>
+<h3 id="s65331277">3.2.14 模型并行正确的是</h3>
+<p>选项：A、可分为横向并行和纵向并行；B、每个NPU上拷贝一份完整模型；C、数据并行属于模型并行的一种形式；D、解决大模型难以在单卡上存储以及训练的问题。</p>
+<p>正确答案：AD</p>
+<h3 id="s59927712">3.2.15 Data-free 训练后的量化包含</h3>
+<p>选项：A、基于伪样本生成；B、基于假设分布与统计；C、KL算法；D、Min-Max EMA算法。</p>
+<p>正确答案：AB</p>
+<blockquote>易错：C、D 属于 Label-free 训练后量化的常见算法。</blockquote>
+<h3 id="s64982067">3.2.16 大模型监督学习的特点</h3>
+<p>选项：A、样本维度可以很高；B、预测函数可以是神经网络；C、回归类问题的一个典型应用；D、预测函数可以是线性函数。</p>
+<p>正确答案：ABCD</p>
+
+<h2 id="s64886009">附录：关键知识点详解 <span class="tag-key">重点</span></h2>
+<h3 id="s14849415">BO-SMAC 算法</h3>
+<p>SMAC 全称 Sequential Model-Based Optimization for General Algorithm Configuration，算法在 2011 年被 Hutter 等人提出。该算法的提出即解决高斯回归过程中参数类型不能为离散的情况。</p>
+<p>定义：以<span class="kp">随机森林</span>为代理函数：用每棵子树的输出计算均值，方差作为代理模型的输出。采用 <span class="kp">EI（expected improvement）</span> 作为其采集函数生成新的采样点。采集函数会根据代理模型选取均值小或方差大的点进行采样。</p>
+<p>随机森林：由多个随机生成的决策树组成的决策模型。不同树的不同决策结果可反映输出结果的随机分布。适合处理高维输入参数、同时适合离散和连续输入参数、训练快、易实现、不易过拟合。</p>
+<div class="tldr">方法特性：随机森林擅长处理离散值输入，因此 SMAC 对离散值多的优化问题比较擅长。随机森林的子树有非常大的多样性，对于探索次数较少的点会产生较大的方差，使得 SMAC 具有较优的探索能力。</div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">233题 · 满分1230分</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+<div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3>📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+
+
+<script>
+var Q = [{"kc_id": "kc9.1", "cognitive_level": "apply", "difficulty": "medium", "type": "choice", "points": 4, "question": "在进行 DBA 数据增强时，拿到两条时间序列样本 A={1,1,3,3,2,4}和 B={1,3,2,2,4,4}，采用 DTW 方法对齐，他们间的距离是（）", "options": ["0", "1", "2", "3"], "answer": 0, "explanation": "根据DTW算法计算距离矩阵并寻找最短路径，A和B序列完全可以通过一对多映射完美对齐，路径上的元素和为0，因此距离为0。", "pitfall": "容易误认为不同序列距离必然大于0，忽略了DTW允许一对多映射的特性。"}, {"kc_id": "kc9.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "不属于 STL 算法关键要素的是（）", "options": ["趋势", "季节", "残差", "方差"], "answer": 3, "explanation": "STL（Seasonal and Trend decomposition using Loess）算法将时间序列分解为趋势、季节和残差三个要素，方差不属于STL的分解要素。", "pitfall": "容易将统计学中的方差与时间序列分解要素混淆。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "下面哪个参数不属于算法超参数？", "options": ["DNN 中的 learning-rate", "Random Forest 中的 max_depth", "Kmeans 中的 n_clusters", "DNN 中神经元的 weights"], "answer": 3, "explanation": "超参数是在开始机器学习之前设置值的参数，而不是通过训练得到的参数。DNN中神经元的weights是通过训练数据学习得到的模型参数，不是超参数。", "pitfall": "容易混淆模型参数（如权重、偏置）与超参数（如学习率、网络层数）。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "下面哪种超参优化算法的时间复杂度最低？", "options": ["BO-GP", "BO-SMAC", "随机搜索", "网格搜索"], "answer": 2, "explanation": "随机搜索不需要像网格搜索那样遍历所有组合，也不需要像贝叶斯优化（BO）那样建立代理模型，因此时间复杂度最低。", "pitfall": "容易误认为网格搜索因为简单所以时间复杂度低，实际上网格搜索在高维空间中非常耗时。"}, {"kc_id": "kc9.1", "cognitive_level": "analyze", "difficulty": "hard", "type": "choice", "points": 4, "question": "关于多保真优化算法描述错误的是？", "options": ["多保真算法是为了加快每次超参的评估速度，节约评估资源", "多保真就是用高保真对空间进行快速探索，低保真找到最优组合", "保真度越大，对超参的评估越准确，相应时间越长", "保真度越小，评估越快，但是准确度可能较低"], "answer": 1, "explanation": "多保真优化通常是用低保真对空间进行快速探索，淘汰表现差的区域，再用高保真对潜在最优区域进行精确评估，选项B描述反了。", "pitfall": "容易混淆高保真和低保真的作用，误以为高保真用于快速探索。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下关于并行方式说法正确的是", "options": ["流水线并行目前只有一种固定部署的方式", "数据并行通过将模型切分实现并行", "流水线并行可以提高模型并行的效率", "数据并行不能和模型并行同时使用"], "answer": 2, "explanation": "流水线并行通过引入microbatch，使得不同层可以在不同设备上重叠计算，从而提高模型并行的资源利用率和效率。", "pitfall": "容易误认为数据并行和模型并行不能同时使用，实际上混合并行很常见。"}, {"kc_id": "kc9.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "通过计算 activation 以减小显存占用的方法被称为：", "options": ["重计算", "稀疏化", "低秩分解", "CPU offloading"], "answer": 0, "explanation": "重计算（Recomputation）通过丢弃前向传播时的部分activation，在反向传播需要时重新计算，以此换取显存的节约。", "pitfall": "容易与CPU offloading混淆，后者是将数据转移到CPU内存。"}, {"kc_id": "kc9.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "以下说法错误的是", "options": ["梯度压缩能减少通信量", "深度扩增是实现稀疏化的一种方式", "DeepSpeed 是基于 TensorFlow 的分布式训练框架", "分布式训练中可以通过将计算和通信重叠减少训练时间"], "answer": 2, "explanation": "DeepSpeed 是基于 PyTorch 的分布式训练优化框架，而不是 TensorFlow。", "pitfall": "对主流框架的底层依赖不熟悉，容易凭感觉猜测。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在 NAS 算法中应用权值共享技术的主要原因是：", "options": ["提高搜索精度", "提升搜索效率避免训练大量模型", "让模型更鲁棒", "减少模型参数量"], "answer": 1, "explanation": "NAS搜索空间巨大，如果每个子模型都从头训练成本极高。权值共享允许不同子模型共享同一组权重，从而避免训练大量模型，极大提升搜索效率。", "pitfall": "容易误认为权值共享是为了减少最终模型的参数量。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "通过以下哪种剪枝方法得到的模型在常规 CPU 中推理时，既能压缩模型大小又能缩短模型推理时间？", "options": ["细粒度剪枝", "向量剪枝", "组合剪枝", "滤波器剪枝"], "answer": 3, "explanation": "滤波器剪枝（结构化剪枝）直接去除整个滤波器，不破坏底层矩阵计算的稠密性，因此在常规硬件上能有效加速推理。其他非结构化剪枝需要特殊硬件支持才能加速。", "pitfall": "容易认为所有剪枝都能加速推理，忽略了非结构化剪枝在通用硬件上的稀疏计算开销。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "下面哪个函数不是凸函数？", "options": ["f(x) = x²", "f(x) = eˣ", "f(x) = x³", "f(x) = |x|"], "answer": 2, "explanation": "f(x) = x³ 的二阶导数为 6x，当 x&lt;0 时二阶导数小于0，不满足凸函数二阶导数大于等于0的条件。", "pitfall": "容易忽略函数在整个定义域上的性质，x³在x>0时是凸的，但在全局不是。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "下面哪个方法会在梯度不为 0 时，每次迭代严格减少函数的值？", "options": ["梯度下降", "随机梯度下降", "随机平均梯度下降", "动量法"], "answer": 0, "explanation": "梯度下降（Batch Gradient Descent）使用全量数据计算真实梯度，只要梯度不为0，沿着负梯度方向步长合适，函数值必定严格下降。其他方法由于引入随机性或动量，不一定保证每次严格下降。", "pitfall": "容易混淆梯度下降与随机梯度下降的收敛性质。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "在大规模机器学习中的凸优化问题中，下面哪个方法不能有线性收敛率？", "options": ["SAG", "SVRG", "SAGA", "Mini-batch SGD"], "answer": 3, "explanation": "SAG、SVRG、SAGA等方差缩减算法在强凸条件下可以达到线性收敛率，而普通的Mini-batch SGD通常只能达到亚线性收敛率。", "pitfall": "对各类随机梯度优化算法的收敛率理论不熟悉。"}, {"kc_id": "kc9.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "Time GAN 在进行特征降维模型训练时应用的损失函数是？", "options": ["Supervised Loss", "Regularization Loss", "Unsupervised Loss", "Reconstruction Loss"], "answer": 3, "explanation": "Time GAN中Embedding function和Recovery function负责特征降维和复原，其训练目标是让复原后的特征接近原特征，因此使用Reconstruction Loss。", "pitfall": "容易与生成器和判别器的损失函数混淆。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在模型量化中，PTQ与QAT的主要区别是？", "options": ["PTQ的权重不量化", "PTQ仅依赖少量无标注数据集、或无数据集的校准", "PTQ不需要任何数据集", "PTQ是静态量化"], "answer": 1, "explanation": "PTQ（训练后量化）不需要重新训练模型，通常依赖少量无标注数据或无数据进行校准以确定量化参数；而QAT（量化感知训练）需要在训练过程中融入量化模拟。", "pitfall": "容易误认为PTQ完全不需要数据，实际上静态PTQ通常需要少量校准数据。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "AI方法有丰富的模型，可以从不同角度划分为不同的类别，下列关于不同类别AI方法说法正确的是？", "options": ["监督学习是按照学习对象来进行划分的一种模型", "按照业务问题划分，AI方法包括分类模型和数据模型", "生成式模型是按照学习对象来进行划分的一种模型", "按照模型构造划分，AI方法可以划分为回归模型和分类模型"], "answer": 2, "explanation": "按照学习对象划分，AI方法分为生成式模型和判别式模型。监督学习属于按学习方法划分，回归和分类属于按业务问题划分，参数和非参数属于按模型构造划分。", "pitfall": "容易混淆不同划分维度下的类别名称。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "在应用α剪枝自动增强时，增强样本选择逻辑是？", "options": ["选择所有样本", "选择预测误差最大和最小的样本", "选择预测误差最小的样本", "选择预测误差最大的样本"], "answer": 1, "explanation": "α剪枝自动增强为了兼顾模型对难样本和易样本的学习，会筛选Top α loss样本（难样本）和Bottom α loss样本（易样本）进行汇总。", "pitfall": "容易误认为只选择误差最大的样本来增强模型学习能力。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "NAS技术的关键技术点哪个是不正确的？", "options": ["定义网络结构，是采用卷积神经网络，还是使用全连接网络等", "定义性能评估策略，定义如何评估一个网络结构的性能，包括直接评估和间接评估", "定义搜索空间，包括网络结构的层数，每层的操作类型，以及操作相关的超参数", "定义搜索策略，定义如何搜索搜索空间，如经典的探索-开发策略"], "answer": 0, "explanation": "NAS的三个关键技术点是：搜索空间、搜索策略、性能评估策略。定义使用CNN还是全连接网络属于人工预设，不属于NAS自动搜索的关键技术点定义。", "pitfall": "容易将人工预设的网络类型与NAS的搜索空间混淆。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "凸集是数学优化问题中可行域的一个重要子集。以下关于凸集的描述不正确的是？", "options": ["一个点集的凸包是集合中所有点的凸组合构成的集合", "范数锥不是凸集", "凸集中，任意两个点之间的线段依然属于凸集", "多面体是凸集"], "answer": 1, "explanation": "范数锥 {(x, t) | ||x|| &lt;= t} 是一个凸集。其他选项均是对凸集、凸包和多面体的正确描述。", "pitfall": "对范数锥的几何性质不熟悉，容易误判其凸性。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "有关分布式训练的优势，下列说法不正确的是？", "options": ["分布式训练能够克服训练大模型时单卡内存不足的问题", "在相同训练参数的情况下，分布式训练能提高训练结果的精度", "多卡为提高 batch size 提供了可能性，适配一些大 batch 优化器", "分布式训练可以减少中小模型的训练时间"], "answer": 1, "explanation": "分布式训练的主要目的是加速训练和解决单卡内存不足，在相同参数下并不直接提高模型精度，有时甚至因为通信开销或batch size改变而需要调整超参。", "pitfall": "容易误认为多卡训练能像集成学习一样提高精度。"}, {"kc_id": "kc9.1", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "下列时序数据增强算法属于时域增强的有？", "options": ["Flipping", "DBA", "AAFT", "Window warping"], "answer": [0, 1, 3], "explanation": "Flipping（翻转）、DBA（动态时间规整平均）和Window warping（窗口扭曲）都是在时间域上对序列进行操作。AAFT属于频域增强算法。", "pitfall": "容易将频域增强算法AAFT误认为时域增强。"}, {"kc_id": "kc9.1", "cognitive_level": "apply", "difficulty": "hard", "type": "multi", "points": 6, "question": "小明在参加时序检测竞赛，计划采用 Auto Augment 技术对数据进行增强，他在设计数据增强子策略时包含缩放操作，他需要设计些什么？", "options": ["策略里选择缩放操作", "样本被缩放的幅度", "按概率选择样本进行缩放增强", "直接应用"], "answer": [1, 2], "explanation": "Auto Augment的子策略通常包含两个操作，每个操作需要设计两个参数：操作幅度和执行概率。策略本身已确定是缩放操作，不需要再选择，也不能直接应用。", "pitfall": "容易忽略Auto Augment中概率和幅度这两个关键超参数的设计。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "在应用 Time GAN 进行医疗数据增强时，属于时态特征的有？", "options": ["性别", "年龄", "体温", "血压"], "answer": [2, 3], "explanation": "时态特征是指随时间变化的特征。体温和血压随时间变化，属于时态特征；性别和年龄是静态特征。", "pitfall": "容易将年龄误认为时态特征，虽然年龄随时间增长，但在医疗时序数据中通常作为静态人口学特征。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "DBSCAN 中的超参数 eps 适合采用下列哪种超参优化算法？", "options": ["BO-SMAC", "BO-TPE", "BOHB", "BO-GP"], "answer": [0, 1, 2], "explanation": "eps是连续型超参数，BO-SMAC、BO-TPE和BOHB都适合处理混合或连续型超参。BO-GP通常更适合低维连续空间，对于DBSCAN的eps也可以用，但SMAC、TPE、BOHB更常用。根据原题答案，选ABC。", "pitfall": "对各类贝叶斯优化算法适用的超参类型不熟悉。"}, {"kc_id": "kc9.1", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "盘古大模型训练中采用的技术包括？", "options": ["数据并行", "重计算", "流水线并行", "优化器并行"], "answer": [0, 1, 2, 3], "explanation": "盘古大模型作为千亿参数级别的模型，训练时综合使用了数据并行、重计算（节省显存）、流水线并行和优化器并行等多种技术。", "pitfall": "容易漏选优化器并行，这是大模型训练中节省显存的重要技术。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "以下属于多对多通信的有？", "options": ["AllReduce", "AllGather", "Broadcast", "AlltoAll"], "answer": [0, 1, 3], "explanation": "AllReduce、AllGather和AlltoAll都是多对多通信操作。Broadcast是一对多通信。", "pitfall": "容易将AllGather误认为一对多，实际上它是所有节点收集所有数据，属于多对多。"}, {"kc_id": "kc9.1", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "蒸馏算法主要包括？", "options": ["多教师蒸馏", "助教蒸馏", "自蒸馏", "Data-free 蒸馏"], "answer": [0, 1, 2, 3], "explanation": "知识蒸馏根据教师模型数量、是否使用数据等，可分为多教师蒸馏、助教蒸馏、自蒸馏和Data-free蒸馏等。", "pitfall": "容易漏选Data-free蒸馏，这是一种在无原始数据情况下的重要蒸馏方法。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "以下关于模型量化的说法正确的是？", "options": ["量化感知训练，需要通过训练微调方式更新量化参数，模型权重则冻结不予以更新", "训练后量化，通常包含静态量化与动态量化两种形式，其中静态量化需要进行离线校准", "混合比特量化，需要为不同 group 设置不同的量化比特数，通常需要按优化方式进行搜索设置", "量化精度保持策略，通过对量化参数进行精细微调，目的是为了减少量化误差"], "answer": [1, 2, 3], "explanation": "QAT中模型权重通常是可训练的，而不是冻结的，选项A错误。其他选项均正确描述了量化的相关概念。", "pitfall": "容易误认为QAT只更新量化参数不更新权重，实际上QAT的核心就是通过微调更新权重以适应量化误差。"}, {"kc_id": "kc9.1", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "适应性随机梯度方法会让每个参数拥有自己的学习率。下面哪些方法是适应性方法？", "options": ["SGD", "Adam", "RMSProp", "Adagrad"], "answer": [1, 2, 3], "explanation": "Adam、RMSProp和Adagrad都会根据历史梯度信息自适应地调整每个参数的学习率。普通SGD使用全局统一的学习率。", "pitfall": "容易将带动量的SGD误认为适应性方法。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "深度神经网络中有哪些经典的 trick 可以帮助我们加速训练改善泛化？", "options": ["权重初始化", "数据增强", "学习率调节方法", "学习率 Warmup"], "answer": [0, 1, 2, 3], "explanation": "这四个选项都是深度学习中常用的加速训练和改善泛化的技巧。", "pitfall": "容易漏选学习率Warmup，它在训练初期使用较小学习率，有助于模型稳定收敛。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述DTW（动态时间规整）算法的基本步骤。", "answer": "1. 计算两个序列各个点之间的距离矩阵。2. 寻找一条从矩阵左上角到右下角的路径，使得路径上的元素和最小。路径的当前长度等于前一步的路径长度加上当前元素的大小，且路径上的某个元素的前一个元素只能是左边、上面或左上方的相邻元素。", "explanation": "DTW通过动态规划寻找最优对齐路径，解决序列长短不一或时间步不对齐时的相似度计算问题。", "pitfall": "容易忽略路径的约束条件（只能来自左、上、左上）。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述数据并行、模型并行和流水线并行的区别。", "answer": "数据并行：每个NPU上拷贝一份完整的模型，将数据分散到不同NPU上计算。模型并行：几个NPU共同维护一份模型，共同计算一个minibatch的梯度，通常指将模型不同层分配到不同设备。流水线并行：属于模型并行的一种，通过人为引入microbatch，将模型按层切分到不同设备上，使得不同设备可以同时处理不同的microbatch，从而增加资源利用率。", "explanation": "数据并行切分数据，模型并行切分模型结构，流水线并行通过microbatch重叠计算解决模型并行中的设备空闲问题。", "pitfall": "容易混淆模型并行和流水线并行，流水线并行是模型并行的一种优化形式。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述量化感知训练（QAT）和训练后量化（PTQ）的主要区别。", "answer": "QAT是在模型训练过程中引入伪量化，模拟量化带来的误差，并通过微调更新模型权重，使模型对量化更友好，通常精度较高但需要训练开销。PTQ是在模型训练完成后，通过少量校准数据或无数据确定量化参数，不需要重新训练模型，速度快但可能精度损失较大。PTQ分为静态量化和动态量化。", "explanation": "QAT重训练，精度高开销大；PTQ不训练，开销小精度略低。", "pitfall": "容易误认为PTQ不需要任何数据，静态PTQ通常需要少量无标注校准数据。"}, {"kc_id": "kc9.1", "cognitive_level": "remember", "difficulty": "medium", "type": "short", "points": 10, "question": "简述NAS（网络结构搜索）的三个关键技术点。", "answer": "1. 搜索空间：定义了可能发现的所有网络结构，如层数、操作类型、超参数等。2. 搜索策略：定义如何搜索搜索空间，如探索-开发策略，以快速发现好结构并避免陷入次优。3. 性能评估策略：定义如何评估一个网络结构的性能，包括直接评估和间接评估，以降低评估成本。", "explanation": "NAS通过定义搜索空间、搜索策略和性能评估策略来自动寻找最优网络结构。", "pitfall": "容易将搜索空间和搜索策略混淆，或者遗漏性能评估策略。"}, {"kc_id": "kc9.1", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "什么是重计算？它在分布式训练中有什么作用？", "answer": "重计算是一种内存优化方法，通过在后向传播时丢弃部分activation来节约显存，并在反向传播需要时重新计算这些activation。作用是以计算换内存，减少内存占用，从而可以用来增大batch size或在相同卡数下支撑更大的模型。", "explanation": "重计算通过牺牲少量计算时间来换取显存空间的释放，是训练大模型时的常用技术。", "pitfall": "容易忽略重计算是以增加计算时间为代价的。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "KNN算法的必选超参数是？", "options": ["n_neighbors", "weights", "p", "algorithm"], "answer": 0, "explanation": "KNN的必选超参数是n_neighbors，weights, p, algorithm为可选超参数。", "pitfall": "容易混淆必选和可选超参数。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "以下不属于时间序列分析应用的是？", "options": ["人脸识别", "KPI故障诊断", "语音识别", "业务量预测"], "answer": 0, "explanation": "人脸识别属于图像处理领域，不属于时间序列分析应用。KPI故障诊断属于异常检测，语音识别和业务量预测也涉及时序数据。", "pitfall": "语音识别包含时序信息，容易误选。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在使用模型深层特征作为Teacher蒸馏模型浅层特征的“自蒸馏”算法中，以下描述不正确的是？", "options": ["自蒸馏方式相较于非自蒸馏的方式收敛效果更好", "自蒸馏方式相较于非自蒸馏的方式的抗噪能力更强", "自蒸馏的方式能够一定程度上缓解梯度消失的问题", "自蒸馏策略相比其他蒸馏策略在所有场景都具有优势"], "answer": 3, "explanation": "自蒸馏策略并非在所有场景都具有优势，选项D过于绝对。", "pitfall": "容易认为某种算法在所有场景下都最优。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "随机平均梯度方法（SAG）的梯度估计特点是？", "options": ["无偏更新，两层循环，不需要存储梯度", "有偏更新，一层循环，需要存储梯度", "无偏更新，一层循环，需要存储梯度", "有偏更新，两层循环，不需要存储梯度"], "answer": 1, "explanation": "SAG是有偏更新，只需一层循环，并且需要在内存中保留所有样本最近一次计算的梯度值（需要存储梯度）。", "pitfall": "容易混淆SAG、SVRG和SAGA的特性。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下方法中，通过计算换取内存的是？", "options": ["CPU offloading", "重计算", "梯度压缩", "低秩分解"], "answer": 1, "explanation": "重计算通过丢弃部分activation的方式节约显存，被丢弃的activation会在反向传播时重新计算，即通过计算换内存。", "pitfall": "CPU offloading是通过通信换内存。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "Spec Augment增强数据的维度是？", "options": ["时域", "频域", "时域和频域", "空间域"], "answer": 2, "explanation": "Spec Augment属于时频域数据增强方法，综合了时域和频域进行数据增强。", "pitfall": "容易误认为只是频域增强。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于超参数，以下描述不正确的是？", "options": ["支持向量机算法中的C和sigma都是超参数", "超参数来源于人的经验，会受到硬件的制约", "超参数是人为手动设置的，比如支持向量机中的支持向量就是超参数", "参数是通过模型训练得到的，超参数是人为设定得到的"], "answer": 2, "explanation": "支持向量是训练后得到的模型参数，不是人为设定的超参数。", "pitfall": "支持向量机中的“支持向量”容易和超参数混淆。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "关于随机方差减少梯度（SVRG），以下说法正确的是？", "options": ["需要存储所有梯度", "是无偏更新", "只有一层循环", "利用历史梯度平均减少方差"], "answer": 1, "explanation": "SVRG是无偏更新，两层循环，不需要存储所有梯度，利用快照点梯度修正减少方差。", "pitfall": "SVRG与SAGA的特性容易混淆。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "ZeRO-offload是将什么由NPU上传至CPU以节约内存？", "options": ["activation", "模型权重", "优化器状态", "输入数据"], "answer": 2, "explanation": "ZeRO-offload将优化器状态（如Adam的一阶、二阶动量）由NPU上传至CPU。", "pitfall": "容易与CPU offloading（转移activation）混淆。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "贝叶斯优化中，用于评估如何选择新的采样点的是？", "options": ["代理函数", "先验知识", "采集函数", "目标函数"], "answer": 2, "explanation": "贝叶斯优化使用采集函数来评估如何选择新的采样点，获得新采样点后更新先验知识。", "pitfall": "代理函数和采集函数的作用容易混淆。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "模型量化的主要目的不包括？", "options": ["减少AI模型参数容量", "降低计算复杂度", "增加模型非线性能力", "节省资源开销"], "answer": 2, "explanation": "模型量化是为了减少参数容量、降低计算复杂度、节省资源开销，不能增加模型非线性能力。", "pitfall": "量化主要是压缩和加速，不改变模型本质能力。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "以下属于计算加速方法的是？", "options": ["重计算", "CPU offloading", "低精度训练", "ZeRO offloading"], "answer": 2, "explanation": "低精度训练属于计算加速，其余选项属于内存优化。", "pitfall": "容易混淆计算加速和内存优化的方法。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "随机搜索相比网格搜索的优势主要在于？", "options": ["一定能找到全局最优值", "在同样计算预算下能更高效地搜索超参数空间", "不需要指定参数分布", "可以利用之前的执行结果"], "answer": 1, "explanation": "随机搜索在同样计算预算下，相比网格搜索能更高效地搜索超参数空间，找到更好或同样好的模型。", "pitfall": "随机搜索不能保证找到全局最优，也无法利用先前结果。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "完整的数学优化过程三部曲不包括？", "options": ["根据实际问题建模", "明确最优性条件、存在性等理论关切", "设计优化算法求解", "评估算法的时间复杂度"], "answer": 3, "explanation": "数学优化三部曲包括：建模、明确理论关切、设计优化算法求解。评估时间复杂度不属于三部曲的核心步骤。", "pitfall": "容易将算法分析的内容误认为是优化三部曲。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "以下属于频域数据增强方法的是？", "options": ["Window warping", "AAFT", "Spec Augment", "Flipping"], "answer": 1, "explanation": "AAFT (amplitude adjusted Fourier transform) 属于频域数据增强方法。", "pitfall": "Spec Augment属于时频域增强。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "时间序列异常检测的典型应用是？", "options": ["心电图诊断", "股市分析", "KPI故障诊断", "食品光谱分析"], "answer": 2, "explanation": "KPI故障诊断属于时间序列异常检测；心电图诊断和食品光谱分析属于时间序列分类；股市分析属于时间序列预测。", "pitfall": "容易混淆分类、预测和异常检测的应用场景。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "低秩训练的原理是？", "options": ["用低精度模式训练", "将大模型矩阵拆分成两个小矩阵的乘积", "丢弃部分activation", "压缩梯度以减少通信量"], "answer": 1, "explanation": "低秩训练将大模型的某些矩阵拆分成两个小矩阵的乘积，以此减少模型参数量以加速训练。", "pitfall": "容易与稀疏化训练或低精度训练混淆。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于网格搜索，以下描述错误的是？", "options": ["本质是一种穷举法", "适用于连续型参数", "计算复杂度随超参数规模呈指数增长", "无法利用先前的搜索经验"], "answer": 1, "explanation": "网格搜索不适用于连续型参数，因为它是遍历离散的参数组合。", "pitfall": "网格搜索只能处理离散参数。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于超参数的作用，描述正确的是？", "options": ["超参数会直接参与到训练的过程中并不断更新", "超参数是从训练数据中学习得到的", "超参数是用来调节整个训练过程的配置变量", "超参数只能是连续型的"], "answer": 2, "explanation": "超参数是用来调节整个训练过程的配置变量，在训练过程中往往是恒定的，不是从数据中学习得到的。", "pitfall": "容易混淆参数和超参数的更新方式。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "以下哪个算法的必选超参数包含epsilon (for SVR)？", "options": ["KNN", "SVM", "XGBoost", "DBSCAN"], "answer": 1, "explanation": "SVM的必选超参数包含C, kernel, epsilon (for SVR)。", "pitfall": "DBSCAN也有eps参数，但名称和含义不同。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "XGBoost算法的必选超参数包括哪些？", "options": ["n_estimators", "max_depth", "learning_rate", "subsample"], "answer": [0, 1, 2, 3], "explanation": "XGBoost的必选超参数包括n_estimators, max_depth, learning_rate, subsample, colsample_bytree。", "pitfall": "容易漏选subsample和colsample_bytree。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "时间序列数据分析的应用包括哪些？", "options": ["时间序列分类", "时间序列预测", "时间序列异常检测", "图像分割"], "answer": [0, 1, 2], "explanation": "时序数据分析应用主要包括时间序列分类、时间序列预测和时间序列异常检测。", "pitfall": "图像分割不属于时序数据分析。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "自蒸馏算法的优点包括？", "options": ["相较于非自蒸馏的方式收敛效果更好", "相较于非自蒸馏的方式的抗噪能力更强", "能够一定程度上缓解梯度消失的问题", "在所有场景下都优于其他蒸馏策略"], "answer": [0, 1, 2], "explanation": "实验发现自蒸馏方式收敛效果更好，抗噪能力更强，且能缓解梯度消失问题。并非在所有场景都具有优势。", "pitfall": "容易误选绝对化表述的选项。"}, {"kc_id": "kc9.36", "cognitive_level": "analyze", "difficulty": "hard", "type": "multi", "points": 6, "question": "在减少随机梯度方差的方法中，属于无偏更新的有？", "options": ["SAG", "SVRG", "SAGA", "SGD"], "answer": [1, 2], "explanation": "SVRG和SAGA是无偏更新，SAG是有偏更新。", "pitfall": "SAG和SAGA仅一字之差，但偏差特性不同。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "常见的内存优化方法包括？", "options": ["重计算", "CPU offloading", "ZeRO-offload", "低精度训练"], "answer": [0, 1, 2], "explanation": "重计算、CPU offloading和ZeRO-offload属于内存优化方法，低精度训练属于计算加速方法。", "pitfall": "低精度训练虽然也能减少显存，但在文档分类中属于计算加速。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "计算加速的方法包括哪些？", "options": ["低精度训练", "稀疏化训练", "低秩训练", "梯度压缩"], "answer": [0, 1, 2], "explanation": "计算加速包括低精度训练、稀疏化训练和低秩训练。梯度压缩属于通信优化。", "pitfall": "梯度压缩容易误认为计算加速。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "网格搜索的缺点包括？", "options": ["计算复杂度随超参数规模呈指数增长", "不适用于连续型参数", "无法利用先前的搜索经验", "可能会错过全局最优值"], "answer": [0, 1, 2, 3], "explanation": "网格搜索非常耗时，不适用于连续参数，无法利用先前经验，且由于离散采样可能错过全局最优。", "pitfall": "网格搜索的缺点较多，容易漏选。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "以下属于超参数的有？", "options": ["神经网络中隐藏层的数量", "随机森林中树木的数量", "DNN中神经元的weights", "学习率"], "answer": [0, 1, 3], "explanation": "隐藏层数量、树木数量和学习率是训练前人为设定的超参数。weights是训练得到的参数。", "pitfall": "weights是模型参数，不是超参数。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "时域数据增强的方法包括？", "options": ["Window warping", "Flipping", "Window slicing", "AAFT"], "answer": [0, 1, 2], "explanation": "Window warping, Flipping, Window slicing属于时域数据增强。AAFT属于频域数据增强。", "pitfall": "容易混淆时域和频域的方法。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "Deep learning的必选超参数包括哪些？", "options": ["number of hidden layers", "learning rate", "epochs", "number of frozen layers"], "answer": [0, 1, 2], "explanation": "number of hidden layers, learning rate, epochs等是必选超参数。number of frozen layers是可选超参数（用于迁移学习）。", "pitfall": "迁移学习相关的参数是可选的。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "数学优化三部曲包括哪些步骤？", "options": ["根据实际问题建模得到数学优化问题", "明确最优性条件、存在性、唯一性等理论关切", "设计优化算法求解该优化问题", "部署模型到生产环境"], "answer": [0, 1, 2], "explanation": "完整的优化过程包括建模、明确理论关切和设计优化算法求解三个步骤。", "pitfall": "部署模型不属于数学优化过程。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "随机搜索的优点包括？", "options": ["简单，易于实现", "速度较快", "能并行", "能利用之前的执行结果"], "answer": [0, 1, 2], "explanation": "随机搜索简单、易于实现、速度较快且能并行，但无法利用之前的执行结果。", "pitfall": "随机搜索不能利用历史信息。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "以下支持低精度计算的设备有？", "options": ["Ascend910A", "NVIDIA A100", "NVIDIA T4", "传统单片机"], "answer": [0, 1, 2], "explanation": "Ascend910A、NVIDIA A100和NVIDIA T4都支持低精度计算（如FP16或INT8）。", "pitfall": "传统单片机通常不支持低精度AI计算。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "贝叶斯优化的核心步骤包括？", "options": ["建立一个代理模型", "通过采集函数选择下一个优化点", "获得新采样点后更新先验知识", "遍历所有可能的参数组合"], "answer": [0, 1, 2], "explanation": "贝叶斯优化建立代理模型，使用采集函数选择新采样点，更新先验知识并迭代。它不遍历所有组合。", "pitfall": "贝叶斯优化不是穷举搜索。"}, {"kc_id": "kc9.36", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "RF & ET的必选超参数包括哪些？", "options": ["n_estimators", "max_depth", "criterion", "splitter"], "answer": [0, 1, 2], "explanation": "RF & ET的必选超参数包括n_estimators, max_depth, criterion等。splitter是可选超参数。", "pitfall": "splitter是可选超参数。"}, {"kc_id": "kc9.36", "cognitive_level": "analyze", "difficulty": "hard", "type": "short", "points": 10, "question": "简述SAG、SVRG和SAGA三种算法在是否无偏、循环层数和是否需要存储梯度方面的区别。", "answer": "SAG：有偏更新，一层循环，需要存储梯度。SVRG：无偏更新，两层循环，不需要存储梯度。SAGA：无偏更新，一层循环，需要存储梯度。", "explanation": "SAG利用历史梯度平均减少方差，但存在偏差；SVRG利用快照点梯度修正，无偏但需两层循环；SAGA在SAG基础上增加无偏修正项。", "pitfall": "容易混淆三种算法的偏差特性和存储需求。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "什么是重计算？它是如何实现内存优化的？", "answer": "重计算是一种内存优化方法。在后向传播时需要保留activation会占用内存，重计算通过丢弃部分activation的方式节约显存。被丢弃的activation会在反向传播时重新计算，从而通过计算换取内存。", "explanation": "重计算的核心思想是以时间换空间，通过重新计算被丢弃的激活值来减少显存占用。", "pitfall": "容易与CPU offloading混淆，后者是通过通信换内存。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述网格搜索和随机搜索的原理及各自的优缺点。", "answer": "网格搜索：在参数列表中进行穷举搜索，遍历每种可能的超参数组合。优点是简单易实现；缺点是耗时、不适用于连续型参数、无法利用先前经验、可能错过全局最优。随机搜索：在超参数搜索空间中随机采样固定数量的超参数组合进行测试。优点是简单、速度快、能并行、在同样预算下能更高效搜索；缺点是优化结果无法保证，无法利用之前的执行结果。", "explanation": "网格搜索是穷举，随机搜索是随机采样。随机搜索在重要参数上探索更充分。", "pitfall": "容易忽略随机搜索无法利用历史信息的缺点。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "basic", "type": "short", "points": 10, "question": "什么是超参数？超参数与参数的区别是什么？", "answer": "超参数是在模型开始学习之前设置的参数，用来调节整个训练过程的配置变量。区别在于：参数是通过模型训练从数据中学习得到的，在训练过程中会不断更新；而超参数是人为手动设定的，在训练过程中往往是恒定的，不直接参与训练更新。", "explanation": "超参数控制学习过程，参数是学习的结果。", "pitfall": "容易将模型训练得到的权重等误认为超参数。"}, {"kc_id": "kc9.36", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述贝叶斯优化的基本原理。", "answer": "贝叶斯优化是一种黑盒优化算法，用于求解表达式未知的函数的极值问题。由于目标函数不好优化，它寻找一个代理函数来优化。为了找到合适的代理函数，赋予其概率分布，根据当前先验知识使用采集函数评估如何选择新的采样点。获得新采样点后更新先验知识，继续迭代找到最合适的代理函数，最终求得全局最优解。", "explanation": "贝叶斯优化的核心是代理模型和采集函数，通过不断更新先验知识来逼近最优解。", "pitfall": "容易忽略采集函数的作用。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "数据采集的主要挑战不包括以下哪项？", "options": ["数据采集的代价、成本较大", "多样性无法保证，模型泛化能力较弱", "各种corner case难以获得", "数据标注完全自动化"], "answer": 3, "explanation": "数据采集的主要挑战包括：数据采集的代价、成本较大；多样性无法保证，模型泛化能力较弱；各种corner case难以获得，需要通过数据仿真与合成方法生成。", "pitfall": "容易混淆数据采集的挑战与数据标注的挑战，标注自动化并非数据采集阶段的挑战。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "数据采集的关键技术包括哪些？", "options": ["数据采集、压缩能力、存储能力", "数据生成技术、数据合成技术、风格迁移", "物理仿真数据", "模型剪枝与量化"], "answer": [0, 1, 2], "explanation": "关键技术包括：①数据采集、压缩能力、存储能力；②数据生成技术、数据合成技术、风格迁移；③物理仿真数据。", "pitfall": "模型剪枝与量化属于模型优化技术，不属于数据采集的关键技术。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "CV数据仿真中，类似Tesla采用什么软件进行建模，生成偶发性场景进行自动驾驶验证或训练？", "options": ["Blender", "Houdini", "Maya", "3ds Max"], "answer": 1, "explanation": "通过CG技术为CV算法提供训练数据是业界的趋势，类似Tesla采用Houdini进行建模，生成偶发性场景进行自动驾驶验证或者训练。", "pitfall": "容易混淆各种3D建模软件，需记住文档中明确提到的Tesla使用的软件是Houdini。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "自监督大模型的优势包括哪些？", "options": ["预训练自监督，无需标注，数据标注成本低", "天然的多任务属性，下游不同任务可以共用无标注领域数据", "泛化能力优于监督学习模型", "大模型算力、训练数据、模型结构设计能力门槛低，易于普及"], "answer": [0, 1, 2], "explanation": "自监督大模型的优势包括：预训练自监督，无需标注，数据标注成本低；天然的多任务属性；泛化能力优于监督学习模型；减少维护代价。大模型门槛高，容易形成技术断裂点，因此D选项错误。", "pitfall": "大模型的门槛实际上很高，而非门槛低易于普及。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "关于大模型训练依赖，下列说法正确的是？", "options": ["TB级数据 + PB级算力 = 大模型 200B级参数", "GB级数据 + TB级算力 = 大模型 200B级参数", "TB级数据 + TB级算力 = 大模型 200B级参数", "PB级数据 + TB级算力 = 大模型 200B级参数"], "answer": 0, "explanation": "大模型训练依赖：TB级数据 + PB级算力 = 大模型 200B级参数。", "pitfall": "容易混淆数据量和算力量的单位级别。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "时序多维数据的增强方法包括哪些？", "options": ["遮蔽", "裁剪", "Multi_crops", "加噪"], "answer": [0, 1, 2, 3], "explanation": "时序多维数据的增强方法包括：遮蔽、裁剪、Multi_crops、缩放、加噪。", "pitfall": "所有列出的选项均为时序多维数据的有效增强方法。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "α剪枝自动增强的主要目的是什么？", "options": ["为所有样本采用相同的增强策略", "为每个时序样本选择最合适的增强策略", "减少模型的训练时间", "降低模型的参数量"], "answer": 1, "explanation": "α剪枝自动增强是时序数据增强的千人千面，样本级增强，为每个时序样本选择最合适的增强策略。", "pitfall": "传统的自动数据增强对所有样本采用相同策略，而α剪枝是针对样本级的差异化增强。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "α剪枝自动增强的算法流程包括哪些步骤？", "options": ["Augment sample：对样本执行多种增强策略", "Evaluate and calculate loss：计算增强样本的损失", "Rank and trim：对损失进行排序并修剪", "选择最难样本进行数据增强"], "answer": [0, 1, 2], "explanation": "算法流程包括：1. Augment sample；2. Evaluate and calculate loss；3. Rank and trim。执行步骤包括增强样本、loss计算、增强样本选择、增强样本汇总。D选项不属于该流程。", "pitfall": "α剪枝是筛选Top α loss和Bottom α loss样本，而不是简单选择最难样本。"}, {"kc_id": "kc9.76", "cognitive_level": "analyze", "difficulty": "hard", "type": "choice", "points": 4, "question": "对于MLP模型，关于样本loss的说法正确的是？", "options": ["loss较小样本对模型更新贡献度大", "loss较大样本对模型更新信息小", "loss较大样本对模型更新贡献度大，但会导致更新后的模型在容易样本上性能受损", "loss大小对模型更新没有影响"], "answer": 2, "explanation": "对MLP模型而言，loss较小样本，对模型更新信息小，loss较大样本对模型更新贡献度大，然而这样会导致更新后的模型在容易样本上性能受损。", "pitfall": "容易忽略选择高loss样本带来的负面影响（即容易样本性能受损）。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述主动学习的整体过程。", "answer": "1. 从未标注样本中选择部分样本，由专家进行标注；2. 专家完成标注，生成已标注样本；3. 基于已标注样本训练算法模型；4. 算法模型对未标注数据进行预测，并且按照某种原则选择未标注样本给专家进行标注；5. 专家完成标注，更新已标注样本；6. 重新更新模型，重复上述过程。", "explanation": "主动学习是一个迭代式的数据工程和模型训练过程，通过模型主动选择高价值样本进行标注，以降低标注成本。", "pitfall": "容易遗漏迭代更新的闭环过程。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "选择待标注高价值样本的策略包括哪些？", "options": ["Margin sampling", "Least confident", "Entropy", "Random sampling"], "answer": [0, 1, 2], "explanation": "选择待标注高价值样本的策略包括：Margin sampling、Least confident、Entropy。通过不同任务，选择合适的策略进行待标注样本的选择。", "pitfall": "Random sampling不属于主动学习的高价值样本选择策略。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于主动学习在实际业务问题中应用限制的说法，错误的是？", "options": ["现实的业务数据集可能有大量的噪声，并且领域专家也难以标注", "现在深度学习需要的样本数量庞大，并且训练的轮次很多，导致迭代过程代价增加", "传统的主动学习都是 task specific，缺乏更加普适性的方法", "主动学习将数据工程和模型训练过程变成一种一次性完成的方法，在工业界应用非常顺利"], "answer": 3, "explanation": "主动学习将数据工程和模型训练过程变成一种迭代式的方法，在工业界应用存在一定的障碍，而非一次性完成的方法。", "pitfall": "主动学习的迭代特性既是优势也是工业界应用的障碍。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "主动学习在实际业务应用中的限制包括哪些？", "options": ["现实业务数据集可能有大量噪声，专家难以标注", "深度学习需要样本数量庞大，训练轮次多，迭代代价增加", "传统主动学习缺乏普适性方法", "主动学习在工业界应用存在障碍，因为是迭代式方法"], "answer": [0, 1, 2, 3], "explanation": "以上四点均为主动学习在实际业务问题中应用的限制。", "pitfall": "需全面理解主动学习在实际应用中面临的数据、算力、通用性和工程化障碍。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在原始问题需求分析中，AI的需求分解通常在哪个层面进行？", "options": ["原始需求 (IR)", "系统需求 (SR)", "分配需求 (AR)", "客户需求 (CR)"], "answer": 2, "explanation": "分配需求是具体到模块或者子系统的需求，因此涉及到具体需求实现，而AI方法实际上是实现层面的方法论，因此在AR层面进行AI的需求分解是比较合适的。", "pitfall": "容易误认为在系统需求(SR)层面分解，但实际上AI方法属于实现层面，更适合在分配需求(AR)层面分解。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于系统需求分析，下列说法正确的有哪些？", "options": ["原始需求（IR）描述的是客户的诉求或者分解的业务问题", "系统需求（SR）是系统/产品视角，描述需求", "分配需求（AR）是内部模块视角，分配需求，各模块进行具体需求实现", "一般情况下，原始需求中可以直接推导出AI的算法需求"], "answer": [0, 1, 2], "explanation": "一般情况下，原始需求中，无法直接推导出AI的算法需求，按照系统需求分析方法进行分解。因此D选项错误。", "pitfall": "原始需求通常无法直接推导出AI算法需求，需要经过系统需求分解。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "昇腾Ascend310P NPU的AI Core支持哪两种数值类型？", "options": ["FP16、FP32", "FP16、INT8", "INT8、INT4", "FP32、INT8"], "answer": 1, "explanation": "昇腾Ascend310P NPU的AI Core支持FP16和INT8两种数值类型。", "pitfall": "需准确记忆硬件支持的数值类型，容易混淆FP32和INT8。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于数据增加方法下列说法不正确的是？", "options": ["采用真实数据、仿真数据和数据增强结合的方式，可以解决数据问题", "CG技术可以为CV算法模型提供数据集", "可以基于背景和特性入侵模型进行样本生成", "原始的GAN训练简单，且生成方向可控，往往用于大批量生成样本方便后端任务训练"], "answer": 3, "explanation": "原始的GAN训练困难，且生成方向不可控，因此往往不用于大批量生成样本方便后端任务训练。", "pitfall": "原始GAN的训练难度和生成可控性是其主要缺点，而非优点。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "针对自监督学习说法错误的是？", "options": ["减少维护代价，下游任务变化，仅需标注少量数据", "预训练自监督，无需标注，数据标注成本低", "下游不同任务不可以共用无标注领域数据", "泛化能力优于监督学习模型"], "answer": 2, "explanation": "自监督学习具有天然的多任务属性，下游不同任务可以共用无标注领域数据。因此C选项错误。", "pitfall": "自监督学习的多任务属性正是其优势之一，不同任务可以共用无标注数据。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "一个完整定义的数学优化问题由多个要素组成。其中，数学优化不包括如下哪个要素？", "options": ["常量", "约束条件", "目标函数", "变量"], "answer": 0, "explanation": "一个完整定义的数学优化问题通常包括变量、约束条件和目标函数，不包括常量。", "pitfall": "常量虽然存在于数学表达式中，但不属于优化问题的核心组成要素。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "不属于α剪枝增强执行步骤的是？", "options": ["预测误差计算", "对每个样本执行N种增强策略", "选择增强样本和汇总", "选择最难样本进行数据增强"], "answer": 3, "explanation": "α剪枝自动增强的执行步骤包括：增强样本、loss计算、增强样本选择、增强样本汇总。选择最难样本进行数据增强不属于其执行步骤。", "pitfall": "α剪枝是筛选Top α和Bottom α loss样本，而不是简单选择最难样本。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于主动学习，下列说法中错误的是？", "options": ["算法模型对未标注数据进行预测，并且随机选择未标注样本给专家进行标注", "现实的业务数据集可能有大量的噪声，并且领域专家也难以标注，因此主动学习的实际应用有很大的限制", "实际项目中往往会面临大量数据无标注、标注不全、标注错误等问题，如果进行人工标注可能导致巨大的人力成本和时间成本", "主动学习将数据工程和模型训练过程变成一种迭代式的方法"], "answer": 0, "explanation": "主动学习是按照某种原则（如Margin sampling等）选择未标注样本，而不是随机选择。", "pitfall": "主动学习的核心在于“主动”选择高价值样本，随机选择违背了其基本原理。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于原始问题需求分析说法不正确的是？", "options": ["AI的需求分解通常更适合在分配需求层面进行", "原始需求（IR）是指客户的诉求或者分解的业务问题，体现不同客户对产品的要求", "系统需求（SR）是内部模块视角，在各模块进行具体需求实现", "需求分解的层级顺序为原始需求（IR）-系统需求（SR）-分配需求（AR）"], "answer": 2, "explanation": "系统需求（SR）是系统/产品视角，描述需求；分配需求（AR）才是内部模块视角，在各模块进行具体需求实现。", "pitfall": "容易混淆系统需求(SR)和分配需求(AR)的视角定义。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在设计AI算法时，需要对算法目标进行定义，下列选项不属于算法目标的是？", "options": ["评价方式", "准确率目标", "性能目标", "数据数量"], "answer": 3, "explanation": "算法目标的定义包括：评价方式、准确率目标、性能目标、算力目标等。数据数量属于数据条件，不属于算法目标。", "pitfall": "数据数量是训练模型的前提条件，而非算法追求的目标。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述从需求转化为AI算法定义时，Why、What、How分别需要回答什么问题？", "answer": "Why：需要回答是否需要用AI解决？评估传统算法的周期、成本、代价、效果等，以及AI算法解决的条件是否具备（数据数量、质量、算力等）。\nWhat：需要回答需要做到什么样的程度？是否可以用AI达成？定义算法目标，如评价方式、准确率目标、性能目标等。\nHow：需要回答如何达成，通过什么样的模型和算法解决？明确支撑商用目标的路径，以及存在GAP时是否可以商用。", "explanation": "Why、What、How分别对应了需求分析中的必要性、目标和实现路径。", "pitfall": "容易混淆What和How的边界，What侧重于目标定义，How侧重于实现路径。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "以下说法错误的是？", "options": ["深度扩增是实现稀疏化的一种方式", "分布式训练中可以通过将计算和通信重叠减少训练时间", "DeepSpeed 是基于 TensorFlow 的分布式训练框架", "梯度压缩能减少通信量"], "answer": 2, "explanation": "DeepSpeed 是基于 PyTorch 的分布式训练框架，而非 TensorFlow。", "pitfall": "DeepSpeed是微软开源的知名框架，需准确记忆其基于的底层框架。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "常见的梯度压缩方案包括哪些？", "options": ["Sign", "Top K", "Random Block", "Low-rank"], "answer": [0, 1, 2, 3], "explanation": "常见的梯度压缩方案包括：Sign、Sign + Norm、Top K、Random K、Random Block、Low-rank 等。", "pitfall": "所有列出的选项均为有效的梯度压缩方案。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "计算加速算法中的稀疏化扩增方向包括哪些？", "options": ["深度扩增", "广度扩增", "梯度冻结", "低秩分解"], "answer": [0, 1, 2], "explanation": "根据扩增方向不同，稀疏化可具体分为深度扩增、广度扩增以及梯度冻结。低秩分解属于另一种计算加速算法。", "pitfall": "低秩分解是独立的加速算法，不属于稀疏化的扩增方向。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "在大规模机器学习中的凸优化问题中，下面哪个方法不能有线性收敛率？", "options": ["SAGA", "SVRG", "Mini-batch SGD", "SAG"], "answer": 2, "explanation": "在 SAG 之后，有了一系列的线性收敛算法，如 SAG、SDCA、SVRG、MISO、Finito、SAGA。Mini-batch SGD 不具有线性收敛率。", "pitfall": "Mini-batch SGD是常用的优化算法，但不属于线性收敛算法。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "常见的线性收敛算法包括哪些？", "options": ["SAG", "SVRG", "SAGA", "Mini-batch SGD"], "answer": [0, 1, 2], "explanation": "常见的线性收敛算法包括：SAG、SDCA、SVRG、MISO、Finito、SAGA。Mini-batch SGD不具有线性收敛率。", "pitfall": "需区分线性收敛算法与普通优化算法。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "下列技术中，PyTorch（1.8.0 版本）支持的不包括的是？", "options": ["流水线并行", "重计算", "数据并行", "低精度训练"], "answer": 0, "explanation": "PyTorch 1.8.0 版本支持数据并行、重计算、低精度训练，但不支持流水线并行。", "pitfall": "需注意PyTorch版本与支持特性的对应关系，1.8.0版本尚不支持流水线并行。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "对训练数据直接在原始数据域进行基础数据增强，不可以应用的方法是？", "options": ["Window warping", "Flipping", "DBA", "AAFT"], "answer": 3, "explanation": "AAFT 属于频域数据增强方法，不属于时域（原始数据域）基础数据增强方法。", "pitfall": "容易混淆时域和频域的数据增强方法。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "基础时序数据增强包括哪些类别？", "options": ["时域数据增强", "频域数据增强", "时频域数据增强", "空间域数据增强"], "answer": [0, 1, 2], "explanation": "基础时序数据增强包括：时域数据增强、频域数据增强、时频域数据增强。", "pitfall": "时序数据不涉及空间域增强。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "当有2个超参数存在时，下面哪种超参优化算法的时间复杂度最低？", "options": ["网格搜索", "随机搜索", "BO-GP", "BO-SMAC"], "answer": 1, "explanation": "随机搜索的时间复杂度为 O(n)，是所有列出的算法中最低的。网格搜索为 O(n^k)，BO-GP为 O(n^3)，BO-SMAC为 O(n log n)。", "pitfall": "需记住各算法的时间复杂度公式，并注意n和k的含义。"}, {"kc_id": "kc9.76", "cognitive_level": "remember", "difficulty": "hard", "type": "multi", "points": 6, "question": "常见的超参数优化算法中，时间复杂度为 O(n log n) 的有哪些？", "options": ["BO-SMAC", "BO-TPE", "Hyperband", "BOHB"], "answer": [0, 1, 2, 3], "explanation": "BO-SMAC、BO-TPE、Hyperband、BOHB、PSO的时间复杂度均为 O(n log n)。", "pitfall": "需准确记忆各算法的时间复杂度。"}, {"kc_id": "kc9.76", "cognitive_level": "analyze", "difficulty": "hard", "type": "choice", "points": 4, "question": "假定内存足够大的情况下使用数据并行，下列哪个场景中通信优化的收益最大？", "options": ["大模型训练，卡间带宽大", "小模型训练，卡间带宽大", "大模型训练，卡间带宽有限", "小模型训练，卡间带宽有限"], "answer": 2, "explanation": "大模型训练时通信量大，当卡间带宽有限时，通信成为瓶颈，此时通信优化的收益最大。", "pitfall": "容易忽略模型大小和带宽条件的综合影响，大模型+有限带宽是通信优化的最佳场景。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "关于条件数的描述不正确的是？", "options": ["条件数越大说明函数的可解性越好", "条件数大于等于1", "条件数越小说明函数的可解性越好", "条件数定义在强凸平滑函数上"], "answer": 0, "explanation": "条件数 κ = L/μ ≥ 1。当 κ 较小时，函数可解性较好；当 κ 较大时，函数可解性较差。", "pitfall": "容易混淆条件数大小与可解性的关系，条件数越大反而可解性越差。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "量化分辨率影响量化精度，对于数值分布集中的区域，需要设置较大的量化分辨率。这种说法是否正确？", "options": ["错误", "正确"], "answer": 1, "explanation": "数值分布较为集中、陡峭的区域，设置较高的量化分辨率，以精细区分数值分布。这里的“较大的量化分辨率”指的是较高的分辨率（即量化区间宽度较小）。", "pitfall": "注意“较大的量化分辨率”指的是分辨率数值高，即区间宽度小，而不是区间宽度大。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述非均匀量化中如何设置量化分辨率以获得较好的量化效果。", "answer": "为了获得较好的量化效果，通常需要适应不同区域的特点，设置最佳量化分辨率：\n1. 数值分布较为分散、平坦的区域，设置较低的量化分辨率，即量化区间宽度较大；\n2. 数值分布较为集中、陡峭的区域，设置较高的量化分辨率，以精细区分数值分布。", "explanation": "非均匀量化的核心在于根据数据分布的密集程度动态调整量化区间宽度。", "pitfall": "容易将平坦区域和陡峭区域的量化分辨率设置混淆。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "有关低精度训练，下列说法不正确的是？", "options": ["低精度训练可能会带来 underflow 的问题", "PyTorch 尚不支持低精度训练", "Automatic Mixed Precision (AMP) 能更好的支持低精度训练", "fp16 计算更加亲和 NPU 的 AI Core（或者 GPU 的 Tensor Core）"], "answer": 1, "explanation": "PyTorch 1.6+ 已通过 torch.amp 支持 fp16 低精度训练，且支持 Automatic Mixed Precision (AMP)。", "pitfall": "PyTorch较新版本已经支持低精度训练，不能认为“尚不支持”。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于低精度训练的原因，包括哪些？", "options": ["fp16 计算乘法的理论速度是 fp32 的 4 倍", "NPU 的 AI Core 硬件亲和 fp16", "低精度训练对精度几乎没有影响，但却节约内存、提高吞吐量", "低精度训练完全避免了梯度消失问题"], "answer": [0, 1, 2], "explanation": "低精度训练的原因包括：fp16计算速度快且硬件亲和；对精度几乎没有影响但节约内存、提高吞吐量。低精度训练不能完全避免梯度消失，反而可能带来underflow问题。", "pitfall": "低精度训练不仅不能避免梯度问题，反而可能引发underflow。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述低精度训练可能带来的问题及解决办法。", "answer": "问题：低精度训练可能会带来 underflow（下溢）的问题。由于 fp16 表示范围不及 fp32，因此难以表达很小的 gradient。\n解决办法：采用 loss scaling，如在 loss 上乘以 8192 从而使得梯度也乘以 8192。基于这个思路，NVIDIA 提出了 Automatic Mixed Precision (AMP)，自动判断应该把梯度扩大多少倍以避免 underflow。", "explanation": "低精度训练的核心问题在于数值表示范围受限，通过loss scaling可以有效缓解。", "pitfall": "容易遗漏AMP（自动混合精度）这一自动化解决方案。"}, {"kc_id": "kc9.76", "cognitive_level": "understand", "difficulty": "basic", "type": "choice", "points": 4, "question": "树模型剪枝算法分为预剪枝和后剪枝方法，请问哪种剪枝算法相对更常用？", "options": ["预剪枝", "后剪枝"], "answer": 1, "explanation": "相比于预剪枝，后剪枝方法更常用，正是因为在预剪枝方法中精确地估计何时停止树增长很困难。", "pitfall": "容易误认为预剪枝更常用，实际上后剪枝由于不需要提前估计停止时机，应用更广泛。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "STL算法（季节趋势分解）的关键要素不包括以下哪一项？", "options": ["残差", "季节", "趋势", "方差"], "answer": 3, "explanation": "STL算法将时序数据分解为trend（趋势）、seasonality（季节性）和residual（残差），不包括方差。", "pitfall": "容易将统计学中的方差与STL分解的成分混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在AI模型压缩领域，关于自蒸馏算法使用的原因，描述不正确的是？", "options": ["好的教师可以教出更好的学生，而好的学生可以进一步集成为更好的教师，通过迭代可以进行自我增强", "自蒸馏可以避免构建大的教师模型的开销", "通常来说学生模型本身就可以很好地提供相应蒸馏知识，没有必要构建教师模型", "在训练过程中，中间过程的模型参数可能有值得我们挖掘的信息，可以通过自蒸馏学习训练中间过程的模型信息"], "answer": 2, "explanation": "自蒸馏的原因包括避免构建大教师模型开销、挖掘中间过程模型信息、自我增强等。选项C说法过于绝对，并非完全没有必要构建教师模型。", "pitfall": "容易误认为自蒸馏完全替代了教师模型的作用。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "无监督学习算法可以进一步划分为哪两类问题？", "options": ["回归和分类", "聚类和关联", "平滑和流形", "监督和半监督"], "answer": 1, "explanation": "无监督学习算法可以进一步分为聚类和关联两类问题。", "pitfall": "容易将监督学习的回归和分类与无监督学习的聚类和关联混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下关于监督学习、无监督学习、半监督学习和自监督学习的说法，不正确的是？", "options": ["平滑假设、流形假设和聚类假设都是半监督学习的典型假设", "自监督学习设计辅助任务来挖掘数据自身的表征特性作为监督信息", "无监督学习可以进一步划分为聚类和关联", "半监督学习使用大量标注数据和小量的无标注数据学习"], "answer": 3, "explanation": "半监督学习使用大量的未标记数据以及同时使用标记数据来进行模式识别工作，而不是大量标注数据和小量无标注数据。", "pitfall": "半监督学习的核心是利用大量未标注数据，容易记反。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "在知识蒸馏领域，基于响应值的蒸馏主要关注什么区别？", "options": ["硬标签和软标签", "中间层特征", "相关性", "梯度信息"], "answer": 0, "explanation": "基于响应值的蒸馏主要关注硬标签和软标签的区别，以及蒸馏温度的意义。", "pitfall": "容易与基于中间层特征或相关性的蒸馏混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "根据常见ML算法的超参数及优化算法选择表，DBSCAN中的超参数eps不适合采用下列哪种超参优化算法？", "options": ["BO-TPE", "BO-SMAC", "BO-GP", "BOHB"], "answer": 2, "explanation": "根据表格，DBSCAN的优化算法为BO-TPE, SMAC, BOHB，不包括BO-GP。", "pitfall": "需要准确记忆表格中不同算法对应的优化方法。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在Data Free蒸馏中，DeepDream优化过程中不变的参数是？", "options": ["输入噪声图片", "模型参数", "标签信号", "正则项系数"], "answer": 1, "explanation": "DeepDream优化过程中模型参数是不变的，优化的参数是输入噪声图片。", "pitfall": "容易混淆优化目标，在Data Free蒸馏中是优化输入数据而非模型参数。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "生成式模型学习的对象是？", "options": ["输入x的条件下，输出y的条件分布 p(y|x)", "输入x和输出y的联合分布 p(x, y)", "输出y的边缘分布 p(y)", "输入x的边缘分布 p(x)"], "answer": 1, "explanation": "生成式模型学习的对象是输入x和输出y的联合分布 p(x, y)。", "pitfall": "容易与判别式模型的条件分布 p(y|x) 混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "以下属于判别式模型的是？", "options": ["朴素贝叶斯法", "高斯混合模型", "马尔可夫模型", "支持向量机"], "answer": 3, "explanation": "典型的判别式模型包括线性回归、k近邻法、决策树、最大熵模型、支持向量机等。前三个均为生成式模型。", "pitfall": "需要准确记忆典型模型归属。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于AI算法模型与传统软件方法的区别，说法不正确的是？", "options": ["传统软件方法更加适合规则难易描述的问题", "AI算法通过数据来提取知识或者规则，传统软件方法不依赖于数据", "传统软件方法对于开放场景无法很好适应", "AI算法模型主要是基于概率的推理模型，不适合有着极高精度要求的场景"], "answer": 0, "explanation": "对于能够使用明确规则描述的问题，可以使用传统软件方法解决；如果规则无法明确描述，适合通过AI算法解决。因此传统软件方法适合规则容易描述的问题。", "pitfall": "容易将AI和传统软件适用的规则描述难易程度记反。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "以下时序数据增强算法中，不属于时域增强的是？", "options": ["Flipping", "DBA", "AAFT", "Window warping"], "answer": 2, "explanation": "AAFT (Amplitude Adjusted Fourier Transform) 属于频域数据增强方法。", "pitfall": "容易将频域和时域增强算法混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "数学优化的三要素不包括？", "options": ["目标函数", "变量", "约束条件", "梯度"], "answer": 3, "explanation": "优化是从变量的约束条件所限定的集合中找到使某个目标函数最小/最大的解的过程。三要素是目标函数、变量、约束条件。", "pitfall": "梯度是求解优化问题的工具，而非优化问题的要素。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于PSO（粒子群优化）和GA（遗传算法），以下说法错误的是？", "options": ["两者都可以并行化", "PSO有记忆，GA无记忆", "两者都属于随机搜索算法", "两者都属于局部优化方法"], "answer": 3, "explanation": "PSO和GA都属于全局优化方法，而非局部优化方法。", "pitfall": "容易忽略全局优化与局部优化的区别。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "自监督学习的核心思想是？", "options": ["基于完全标注的信息，实现模型与数据分布的近似", "内部数据的规律以及少量参考信息之间的关系，能够揭示未知的规律和分布", "数据内部的维度间关系是其外在表现的本源信息", "自身规律的学习和理解，结合人的认知，完成学习过程"], "answer": 2, "explanation": "自监督学习的核心思想是：数据内部的维度间关系是其外在表现的本源信息。或者说，内因决定外在表现。", "pitfall": "容易将自监督与半监督、无监督的核心思想混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在自蒸馏算法中，关于蒸馏loss的权重 $\\alpha_t$ 的描述正确的是？", "options": ["训练初期 $\\alpha_t$ 较大，模型训练更依赖教师的软标签", "训练初期 $\\alpha_t$ 较小，模型训练更依赖数据硬标签", "随着epoch增加，教师的软标签可信度下降，$\\alpha_t$ 变小", "$\\alpha_t$ 在整个训练过程中保持不变"], "answer": 1, "explanation": "在训练初期，模型精度较差，$\\alpha_t$ 较小，模型训练更依赖数据硬标签；随着epoch增加，教师的软标签越来越可信，则 $\\alpha_t$ 也变大。", "pitfall": "容易忽略权重随训练阶段动态变化的特性。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "DeepInversion 相比于 DeepDream 的主要改进在于？", "options": ["使用了不同的分类损失函数", "优化了正则项 $R(\\hat{x})$", "不再需要教师模型", "直接使用真实数据进行蒸馏"], "answer": 1, "explanation": "DeepInversion基于DeepDream优化了正则项 $R(\\hat{x})$，通过特征正则化项使得生成的图片在各个级别的特征相似。", "pitfall": "容易忽略正则项在数据生成中的关键作用。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下哪种场景更适合使用AI算法而不是传统软件方法？", "options": ["数据获取困难，规则明确", "数据获取容易，规则难以描述，搜索空间庞大", "安全性、可靠性要求极高（大于99.99%）", "影响因素以内部因素为主，边界确定"], "answer": 1, "explanation": "AI适合数据容易获取，规则难以描述，搜索空间庞大，并且不要求极高可靠性的场景。", "pitfall": "容易在安全性要求和数据获取难易度上产生混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "AutoAugment技术在设计数据增强子策略时，主要搜索的是？", "options": ["增强方法的类型和执行顺序", "单个增强方法被执行的概率和增强幅度", "最优的模型网络结构", "最佳的学习率和批次大小"], "answer": 1, "explanation": "AutoAugment通过强化学习、元学习或者进化搜索自动搜索最佳数据增强策略，即单个增强方法被执行的概率和增强幅度。", "pitfall": "容易将数据增强策略搜索与超参数优化或网络结构搜索混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "生成式模型的缺点不包括？", "options": ["鲁棒性较差", "容易受到异常数据影响", "需要大量数据进行复杂计算", "在小数据集上表现较好"], "answer": 3, "explanation": "生成式模型需要大量数据进行复杂计算，鲁棒性较差；在小数据集上表现较好是判别式模型的优点。", "pitfall": "容易将生成式模型和判别式模型的优缺点记反。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "完整的数学优化过程三部曲不包括以下哪一步？", "options": ["根据实际问题建模得到一个数学优化问题", "明确该优化问题解的最优性条件、存在性、唯一性等理论关切", "收集大量标注数据并训练深度学习模型", "设计优化算法求解该优化问题"], "answer": 2, "explanation": "完整的优化过程包括建模、明确理论关切和设计优化算法三个步骤，不涉及训练深度学习模型。", "pitfall": "容易将AI模型训练与数学优化流程混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "在对时序数据进行增强时，基于时序数据的自相关性，给初始点一个扰动，后续数据点随之扰动，属于此思想的方法有？", "options": ["LGT", "MAR", "GAN", "STL"], "answer": [0, 1], "explanation": "基于统计生成模型的核心思想是用统计学方法模拟时序数据（基于自相关性给扰动），方法包括LGT和MAR。GAN属于基于学习方法，STL属于基于分解的方法。", "pitfall": "容易将不同类别的时序增强方法混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于监督学习和无监督学习，说法不正确的有？", "options": ["平滑假设、流形假设和聚类假设都是监督学习的经典假设", "自监督学习设计辅助任务来挖掘数据自身的表征特性作为监督信息", "无监督学习可以进一步划分为聚类和关联", "半监督学习使用大量标注数据和小量的无标注数据学习"], "answer": [0, 3], "explanation": "平滑假设、流形假设和聚类假设是半监督学习的典型假设；半监督学习使用大量未标记数据和少量标记数据。", "pitfall": "容易混淆各类学习方法的假设条件和数据标注比例。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "在知识蒸馏领域，蒸馏算法主要包括哪些？", "options": ["多教师蒸馏", "Data-Free 蒸馏", "自蒸馏", "助教蒸馏"], "answer": [0, 1, 2, 3], "explanation": "知识蒸馏算法主要包括多教师蒸馏、助教蒸馏、自蒸馏和Data-Free蒸馏。", "pitfall": "容易遗漏某些蒸馏变体。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "DBSCAN 中的超参数 eps 适合采用的超参数优化算法有？", "options": ["BO-TPE", "BO-SMAC", "BO-GP", "BOHB"], "answer": [0, 1, 3], "explanation": "根据常见ML算法超参优化表，DBSCAN适合采用BO-TPE, SMAC, BOHB。", "pitfall": "容易将不同算法适用的优化器记混。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "采用数据并行时的训练流程包括？", "options": ["训练", "指定设备(NPU)", "准备模型", "准备数据"], "answer": [0, 1, 2, 3], "explanation": "分布式训练流程主要包括指定设备、准备数据、准备模型和训练四个步骤。", "pitfall": "容易遗漏某个步骤，如指定设备或准备数据。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "关于Data Free蒸馏，下列说法正确的有？", "options": ["DeepInversion是Data Free蒸馏中一种数据生成的策略", "DeepDream利用Teacher模型的BN层的running mean和running variance信息使得生成的数据尽可能与训练数据分布相似", "DeepDream是Data Free蒸馏中一种数据生成的策略", "当只有一个教师模型而无法得到训练数据，通过教师模型生成或恢复训练数据来用于蒸馏的方式称为Data Free蒸馏"], "answer": [0, 2, 3], "explanation": "DeepDream是基础策略，DeepInversion优化了正则项。利用BN层信息的是DeepInversion，而非DeepDream。", "pitfall": "容易混淆DeepDream和DeepInversion的具体机制。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于生成式模型，说法正确的有？", "options": ["高斯混合模型、决策树、马尔可夫模型都属于生成式模型", "生成式模型学习的是输入和输出的联合分布", "生成式模型容易受一些异常数据影响，从而得出错误的分布", "生成式模型很容易出现过拟合的现象，泛化能力较差"], "answer": [1, 2], "explanation": "生成式模型学习联合分布，鲁棒性较差易受异常数据影响。决策树属于判别式模型，生成式模型过拟合可能性较小。", "pitfall": "容易将生成式和判别式模型的典型代表及优缺点记反。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于AI算法模型与传统软件方法，说法正确的有？", "options": ["传统软件方法更加适合规则难易描述的问题", "AI算法通过数据来提取知识或者规则，传统软件方法不依赖于数据", "传统软件方法对于开放场景也能很好的适应", "AI算法模型主要是基于概率的推理模型，不适合有着极高精度要求的场景"], "answer": [1, 3], "explanation": "AI算法依赖数据提取规则，传统软件适合规则明确的问题。传统软件对开放场景适应差，AI不适合极高可靠性场景。", "pitfall": "容易在规则描述难易度和场景适应性上混淆两者。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "在设计数据增强子策略时，若包含缩放操作，需要设计的内容有？", "options": ["策略里选择缩放操作", "样本被缩放的幅度", "直接应用", "按概率选择样本进行缩放增强"], "answer": [1, 3], "explanation": "AutoAugment设计子策略时主要搜索增强方法被执行的概率和增强幅度，因此需要设计样本被缩放的幅度和按概率选择样本进行缩放增强。", "pitfall": "容易误选“直接应用”，忽略了概率和幅度的搜索。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "下列时序数据增强算法中，属于时域增强的有？", "options": ["Flipping", "DBA", "AAFT", "Window warping"], "answer": [0, 1, 3], "explanation": "时域增强方法包括Window warping, Flipping, Window slicing, Noise injection, Perturbing, DBA等。AAFT属于频域增强。", "pitfall": "容易将频域增强算法AAFT误认为时域。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于PSO（粒子群优化）和GA（遗传算法），说法正确的有？", "options": ["两者都可以并行化", "PSO有记忆，GA无记忆", "两者都属于随机搜索算法", "两者都属于全局优化方法"], "answer": [0, 1, 2, 3], "explanation": "PSO和GA都属于仿生算法、全局优化方法、随机搜索算法，都隐含并行性。PSO有记忆，GA无记忆。", "pitfall": "容易忽略PSO有记忆而GA无记忆这一区别。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "使用数学优化手段解决实际问题的完整流程包含的必要步骤有？", "options": ["根据实际问题建模得到一个数学优化问题", "明确该优化问题解的最优性条件、存在性、唯一性等理论关切", "收集并清洗大量训练数据", "设计优化算法求解该优化问题"], "answer": [0, 1, 3], "explanation": "完整的优化过程三部曲为：建模、明确理论关切、设计优化算法求解。不包含收集训练数据。", "pitfall": "容易将机器学习流程与数学优化流程混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "以下属于半监督学习典型假设的有？", "options": ["平滑假设", "聚类假设", "流形假设", "独立同分布假设"], "answer": [0, 1, 2], "explanation": "半监督学习的典型假设包括平滑假设、聚类假设和流形假设。", "pitfall": "容易将一般机器学习假设与半监督特定假设混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "无监督学习的核心思想包括？", "options": ["基于完全标注的信息，实现模型与数据分布的近似", "自身规律的学习和理解", "结合人的认知，完成学习过程", "内部数据的规律以及少量参考信息之间的关系，能够揭示未知的规律和分布"], "answer": [1, 2], "explanation": "无监督学习的核心思想是自身规律的学习和理解，结合人的认知，完成学习过程。", "pitfall": "容易将无监督、监督和半监督的核心思想混淆。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "关于自蒸馏算法，以下说法正确的有？", "options": ["Teacher Model就是Student Model的集成版本", "在Epoch T时刻，选择Epoch T-1时刻的模型作为自己的Teacher模型进行蒸馏", "自蒸馏无法进行自我增强", "构建大的教师模型成本较大是使用自蒸馏的原因之一"], "answer": [0, 1, 3], "explanation": "自蒸馏是自己蒸馏到自己，Teacher是Student的集成版本，使用前一epoch模型作为Teacher，原因是构建大模型成本大且可自我增强。", "pitfall": "容易忽略自蒸馏可以通过迭代进行自我增强的特性。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述自蒸馏算法使用的主要原因。", "answer": "1. 构建大的教师模型成本较大；2. 在训练过程中，中间过程的模型参数可能有值得我们挖掘的信息；3. 好的教师可以教出更好的学生，而好的学生可以进一步集成为更好的教师，通过迭代可以进行自我增强。", "explanation": "自蒸馏避免了构建大教师模型的开销，同时利用了训练中间过程的信息，并能通过迭代实现自我增强。", "pitfall": "容易遗漏迭代自我增强这一关键点。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述生成式模型和判别式模型的区别。", "answer": "1. 学习对象不同：生成式模型学习的是输入x和输出y的联合分布p(x,y)；判别式模型学习的是输入x的条件下输出y的条件分布p(y|x)。2. 建模过程不同：生成式模型强调数据自身分布，通过计算联合概率预测类别；判别式模型强调数据边界，直接计算条件概率预测类别。3. 优缺点不同：生成式模型过拟合可能较小，但鲁棒性差，需要大量数据；判别式模型在小数据集上表现好，计算量小，但更容易过拟合。", "explanation": "从学习对象、建模过程和优缺点三个方面进行区分。", "pitfall": "容易只回答学习对象的不同，而忽略建模过程和优缺点。"}, {"kc_id": "kc9.118", "cognitive_level": "remember", "difficulty": "basic", "type": "short", "points": 10, "question": "简述采用数据并行时的训练流程。", "answer": "1. 指定设备：多卡时初始化NPU集群，单卡时指定NPU；2. 准备数据：多卡使用分布式数据采样器，单卡使用数据采样器；3. 准备模型：多卡使用DDP包裹模型，单卡直接准备模型；4. 训练：单卡与多卡相同。", "explanation": "数据并行训练流程包括指定设备、准备数据、准备模型和训练四个步骤。", "pitfall": "容易遗漏分布式数据采样器或DDP包裹模型等细节。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述使用数学优化手段解决实际问题的完整流程。", "answer": "完整的优化过程包括三个步骤：1. 根据实际问题建模得到一个数学优化问题；2. 明确该优化问题解的最优性条件、存在性、唯一性等理论关切；3. 设计优化算法求解该优化问题。", "explanation": "数学优化三部曲为建模、理论关切和算法求解。", "pitfall": "容易将理论关切这一步遗漏。"}, {"kc_id": "kc9.118", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述时序数据增强方法的主要分类及其核心思想。", "answer": "1. 基于统计生成模型：核心思想是用统计学方法模拟时序数据，基于自相关性给初始点扰动；2. 基于分解的时序数据增强：核心思想是把时序数据分解为某些成分，再对每个成分设计增强方法；3. 基于学习方法的时序数据增强：核心思想是从数据中学得数据增强方式。此外还有基础时序增强，分为时域、频域和时频域增强。", "explanation": "高阶时序增强分为基于统计生成模型、基于分解和基于学习方法。基础增强分为时域、频域和时频域。", "pitfall": "容易将高阶增强分类与基础增强分类混淆。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于PSO和GA算法的差异，以下说法不正确的是？", "options": ["PSO有记忆，所有粒子都保存好的解的知识，而GA无记忆性", "PSO中的粒子仅仅通过当前搜索到最优点进行共享信息，是一种单共享项信息机制", "GA中，染色体之间相互共享信息，使得整个种群都向最优区域移动", "PSO相对于GA有交叉和变异操作，因此原理更复杂"], "answer": 3, "explanation": "PSO相对于GA没有交叉和变异操作，粒子只是通过内部速度进行更新，因此原理更简单、参数更少、实现更容易。", "pitfall": "容易混淆PSO和GA的操作机制，PSO无交叉变异，GA有。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "用数学优化手段解决实际问题有一个完整的流程。该流程包含如下哪些必要的步骤？", "options": ["分析解的最优性条件", "设计优化算法找到最优解", "根据实际问题建模得到一个数学优化问题", "分析解的存在性和唯一性"], "answer": [0, 1, 2, 3], "explanation": "数学优化解决实际问题的完整流程包括：根据实际问题建模、分析解的存在性和唯一性、分析解的最优性条件、设计优化算法找到最优解。", "pitfall": "可能会遗漏存在性、唯一性或最优性条件的分析。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "适应性随机梯度方法会让每个参数拥有自己的学习率。下面哪些方法是适应性随机梯度方法？", "options": ["Adagrad", "RMSProp", "SGD", "Adam"], "answer": [0, 1, 3], "explanation": "SGD是传统的随机梯度下降方法，不拥有自适应学习率。Adagrad、RMSProp和Adam都属于适应性随机梯度方法。", "pitfall": "容易将SGD误认为是适应性方法。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "深度神经网络中有哪些经典的trick可以帮助我们加速训练改善泛化？", "options": ["数据增强", "学习率调节方法", "学习率Warmup", "权重初始化"], "answer": [0, 1, 2, 3], "explanation": "随机梯度方法通常与一些trick结合，如权重初始化、数据增强、学习率调节和warmup，去改善神经网络的泛化能力。", "pitfall": "无特别易错点，均为常见trick。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 4, "question": "盘古大模型训练中采用的技术包括？", "options": ["重计算", "流水线并行", "优化器并行", "数据并行"], "answer": [0, 1, 2, 3], "explanation": "盘古大模型的并行方式采用了数据并行、Tensor并行、流水线并行和优化器并行，在内存优化上使用了重计算。", "pitfall": "可能会遗漏优化器并行或重计算。"}, {"kc_id": "kc9.158", "cognitive_level": "analyze", "difficulty": "hard", "type": "multi", "points": 4, "question": "某神经网络模型能够适用于多个场景，请问以下哪些描述的剪枝评估准则可以针对每个场景对模型单独进行剪枝？", "options": ["利用子空间聚类的思想对滤波器产生的特征层进行聚类来消除滤波器的冗余", "将滤波器经过激活层后输出的特征层当中数值为0所占百分比作为该滤波器重要性的评估依据", "对于每一层滤波器输出的特征层，先将特征层进行池化输出为向量，而后对各个特征向量进行PCA分析，去掉信息含量少的特征层对应的滤波器", "利用谱聚类的思想，先对各层滤波器进行谱聚类，聚类之后根据滤波器的贡献进行排序"], "answer": [0, 1, 2], "explanation": "ABC均为数据驱动的评估准则，可以针对每个场景单独进行剪枝；D为参数驱动的评估准则，不依赖于具体场景数据。", "pitfall": "容易混淆参数驱动和数据驱动的剪枝评估准则。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 4, "question": "在应用Time GAN进行医疗数据增强时，属于时态特征的有？", "options": ["年龄", "体温", "血压", "性别"], "answer": [1, 2], "explanation": "在医疗数据问题中，年龄和性别通常被视为静态特征，而体温、血压等随时间快速变化的特征被视为时态特征。", "pitfall": "容易将年龄误认为时态特征。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于同步训练和异步训练的性能比较，假设其余条件一致，相同epochs，以下说法正确的是？", "options": ["异步训练花费时间多，但精度高", "异步训练花费时间少，但精度可能会低于同步训练", "同步训练花费时间少，但精度低", "同步训练和异步训练花费时间相同，精度相同"], "answer": 1, "explanation": "异步训练花费时间少，但精度可能会低于同步训练，原因是异步训练的梯度存在延时问题。", "pitfall": "容易误认为异步训练精度更高。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 4, "question": "用于解决异步训练中梯度延时的方法包括？", "options": ["delay compensation等相关算法", "半异步训练", "低精度训练", "流水线并行"], "answer": [0, 1], "explanation": "解决异步训练中的梯度延时问题可以从算法层面进行处理（如delay compensation），或采用半异步训练以减小延时梯度的影响。", "pitfall": "容易将低精度训练或流水线并行误认为是解决梯度延时的方法。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "以下属于多对多通信的有？", "options": ["Broadcast", "AlltoAll", "AllReduce", "AllGather"], "answer": [1, 2, 3], "explanation": "Broadcast属于一对多通信，AlltoAll、AllReduce、AllGather属于多对多通信。", "pitfall": "容易混淆Broadcast和AllGather。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "假设共M个micro-batch，N个设备，并假设每个NPU前向传播需要1单位时间，GPipe前向传播的资源利用率为？", "options": ["M/N", "N/(N+M-1)", "M/(N+M-1)", "(N+M-1)/M"], "answer": 2, "explanation": "GPipe前向传播时间总体为N+M-1，其中每个NPU工作时间为M，因此资源利用率为M/(N+M-1)。", "pitfall": "容易记错分子分母。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "知识蒸馏领域，模型容量越大，往往模型精度越高。学生模型选择教师模型时，尽可能寻找容量大、精度高的模型作为教师模型。该说法：", "options": ["错误", "正确"], "answer": 0, "explanation": "并不是教师模型精度越高，蒸馏效果越好。当教师模型容量与学生模型gap过大时，学生模型的精度反而会下降，需要引入合适大小的助教模型进行蒸馏。", "pitfall": "直觉上容易认为教师模型越大越好。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "每经过若干个 epochs 成倍减少学习率，这种学习率调节方式属于？", "options": ["线性学习率", "余弦学习率", "多阶段学习率", "固定学习率"], "answer": 2, "explanation": "多阶段学习率是指每过一定的step数，将学习率减少一定比例（如成倍减少）。", "pitfall": "容易与即时变化学习率（如线性、余弦）混淆。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "实际业务问题中，关于样本类别不均衡场景下的方法，正确的是？", "options": ["欠采样是模型方法", "少样本迁移是数据方法", "过采样是数据方法", "多模型融合是数据方法"], "answer": 2, "explanation": "欠采样和过采样属于数据方法；多模型融合、损失函数设计、自监督+少样本迁移属于模型方法。", "pitfall": "容易混淆数据方法和模型方法的分类。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "hard", "type": "choice", "points": 4, "question": "适合做混合比特量化的自动采样方法是？", "options": ["EMA算法", "KL散度", "进化搜索", "反向传播"], "answer": 2, "explanation": "混合比特的搜索方法包括贪心搜索、进化搜索、强化学习搜索等。以FP16、INT8、INT4相混合为例，可以采用进化搜索进行搜索。", "pitfall": "容易误选反向传播，但混合比特搜索通常用启发式或强化学习算法。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "单卡内存有限的情况下进行大样本的分布式训练，以下做法不正确的是？", "options": ["可以考虑error feedback", "可以尝试tensor并行", "可以尝试流水线并行", "可以尝试优化器并行"], "answer": 0, "explanation": "error feedback主要用于通信压缩，缓解梯度压缩带来的精度损失，不能直接解决单卡内存有限的问题。tensor并行、流水线并行和优化器并行都可以减少单卡内存占用。", "pitfall": "容易将通信优化与内存优化混淆。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "关于确定性和随机方法比较，不正确的是？", "options": ["都是无偏的", "都能收敛到最优点", "确定单步迭代时间与样本个数有关", "随机方法满足的假设打破一致性的下界"], "answer": 0, "explanation": "随机方法通常是有偏的，或者方差较大，并非都是无偏的。", "pitfall": "容易误认为随机方法也是无偏的。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下不属于量化误差来源的是？", "options": ["clip截断", "Relu激活函数的使用", "Round取整"], "answer": 1, "explanation": "量化误差主要来源于clip截断和Round取整操作，Relu激活函数的使用不直接产生量化误差。", "pitfall": "容易误选clip截断。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于流水线并行的通信，正确的是？", "options": ["通信的内容主要是正反向的中间结果", "假定使用GPipe，GPU 1正向计算与反向计算时与同一个GPU通信", "通信量与micro-batch大小无关", "主要通过一对多通信"], "answer": 2, "explanation": "流水线并行的通信量与micro-batch大小无关，主要通信内容是激活值和梯度，通信发生在相邻的设备之间（点对点通信）。", "pitfall": "容易误认为通信量与micro-batch大小有关。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于 All reduce，不正确的是？", "options": ["tensor需要all reduce", "流水线需要all reduce", "不采用优化器并行，数据并行需要all reduce"], "answer": 1, "explanation": "流水线并行主要是点对点通信，不需要all reduce。数据并行在不采用优化器并行时需要all reduce来同步梯度。", "pitfall": "容易混淆不同并行模式下的通信原语。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于成本函数，不正确的是？", "options": ["成本函数数值的大小刻画了对数据的拟合程度", "用于分类问题的常用成本函数有logistic成本函数", "成本函数都是凸函数", "用于回归问题的常用成本函数有least square函数"], "answer": 2, "explanation": "常用的成本函数一般是凸函数，但并非所有成本函数都是凸函数（如神经网络中的损失函数通常非凸）。", "pitfall": "容易将“常用的”绝对化为“都是”。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "PyTorch 1.10 不支持的是？", "options": ["低精度", "混合并行", "Error feedback", "重计算"], "answer": 1, "explanation": "PyTorch 1.10支持数据并行、ZeRO、低精度、Error feedback和重计算，但不支持混合并行、Tensor并行、流水线并行和自动并行。", "pitfall": "容易混淆PyTorch不同版本支持的特性。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "Auto Augment 流程不包含？", "options": ["用策略S训练一个子网络得到验证精度R", "为每个样本都执行所有增强策略", "用R更新控制器", "选择一个增强策略S"], "answer": 1, "explanation": "Auto Augment是搜索最佳的数据增强策略，而不是为每个样本执行所有增强策略。", "pitfall": "容易与样本级自适应增强混淆。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "用α剪枝自动增强中增强样本正确的是？", "options": ["选择预测误差大和误差小的样本，保证困难样本和容易样本的平衡性", "只选择预测误差大的样本，因为误差大的样本更新贡献大", "只选择预测误差小的样本，因为误差小的样本更新贡献大", "只选择预测误差小的样本，因为误差小的样本更新贡献小"], "answer": 0, "explanation": "α剪枝自动增强算法通过选择预测误差大和误差小的样本，保证困难样本和容易样本的平衡性，实现样本级自适应增强。", "pitfall": "容易误认为只选择误差大或误差小的样本。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "从原始需求出发，分析是否具有AI需求，正确的是？", "options": ["分配需求需要考虑是否有系统级的AI需求", "一般原始需求无法直接推导出AI需求", "系统需求层面比较适合AI的需求分析"], "answer": 1, "explanation": "一般原始需求无法直接推导出AI需求，需要进行进一步的分析和转化。", "pitfall": "容易误认为系统需求层面适合AI需求分析。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下不是遗传算法优点的是？", "options": ["不会陷入局部最优解，能够得到全局最优解", "全局搜索能力强，适用于各类问题", "可以加入先验知识对搜索进行指导，提高搜索效率", "可并行实现，在多处理器或分布式环境下能够快速地搜索出最优解"], "answer": 3, "explanation": "GA算法的并行化较难，因此“可并行实现”不是其优点。", "pitfall": "容易误认为GA容易并行化。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下哪个算法需要代理函数？", "options": ["随机搜索", "粒子群算法", "遗传算法", "BO-SMAC"], "answer": 3, "explanation": "BO（贝叶斯优化）算法需要代理函数，BO-SMAC的代理函数为随机森林(RF)。", "pitfall": "容易将BO算法与其他启发式搜索算法混淆。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于数学问题的集合，不正确的是？", "options": ["最优解可出现在集合之外", "该集合由变量的约束条件定义", "该集合可以是变量所在的整个欧氏空间", "该集合为变量的可行域"], "answer": 0, "explanation": "数学问题的集合由变量的约束条件定义，即为变量的可行域，最优解必须在可行域内，不能出现在集合之外。", "pitfall": "容易忽略可行域的约束。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于时序数据增强描述不正确的是？", "options": ["STFT时频域数据增强方法", "STL是基于统计的方法", "α剪枝算法是基于学习方法的时序数据增强", "DBA是时域时序数据增强方法"], "answer": 1, "explanation": "STL是基于时序分解的方法，不是基于统计的方法。", "pitfall": "容易混淆STL的类别。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "关于条件数，不正确的是？", "options": ["条件数是平滑性常数与强凸性常数的比值", "条件数大于等于1", "条件数定义在强平滑性常数上", "条件数越小说明函数可解性越差"], "answer": 3, "explanation": "条件数越小说明函数越容易求解，可解性越好。", "pitfall": "容易记反条件数与可解性的关系。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "关于时序数据增强，不正确的是？", "options": ["Auto Augmentation所有样本采用相同增强策略，忽略了样本间的差异性", "PBA是数据集级的自动增强", "α剪枝自动增强算法为数据集级问题用差异化的", "α剪枝自动增强算法是样本级自适应的"], "answer": 2, "explanation": "α剪枝自动增强算法是样本级自适应的，为每个时序样本选择最合适的增强策略，而不是数据集级。", "pitfall": "容易混淆数据集级和样本级增强。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "有关 SignSGD 的说法正确的是？", "options": ["不能与error feedback共用", "对比fp16的深度，可以减少通信32倍", "主要目的是为了节省内存", "数据并行下，单步耗时可能高于SGD"], "answer": 3, "explanation": "SignSGD主要为了减少通信量，但在数据并行下，由于额外的符号计算和同步开销，单步耗时可能高于SGD。", "pitfall": "容易误认为SignSGD单步耗时一定低于SGD。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "有关 TimeGAN 不正确的是？", "options": ["基于随机向量生成嵌入式空间数据", "真实时间序列Embedding得到嵌入式空间表达", "Sequence Discriminator评判生成数据和真实数据的分布", "Embedding Function恢复得到的原始维度数据"], "answer": 3, "explanation": "TimeGAN中恢复原始维度数据的是Generator，而不是Embedding Function。", "pitfall": "容易混淆TimeGAN各模块的功能。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下不是粒子群算法步骤的是？", "options": ["将选择、交叉和突变的遗传因子应用到种群中，产生新一代", "初始化一群微粒（规模为N），包括随机质量和速度", "对于每个微粒，将其适应值与其经过的最好位置gbest作比较", "对于每个微粒，将其适应值与其经过的最好位置pbest作比较"], "answer": 0, "explanation": "选择、交叉和突变是遗传算法的步骤，不是粒子群算法的步骤。", "pitfall": "容易混淆PSO和GA的步骤。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "关于半监督和自监督，正确的是？", "options": ["半监督的核心思想：数据内部的维度间关系是其外在表现的本源信息", "流形假设是半监督学习的典型假设", "自监督学习使用大量的未标记数据，以及同时使用标记数据，来进行模式识别工作", "半监督学习通过设计辅助任务来挖掘数据自身的表征特性作为监督信息"], "answer": 1, "explanation": "流形假设是半监督学习的典型假设。其他选项描述的是自监督学习或混淆了两者概念。", "pitfall": "容易混淆半监督和自监督的核心思想。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "基于相关性蒸馏的特点是？", "options": ["更加关注样本在网络的中间层特征信息", "更加关注样本在网络最后一层的响应值信息", "关注样本在网络中的特征信息", "更加关注不同数据样本之间的关系"], "answer": 3, "explanation": "基于相关性蒸馏更加关注不同数据样本之间的关系，而不是单个样本的特征或响应值。", "pitfall": "容易与基于特征或基于响应的蒸馏混淆。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "hard", "type": "multi", "points": 4, "question": "以下属于基于搜索的剪枝算法的有？", "options": ["Network Adjustment", "ABCPruner", "MetaPruning", "DMCP"], "answer": [0, 1, 2, 3], "explanation": "基于搜索的剪枝算法包括ABCPruner（人工蜂群算法）、MetaPruning（元学习）、NetworkAdjustment和DMCP（可微分马尔可夫过程）。", "pitfall": "容易遗漏某些基于搜索的剪枝算法。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "hard", "type": "multi", "points": 4, "question": "下面哪些算法是多保真优化算法？", "options": ["Hyperband", "BOHB", "Halving", "SGD"], "answer": [0, 1, 2], "explanation": "多保真优化算法包括Successive Halving (SH)、Hyperband (HB)和BOHB。SGD是优化算法，不是多保真超参优化算法。", "pitfall": "容易将SGD误认为是多保真优化算法。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 4, "question": "关于 CPU offloading，不正确的是？", "options": ["用于缓解大模型训练NPU显存不足的问题", "GPU V100训练ResNet18一般无需CPU Offloading", "将优化器状态放到CPU上", "通过计算换通信"], "answer": [2, 3], "explanation": "CPU offloading是将优化器状态或模型参数放到CPU上，通过通信换内存，而不是将优化器状态放到CPU上（表述有误，应为将部分计算或数据放到CPU），且是通信换内存而非计算换通信。原题答案为CD。", "pitfall": "容易混淆计算换通信和通信换内存的概念。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述PSO与GA算法在信息共享机制上的差异。", "answer": "PSO中的粒子仅仅通过当前搜索到最优点进行共享信息，所以很大程度上这是一种单共享项信息机制；而GA中，染色体之间相互共享信息，使得整个种群都向最优区域移动。", "explanation": "PSO是单共享项信息机制，GA是种群间相互共享信息。", "pitfall": "容易忽略PSO的单共享项特性。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "basic", "type": "short", "points": 10, "question": "简述深度学习中的随机梯度下降方法起作用的三个关键因素。", "answer": "Mini-batch、动量和权重衰减。", "explanation": "这三个因素是SGD在深度学习中起作用的关键。", "pitfall": "容易遗漏其中一个或两个因素。"}, {"kc_id": "kc9.158", "cognitive_level": "remember", "difficulty": "medium", "type": "short", "points": 10, "question": "简述盘古大模型在并行方式和内存优化上采用了哪些技术。", "answer": "并行方式采用了数据并行、Tensor并行、流水线并行和优化器并行；在内存优化上使用了重计算。", "explanation": "盘古大模型综合使用了多种并行和内存优化技术。", "pitfall": "容易遗漏优化器并行或重计算。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述多保真优化算法的核心思想及其应用背景。", "answer": "应用背景：贝叶斯优化等方法需要大量评价，而目标函数评估非常耗时，在大规模数据集上代价巨大。核心思想：只使用一部分资源来训练模型，不同资源的分配对应保真度大小，多保真就是高保真和低保真的综合运用，用较多的低保真对参数空间快速探索，用较少的高保真验证最可能的超参组合。", "explanation": "多保真优化通过结合高低保真度评估来加速超参搜索。", "pitfall": "容易忽略背景或核心思想中的高低保真结合。"}, {"kc_id": "kc9.158", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述样本类别不均衡问题中，数据方法和模型方法分别包含哪些具体技术。", "answer": "数据方法：欠采样（ENN、Tomek Link、NearMiss）、过采样（SMOTE、Borderline-SMOTE、ADASYN、Mixup）、数据生成。模型方法：多模型融合（EasyEnsemble）、损失函数设计（类别加权Loss、Focal loss、GHM loss）、自监督+少样本迁移、对比学习。", "explanation": "数据方法侧重于调整数据分布，模型方法侧重于调整算法或损失函数。", "pitfall": "容易混淆数据方法和模型方法的具体技术。"}, {"kc_id": "kc9.202", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "TimeGAN提出时序数据应该有两种特征，其中不会因为时间而改变的特征（如性别）被称为？", "options": ["静态特征S", "时态特征X", "动态特征D", "空间特征P"], "answer": 0, "explanation": "TimeGAN提出时序数据包含静态特征S和时态特征X。静态特征S不会因为时间而改变，例如性别；时态特征X随时间改变，例如生命特征。", "pitfall": "容易将静态特征和时态特征混淆，需记住S代表Static（静态），X代表随时间变化的特征。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在内存优化中，CPU Offloading 技术的核心思想是？", "options": ["以计算换通信", "以通信换内存", "以内存换算力", "以时间换空间"], "answer": 1, "explanation": "CPU offloading 是将额外的 activation 从 NPU 移动到 CPU 以节约内存，需要时再取回，通过 NPU-CPU 通信换取内存空间，即以通信换内存。", "pitfall": "注意区分“以计算换通信”（如重计算）和“以通信换内存”（如CPU Offloading）。"}, {"kc_id": "kc9.202", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "ZeRO offloading 技术主要用于将什么数据从 NPU 移动到 CPU 以节约内存？", "options": ["激活值", "梯度", "优化器状态", "模型权重"], "answer": 2, "explanation": "ZeRO offloading 是将优化器状态从 NPU 移动到 CPU 以节约内存。", "pitfall": "CPU offloading 移动的是 activation，而 ZeRO offloading 移动的是优化器状态。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在 Data-free 训练后量化中，若假设激活分布服从正态分布，通常采用什么统计方法确定量化的饱和截断区间？", "options": ["1σ 统计", "2σ 统计", "3σ 统计", "Min-Max 统计"], "answer": 2, "explanation": "基于假设分布与统计的 Data-free 量化方法中，假设激活分布服从正态分布（如 BN 层输出），采用 3σ 统计确定量化的饱和截断区间。", "pitfall": "容易误选 Min-Max，但 Min-Max 属于 Label-free 量化算法。"}, {"kc_id": "kc9.202", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "以下哪个算法不属于 Label-free 训练后量化的常见算法？", "options": ["Absmax 算法", "Min-Max EMA 算法", "KL 算法", "基于伪样本生成"], "answer": 3, "explanation": "Label-free 训练后量化依赖少量无标注数据，常见算法包括 Absmax、Min-Max EMA、KL 算法。基于伪样本生成属于 Data-free 训练后量化。", "pitfall": "需严格区分 Data-free 和 Label-free 的常见算法。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "α剪枝自动增强算法的主要目的是什么？", "options": ["为整个数据集选择统一的最优增强策略", "为每个时序样本选择最合适的增强策略", "通过生成模型合成新的时序数据", "将时序数据分解为趋势和季节性成分"], "answer": 1, "explanation": "α剪枝自动增强是时序数据增强的“千人千面”，即样本级增强，为每个时序样本选择最合适的增强策略。", "pitfall": "自动数据增强通常按数据集探索最优策略，而α剪枝是针对样本级的，不要混淆。"}, {"kc_id": "kc9.202", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "在高阶时序数据增强中，STL 算法属于哪一类方法？", "options": ["基于统计生成模型", "基于分解的时序数据增强", "基于学习方法的时序数据增强", "基于频域的时序数据增强"], "answer": 1, "explanation": "基于分解的时序数据增强核心思想是把时序数据分解为某些成分（如 trend/seasonality/residual），再对每个成分设计增强方法，典型方法为 STL 算法。", "pitfall": "STL 是分解算法，MAR 是统计生成模型，GAN 是学习方法，需对应清楚。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "基础的强化学习本质上是一个什么过程？", "options": ["马尔可夫决策过程（MDP）", "贝叶斯优化过程", "凸优化过程", "梯度下降过程"], "answer": 0, "explanation": "基础的强化学习本质上是一个马尔可夫决策过程（MDP），再叠加机器学习成为一个具备学习能力的 MDP 过程。", "pitfall": "强化学习涉及状态转移和奖励，本质是 MDP，不要与其他优化算法混淆。"}, {"kc_id": "kc9.202", "cognitive_level": "analyze", "difficulty": "hard", "type": "choice", "points": 4, "question": "以下哪种场景最适合使用强化学习方法？", "options": ["环境无法给出反馈的场景", "试错成本极高的医疗手术场景", "环境能够及时给出准确反馈的自动驾驶仿真场景", "环境快速变化且无法获得准确应对的场景"], "answer": 2, "explanation": "理论上只要能够形成反馈的环境都适合使用强化学习方法。不适用场景包括：环境无法反馈、反馈状态错误、环境快速变化需快速应对、试错成本高。", "pitfall": "试错成本高是强化学习的不适用场景，因为强化学习需要大量探索试错。"}, {"kc_id": "kc9.202", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "BO-SMAC 算法使用的代理函数是？", "options": ["高斯过程回归", "随机森林", "树状结构 Parzen 估计器（TPE）", "支持向量机"], "answer": 1, "explanation": "BO-SMAC 以随机森林为代理函数，用每棵子树的输出计算均值和方差作为代理模型的输出。", "pitfall": "BO-GP 用高斯过程，BO-TPE 用 TPE，BO-SMAC 用随机森林，需区分清楚。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "在 BO-TPE 流程中，如何选择下一次迭代的超参？", "options": ["寻找 log(g(x)) - log(l(x)) 最大的点", "寻找 log(g(x)) - log(l(x)) 最小的点", "寻找 g(x) + l(x) 最大的点", "寻找 g(x) * l(x) 最小的点"], "answer": 1, "explanation": "BO-TPE 流程中，将训练集分为好、坏两类，拟合两个 KDE g(x) 和 l(x)，然后生成采样点，并求出 log(g(x)) - log(l(x)) 最小的点作为下个迭代的超参。", "pitfall": "容易记错为最大值，实际上是最小化 log(g(x)) - log(l(x))，即最大化 l(x)/g(x)。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于凸优化问题的局部最优解和全局最优解，下列说法正确的是？", "options": ["局部最优解一般优于全局最优解", "局部最优解与全局最优解等价", "两者在一般优化问题中等价", "全局最优解通常无法在多项式时间内找到"], "answer": 1, "explanation": "凸优化问题的局部最优解与全局最优解等价。在一般优化问题（非凸）中两者不等价，且全局最优解通常无法在多项式时间内找到。", "pitfall": "注意前提是“凸优化问题”，一般非凸优化问题中局部最优不等于全局最优。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "模型并行的主要目的是解决什么问题？", "options": ["数据量过大无法加载到内存", "大模型难以在单卡上存储以及训练", "通信开销过大的问题", "模型量化精度损失的问题"], "answer": 1, "explanation": "模型并行主要是为了解决大模型难以在单卡上存储以及训练的问题，可分为横向并行和纵向并行。", "pitfall": "数据并行是为了解决数据量大的问题，模型并行是为了解决模型大的问题。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于模型量化对推理性能的影响，下列说法错误的是？", "options": ["量化的数据加载更快", "量化不改变模型结构", "量化增加了模型精度", "NPU的INT8算力比FP16高"], "answer": 2, "explanation": "量化能够提升模型的推理性能，因为量化数据加载更快，且 NPU 的 INT8 算力比 FP16 高。量化不改变模型结构，但通常会降低模型精度而非增加。", "pitfall": "量化通常会导致精度下降，而不是增加精度。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "高斯过程回归是一种什么类型的模型？", "options": ["参数模型", "非参数模型", "深度学习模型", "强化学习模型"], "answer": 1, "explanation": "高斯过程回归是使用高斯过程对数据进行回归的非参数模型。", "pitfall": "高斯过程虽然名字里有“过程”，但它是一种非参数的概率模型。"}, {"kc_id": "kc9.202", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "复杂系统的系统目标通常可分解为哪三个目标？", "options": ["功能目标、性能目标、可靠性目标", "功能目标、成本目标、可靠性目标", "性能目标、成本目标、安全性目标", "功能目标、性能目标、安全性目标"], "answer": 0, "explanation": "复杂系统的系统目标可分解为功能目标、性能目标、可靠性目标。功能目标由功能实体组合来实现。", "pitfall": "注意区分系统目标的三大分类，不要遗漏可靠性目标。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "TimeGAN 提出时序数据应该包含哪两种特征？", "options": ["静态特征S", "时态特征X", "空间特征P", "频域特征F"], "answer": [0, 1], "explanation": "TimeGAN提出时序数据应该有两种特征：静态特征S（不随时间改变，如性别）和时态特征X（随时间改变，如生命特征）。", "pitfall": "TimeGAN强调的是静态和时态特征，不要与其他维度的特征混淆。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于内存优化技术，下列说法正确的有？", "options": ["重计算通过重新计算部分 activation 以节约内存", "CPU offloading 将 activation 从 NPU 移动到 CPU 以节约内存", "ZeRO offloading 将优化器状态从 NPU 移动到 CPU 以节约内存", "CPU-offloading 不可以与重计算技术共同使用"], "answer": [0, 1, 2], "explanation": "重计算、CPU offloading 和 ZeRO offloading 都是内存优化方式。CPU-offloading 可以与重计算技术共同使用，进一步提升显存利用率。", "pitfall": "CPU-offloading 和重计算是可以结合使用的，选项D错误。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "Data-free 训练后量化不依赖真实数据，其包括哪些方法？", "options": ["基于假设分布与统计", "基于伪样本生成", "KL算法", "Min-Max EMA算法"], "answer": [0, 1], "explanation": "Data-free 训练后量化包括基于假设分布与统计（如3σ统计）和基于伪样本生成（如基于GAN）。KL算法和Min-Max EMA算法属于 Label-free 训练后量化。", "pitfall": "注意区分 Data-free 和 Label-free 的具体算法。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "以下属于高阶时序数据增强方法的有？", "options": ["基于统计生成模型", "基于分解的时序数据增强", "基于学习方法的时序数据增强", "频域数据增强"], "answer": [0, 1, 2], "explanation": "高阶时序数据增强包括：基于统计生成模型（如MAR）、基于分解的时序数据增强（如STL）、基于学习方法的时序数据增强（如GAN、Automated Data Augmentation、Embedding Space）。", "pitfall": "频域数据增强和时域数据增强属于基础增强方法，不属于高阶方法。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "α剪枝自动增强算法的流程步骤包括哪些？", "options": ["增强样本", "评估并计算 loss", "排序和修剪，筛选 Top α loss 和 Bottom α loss 样本", "增强样本汇总"], "answer": [0, 1, 2, 3], "explanation": "α剪枝自动增强流程为：1. Augment sample；2. Evaluate and calculate loss；3. Rank and trim；4. 增强样本汇总。", "pitfall": "注意α剪枝是保留 Top α loss 和 Bottom α loss 样本，而不是只保留某一种。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于强化学习，下列说法正确的有？", "options": ["本质上是一个马尔科夫决策过程", "是一个迭代式过程", "需要解决探索-利用之间的矛盾", "适用于试错成本高的场景"], "answer": [0, 1, 2], "explanation": "强化学习本质是马尔科夫决策过程，是迭代式过程，解决探索-利用矛盾。不适用于试错成本高的场景。", "pitfall": "试错成本高是强化学习的不适用场景，因为强化学习需要不断试错来学习。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "关于 BO-SMAC 算法，下列说法正确的有？", "options": ["适合处理高维输入参数", "同时适合离散和连续输入参数", "探索能力强，不易过拟合", "以高斯过程为代理函数"], "answer": [0, 1, 2], "explanation": "BO-SMAC 以随机森林为代理函数，适合处理高维、离散和连续输入参数，训练快、易实现、不易过拟合，探索能力强。", "pitfall": "BO-SMAC 的代理函数是随机森林，而不是高斯过程。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "BO-TPE 算法的流程包括哪些步骤？", "options": ["将训练集分为好、坏两类", "拟合两个 KDE g(x) 和 l(x)", "生成采样点，求 log(g(x)) - log(l(x)) 最小的点", "计算观测点之间的协方差矩阵"], "answer": [0, 1, 2], "explanation": "BO-TPE 流程包括：将训练集分为好、坏两类，拟合两个 KDE g(x) 和 l(x)，生成采样点并求出 log(g(x)) - log(l(x)) 最小的点作为下个迭代的超参。计算协方差矩阵是高斯过程的步骤。", "pitfall": "计算协方差矩阵属于 BO-GP 的流程，不要与 BO-TPE 混淆。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于凸集的描述，下列正确的有？", "options": ["凸集任意两个点之间的线段上的点也属于该集合", "一个凸包是点的凸组合", "范数球不是凸集", "多面体是半平面和超平面的交集"], "answer": [0, 1, 3], "explanation": "凸集任意两点连线上的点也在集合内；凸包是点的凸组合；多面体是半平面（线性不等式）和超平面（线性等式）的交集。范数球是凸集。", "pitfall": "范数球是凸集，选项C错误。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "量化能够提升模型的推理性能，主要原因包括？", "options": ["量化的数据加载更快", "量化改变了模型结构", "量化增加了模型精度", "NPU的INT8算力比FP16高"], "answer": [0, 3], "explanation": "量化提升推理性能的原因在于数据加载更快以及硬件（如NPU）对低比特（如INT8）算力的支持更高。量化不改变模型结构，且通常会降低精度。", "pitfall": "量化不改变模型结构，也不会增加精度，反而可能带来精度损失。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于模型并行，下列说法正确的有？", "options": ["可分为横向并行和纵向并行", "每个NPU上拷贝一份完整模型", "数据并行属于模型并行的一种形式", "解决大模型难以在单卡上存储以及训练的问题"], "answer": [0, 3], "explanation": "模型并行分为横向并行和纵向并行，解决大模型单卡存储和训练问题。数据并行是每个NPU拷贝完整模型，不属于模型并行。", "pitfall": "数据并行和模型并行是两种不同的并行策略，数据并行中每个NPU有完整模型。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "大模型监督学习的特点包括？", "options": ["样本维度可以很高", "预测函数可以是神经网络", "预测函数可以是线性函数", "回归类问题的一个典型应用"], "answer": [0, 1, 2, 3], "explanation": "大模型监督学习的特点包括：样本维度高，预测函数可以是神经网络或线性函数，是回归类问题的典型应用。", "pitfall": "预测函数不仅限于神经网络，也可以是线性函数。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述 TimeGAN 中静态特征 S 和时态特征 X 的区别，并各举一例。", "answer": "静态特征 S 是不会因为时间而改变的特征，例如性别；时态特征 X 是随时间而改变的特征，例如生命特征（包括脉搏、呼吸、体温、血压等数据）。", "explanation": "TimeGAN 强调时序数据应包含这两种特征，模型通过学习真实数据的联合分布，使得生成数据的分布与真实数据相似。", "pitfall": "举例时要注意特征是否随时间变化，静态特征不能随时间变化。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述 CPU Offloading 技术及其与重计算技术的关系。", "answer": "CPU Offloading 是一种内存优化技术，通过将额外的 activation 从 NPU 暂时移动到 CPU，需要时再取回，以 NPU-CPU 通信换取内存空间。CPU-offloading 可以与重计算（recomputation）技术共同使用，进一步提升显存利用率。", "explanation": "CPU Offloading 是以通信换内存，重计算是以计算换通信，两者可以结合使用以最大化显存优化效果。", "pitfall": "不要混淆 CPU offloading（移动 activation）和 ZeRO offloading（移动优化器状态）。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述 Data-free 和 Label-free 训练后量化的区别，并列举各自的常见方法。", "answer": "Data-free 训练后量化不依赖真实数据，对模型进行量化参数的离线校准，常见方法包括基于假设分布与统计（如3σ统计）和基于伪样本生成（如基于GAN）。Label-free 训练后量化依赖少量无标注数据，对模型进行量化参数的离线校准，常见算法包括 Absmax 算法、Min-Max EMA 算法、KL 算法等。", "explanation": "两者的核心区别在于是否依赖数据（无标注数据）进行校准。Data-free 完全不需要数据，通过假设或生成数据校准；Label-free 需要少量无标注数据校准。", "pitfall": "容易将 KL 算法等误归为 Data-free，实际上它们需要少量无标注数据，属于 Label-free。"}, {"kc_id": "kc9.202", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述强化学习不适用的场景。", "answer": "强化学习不适用的场景包括：1. 环境无法给出反馈或者无法及时给出反馈；2. 反馈的状态错误或者不准确；3. 环境快速变化，需要能够快速获得准确的应对；4. 试错成本高的场景。", "explanation": "强化学习依赖环境的反馈进行试错学习，如果环境无法提供有效反馈、变化过快或试错代价过大，强化学习将难以应用。", "pitfall": "试错成本高是常见的不适用场景，因为强化学习本质上是一个不断试错和迭代的过程。"}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "multi": "二、多选题", "tf": "三、判断题", "fill": "四、填空题", "short": "五、简答题", "calc": "六、计算题", "code": "七、代码题", "essay": "八、问答题", "comprehensive": "九、综合题"}, "section_order": ["choice", "multi", "tf", "fill", "short", "calc", "code", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "code_placeholder": "在此编写代码...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "partial_label": "部分正确", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+var __epaImages = {}; // { qid: [dataUrl, ...] } — pasted images per answer field
+
+// ─── Answer normalization (robust to how the JSON was authored) ──────
+// tf / choice answers may arrive as int index, boolean, letter ("A"),
+// or label string ("正确"/"错误"/"对"/"错"). All are coerced to an
+// option index so grading never silently fails on a type mismatch.
+
+function tfAnswerIndex(ans) {
+  // option 0 = true_label (正确), option 1 = false_label (错误)
+  // boolean: true → 正确(0), false → 错误(1)
+  if (typeof ans === 'boolean') return ans ? 0 : 1;
+  // number: treat as boolean (0=false→错误(1), non-zero=true→正确(0))
+  if (typeof ans === 'number') return ans ? 0 : 1;
+  var s = ('' + ans).trim().toLowerCase();
+  var truthy = ['t', 'true', '正确', '对', '是', 'yes', 'y', '√', '✓'];
+  var falsy  = ['f', 'false', '错误', '错', '否', 'no', 'n', '×', 'x'];
+  if (truthy.indexOf(s) !== -1) return 0;
+  if (falsy.indexOf(s) !== -1) return 1;
+  return ans ? 0 : 1;
+}
+
+function choiceAnswerIndex(ans, options) {
+  if (typeof ans === 'number') return ans;
+  var s = ('' + ans).trim();
+  if (/^[A-Za-z]$/.test(s)) return s.toUpperCase().charCodeAt(0) - 65;
+  if (/^\d+$/.test(s)) return parseInt(s, 10);
+  if (options) {
+    for (var i = 0; i < options.length; i++) {
+      if (('' + options[i]).trim() === s) return i;
+    }
+  }
+  return parseInt(s, 10);
+}
+
+function multiAnswerSet(ans, options) {
+  var arr = Array.isArray(ans) ? ans : [ans];
+  var set = {};
+  for (var i = 0; i < arr.length; i++) {
+    set[choiceAnswerIndex(arr[i], options)] = true;
+  }
+  return set;
+}
+
+// Normalize free text for fill-in-the-blank comparison: trim, lowercase,
+// drop surrounding whitespace and common punctuation, unify full/half width.
+function normText(s) {
+  s = ('' + s).trim().toLowerCase();
+  s = s.replace(/[\s　]+/g, '');
+  s = s.replace(/[.,;:!?。，、；：！？“”"'（）()【】\[\]<>《》]/g, '');
+  // full-width ASCII -> half-width
+  s = s.replace(/[！-～]/g, function (c) {
+    return String.fromCharCode(c.charCodeAt(0) - 0xfee0);
+  });
+  return s;
+}
+
+// How many blanks does a fill question have? Count underscore / ＿ runs.
+function fillBlankCount(question) {
+  var m = ('' + question).match(/(_{2,}|＿+)/g);
+  return m ? m.length : 0;
+}
+
+// Coerce a fill `answer` into an array (one entry per blank) of accepted
+// answer lists. Handles: string, [synonyms], [[blank1 syns],[blank2 syns]].
+function fillBlankAnswers(ans, nBlanks) {
+  if (nBlanks < 1) nBlanks = 1;
+  if (!Array.isArray(ans)) return padBlanks([[ans]], nBlanks);
+  if (ans.length && Array.isArray(ans[0])) return padBlanks(ans, nBlanks);
+  // flat array of strings
+  if (nBlanks === 1) return [ans];                 // synonyms for one blank
+  if (ans.length === nBlanks) {                    // one answer per blank
+    return ans.map(function (a) { return [a]; });
+  }
+  return padBlanks([ans], nBlanks);                // ambiguous -> all on blank 1
+}
+
+function padBlanks(arr, n) {
+  var out = arr.slice(0, n);
+  while (out.length < n) out.push(['']);
+  return out;
+}
+
+// ─── Build ───────────────────────────────────────────────────────────
+
+function build() {
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+
+  // Stable-sort questions by section order so headings group correctly
+  // regardless of input order.
+  var order = LABELS.section_order || [];
+  Q.forEach(function (q, i) { q._i = i; });
+  Q.sort(function (a, b) {
+    var oa = order.indexOf(a.type); if (oa === -1) oa = 99;
+    var ob = order.indexOf(b.type); if (ob === -1) ob = 99;
+    return oa - ob || a._i - b._i;
+  });
+
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    if (q.type !== sec) {
+      sec = q.type;
+      if (titles[q.type]) h += '<h3>' + titles[q.type] + '</h3>';
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i + 1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+
+    if (q.type === 'fill') {
+      h += '<div class="q-text">' + renderFill(q, qid) + '</div>';
+    } else {
+      h += '<div class="q-text">' + q.question + '</div>';
+    }
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65 + j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'multi') {
+      var mopts = q.options || [];
+      for (var k = 0; k < mopts.length; k++) {
+        h += '<label class="option" id="opt-' + qid + '-' + k + '" onclick="toggle(\'' + qid + '\',' + k + ')">';
+        h += '<input type="checkbox" name="' + qid + '" value="' + k + '">' + String.fromCharCode(65 + k) + '. ' + mopts[k] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else if (q.type === 'fill') {
+      // inputs already rendered inline inside q-text
+    } else if (q.type === 'code') {
+      h += '<textarea class="q-textarea q-code" id="text-' + qid + '" placeholder="' + (LABELS.code_placeholder || LABELS.placeholder) + '" rows="8" spellcheck="false"></textarea>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + (q.explanation || '') + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+  __epaPasteListeners(container);
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function (err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+// Render fill question text with inline <input> boxes replacing blanks.
+function renderFill(q, qid) {
+  var nBlanks = fillBlankCount(q.question);
+  var k = 0;
+  var html = ('' + q.question).replace(/(_{2,}|＿+)/g, function () {
+    var inp = '<input type="text" class="fill-input" id="fill-' + qid + '-' + k + '" autocomplete="off" spellcheck="false">';
+    k++;
+    return inp;
+  });
+  if (k === 0) {
+    // No markers in text -> append boxes based on answer shape, one per line
+    var n = fillBlankAnswers(q.answer, 1).length;
+    var ans = q.answer;
+    if (Array.isArray(ans)) n = Array.isArray(ans[0]) ? ans.length : (ans.length || 1);
+    if (n < 1) n = 1;
+    html += '<div>';
+    for (var b = 0; b < n; b++) {
+      html += '<div class="fill-blank-row">';
+      if (n > 1) html += '<span class="fill-tag">' + (b + 1) + '.</span>';
+      html += '<input type="text" class="fill-input" id="fill-' + qid + '-' + b + '" autocomplete="off" spellcheck="false">';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+// ─── Selection handlers ──────────────────────────────────────────────
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) all[i].classList.remove('selected');
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) target.classList.add('selected');
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) radio.checked = true;
+}
+
+function toggle(qid, idx) {
+  var box = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  var label = document.getElementById('opt-' + qid + '-' + idx);
+  if (!box) return;
+  box.checked = !box.checked;
+  if (label) label.classList.toggle('selected', box.checked);
+}
+
+// ─── Grading ─────────────────────────────────────────────────────────
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      score += gradeSingle(q, qid, card, badge, correctEl);
+    } else if (q.type === 'multi') {
+      score += gradeMulti(q, qid, card, badge, correctEl);
+    } else if (q.type === 'fill') {
+      score += gradeFill(q, qid, card, badge, correctEl);
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = roundScore(score);
+    sb.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var a = 0; a < opts.length; a++) opts[a].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var b = 0; b < tas.length; b++) tas[b].disabled = true;
+  var fis = document.querySelectorAll('.fill-input');
+  for (var c = 0; c < fis.length; c++) fis[c].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) { btn.disabled = true; btn.textContent = LABELS.graded_label; }
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function (err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+function roundScore(s) {
+  return Math.round(s * 10) / 10;
+}
+
+function gradeSingle(q, qid, card, badge, correctEl) {
+  var ansIdx = q.type === 'tf' ? tfAnswerIndex(q.answer) : choiceAnswerIndex(q.answer, q.options);
+  var radio = document.querySelector('input[name="' + qid + '"]:checked');
+  if (radio && parseInt(radio.value, 10) === ansIdx) {
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+    correctEl.innerHTML = '';
+    var ok = document.getElementById('opt-' + qid + '-' + ansIdx);
+    if (ok) ok.classList.add('correct-answer');
+    return q.points;
+  }
+  card.classList.add('wrong');
+  badge.className = 'badge badge-no';
+  badge.textContent = LABELS.wrong_label;
+  var ansText = q.type === 'choice'
+    ? String.fromCharCode(65 + ansIdx) + '. ' + (q.options ? q.options[ansIdx] : '')
+    : (ansIdx === 0 ? LABELS.true_label : LABELS.false_label);
+  correctEl.innerHTML = LABELS.answer_prefix + ansText;
+  if (radio) {
+    var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+    if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+  }
+  var corr = document.getElementById('opt-' + qid + '-' + ansIdx);
+  if (corr) corr.classList.add('correct-answer');
+  return 0;
+}
+
+function gradeMulti(q, qid, card, badge, correctEl) {
+  var want = multiAnswerSet(q.answer, q.options);
+  var wantKeys = Object.keys(want).map(Number);
+  var checked = document.querySelectorAll('input[name="' + qid + '"]:checked');
+  var picked = [];
+  for (var i = 0; i < checked.length; i++) picked.push(parseInt(checked[i].value, 10));
+
+  var anyWrong = false, hitCorrect = 0;
+  for (var p = 0; p < picked.length; p++) {
+    if (want[picked[p]]) hitCorrect++;
+    else anyWrong = true;
+  }
+
+  // reveal correct / wrong option markers
+  var mopts = q.options || [];
+  for (var j = 0; j < mopts.length; j++) {
+    var el = document.getElementById('opt-' + qid + '-' + j);
+    if (!el) continue;
+    if (want[j]) el.classList.add('correct-answer');
+    else if (picked.indexOf(j) !== -1) el.classList.add('wrong-answer');
+  }
+
+  var earned;
+  if (!anyWrong && hitCorrect === wantKeys.length && picked.length === wantKeys.length) {
+    earned = q.points;
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+    correctEl.innerHTML = '';
+  } else if (!anyWrong && hitCorrect > 0) {
+    // 少选不错选 -> partial credit
+    earned = roundScore(q.points * hitCorrect / wantKeys.length);
+    card.classList.add('partial');
+    badge.className = 'badge badge-partial';
+    badge.textContent = LABELS.partial_label;
+    correctEl.innerHTML = LABELS.answer_prefix + multiAnswerText(wantKeys, mopts);
+  } else {
+    earned = 0;
+    card.classList.add('wrong');
+    badge.className = 'badge badge-no';
+    badge.textContent = LABELS.wrong_label;
+    correctEl.innerHTML = LABELS.answer_prefix + multiAnswerText(wantKeys, mopts);
+  }
+  return earned;
+}
+
+function multiAnswerText(keys, options) {
+  return keys.sort(function (a, b) { return a - b; }).map(function (k) {
+    return String.fromCharCode(65 + k) + '. ' + (options ? options[k] : '');
+  }).join('  ');
+}
+
+// ─── Image paste support ─────────────────────────────────────────────
+
+function __epaPasteListeners(container) {
+  var tas = container.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) {
+    (function(ta) {
+      var qid = ta.id.replace('text-', '');
+      ta.addEventListener('paste', function(e) {
+        var items = e.clipboardData && e.clipboardData.items;
+        if (!items) return;
+        for (var j = 0; j < items.length; j++) {
+          if (items[j].type.indexOf('image') !== -1) {
+            e.preventDefault();
+            var file = items[j].getAsFile();
+            var reader = new FileReader();
+            reader.onload = (function(id, anchor) {
+              return function(ev) {
+                var dataUrl = ev.target.result;
+                if (!__epaImages[id]) __epaImages[id] = [];
+                __epaImages[id].push(dataUrl);
+
+                var wrap = document.createElement('div');
+                wrap.className = 'paste-img-wrap';
+                var img = document.createElement('img');
+                img.src = dataUrl;
+                var rm = document.createElement('button');
+                rm.className = 'paste-img-remove';
+                rm.title = '移除图片';
+                rm.textContent = '×';
+                rm.onclick = (function(url, w) {
+                  return function() {
+                    var idx = __epaImages[id].indexOf(url);
+                    if (idx !== -1) __epaImages[id].splice(idx, 1);
+                    w.parentNode.removeChild(w);
+                  };
+                })(dataUrl, wrap);
+                wrap.appendChild(img);
+                wrap.appendChild(rm);
+                anchor.parentNode.insertBefore(wrap, anchor.nextSibling);
+              };
+            })(qid, ta);
+            reader.readAsDataURL(file);
+          }
+        }
+      });
+    })(tas[i]);
+  }
+}
+
+// ─── Collect all user answers for export ─────────────────────────────
+
+function collectAnswers() {
+  var out = [];
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var userAnswer = null;
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      userAnswer = radio ? parseInt(radio.value, 10) : null;
+    } else if (q.type === 'multi') {
+      var checked = document.querySelectorAll('input[name="' + qid + '"]:checked');
+      userAnswer = [];
+      for (var c = 0; c < checked.length; c++) {
+        userAnswer.push(parseInt(checked[c].value, 10));
+      }
+    } else if (q.type === 'fill') {
+      var nBlanks = fillBlankCount(q.question);
+      var blanks = fillBlankAnswers(q.answer, nBlanks);
+      userAnswer = [];
+      for (var b = 0; b < blanks.length; b++) {
+        var inp = document.getElementById('fill-' + qid + '-' + b);
+        userAnswer.push(inp ? inp.value : '');
+      }
+    } else {
+      var ta = document.getElementById('text-' + qid);
+      userAnswer = ta ? ta.value : '';
+    }
+
+    out.push({
+      index: i,
+      type: q.type,
+      question: q.question,
+      options: q.options || null,
+      correct_answer: q.answer,
+      user_answer: userAnswer,
+      points: q.points,
+      explanation: q.explanation || '',
+      kc_id: q.kc_id || '',
+      images: (__epaImages[qid] || []).slice()
+    });
+  }
+  return out;
+}
+
+// ─── Save answers for AI grading ─────────────────────────────────────
+
+function saveForGrading() {
+  var answers = collectAnswers();
+  var chapterTitle = (document.title || '章节').replace(/\s+/g, '_');
+  var nowStr = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  var filename = chapterTitle + '_answers_' + nowStr + '.json';
+
+  var data = JSON.stringify({
+    chapter: document.title || '',
+    saved_at: new Date().toISOString(),
+    questions: answers
+  }, null, 2);
+
+  var blob = new Blob([data], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  var cmdEl = document.getElementById('epa-grade-cmd-text');
+  if (cmdEl) cmdEl.textContent = '/exampass grade "<下载目录>/' + filename + '"';
+  var modal = document.getElementById('epa-grade-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function __epaCloseGradeModal() {
+  var modal = document.getElementById('epa-grade-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function __epaCopyGradeCmd() {
+  var cmdEl = document.getElementById('epa-grade-cmd-text');
+  if (!cmdEl) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmdEl.textContent);
+  } else {
+    var range = document.createRange();
+    range.selectNodeContents(cmdEl);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('copy');
+    sel.removeAllRanges();
+  }
+  var btn = document.getElementById('epa-grade-copy-btn');
+  if (btn) { btn.textContent = '已复制'; setTimeout(function(){ btn.textContent = '复制命令'; }, 2000); }
+}
+
+function gradeFill(q, qid, card, badge, correctEl) {
+  var nBlanks = fillBlankCount(q.question);
+  var blanks = fillBlankAnswers(q.answer, nBlanks);
+  var n = blanks.length;
+  var hit = 0;
+  var displays = [];
+
+  for (var b = 0; b < n; b++) {
+    var inp = document.getElementById('fill-' + qid + '-' + b);
+    var accepted = blanks[b] || [''];
+    var user = inp ? normText(inp.value) : '';
+    var ok = false;
+    for (var a = 0; a < accepted.length; a++) {
+      if (accepted[a] !== '' && normText(accepted[a]) === user && user !== '') { ok = true; break; }
+    }
+    if (inp) inp.classList.add(ok ? 'fill-ok' : 'fill-no');
+    if (ok) hit++;
+    displays.push((n > 1 ? (b + 1) + '. ' : '') + accepted.filter(function (x) { return x !== ''; }).join(' / '));
+  }
+
+  var earned = roundScore(q.points * hit / n);
+  correctEl.innerHTML = LABELS.answer_prefix + displays.join('   ');
+
+  if (hit === n) {
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+  } else if (hit > 0) {
+    card.classList.add('partial');
+    badge.className = 'badge badge-partial';
+    badge.textContent = LABELS.partial_label;
+  } else {
+    card.classList.add('wrong');
+    badge.className = 'badge badge-no';
+    badge.textContent = LABELS.wrong_label;
+  }
+  return earned;
+}
+
+</script>
+<script>
+function __epaSwitch(tab) {
+  document.querySelectorAll('#epa-tabs .tab-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-tab') === tab); });
+  document.querySelectorAll('.tab-panel').forEach(function(p){
+    p.classList.toggle('active', p.id === 'panel-' + tab); });
+  // The test panel is display:none on load, so build()'s MathJax typeset ran
+  // on hidden content. Re-run build() the first time the panel is visible so
+  // it renders + typesets at the real size. Guarded so answers aren't wiped.
+  if(tab === 'test' && !window.__epaTestBuilt){
+    window.__epaTestBuilt = true;
+    if(typeof build === 'function'){ try { build(); } catch(err){} }
+  } else if(tab === 'test' && window.MathJax && MathJax.typesetPromise){
+    var panel = document.getElementById('panel-test');
+    if(panel) MathJax.typesetPromise([panel]).catch(function(){});
+  }
+  if(window.__epaFitFormulas) setTimeout(window.__epaFitFormulas, 50);
+  window.scrollTo(0, 0);
+}
+document.addEventListener('click', function(e){
+  var btn = e.target.closest('#epa-tabs .tab-btn'); if(!btn) return;
+  __epaSwitch(btn.getAttribute('data-tab'));
+});
+</script>
+</body>
+</html>

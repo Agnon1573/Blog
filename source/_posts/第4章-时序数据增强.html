@@ -1,0 +1,1251 @@
+---
+title: 第4章 时序数据增强
+date: 2026-10-12 09:00:00
+categories:
+  - 决策推理
+tags:
+  - 决策推理
+layout: false
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第4章 时序数据增强</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+/* Modern monospace stack — avoids the ugly Courier New fallback on Windows. */
+:root {
+  --mono: "Cascadia Code", "JetBrains Mono", "Fira Code", "Source Code Pro",
+          Consolas, "SF Mono", Menlo, "DejaVu Sans Mono", monospace;
+}
+code {
+  font-family: var(--mono);
+  background: #eee8d8; color: #8a4b1e;
+  padding: 1px 5px; border-radius: 4px; font-size: 0.9em;
+}
+pre {
+  font-family: var(--mono);
+  background: #2d2a26; color: #ece6da;
+  padding: 14px 16px; border-radius: var(--radius);
+  overflow-x: auto; line-height: 1.6; font-size: 0.9em;
+  border: 1px solid #3d3934; tab-size: 2;
+}
+pre code {
+  background: none; color: inherit; padding: 0; font-size: 1em; border-radius: 0;
+}
+/* kp/exp spans inside <pre> must inherit the light code color, not their own dark color */
+pre .kp, pre .exp { color: inherit; }
+
+/* ── Long display formulas: scroll inside their column, never overflow ── */
+mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+/* ── Checkpoint self-test ── */
+.checkpoint {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius);
+  padding: 10px 16px; margin: 18px 0;
+  font-size: 0.95em;
+}
+.checkpoint::before {
+  content: '🧠 自测：';
+  font-weight: 700; color: #1e40af;
+}
+.checkpoint .cp-answer { margin-top: 10px; border-top: 1px dashed #bfdbfe; padding-top: 8px; }
+.checkpoint .cp-answer summary {
+  cursor: pointer; color: #1e40af; font-weight: 600; user-select: none;
+  list-style: none;
+}
+.checkpoint .cp-answer summary::before { content: '💡 '; }
+.checkpoint .cp-answer summary::-webkit-details-marker { display: none; }
+.checkpoint .cp-answer[open] summary { margin-bottom: 6px; }
+.checkpoint .cp-answer ol, .checkpoint .cp-answer p { font-weight: 400; color: var(--ink); }
+
+/* ── TL;DR summary ── */
+.tldr {
+  background: #fefce8; border-left: 3px solid #eab308;
+  padding: 8px 14px; margin: 10px 0;
+  font-weight: 600; font-size: 0.95em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  body { max-width: 100%; padding: 12px 10px 40px; font-size: 11pt; }
+  h1 { font-size: 1.3em; }
+  h2 { font-size: 1.12em; }
+  table { font-size: 0.85em; }
+  td, th { padding: 4px 6px; }
+  pre { font-size: 0.85em; padding: 6px; }
+}
+@media (max-width: 400px) {
+  body { padding: 8px 6px 32px; font-size: 10.5pt; }
+}
+
+/* === Interactive Test Styles === */
+
+/* ── Score box ── */
+#score-box {
+  display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border);
+}
+#score-box .score-num { font-size: 2.2em; font-weight: 700; }
+#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+
+/* ── Question card ── */
+.q-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s;
+}
+.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
+
+.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.q-text { margin-bottom: 8px; font-size: 0.98em; }
+
+/* ── Options (compact) ── */
+.option {
+  display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5;
+}
+.option:hover            { background: #f0ede0; }
+.option input            { margin-right: 6px; }
+.option.selected         { border-color: var(--accent); background: #eff6ff; }
+.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
+
+/* ── Textareas (compact) ── */
+.q-textarea {
+  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical;
+}
+.q-textarea:focus { outline: none; border-color: var(--accent); }
+.q-code {
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 0.88em; line-height: 1.5; background: #1e1e2e; color: #e0e0e0;
+  tab-size: 4; white-space: pre;
+}
+.q-code:focus { border-color: var(--accent); }
+
+/* ── Partial-credit badge ── */
+.badge-partial { background: #fef3c7; color: #92400e; }
+.q-card.partial { border-color: #f59e0b; }
+
+/* ── Result after grading ── */
+.result {
+  display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
+}
+.result .badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px;
+}
+.badge-ok  { background: var(--correct-bg); color: #166534; }
+.badge-no  { background: var(--wrong-bg); color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+
+.result .explanation { margin-top: 4px; color: var(--ink); }
+.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+
+/* ── Grading button ── */
+.grading-bar { text-align: center; margin: 20px 0; }
+.grading-bar button {
+  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
+}
+.grading-bar button:hover     { background: var(--accent-hover); }
+.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
+
+/* ── Fill-in-blank inputs ── */
+.fill-input {
+  border: 1px solid var(--card-border); border-radius: 3px;
+  padding: 2px 8px; font-family: inherit; font-size: 0.95em;
+  background: #fefcf5; width: 140px; vertical-align: middle;
+  transition: border-color .12s;
+}
+.fill-input:focus { outline: none; border-color: var(--accent); }
+.fill-input.fill-ok { border-color: var(--correct); background: var(--correct-bg); }
+.fill-input.fill-no { border-color: var(--wrong); background: var(--wrong-bg); }
+/* stacked blanks (fill questions whose blank markers aren't in the text) */
+.fill-blank-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+.fill-blank-row .fill-input { flex: 1; min-width: 0; width: auto; }
+.fill-tag { font-weight: 600; font-size: 0.9em; color: var(--ink-light); white-space: nowrap; }
+
+/* ── Pasted image preview ── */
+.paste-img-wrap {
+  margin-top: 6px; position: relative; display: inline-block; max-width: 100%;
+}
+.paste-img-wrap img {
+  max-width: 100%; max-height: 240px; border-radius: 4px;
+  border: 1px solid var(--divider); display: block;
+}
+.paste-img-remove {
+  position: absolute; top: 3px; right: 3px; width: 20px; height: 20px;
+  background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 50%;
+  cursor: pointer; font-size: 12px; line-height: 20px; text-align: center; padding: 0;
+}
+
+/* ── AI批改 save-for-grading button ── */
+.save-bar { text-align: center; margin: 10px 0 4px; }
+.save-bar button {
+  font-size: 0.95em; padding: 7px 22px; background: #7c5ccc;
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600;
+}
+.save-bar button:hover { background: #6748b4; }
+
+/* ── Grade export modal ── */
+#epa-grade-modal {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.62);
+  z-index: 9998; align-items: center; justify-content: center;
+}
+#epa-grade-modal.open { display: flex; }
+.epa-grade-dialog {
+  background: #fff; border-radius: 10px; padding: 24px 28px; max-width: 560px;
+  width: 90vw; box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+}
+.epa-grade-dialog h3 { margin: 0 0 10px; font-size: 1.1em; }
+.epa-grade-dialog p {
+  color: var(--ink-light); font-size: 0.93em; margin: 0 0 12px; line-height: 1.6;
+}
+.epa-grade-cmd {
+  background: #1e1e2e; color: #e0e0e0; border-radius: 6px; padding: 10px 14px;
+  font-family: "Consolas","Monaco","Courier New",monospace; font-size: 0.88em;
+  word-break: break-all; margin-bottom: 12px; user-select: all; white-space: pre-wrap;
+}
+.epa-grade-dialog-btns { display: flex; gap: 10px; justify-content: flex-end; }
+.epa-grade-dialog-btns button {
+  padding: 7px 18px; border-radius: 6px; border: none; cursor: pointer;
+  font-size: 0.93em; font-weight: 600;
+}
+.btn-copy { background: var(--accent); color: #fff; }
+.btn-copy:hover { background: var(--accent-hover); }
+.btn-close-modal { background: #e5e5e5; color: var(--ink); }
+.btn-close-modal:hover { background: #d5d5d5; }
+
+
+
+/* ── Combined page: top tab bar (清单 | 题目) ──
+   Sticky so 清单/测试 switching stays reachable after scrolling. This replaces
+   the old floating FAB, which was pinned bottom-right and permanently covered
+   (and click-blocked) the bottom-right slide card of the PPT 对照 rail. */
+#epa-tabs { position: sticky; top: 4px; z-index: 1000;
+  display: flex; gap: 0; justify-content: center; margin: 6px auto 22px;
+  max-width: 520px; border: 1px solid var(--divider); border-radius: 10px; overflow: hidden;
+  background: var(--paper); box-shadow: 0 2px 10px rgba(0,0,0,0.10); }
+#epa-tabs .tab-btn { flex: 1; padding: 10px 18px; cursor: pointer; border: none;
+  background: var(--paper-dark); color: var(--ink-light); font-size: 1.02em; font-weight: 600;
+  font-family: inherit; transition: background .15s, color .15s; }
+#epa-tabs .tab-btn + .tab-btn { border-left: 1px solid var(--divider); }
+#epa-tabs .tab-btn.active { background: var(--accent); color: #fff; }
+#epa-tabs .tab-btn:not(.active):hover { background: #efe7d3; color: var(--ink); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+/* keep the test readable/centered even though the body is wide for the rail */
+#panel-test { max-width: 980px; margin: 0 auto; }
+/* When the tab bar is pinned at the top, drop the sticky slide rail below it so
+   the bar never covers the first slide card. `top` only affects the PINNED
+   position — initial layout still top-aligns the rail with the notes column. */
+.kn-rail { top: 60px; max-height: calc(100vh - 74px); }
+@media print { #epa-tabs { position: static; display: none; } .tab-panel { display: block !important; } }
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">ExamPass Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第4章 时序数据增强</h1><div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
+<div class="toc">
+<h2>目录</h2>
+<ul>
+<li><a href="#s15699995">时序数据增强概述</a></li>
+<li><a href="#s50198436">时序数据增强算法</a></li>
+  <li><a href="#s27211882">基础时序数据增强</a></li>
+  <li><a href="#s71663142">时域数据增强</a></li>
+  <li><a href="#s56912198">频域数据增强</a></li>
+  <li><a href="#s62442563">时频域数据增强</a></li>
+  <li><a href="#s15838494">高阶时序数据增强</a></li>
+<li><a href="#s88635370">时序数据增强案例</a></li>
+<li><a href="#s46669918">频域数据增强方式</a></li>
+<li><a href="#s45243427">2.1 时频域时序数据增强典型算法：Spec Augment</a></li>
+  <li><a href="#s31865891">背景</a></li>
+  <li><a href="#s23160865">Spec Augment 数据增强研究动机</a></li>
+  <li><a href="#s36567319">Spec Augment 数据增强策略</a></li>
+  <li><a href="#s18074051">实验</a></li>
+<li><a href="#s33581942">2.2 时序数据增强方法概览</a></li>
+  <li><a href="#s15838494">高阶时序数据增强</a></li>
+  <li><a href="#s67604420">基于分解的时序数据增强</a></li>
+  <li><a href="#s58036065">基于学习方法的时序数据增强</a></li>
+<li><a href="#s14690038">2.2 时序数据增强典型算法：Time GAN</a></li>
+  <li><a href="#s25667145">深度生成模型与时间序列</a></li>
+  <li><a href="#s76195626">Time GAN 的特征与原理</a></li>
+  <li><a href="#s66794285">Time GAN 关键模块</a></li>
+  <li><a href="#s77643856">模型结构与流程</a></li>
+<li><a href="#s20504197">2.2 时序数据自动增强</a></li>
+  <li><a href="#s25008050">问题背景与图像领域的解决思路</a></li>
+  <li><a href="#s30399077">α剪枝自动增强</a></li>
+  <li><a href="#s26770178">时序数据自动增强验证：股票预测</a></li>
+<li><a href="#s15194854">2.3 小结</a></li>
+<li><a href="#s45746746">3.1 云核故障数据增强</a></li>
+  <li><a href="#s86921673">3.1.1 应用 Time GAN 增强故障诊断数据</a></li>
+<li><a href="#s51349120">数据量缺口与Time GAN增强流程</a></li>
+  <li><a href="#s81924493">Time GAN 增强流程</a></li>
+  <li><a href="#s70138321">训练与推理过程</a></li>
+  <li><a href="#s89872403">数据增强效果示例</a></li>
+<li><a href="#s35042443">运维时序数据增强</a></li>
+  <li><a href="#s17810732">基于 Global-Local GAN 的时序数据超分方法</a></li>
+  <li><a href="#s21520840">Global-Local GAN 技术原理</a></li>
+<li><a href="#s59480998">运维数据增强 - Demo展示</a></li>
+<li><a href="#s51775187">运维数据增强 - 验证结果</a></li>
+<li><a href="#s43660726">小结</a></li>
+<li><a href="#s38217022">课后习题</a></li>
+</ul>
+</div>
+<h2 id="s15699995">时序数据增强概述</h2>
+<p>时序数据是指将统一统计指标的数值按其发生的时间先后顺序排列而成的数列。AI模型性能依赖于大量训练数据，但在医疗诊断、智能故障诊断等领域，往往存在难以获取充足数据的问题。一种直观的方法是<span class="kp">数据增强</span>，通过已有少量时序数据生成更多的等价时序数据，扩展训练数据集，克服时序数据不足问题。</p>
+<div class="tldr">时序数据具有固有特性：<span class="kp">时间依赖性</span>，这使得数据增强方法需要专门设计，不能随意打乱特征顺序结构。图像和NLP处理的数据增强方法可能不能直接迁移到时序数据，且数据增强方法与任务相关。</div>
+<blockquote>易错：时序数据中每条样本的特征数据都有先后顺序，不能随意打乱，这与传统机器学习算法不同。</blockquote>
+
+<h2 id="s50198436">时序数据增强算法</h2>
+<h3 id="s27211882">基础时序数据增强</h3>
+<p>基础时序数据增强主要分为三类：<span class="kp">时域数据增强</span>、<span class="kp">频域数据增强</span>和<span class="kp">时频域数据增强</span>。</p>
+
+<h3 id="s71663142">时域数据增强</h3>
+<p><span class="tag-key">重点</span> 时域变换是时间序列数据最直接的数据增强方法，直接从原始输入时间序列进行增强，对原始数据进行转换、增加噪声等方法。</p>
+<p>基础方法包括：</p>
+<p>- <span class="kp">Window Warping（窗口规整）</span>：对时序中的部分片段进行拉伸或缩减。</p>
+<p>- <span class="kp">Jittering / Noise Injection（噪声注入）</span>：给每个时间步数据添加高斯噪声。</p>
+<p>- <span class="kp">Flipping（翻转）</span>：通过翻转产生时间序列数据。</p>
+<p>- <span class="kp">Permutation（排列）</span>：将时序数据分割成多份并重新排列，分割不破坏时序依赖关系。</p>
+<p>- <span class="kp">Window Slicing（窗口切片）</span>：从时序中提取窗口大小的切片。</p>
+
+<p><span class="tag-must">必考</span> <span class="kp">动态时间规整（Dynamic Time Warping, DTW）算法</span>：当序列长短不一或时间步不对齐时，难以有效计算两条时间序列的相似度。DTW算法对时间序列线性放缩，达到更好的对齐效果，可以存在一对多映射的情况，适用于复杂时间序列。</p>
+<p>DTW算法步骤：1. 计算两个序列各个点之间的距离矩阵。2. 寻找一条从矩阵左上角到右下角的路径，使得路径上的元素和最小。</p>
+<p>路径性质：1. 当前路径长度 = 前一步的路径长度 + 当前元素的大小。2. 路径上的某个元素 $(i, j)$，它的前一个元素只可能为左边的相邻元素 $(i, j - 1)$、上面的相邻元素 $(i - 1, j)$ 或左上方的相邻元素 $(i - 1, j - 1)$。</p>
+<div class="tldr">DTW算法通过动态规划求解从矩阵左上角到右下角的最短路径长度 $L_{min}(i, j)$。</div>
+
+<p><span class="tag-freq">高频</span> <span class="kp">DTW Barycenter Averaging (DBA) 算法</span>：在DTW的基础上做重心平均，把时间序列压缩成一条来进行比较，生成新样本。DBA的结果要好于传统求平均值的结果。</p>
+<p>DBA数据增强流程：1. 随机选取初始时间序列，赋予0.5权重。2. 根据DTW距离找到最近的5个时间序列。3. 从5个最近邻中随机选择两个，分别赋予0.15的权重。4. 剩余权重为0.2，将剩下的序列平均分配这0.2的权重。5. 将这5个DTW对齐后的时间序列加权求和增强生成新的时间序列样本。</p>
+<div class="checkpoint">DBA算法中，初始时间序列、随机选择的两个最近邻序列以及剩余序列的权重分别是多少？<details class="cp-answer"><summary>参考答案</summary>初始时间序列权重为0.5，随机选择的两个最近邻序列权重各为0.15，剩余序列平均分配0.2的权重。</details></div>
+
+<h3 id="s56912198">频域数据增强</h3>
+<p><span class="tag-key">重点</span> 核心思想是把数据从时域转化为频域（如傅里叶变换），再对振幅、相位采用加噪等时域增强算法。</p>
+<p>傅里叶变换公式：$F(\omega_k) = \frac{1}{N} \sum_{t=0}^{N-1} x_t e^{-j\omega_k t} = A(\omega_k) \exp[j\theta(\omega_k)]$，其中 $A(\omega_k)$ 是振幅，$\theta(\omega_k)$ 是相位。</p>
+<p>数据增强方法包括：</p>
+<p>- <span class="kp">振幅扰动</span>：考虑振幅谱中的原始均值和方差，将随机选择的段的振幅值替换为高斯噪声。</p>
+<p>- <span class="kp">相位扰动</span>：随机选择的段的相位值由相位谱中额外的零均值高斯噪声相加。</p>
+<p>相关算法：AAFT (Amplitude Adjusted Fourier Transform)、IAAFT (Iterated AAFT)、APP (Amplitude and Phase Perturbations)。</p>
+
+<h3 id="s62442563">时频域数据增强</h3>
+<p>核心思想是综合时域与频域进行数据增强。方法包括STFT (Short-Time Fourier Transform)和Spec Augment。</p>
+<p><span class="tag-freq">高频</span> <span class="kp">Spec Augment 数据增强</span>：针对自动语音识别（ASR）任务，直接对频谱图本身进行增强，而不是增强波形数据。方法简单、计算量小、不需要额外的数据，可以在训练期间在线运行。</p>
+<p>Spec Augment包含三种变形方法：1. <span class="kp">时间变形</span>：对时间轴进行拉伸或压缩。2. <span class="kp">频率掩膜</span>：对连续的频率通道进行掩膜。3. <span class="kp">时间掩膜</span>：对频谱图的时间轴进行掩膜。</p>
+<p>为防止多个掩膜相互覆盖，设置不同参数形成四种增强策略：None, LB, LS, MB, SS。</p>
+<div class="checkpoint">Spec Augment与传统ASR数据增强方法的主要区别是什么？<details class="cp-answer"><summary>参考答案</summary>传统方法在音频波形转换成频谱图之前对波形数据进行增强，每次迭代后需生成新频谱图；Spec Augment直接对频谱图本身进行增强，应用于网络输入特征，计算量小且可在线运行。</details></div>
+
+<h3 id="s15838494">高阶时序数据增强</h3>
+<p><span class="tag-info">了解</span> <span class="kp">基于统计生成模型</span>：用统计学方法模拟时序数据（基于时序数据的自相关性，给初始点一个扰动，后续数据点随之扰动）。方法包括LGT (Local and Global Trend)和MAR (Mixture of Autoregressive Models)。</p>
+<p><span class="tag-info">了解</span> <span class="kp">基于分解的时序数据增强</span>：把时序数据分解为某些成分，再对每个成分设计增强方法。如<span class="kp">STL算法</span>，将时序数据分解为趋势、季节性、残差三个成分，调整基础、趋势和季节性的权重重构确定性部分，对残差部分进行随机性调整。</p>
+
+<p><span class="tag-key">重点</span> <span class="kp">基于学习方法的时序数据增强</span>：从数据中学得数据增强方式，如GAN、Time GAN等。</p>
+<p><span class="kp">GAN（生成对抗网络）</span>：由生成器和判别器组成，两者相互竞争，最终生成器可以生成非常逼真的样本。</p>
+<p><span class="tag-freq">高频</span> <span class="kp">Time GAN</span>：考虑到时序数据的时态特征，但没有考虑静态特征而提出。时序数据包含静态特征 $S$（不随时间改变）和时态特征 $X$（随时间改变）。</p>
+<p>Time GAN关键模块：1. Embedding function（嵌入函数）——特征降维；2. Recovery function（恢复函数）——特征提取；3. Sequence Generator（时间序列生成器）；4. Sequence Discriminator（时间序列判别器）。</p>
+<p>Time GAN损失函数：1. Unsupervised loss（无监督损失）；2. Supervised loss（有监督损失）；3. Reconstruction loss（重建损失）——特征降维。</p>
+<div class="checkpoint">Time GAN相比于传统的循环GAN或循环条件GAN，主要解决了什么问题？<details class="cp-answer"><summary>参考答案</summary>传统的循环GAN等方法考虑了时态特征，但没有考虑静态特征。Time GAN同时考虑了静态特征和时态特征。</details></div>
+
+<p><span class="tag-info">了解</span> <span class="kp">自动数据增强</span>：通过强化学习、元学习或进化搜索自动搜索最佳数据增强策略。包括Auto Augmentation、PBA算法和Rand Augmentation。</p>
+<p><span class="tag-key">重点</span> <span class="kp">α剪枝自动增强</span>：针对自动数据增强忽略样本间差异性的问题，提出样本级增强，为每个时序样本选择最合适的增强策略。步骤包括：1. Augment sample（增强样本）；2. Evaluate and calculate loss（loss计算）；3. Rank and trim（增强样本选择与汇总）。</p>
+<blockquote>易错：对MLP模型而言，loss较小样本对模型更新信息小，loss较大样本对模型更新贡献度大，然而这样会导致更新后的模型在容易样本上性能受损。</blockquote>
+<p><span class="tag-info">了解</span> <span class="kp">Embedding Space 数据增强</span>：在encoding space上增加扰动。</p>
+
+<h2 id="s88635370">时序数据增强案例</h2>
+<p>时序数据增强在实际中有广泛的应用案例，主要包括：</p>
+<p>- <span class="kp">云核故障数据增强</span>：基于云核故障机器数据构建电信领域机器数据模型，解决无故障率99%以上导致的故障数据不足问题。</p>
+<p>- <span class="kp">自动语音识别数据增强</span>：通过Spec Augment等方法扩大数据集，防止模型过度拟合，提升泛化能力。</p>
+<p>- <span class="kp">运维时序数据增强</span>：用于KPI故障诊断、设备维护等时间序列异常检测任务。</p>
+<div class="tldr">时序数据增强技术能够有效提升时序数据数据量，解决数据不足问题，从而提升时序模型性能。</div>
+
+<h2 id="s46669918">频域数据增强方式</h2>
+<p>其中，$\omega_k = \frac{2\pi k}{N}$ 是<span class="kp">角频率</span>，$A(\omega_k)$ 是<span class="kp">振幅</span>，$\theta(\omega_k)$ 是<span class="kp">相位</span>。</p>
+<p><span class="kp">数据增强方式</span>包括：</p>
+<ul>
+<li><p><span class="kp">对振幅 $A(\omega_k)$ 的扰动</span>：考虑振幅谱中的原始均值和方差，将随机选择的段的振幅值替换为高斯噪声。</p></li>
+<li><p><span class="kp">对相位 $\theta(\omega_k)$ 的扰动</span>：随机选择的段的相位值由相位谱中额外的零均值高斯噪声相加。</p></li>
+</ul>
+<div class="tldr">基于振幅和相位扰动的数据增强与时域增强方法相结合，能带来显著的时间序列异常检测改进。</div>
+<p><span class="tag-key">重点</span> <span class="kp">频域数据增强典型算法</span>：</p>
+<ul>
+<li><p><span class="kp">AAFT (Amplitude Adjusted Fourier Transform)</span>：振幅调整傅里叶变换。</p></li>
+<li><p><span class="kp">IAAFT (Iterated AAFT)</span>：迭代振幅调整傅里叶变换。</p></li>
+<li><p><span class="kp">APP (Amplitude and Phase Perturbations)</span>：振幅与相位扰动。</p></li>
+</ul>
+
+<h2 id="s45243427">2.1 时频域时序数据增强典型算法：Spec Augment</h2>
+<h3 id="s31865891">背景</h3>
+<p><span class="kp">自动语音识别 (ASR)</span>是一种将音频输入转换成文本的技术。当训练集数量不足或不够全面时，模型往往会过度拟合，因此需要通过<span class="kp">数据增强</span>扩大数据集，让网络变得更鲁棒。ASR 领域的数据增强通常指对训练的音频波形进行变形或添加背景噪声。</p>
+<h3 id="s23160865">Spec Augment 数据增强研究动机</h3>
+<p><span class="tag-freq">高频</span> 传统数据增强方法在音频波形转换成频谱图之前进行，每次迭代后都需要生成新的频谱图。流程为：音频波形 → 音频波形数据增强 → 视觉表示（频谱图） → ASR网络。</p>
+<p><span class="tag-must">必考</span> <span class="kp">Spec Augment 数据增强方法</span>直接增强频谱图本身，而不是增强波形数据。由于直接应用于网络的输入特征，方法简单、计算量小、不需要额外的数据，可以在训练期间在线运行。流程为：音频波形 → 视觉表示（频谱图） → 频域/时域频谱图数据增强 → ASR网络。</p>
+<h3 id="s36567319">Spec Augment 数据增强策略</h3>
+<p><span class="tag-key">重点</span> Spec Augment 包含三种变形方法：</p>
+<ol>
+<li><p><span class="kp">时间变形</span>：对于时间步长为 (W, τ-W) 的图像，穿过图像中心水平线的某个随机点经变形后，处在其左或其右距离为 w 的位置，w 从 [0, W] 的均匀分布中选择，W 为时间变形参数。</p></li>
+<li><p><span class="kp">频率掩膜</span>：对 f 个连续的梅尔频率通道 [f₀, f₀+f) 应用掩膜，f 从 [0, F] 均匀分布中选择，F 为频率掩膜参数，f₀ 从 [0, v-f) 中选择，v 代表梅尔频率通道的数量。</p></li>
+<li><p><span class="kp">时间掩膜</span>：对 t 个连续的时间步长 [t₀, t₀+t) 应用掩膜，t 从 [0, T] 的均匀分布中选择，T 为时间掩膜参数，t₀ 从 [0, τ-t) 中选择。</p></li>
+</ol>
+<p>为防止多个掩膜相互覆盖，设置不同参数形成四种增强策略（None, LB, LD, SM, SS）。</p>
+<h3 id="s18074051">实验</h3>
+<p><span class="tag-info">了解</span> 实验采用 LAS 网络模型，数据集为 LibriSpeech 和 Switchboard。学习率策略包括 B(asic)、D(ouble) 和 L(ong)。与语言模型进行浅聚合。</p>
+<div class="tldr">Spec Augment 方法在 ASR 任务 LibriSpeech 960h 和 Switchboard 300h 数据集上达到了目前最先进的表现性能，字错误率显著下降。</div>
+
+<h2 id="s33581942">2.2 时序数据增强方法概览</h2>
+<h3 id="s15838494">高阶时序数据增强</h3>
+<p><span class="kp">核心思想</span>：用统计学方法模拟时序数据（基于时序数据的自相关性，给初始点一个扰动，后续数据点随之扰动）。方法包括 LGT (Local and Global Trend) 和 MAR (Mixture of Autoregressive models)。</p>
+<h3 id="s67604420">基于分解的时序数据增强</h3>
+<p><span class="kp">核心思想</span>：把时序数据分解为某些成分，再对每个成分设计增强方法。方法如 STL算法（分解为 trend/seasonality/residual，调整基础、趋势和季节性的权重，重构确定性部分，对 residual 进行随机性调整）。</p>
+<h3 id="s58036065">基于学习方法的时序数据增强</h3>
+<p><span class="kp">核心思想</span>：从数据中学得数据增强方式。方法包括 Time GAN、Automated Data Augmentation、Embedding Space（在 encoding space 上增加扰动）。</p>
+
+<h2 id="s14690038">2.2 时序数据增强典型算法：Time GAN</h2>
+<h3 id="s25667145">深度生成模型与时间序列</h3>
+<p><span class="kp">深度生成模型 (DGM)</span>能生成高维数据，以 GAN 为典型。在时间序列领域，循环 GAN 和循环条件 GAN 考虑了时态特征，但没有考虑静态特征，因此提出了 <span class="kp">Time GAN</span>。</p>
+<h3 id="s76195626">Time GAN 的特征与原理</h3>
+<p><span class="tag-must">必考</span> 时序数据应该有两种特征：</p>
+<ul>
+<li><p><span class="kp">静态特征 S</span>：不会因为时间而改变的特征，例如性别。</p></li>
+<li><p><span class="kp">时态特征 X</span>：随时间而改变的特征，例如生命特征（脉搏、呼吸、体温、血压等）。</p></li>
+</ul>
+<p>模型学习真实训练数据的分布，使得生成数据的分布 $\hat{p}(S, X_{1:T})$ 与真实数据的分布 $p(S, X_{1:T})$ 相似。</p>
+<h3 id="s66794285">Time GAN 关键模块</h3>
+<p><span class="tag-key">重点</span> 1. Embedding function 和 Recovery function</p>
+<p>采用 <span class="kp">Embedding 方法</span>降低特征维度，简化 GAN 网络复杂度。用更低维度的 $\mathbf{h}_S$ 表示静态特征 $\mathbf{s}$，$\mathbf{h}_t$ 表示时态特征 $\mathbf{x}_t$。时态特征的输入为静态特征 $\mathbf{h}_S$ 和上一时刻时态特征 $\mathbf{h}_{t-1}$。通过 Recovery 函数复原出原来的特征。通过损失函数 <span class="kp">Reconstruction Loss ($\mathcal{L}_R$)</span> 评估端到端降维后的复原程度。</p>
+<p>2. Sequence Generator 和 Discriminator</p>
+<p>生成器 $g_S$ 通过随机向量 $\mathbf{z}_S$ 生成 $\hat{\mathbf{h}}_S$，$g_X$ 通过随机向量 $\mathbf{z}_t$ 和 $\hat{\mathbf{h}}_S$、$\hat{\mathbf{h}}_{t-1}$ 生成 $\hat{\mathbf{h}}_t$。判别器识别真实数据与生成数据，对于时态特征 $\hat{\mathbf{h}}_t$，判别器使用双向的 RNN 判断两个方向的输出结果。</p>
+<p>此部分模型训练包含两个损失函数：</p>
+<ul>
+<li><p><span class="kp">Supervised Loss ($\mathcal{L}_S$)</span>：学习时态特征 $\mathbf{h}_t$，每一步的 $\mathbf{h}_t$ 是训练标签。</p></li>
+<li><p><span class="kp">Unsupervised Loss ($\mathcal{L}_U$)</span>：常规的 GAN 损失函数，评估静态特征和时态特征。</p></li>
+</ul>
+<h3 id="s77643856">模型结构与流程</h3>
+<p><span class="tag-info">了解</span> 模型包含 Embedding、Recovery、Generate、Discriminate 等步骤。Supervised Loss 学习条件概率 $\hat{p}(\mathbf{X}_t | \mathbf{S}, \mathbf{X}_{1:t-1})$，Unsupervised Loss 直接学习分布 $\hat{p}(\mathbf{S}, \mathbf{X}_{1:T})$。</p>
+<div class="checkpoint">Time GAN 提出时序数据有哪两种特征？<details class="cp-answer"><summary>参考答案</summary>静态特征 S（不随时间改变）和时态特征 X（随时间改变）。</details></div>
+
+<h2 id="s20504197">2.2 时序数据自动增强</h2>
+<h3 id="s25008050">问题背景与图像领域的解决思路</h3>
+<p>时序数据增强策略众多，如何选择最优的数据增强方法和增强参数？图像领域的解决思路包括：</p>
+<ul>
+<li><p><span class="kp">AutoAugment</span>：通过强化学习、元学习或进化搜索自动搜索最佳数据增强策略（单个增强方法被执行的概率和增强幅度）。</p></li>
+<li><p><span class="kp">PBA (Population Based Augmentation)</span>：优化 AutoAugment 的搜索空间设计，利用进化算法提升搜索效率。</p></li>
+<li><p><span class="kp">RandAugment</span>：去掉单独的策略搜索阶段，极大降低搜索空间大小。</p></li>
+</ul>
+<h3 id="s30399077">α剪枝自动增强</h3>
+<p><span class="tag-must">必考</span> 自动数据增强按数据集探索最优策略，所有样本采用相同增强策略，忽略了样本间的差异性。对此提出 <span class="kp">α剪枝自动增强</span>，实现时序数据增强的"千人千面"，即为每个时序样本选择最合适的增强策略。</p>
+<p><span class="tag-key">重点</span> 算法流程：</p>
+<ol>
+<li><p><span class="kp">Augment sample</span>：执行 N 种增强策略得到 N 个增强样本。</p></li>
+<li><p><span class="kp">Evaluate and calculate loss</span>：将增强样本输入神经网络，计算预测误差 loss。</p></li>
+<li><p><span class="kp">Rank and trim</span>：选择 loss 最大的 α 个和最小的 α 个增强样本。</p></li>
+<li><p><span class="kp">Augmented samples</span>：增强样本汇总。</p></li>
+</ol>
+<blockquote>易错：α剪枝自动增强分别筛选预测误差 (loss) 最大和最小的 α 个增强样本，是为了保证困难样本和容易样本的平衡性，避免模型频繁更新。如果只选 loss 大的样本，会导致更新后的模型在容易样本上性能受损。</blockquote>
+<h3 id="s26770178">时序数据自动增强验证：股票预测</h3>
+<p><span class="tag-info">了解</span> 采用标准普尔500指数(S&P500) 数据集，使用 LSTM 模型预测未来 t 时刻股票价格是否高于日均股价。选择了10种时序数据增强方法。</p>
+<div class="tldr">验证结果表明，数据增强后，模型预测性能优于原始数据。</div>
+
+<h2 id="s15194854">2.3 小结</h2>
+<p>1. 部分图像领域增强方法可以直接迁移至时间序列数据领域，但时序数据增强自身具有较强的领域相关性。</p>
+<p>2. 针对时间序列数据依赖特点进行维度对齐，介绍了时序数据增强典型算法 DBA 技术产生的背景与特点。</p>
+<p>3. 针对如何对每条样本选择最优的增强方法，介绍了样本级的时序数据自动增强方法——α剪枝自动增强。</p>
+
+<h2 id="s45746746">3.1 云核故障数据增强</h2>
+<h3 id="s86921673">3.1.1 应用 Time GAN 增强故障诊断数据</h3>
+<p>当核心网出现问题时，需要快速定位到问题根因。使用机器学习算法学习专家经验，通过算法快速定位问题根因。基于云核故障机器数据构建电信领域机器数据模型，面临以下挑战：</p>
+<ol>
+<li><p><span class="kp">现网故障数据稀缺</span>：核心网非常稳定，无故障率在99%以上，现网中很少出现故障。</p></li>
+<li><p><span class="kp">实验室故障数据构造受限</span>：实验室尝试在网元中注入故障生成故障数据，但受工具限制，构造速度较慢，无法在规定时间内完成需求。</p></li>
+</ol>
+<div class="checkpoint">云核故障数据增强面临哪两个主要挑战？<details class="cp-answer"><summary>参考答案</summary>1. 现网故障数据稀缺（无故障率99%以上）；2. 实验室故障数据构造受限（受工具限制构造速度慢）。</details></div>
+
+<h2 id="s51349120">数据量缺口与Time GAN增强流程</h2>
+<p>目前有155组故障数据包，算法对故障数据的需求为700组，现网及实验室均不能提供充足的故障数据包以供算法使用。为满足算法对数据量的需求，应用 <span class="kp">Time GAN</span> 算法增强故障数据。<span class="tag-must">必考</span></p>
+
+<h3 id="s81924493">Time GAN 增强流程</h3>
+<p>Time GAN 增强流程主要包括以下步骤：<span class="tag-key">重点</span></p>
+<p>1. <span class="kp">KPI文件输入</span>：输入原始KPI数据。</p>
+<p>2. <span class="kp">傅里叶变换与周期性判断</span>：通过FFT将曲线变化到频域，判断KPI曲线的周期性（如频率为10，周期性为100）。</p>
+<p>3. <span class="kp">场景判断</span>：根据异常KPI时间段、正常KPI时间段、不可用KPI时间段对KPI曲线进行判断，将其归类至不同场景（场景1至场景5）。</p>
+<p>4. <span class="kp">数据增强</span>：KPI增强算法 Time GAN 对对应场景的周期性曲线进行增强。Time GAN 的训练包含三部分损失：无监督损失（学习数据分布）、监督损失（学习条件分布）、重构损失（提供潜在嵌入空间）。</p>
+<p>5. <span class="kp">增强结果后处理</span>：对增强结果进行后处理。</p>
+<p>6. <span class="kp">输出增强结果文件</span>：输出最终的增强数据。</p>
+<div class="tldr">Time GAN训练包含无监督损失、监督损失和重构损失三部分。</div>
+
+<h3 id="s70138321">训练与推理过程</h3>
+<p><span class="tag-freq">高频</span></p>
+<p><strong>训练阶段</strong></p>
+<p>输入全部KPI序列，通过KPI增强算法进行训练，输出KPI增强算法模型。</p>
+<p><strong>KPI分组：</strong></p>
+<p>输入全部KPI序列，使用KPI序列相关性分析，包括：<span class="kp">斯皮尔曼相关系数</span>、<span class="kp">最大互信息数</span>、<span class="kp">动态时间规整</span>。计算相关性，对相关性系数进行加权，根据加权后的相似度对KPI进行分组。n条KPI序列分为k组，每组KPI间具有相关性。</p>
+<p>目的：将全部KPI序列进行相关性分析，将具有相关性的KPI分为一组，每一组作为训练数据训练一个模型，该模型能够充分学习一组KPI之间的相关性，保证在KPI数据增强时不丢失KPI间相关性。</p>
+<p>当前进展：使用KPI因果挖掘算法测试增强前后的数据，抽取关系一致，置信度发生轻微变化。</p>
+
+<p><strong>KPI时序数据增强（推理阶段）</strong></p>
+<p>输入单条KPI序列，输出增强KPI序列，输出结果包括：相似曲线、异常前增强正常数据、增强正常数据到7天、不可用数据替换。</p>
+<blockquote>易错：输出2、3为数据增强算法输出后的结果，非直接平移周期性数据而来，与周期性数据不同。</blockquote>
+<p>目的：实现KPI时序数据增强，扩充KPI样本多样性。</p>
+<p>当前进展：已完成方案设计、原型开发，在4G KPI数据集上进行验证，具有两个周期性以上的曲线余弦相似性达98.14%。已完成5GC KPI、4G KPI数据增强，已发布数据集。</p>
+<p>应用场景：该方法已应用于上海铁路局数据中心局点。</p>
+
+<h3 id="s89872403">数据增强效果示例</h3>
+<p>通过数据增强生成大量数据包以供机器学习模型进行训练，满足云核故障在数据层面上的要求。例如，针对2022年6月16日的3个故障：AMF1 sbim-pod限流800丢包、SMF2到UDM的链路正常但HTTP消息无法接收、UDM的外联口被shutdown导致链路故障。通过对比正常3天数据与异常1天数据的AMF注册态平均用户数曲线，验证了数据增强的有效性。</p>
+
+<h2 id="s35042443">运维时序数据增强</h2>
+
+<h3 id="s17810732">基于 Global-Local GAN 的时序数据超分方法</h3>
+<p><span class="tag-key">重点</span></p>
+<p><strong>背景描述</strong></p>
+<p>通讯网络网元数量多、覆盖地域广、服务时间长，因此网络数字孪生体必将是一个规模庞大的复杂系统。这显著增加了数据的采集和存储、模型的设计和运用等方面的复杂度，对系统软硬件要求非常高。</p>
+<p>目前从网络设备采集数据存在以下问题：</p>
+<p>1. <span class="kp">网络数据获取成本高</span>：毫秒级采集频率导致数据量成千倍增加，数据采集的带宽、内存等资源远远无法满足数据量的增长。</p>
+<p>2. <span class="kp">特征缺失</span>：低分辨率数据在应用于AI模型训练时会导致特征缺失，影响训练效果。</p>
+
+<p><strong>技术挑战</strong></p>
+<p>构建网络数字孪生数据超分机制，实现孪生数据与现实网络环境的部分解耦。通过数据超分，解决细粒度网络数据获取困难、成本高的问题。统计方法只适用于平稳的数据类型，无法对非平稳数据进行预测。需要对生成的高分辨率数据进行度量，生成的数据与原始低分辨率数据应在统计意义上保持一致。</p>
+
+<p><strong>数字孪生引擎（DTE）特性</strong></p>
+<p>全面：数据全生命周期，所有网络数据。实时：实时接入、实时计算、实时访问。轻量：资源占用少。安全：数据安全。免维护：自智。</p>
+
+<h3 id="s21520840">Global-Local GAN 技术原理</h3>
+<p><span class="tag-must">必考</span></p>
+<p><strong>损失函数设计：</strong></p>
+<p>Global-Local GAN 的损失函数设计包含三个部分：</p>
+<p>1. $\mathcal{L}_{\mathrm{U}}$（无监督学习）：首先对整体的数据分布进行拟合（Global），直接学习分布。</p>
+<p>2. $\mathcal{L}_{\mathrm{S}}$（监督学习）：对每个时间步的数据分布进行拟合（Local），学习条件分布。</p>
+<p>3. $\mathcal{L}_{\mathrm{R}}$（重构学习）：完成了对整个数据的特征分布的拟合，提供潜在嵌入空间。</p>
+
+<p><strong>时序数据特征定义：</strong></p>
+<p>对时序数据，提出时序数据应该有两种特征：</p>
+<p>1. <span class="kp">全局特征</span>：不会因为时间而改变的特征，以医疗数据为例（如性别）。</p>
+<p>2. <span class="kp">局部特征</span>：随时间而改变的特征，例如生命特征（包括脉搏、呼吸、体温、血压等数据）。</p>
+<blockquote>易错：全局特征不随时间改变，局部特征随时间改变。</blockquote>
+
+<p><strong>GAN的本质：</strong></p>
+<p>让模型学习真实训练数据的分布，随机输入一个向量，经过模型输出一个超分辨率后的数据，这个数据的分布与真实数据的分布相似，这样就生成了与原始低分辨率相似的超分数据。</p>
+
+<h2 id="s59480998">运维数据增强 - Demo展示</h2>
+<p><span class="tag-info">了解</span></p>
+<p>目录结构包含数据预处理、特征预测和单步预测、模型代码等文件夹。</p>
+<p><strong>架构与技术栈</strong></p>
+<p>Global-Local GAN架构；时序模型基于RNN，可扩展至CNN、Transformer等；训练基于PyTorch库，可扩展至MindSpore库。</p>
+<p><strong>时间序列指标与公开数据集</strong></p>
+<p>时间序列指标展示（Original与Generated对比，Time区间为[0,10)，分辨率超分为2倍）。</p>
+
+<h2 id="s51775187">运维数据增强 - 验证结果</h2>
+<p><span class="tag-freq">高频</span></p>
+<p><strong>数据分辨率与数据集质量</strong></p>
+<p>数据分辨率提高 $\Rightarrow$ 数据集质量提高？</p>
+<p><strong>判定原则</strong></p>
+<p>1. 倾向于与原始数据最相似的生成数据</p>
+<p>2. 计算上inexpensive，并尽可能简单地解释</p>
+<p><strong>评价指标</strong></p>
+<p>1. <span class="kp">PCA</span>：主成分分析，用于降低维度及特征抽取</p>
+<p>2. <span class="kp">t-SNE</span>：将高维数据降维到2维，使在图上直观展现</p>
+<p>3. <span class="kp">TSTR</span> (Train Synthetic Test Real, 训练合成, 测试真实)：一种间接评估技术，在合成数据上训练预测模型，并在实际数据上验证，检验实际业务模型提升效果</p>
+<p><strong>Time-series Generative Adversarial Networks</strong></p>
+<p>通过t-SNE plot和PCA plot对比Original与Synthetic数据。使用Forecasting Model对Real Data和Generated Data进行评估，计算MAPE指标。</p>
+
+<h2 id="s43660726">小结</h2>
+<p>1. 随着深度学习模型在时间序列数据上越来越流行，有限的训练数据需要有效的数据扩充方法提升样本数；</p>
+<p>2. 本章节介绍了时序数据增强的案例，针对时序数据不足问题，已在尝试不同数据增强手段解决实际数据不足问题，如Time GAN；</p>
+<p>3. 时序数据的数据增强算法尚处在探索期，值得更多的尝试。</p>
+<div class="tldr">时序数据增强算法尚处在探索期，Time GAN等手段用于解决实际数据不足问题。</div>
+
+<h2 id="s38217022">课后习题</h2>
+<div class="checkpoint">1、【多选】下列时序数据增强算法属于时域增强的有（）<br>A、Flipping B、DBA C、AAFT D、Window warping<details class="cp-answer"><summary>参考答案</summary>A、B、D</details></div>
+<div class="checkpoint">2、【多选】小明在参加时序检测竞赛，拿到标注数据50类，每类50个时序样本，他识别出这是一个小样本问题，但不知道有效的数据增强操作，计划采用Auto Augment技术对数据进行增强，他在设计数据增强子策略时包含缩放操作，他需要设计些什么？（）<br>A、策略里选择缩放操作 B、样本被缩放的幅度 C、按概率选择样本进行缩放增强 D、直接应用<details class="cp-answer"><summary>参考答案</summary>B、C。Auto Augment的子策略设计，需要考虑数据增强操作的选择，被执行的概率和执行的幅度，此问题中已明确策略中包含缩放操作，只需考虑缩放操作的执行概率和幅度。</details></div>
+<div class="checkpoint">3、【单选】在进行DBA数据增强时，拿到两条时间序列样本A={1,1,3,3,2,4}和B={1,3,2,2,4,4}，采用DTW方法对齐，他们间的距离是（）<br>A、0 B、1 C、2 D、3<details class="cp-answer"><summary>参考答案</summary>A</details></div>
+<div class="checkpoint">4、【多选】在应用Time GAN进行医疗数据增强时，属于时态特征的有（）<br>A、性别 B、年龄 C、体温 D、血压<details class="cp-answer"><summary>参考答案</summary>C、D</details></div>
+<div class="checkpoint">5、【单选】不属于STL算法关键要素的是（）<br>A、趋势 B、季节 C、残差 D、方差<details class="cp-answer"><summary>参考答案</summary>D</details></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">116题 · 满分630分</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+<div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3>📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+
+
+<script>
+var Q = [{"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "时序数据是指将统一统计指标的数值按其发生的时间先后顺序排列而成的数列。当时序数据不足时，一种直观的解决方法是：", "options": ["特征选择", "数据增强", "降维", "正则化"], "answer": 1, "explanation": "通过已有少量时序数据生成更多的等价时序数据，扩展训练数据集，从而克服时序数据不足的问题，这种方法称为数据增强。", "pitfall": "容易与特征工程的其他步骤混淆，注意题目强调的是解决数据量不足的问题。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "basic", "type": "choice", "points": 4, "question": "时序数据具有其固有特性，这使得数据增强方法需要专门设计。时序数据最重要的固有特性是：", "options": ["空间依赖性", "时间依赖性", "数据稀疏性", "高维性"], "answer": 1, "explanation": "时序数据中每条样本的特征数据都有先后顺序，具有时间依赖性，不能随意打乱。", "pitfall": "传统机器学习算法可以随意打乱特征顺序结构，但时序数据不行。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "以下哪种方法不属于基础时域数据增强方法？", "options": ["Window Warping", "Jittering", "Spec Augment", "Flipping"], "answer": 2, "explanation": "Spec Augment 属于时频域数据增强方法，其余均为时域数据增强方法。", "pitfall": "需区分时域、频域和时频域数据增强的典型方法。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "对时序中的部分片段进行拉伸或缩减的数据增强方法称为：", "options": ["Jittering", "Window Warping", "Permutation", "Window Slicing"], "answer": 1, "explanation": "Window Warping（窗口规整）是对时序中的部分片段进行拉伸或缩减。", "pitfall": "Window Slicing 是提取窗口大小的切片，注意区分。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "给每个时间步数据添加高斯噪声的时域数据增强方法是：", "options": ["Flipping", "Permutation", "Jittering", "Window Slicing"], "answer": 2, "explanation": "Jittering（抖动/噪声注入）是给每个时间步数据添加高斯噪声。", "pitfall": "注意与频域中的振幅扰动和相位扰动区分。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "DTW（动态时间规整）算法的主要动机是解决什么问题？", "options": ["数据量不足", "序列长短不一或时间步不对齐时难以计算相似度", "特征维度过高", "数据存在噪声"], "answer": 1, "explanation": "因序列长短不一，或时间步不对齐时，难以有效计算两条时间序列的相似度，DTW算法通过线性放缩达到更好的对齐效果。", "pitfall": "DTW是为了对齐和计算相似度，而不是直接生成数据。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "在DTW算法中，寻找从矩阵左上角到右下角的路径时，路径上的某个元素 (i, j) 的前一个元素不可能为以下哪项？", "options": ["左边的相邻元素 (i, j-1)", "上面的相邻元素 (i-1, j)", "左上方的相邻元素 (i-1, j-1)", "右下方的相邻元素 (i+1, j+1)"], "answer": 3, "explanation": "DTW路径性质规定，前一个元素只能是左边、上面或左上方的相邻元素之一。", "pitfall": "路径是从左上到右下，方向只能向右、向下或向右下，不能回退。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "DBA（DTW Barycenter Averaging）算法是在DTW的基础上做什么操作来生成新样本？", "options": ["求最大值", "求最小值", "重心平均", "随机采样"], "answer": 2, "explanation": "DBA是在DTW的基础上做重心平均，把时间序列压缩成一条来进行比较，生成新样本。", "pitfall": "DBA的结果要好于传统求平均值的结果。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "hard", "type": "choice", "points": 4, "question": "在DBA数据增强流程中，随机选取的初始时间序列被赋予的权重是：", "options": ["0.15", "0.2", "0.5", "1.0"], "answer": 2, "explanation": "DBA流程第一步：从训练集中随机选取一个初始时间序列，赋予它0.5的权重作为初始化时间序列。", "pitfall": "需记住DBA流程中的具体权重分配：初始0.5，两个近邻各0.15，剩余0.2。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "hard", "type": "choice", "points": 4, "question": "在DBA数据增强流程中，根据DTW距离找到DBA初始化时间序列最近的多少个时间序列？", "options": ["3个", "5个", "7个", "10个"], "answer": 1, "explanation": "DBA流程第二步：根据DTW距离，找到DBA初始化时间序列最近的5个时间序列。", "pitfall": "找到5个后，从中随机选择两个赋予0.15权重，剩余分配0.2权重。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "频域数据增强的核心思想是：", "options": ["直接对原始时间序列进行切片", "把数据从时域转化为频域，再对振幅、相位采用加噪等增强算法", "利用生成对抗网络生成新样本", "将时序数据分解为趋势和季节性成分"], "answer": 1, "explanation": "频域数据增强把数据从时域转化为频域（如傅里叶变换），再对振幅、相位采用加噪等时域增强算法。", "pitfall": "注意与时域和基于分解的方法区分。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "在傅里叶变换中，频谱 $F(\\omega_k)$ 可以表示为振幅和相位的组合，其中相位由哪个符号表示？", "options": ["$A(\\omega_k)$", "$\\theta(\\omega_k)$", "$x_t$", "$\\omega_k$"], "answer": 1, "explanation": "公式 $F(\\omega_k) = A(\\omega_k) \\exp[j\\theta(\\omega_k)]$ 中，$A(\\omega_k)$ 是振幅，$\\theta(\\omega_k)$ 是相位。", "pitfall": "容易混淆振幅A和相位θ的符号。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于频域数据增强中的振幅扰动，说法正确的是：", "options": ["将随机选择的段的相位值由零均值高斯噪声相加", "将随机选择的段的振幅值替换为高斯噪声", "对时间轴进行拉伸或压缩", "对连续的频率通道进行掩膜"], "answer": 1, "explanation": "振幅扰动是考虑振幅谱中的原始均值和方差，将随机选择的段的振幅值替换为高斯噪声。", "pitfall": "相位扰动才是将相位值由零均值高斯噪声相加。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下哪个算法不属于频域数据增强方法？", "options": ["AAFT", "IAAFT", "APP", "STFT"], "answer": 3, "explanation": "STFT（短时傅里叶变换）属于时频域数据增强方法，AAFT、IAAFT、APP属于频域数据增强方法。", "pitfall": "STFT虽然包含傅里叶变换，但它是时频域结合的方法。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Spec Augment 数据增强方法的研究动机是：", "options": ["增强音频波形数据本身", "增强频谱图本身，而不是增强波形数据", "通过生成对抗网络生成新的音频", "对时序数据进行分解后增强"], "answer": 1, "explanation": "Spec Augment 研究增强频谱图本身的方法，而不是增强波形数据，直接应用于网络的输入特征，计算量小。", "pitfall": "传统方法通常在波形转换成频谱图之前进行增强，而Spec Augment在频谱图上进行。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "Spec Augment 包含的三种变形方法中，对时间轴进行拉伸或压缩的方法是：", "options": ["频率掩膜", "时间掩膜", "时间变形", "相位扰动"], "answer": 2, "explanation": "Spec Augment 包含时间变形、频率掩膜和时间掩膜。时间变形是对时间轴进行拉伸或压缩。", "pitfall": "时间掩膜是对频谱图的时间轴进行掩膜，与时间变形不同。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "在Spec Augment中，为了防止多个掩膜相互覆盖，设置了不同的参数形成增强策略。以下哪个不是Spec Augment的策略？", "options": ["LB", "LS", "MB", "XL"], "answer": 3, "explanation": "Spec Augment的策略包括None, LB, LS, MB, SS，没有XL。", "pitfall": "需要记住具体的策略名称。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "基于统计生成模型的时序数据增强方法的核心思想是：", "options": ["把时序数据分解为趋势、季节性等成分", "用统计学方法模拟时序数据，基于自相关性给初始点扰动", "通过生成器和判别器相互竞争生成样本", "在encoding space上增加扰动"], "answer": 1, "explanation": "基于统计生成模型的核心思想是用统计学方法模拟时序数据，基于时序数据的自相关性，给初始点一个扰动，后续数据点随之扰动。", "pitfall": "注意与基于分解和基于学习的方法区分。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "STL算法将时序数据分解为哪三个成分？", "options": ["趋势、季节性、残差", "均值、方差、协方差", "高频、低频、噪声", "静态特征、时态特征、噪声"], "answer": 0, "explanation": "STL算法将时序数据分解为趋势、季节性、残差三个成分，并分别进行调整和增强。", "pitfall": "残差部分进行随机性调整，趋势和季节性调整权重重构确定性部分。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Time GAN 相比于传统的循环GAN和循环条件GAN，主要改进是考虑了什么？", "options": ["静态特征", "时态特征", "双向RNN", "无监督损失"], "answer": 0, "explanation": "传统方法考虑了时态特征，但没有考虑静态特征，Time GAN 同时考虑了静态特征和时态特征。", "pitfall": "静态特征是不会因为时间而改变的特征，如性别。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "hard", "type": "choice", "points": 4, "question": "Time GAN 中不包含以下哪个关键模块？", "options": ["Embedding function", "Recovery function", "Sequence Generator", "Feature Extractor"], "answer": 3, "explanation": "Time GAN 的关键模块包括 Embedding function、Recovery function、Sequence Generator 和 Sequence Discriminator。", "pitfall": "Recovery function 负责特征提取，没有单独的 Feature Extractor 模块。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "在 Time GAN 中，用于特征降维并简化GAN网络复杂度的损失函数是：", "options": ["Unsupervised loss", "Supervised loss", "Reconstruction loss", "Cross-entropy loss"], "answer": 2, "explanation": "Reconstruction loss（重建损失）用于特征降维，通过 Embedding 和 Recovery 函数复原原来的特征来计算。", "pitfall": "无监督损失用于判别器识别真假，有监督损失用于指导生成器生成。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "Google 针对图像领域最优增强策略选择设计出的自动数据增强方法是：", "options": ["PBA", "Auto Augmentation", "Rand Augmentation", "α剪枝自动增强"], "answer": 1, "explanation": "Auto Augmentation 是 Google 提出的通过强化学习、元学习或进化搜索自动搜索最佳数据增强策略的方法。", "pitfall": "PBA是UC Berkeley提出的，Rand Augmentation是Google后续提出的简化版。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "α剪枝自动增强的核心思想是：", "options": ["所有样本采用相同增强策略", "去掉单独的策略搜索阶段", "样本级增强，为每个时序样本选择最合适的增强策略", "在encoding space上增加扰动"], "answer": 2, "explanation": "α剪枝自动增强的核心思想是时序数据增强的“千人千面”，即样本级增强，为每个时序样本选择最合适的增强策略。", "pitfall": "自动数据增强是所有样本采用相同策略，忽略了样本间差异性，α剪枝解决了这个问题。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "Embedding Space 数据增强的做法是：", "options": ["在原始时间序列上添加噪声", "在频谱图上进行掩膜", "在encoding space上增加扰动", "将数据分解后对残差加噪"], "answer": 2, "explanation": "Embedding Space 数据增强是在 encoding space（编码空间）上增加扰动。", "pitfall": "注意是在编码空间增加扰动，而不是直接在原始数据上。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "basic", "type": "multi", "points": 6, "question": "时序数据分析应用广泛，以下哪些属于时序数据分析的应用场景？", "options": ["时间序列分类", "时间序列预测", "时间序列异常检测", "图像目标检测"], "answer": [0, 1, 2], "explanation": "时序数据分析应用包括时间序列分类（如心电图诊断）、时间序列预测（如股市分析）、时间序列异常检测（如KPI故障诊断）。", "pitfall": "图像目标检测属于计算机视觉领域，不属于时序数据分析。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "以下哪些属于基础时域数据增强方法？", "options": ["Window Warping", "Jittering", "Flipping", "Permutation"], "answer": [0, 1, 2, 3], "explanation": "基础时域数据增强方法包括 Window Warping, Jittering, Flipping, Permutation, Window Slicing 等。", "pitfall": "这些都是直接从原始输入时间序列进行增强的方法。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于DTW（动态时间规整）算法，以下说法正确的是：", "options": ["适用于序列长短不一或时间步不对齐的情况", "可以存在一对多映射的情况", "寻找从矩阵左上角到右下角路径上的元素和最小", "只能处理等长的序列"], "answer": [0, 1, 2], "explanation": "DTW算法对时间序列线性放缩，达到更好的对齐效果，可以存在一对多映射的情况，适用于复杂时间序列。通过寻找矩阵中最短路径计算相似度。", "pitfall": "DTW不要求序列等长，这正是它的优势之一。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "hard", "type": "multi", "points": 6, "question": "DBA 数据增强流程包括以下哪些步骤？", "options": ["从训练集中随机选取一个初始时间序列，赋予0.5权重", "根据DTW距离找到最近的5个时间序列", "从5个最近邻中随机选择两个，分别赋予0.15权重", "将剩下的序列平均分配0.2的权重"], "answer": [0, 1, 2, 3], "explanation": "DBA流程包括初始化（0.5权重）、找近邻（5个）、分配权重（两个0.15，剩余0.2），最后加权求和生成新样本。", "pitfall": "权重总和必须为1，需牢记各部分的具体权重值。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "频域数据增强中，基于傅里叶变换的数据增强方法包括：", "options": ["振幅扰动", "相位扰动", "时间掩膜", "频率掩膜"], "answer": [0, 1], "explanation": "频域数据增强对振幅、相位采用加噪等算法，包括振幅扰动和相位扰动。时间掩膜和频率掩膜属于Spec Augment（时频域）。", "pitfall": "注意区分频域数据增强和Spec Augment的掩膜操作。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "Spec Augment 包含的三种变形方法是：", "options": ["时间变形", "频率掩膜", "时间掩膜", "振幅扰动"], "answer": [0, 1, 2], "explanation": "Spec Augment 包含时间变形、频率掩膜和时间掩膜三种变形方法。", "pitfall": "振幅扰动属于频域数据增强，不属于Spec Augment。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "关于Spec Augment，以下说法正确的是：", "options": ["增强频谱图本身，而不是增强波形数据", "直接应用于网络的输入特征，计算量小", "可以在训练期间在线运行", "需要额外的数据才能进行增强"], "answer": [0, 1, 2], "explanation": "Spec Augment 增强频谱图本身，方法简单、计算量小、不需要额外的数据，可以在训练期间在线运行。", "pitfall": "Spec Augment 不需要额外的数据，这是它的一大优点。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "基于分解的时序数据增强中，STL算法将时序数据分解后，对哪些部分进行了处理？", "options": ["调整基础、趋势和季节性的权重，重构确定性部分", "对残差部分进行随机性调整", "对趋势部分进行随机性调整", "对季节性部分进行掩膜"], "answer": [0, 1], "explanation": "STL算法调整基础、趋势和季节性的权重重构确定性部分，对残差部分进行随机性调整。", "pitfall": "确定性部分通过调整权重重构，随机性部分（残差）进行随机调整。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "hard", "type": "multi", "points": 6, "question": "Time GAN 的关键模块包括：", "options": ["Embedding function", "Recovery function", "Sequence Generator", "Sequence Discriminator"], "answer": [0, 1, 2, 3], "explanation": "Time GAN 包含四个关键模块：Embedding function（嵌入函数）、Recovery function（恢复函数）、Sequence Generator（生成器）和 Sequence Discriminator（判别器）。", "pitfall": "这四个模块协同工作，Embedding和Recovery负责降维和复原，Generator和Discriminator负责对抗生成。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "Time GAN 的损失函数包括哪些？", "options": ["Unsupervised loss", "Supervised loss", "Reconstruction loss", "Contrastive loss"], "answer": [0, 1, 2], "explanation": "Time GAN 的损失函数包括无监督损失、有监督损失和重建损失。", "pitfall": "重建损失用于特征降维，有监督损失指导生成，无监督损失用于对抗判别。"}, {"kc_id": "kc4.1", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "以下哪些属于自动数据增强方法？", "options": ["Auto Augmentation", "PBA", "Rand Augmentation", "DBA"], "answer": [0, 1, 2], "explanation": "Auto Augmentation, PBA, Rand Augmentation 属于自动数据增强方法。DBA 是基于DTW的时域数据增强方法。", "pitfall": "DBA虽然缩写相似，但属于基础时域增强算法。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "α剪枝自动增强的步骤包括：", "options": ["Augment sample（增强样本）", "Evaluate and calculate loss（loss计算）", "Rank and trim（增强样本选择与汇总）", "Search policy（策略搜索）"], "answer": [0, 1, 2], "explanation": "α剪枝自动增强步骤包括增强样本、loss计算、增强样本选择与汇总。它去掉了单独的策略搜索阶段。", "pitfall": "α剪枝是样本级增强，不需要全局策略搜索。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于时序数据的特性，以下说法正确的是：", "options": ["具有时间依赖性", "不能随意打乱特征顺序", "可以在频率域和时频域进行变换增强", "数据增强方法与任务无关"], "answer": [0, 1, 2], "explanation": "时序数据具有时间依赖性，不能随意打乱；可以在变换域进行增强；且数据增强方法与任务相关，对分类有效的方法对异常检测可能无效。", "pitfall": "数据增强方法与任务高度相关，不能盲目迁移。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "在 Time GAN 中，关于时态特征 $X$ 的说法正确的是：", "options": ["随时间而改变的特征", "包括脉搏、呼吸、体温、血压等数据", "不会因为时间而改变的特征", "如性别"], "answer": [0, 1], "explanation": "时态特征 $X$ 是随时间而改变的特征，如生命特征（脉搏、呼吸等）。静态特征 $S$ 才是不会因为时间而改变的特征，如性别。", "pitfall": "严格区分静态特征和时态特征的概念。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述DTW（动态时间规整）算法的动机和步骤。", "answer": "动机：因序列长短不一，或时间步不对齐时，难以有效计算两条时间序列的相似度。DTW算法对时间序列线性放缩，达到更好的对齐效果，适用于复杂时间序列。\n步骤：1. 计算两个序列各个点之间的距离矩阵。2. 寻找一条从矩阵左上角到右下角的路径，使得路径上的元素和最小。", "explanation": "DTW通过动态规划寻找最短路径来计算相似度，解决序列不对齐问题。", "pitfall": "注意路径的起点和终点，以及路径的性质。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述DBA数据增强的流程。", "answer": "1. 从训练集中随机选取一个初始时间序列，赋予它0.5的权重，作为DBA的初始化时间序列。2. 根据DTW距离，找到DBA初始化时间序列最近的5个时间序列。3. 从5个最近邻中随机选择两个，分别赋予0.15的权重。4. 为使总的权重为1，此时剩余权重为0.2，将剩下的序列平均分配这0.2的权重。5. 将这5个DTW对齐后的时间序列加权求和增强生成新的时间序列样本。", "explanation": "DBA是基于DTW的重心平均算法，通过加权求和生成新样本。", "pitfall": "权重分配是关键，0.5、0.15、0.15、0.2。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述Spec Augment的研究动机和三种数据增强策略。", "answer": "研究动机：传统ASR数据增强在波形转换成频谱图之前进行，每次迭代都需要生成新频谱图。Spec Augment研究增强频谱图本身，直接应用于网络输入特征，计算量小，可在线运行。\n三种策略：1. 时间变形：对时间轴进行拉伸或压缩。2. 频率掩膜：对连续的频率通道进行掩膜。3. 时间掩膜：对频谱图的时间轴进行掩膜。", "explanation": "Spec Augment直接在频谱图上进行掩膜和变形，避免了波形层面的复杂操作。", "pitfall": "注意区分频率掩膜和时间掩膜的作用对象。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述Time GAN中时序数据的两种特征及其含义。", "answer": "1. 静态特征 $S$：不会因为时间而改变的特征，例如性别。2. 时态特征 $X$：随时间而改变的特征，例如生命特征（包括脉搏、呼吸、体温、血压等数据）。", "explanation": "Time GAN 同时考虑了静态特征和时态特征，这是它区别于传统循环GAN的地方。", "pitfall": "不要混淆静态特征和时态特征的定义。"}, {"kc_id": "kc4.1", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述α剪枝自动增强的核心思想及步骤。", "answer": "核心思想：时序数据增强的“千人千面”，即样本级增强，为每个时序样本选择最合适的增强策略。\n步骤：1. Augment sample：增强样本。2. Evaluate and calculate loss：loss计算。3. Rank and trim：增强样本选择与汇总。", "explanation": "α剪枝自动增强针对每个样本选择最合适的策略，克服了传统自动增强忽略样本间差异性的问题。", "pitfall": "注意它不是全局策略搜索，而是针对单个样本的。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "频域数据增强中，对相位 $\\theta(\\omega_k)$ 的扰动方式是？", "options": ["将随机选择的段的相位值替换为高斯噪声", "随机选择的段的相位值由相位谱中额外的零均值高斯噪声相加", "将所有相位值置零", "对相位值进行均匀缩放"], "answer": 1, "explanation": "对相位的扰动是指随机选择的段的相位值由相位谱中额外的零均值高斯噪声相加。", "pitfall": "容易与振幅扰动混淆，振幅是替换为高斯噪声，相位是相加零均值高斯噪声。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "AAFT 的全称是？", "options": ["Amplitude Adjusted Fourier Transform", "Iterated Amplitude Adjusted Fourier Transform", "Amplitude and Phase Perturbations", "Automated Amplitude Fourier Transform"], "answer": 0, "explanation": "AAFT 的全称是 Amplitude Adjusted Fourier Transform（振幅调整傅里叶变换）。", "pitfall": "注意区分 AAFT 和 IAAFT，后者是迭代版本。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "频域数据增强的典型算法包括哪些？", "options": ["AAFT (Amplitude Adjusted Fourier Transform)", "IAAFT (Iterated AAFT)", "APP (Amplitude and Phase Perturbations)", "Spec Augment"], "answer": [0, 1, 2], "explanation": "频域数据增强典型算法包括 AAFT、IAAFT 和 APP。Spec Augment 是针对频谱图的增强方法。", "pitfall": "Spec Augment 虽然作用于频谱图，但在分类上属于时频域增强，不属于这里列出的频域典型算法。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Spec Augment 数据增强方法直接应用于？", "options": ["音频波形", "文本数据", "频谱图", "声学特征向量"], "answer": 2, "explanation": "Spec Augment 研究增强频谱图本身的方法，而不是增强波形数据，直接应用于网络的输入特征。", "pitfall": "传统ASR增强通常在波形转频谱图之前进行，而Spec Augment直接增强频谱图。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "Spec Augment 包含的三种变形方法不包括？", "options": ["时间变形", "频率掩膜", "时间掩膜", "振幅缩放"], "answer": 3, "explanation": "Spec Augment 包含时间变形、频率掩膜和时间掩膜三种变形方法。", "pitfall": "振幅缩放不属于Spec Augment的三种基本变形方法。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "Spec Augment 中，频率掩膜的参数 F 代表？", "options": ["时间步长", "频率掩膜参数，从 [0, F] 均匀分布中选择 f", "梅尔频率通道的数量", "时间掩膜参数"], "answer": 1, "explanation": "F 为频率掩膜参数，f 是从 [0, F] 均匀分布中选择得到，f₀ 从 [0, v-f) 中选择得到，v 代表梅尔频率通道的数量。", "pitfall": "F是参数上限，f才是实际选择的掩膜长度。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "在 Spec Augment 的增强策略中，LD 策略的频率掩膜次数 是？", "options": ["0", "1", "2", "4"], "answer": 2, "explanation": "根据策略表，LD (LibriSpeech Double) 策略的 mF 为 2。", "pitfall": "需要记住不同策略的参数差异，如LB的mF为1，LD的mF为2。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "Spec Augment 的三种变形方法包括哪些？", "options": ["时间变形", "频率掩膜", "时间掩膜", "相位扰动"], "answer": [0, 1, 2], "explanation": "Spec Augment 包含时间变形、频率掩膜和时间掩膜三种变形方法。", "pitfall": "相位扰动属于频域数据增强，不属于Spec Augment。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "Spec Augment 的四种增强策略包括哪些？", "options": ["None", "LB", "LD", "SM"], "answer": [0, 1, 2, 3], "explanation": "四种增强策略为 None, LB, LD, SM, SS（题目中给出前四个选项均正确，实际有五种，但选项中列出的均属于策略之一）。", "pitfall": "注意SS也是策略之一，但本题选项均正确。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "Spec Augment 相比传统 ASR 数据增强方法的优点有？", "options": ["方法简单", "计算量小", "不需要额外的数据", "可以在训练期间在线运行"], "answer": [0, 1, 2, 3], "explanation": "Spec Augment 直接应用于网络的输入特征，方法简单、计算量小、不需要额外的数据，可以在训练期间在线运行，而不会对训练速度造成严重影响。", "pitfall": "所有选项均为Spec Augment的优点。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "高阶时序数据增强的核心思想是？", "options": ["将时序数据分解为某些成分再设计增强方法", "从数据中学得数据增强方式", "用统计学方法模拟时序数据，基于自相关性给初始点扰动", "在频域对振幅和相位进行扰动"], "answer": 2, "explanation": "高阶时序数据增强的核心思想是用统计学方法模拟时序数据，基于时序数据的自相关性，给初始点一个扰动，后续数据点随之扰动。", "pitfall": "注意区分高阶、基于分解和基于学习的方法的核心思想。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "基于分解的时序数据增强方法 STL 算法将时序数据分解为哪些成分？", "options": ["trend, seasonality, residual", "amplitude, phase, frequency", "static, dynamic, noise", "mean, variance, covariance"], "answer": 0, "explanation": "STL算法将时序数据分解为 trend（趋势）、seasonality（季节性）和 residual（残差）。", "pitfall": "分解后的成分名称需准确记忆。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "基于学习方法的时序数据增强包括哪些方法？", "options": ["Time GAN", "Automated Data Augmentation", "Embedding Space", "STL算法"], "answer": [0, 1, 2], "explanation": "基于学习的方法包括 Time GAN、Automated Data Augmentation 和 Embedding Space（在 encoding space 上增加扰动）。STL属于基于分解的方法。", "pitfall": "STL是基于分解的方法，不要混淆。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "基于分解的时序数据增强 STL 算法对分解后的成分进行的操作包括？", "options": ["调整基础、趋势和季节性的权重", "重构确定性部分", "对 residual 进行随机性调整", "将所有成分替换为高斯噪声"], "answer": [0, 1, 2], "explanation": "STL算法分解后，调整基础、趋势和季节性的权重，重构确定性部分，对 residual 进行随机性调整。", "pitfall": "不是替换为高斯噪声，而是对残差进行随机性调整。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述 Spec Augment 数据增强的研究动机及与传统方法的区别。", "options": [], "answer": "研究动机：传统的 ASR 模型参数多，训练数据不足时易过拟合，需要数据增强。传统方法在音频波形转换成频谱图之前进行增强，每次迭代需生成新频谱图。Spec Augment 直接增强频谱图本身，方法简单、计算量小、不需要额外数据，可在线运行。", "explanation": "考察对Spec Augment背景和动机的理解。", "pitfall": "需要明确指出传统方法增强波形，而Spec Augment增强频谱图。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "Time GAN 提出时序数据应该有哪两种特征？", "options": ["静态特征和动态特征", "静态特征 S 和时态特征 X", "趋势特征和季节性特征", "振幅特征和相位特征"], "answer": 1, "explanation": "Time GAN 提出时序数据应该有静态特征 S（不随时间改变）和时态特征 X（随时间改变）。", "pitfall": "注意术语是静态特征和时态特征。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Time GAN 中，不会因为时间而改变的特征称为？", "options": ["时态特征", "静态特征", "季节性特征", "残差特征"], "answer": 1, "explanation": "静态特征 S 不会因为时间而改变，例如性别。", "pitfall": "时态特征是随时间改变的。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "Time GAN 采用 Embedding 方法的主要目的是？", "options": ["增加特征维度", "降低特征维度，简化 GAN 网络复杂度", "生成随机噪声", "计算损失函数"], "answer": 1, "explanation": "采用 Embedding 方法是为了降低特征维度，简化 GAN 网络复杂度。", "pitfall": "Embedding通常是降维操作。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "hard", "type": "choice", "points": 4, "question": "Time GAN 中，评估静态特征和时态特征端到端降维后复原程度的损失函数是？", "options": ["Supervised Loss ($L_S$)", "Unsupervised Loss ($L_U$)", "Reconstruction Loss ($L_R$)", "GAN Loss"], "answer": 2, "explanation": "Reconstruction Loss ($L_R$) 评估静态特征 $s$ 和时态特征 $x_t$ 端到端降维后的复原程度。", "pitfall": "区分三种损失函数的作用。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "hard", "type": "choice", "points": 4, "question": "Time GAN 的判别器使用的是哪种 RNN？", "options": ["单向 RNN", "双向 RNN", "LSTM", "GRU"], "answer": 1, "explanation": "对于时态特征，判别器使用的是双向的 RNN，判断从两个方向的 RNN 的输出结果。", "pitfall": "注意是双向RNN。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "Time GAN 模型训练中，学习时态特征 $h_t$ 的损失函数是？", "options": ["Reconstruction Loss ($L_R$)", "Supervised Loss ($L_S$)", "Unsupervised Loss ($L_U$)", "Cross Entropy Loss"], "answer": 1, "explanation": "Supervised Loss ($L_S$) 学习时态特征 $h_t$，每一步的 $h_t$ 是训练标签。", "pitfall": "Supervised Loss用于学习时态特征的生成。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "Time GAN 的关键模块包括哪些？", "options": ["Embedding function", "Recovery function", "Sequence Generator", "Discriminator"], "answer": [0, 1, 2, 3], "explanation": "Time GAN 的关键模块包括 Embedding function、Recovery function、Sequence Generator 和 Discriminator。", "pitfall": "四个模块缺一不可。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "Time GAN 中，时态特征的输入包括哪些？", "options": ["静态特征 $h_s$", "上一时刻时态特征 $h_{t-1}$", "当前时刻时态特征 $x_t$", "随机向量 $z_t$"], "answer": [0, 1, 2], "explanation": "时态特征的输入为静态特征 $h_s$ 和上一时刻时态特征 $h_{t-1}$，以及当前时刻的 $x_t$（在Embedding阶段）。随机向量 $z_t$ 是在生成阶段使用的。", "pitfall": "注意区分Embedding阶段和生成阶段的输入。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "Time GAN 的生成器 $g_X$ 生成 $\\hat{h}_t$ 的输入包括哪些？", "options": ["随机向量 $z_t$", "静态特征 $\\hat{h}_S$", "上一时刻时态特征 $\\hat{h}_{t-1}$", "真实数据 $x_t$"], "answer": [0, 1, 2], "explanation": "生成器 $g_X$ 通过随机向量 $z_t$ 和 $\\hat{h}_S$、$\\hat{h}_{t-1}$ 生成 $\\hat{h}_t$。", "pitfall": "生成阶段不输入真实数据 $x_t$。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "Time GAN 模型训练包含的损失函数有？", "options": ["Reconstruction Loss ($L_R$)", "Supervised Loss ($L_S$)", "Unsupervised Loss ($L_U$)", "Cross Entropy Loss"], "answer": [0, 1, 2], "explanation": "Time GAN 包含 Reconstruction Loss、Supervised Loss 和 Unsupervised Loss。", "pitfall": "Cross Entropy Loss 不是 Time GAN 的主要损失函数。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "Time GAN 中，Embedding 和 Recovery 模块的作用包括？", "options": ["降低特征维度", "简化 GAN 网络复杂度", "复原出原来的特征", "生成随机向量"], "answer": [0, 1, 2], "explanation": "Embedding 降低特征维度，简化网络复杂度；Recovery 复原出原来的特征。生成随机向量是Generator的作用。", "pitfall": "注意区分各模块的功能。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述 Time GAN 的核心思想及其包含的两种特征。", "options": [], "answer": "核心思想：让模型学习真实训练数据的分布，随机输入一个向量，经过模型输出一个数据，这个数据的分布与真实数据的分布相似，从而使生成数据与真实数据非常相像。两种特征：1. 静态特征 S：不会因为时间而改变的特征，例如性别；2. 时态特征 X：随时间而改变的特征，例如生命特征（脉搏、呼吸、体温、血压等）。", "explanation": "考察Time GAN的基本概念和特征定义。", "pitfall": "需要准确描述两种特征的定义和例子。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述 Time GAN 中 Supervised Loss 和 Unsupervised Loss 的作用。", "options": [], "answer": "Supervised Loss ($L_S$)：学习时态特征 $h_t$，每一步的 $h_t$ 是训练标签，用于学习条件概率 $\\hat{p}(X_t | S, X_{1:t-1})$。Unsupervised Loss ($L_U$)：常规的 GAN 损失函数，评估静态特征和时态特征，直接学习分布 $\\hat{p}(S, X_{1:T})$。", "explanation": "考察Time GAN中两个关键损失函数的作用。", "pitfall": "需要明确两者在学习目标上的区别。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "图像领域的自动数据增强方法 AutoAugment 通过什么自动搜索最佳策略？", "options": ["强化学习、元学习或者进化搜索", "随机搜索", "网格搜索", "贝叶斯优化"], "answer": 0, "explanation": "AutoAugment 通过强化学习、元学习或者进化搜索自动搜索最佳数据增强策略。", "pitfall": "注意AutoAugment使用的是高级搜索算法。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "PBA 算法利用什么提升了搜索效率？", "options": ["强化学习", "进化算法", "随机搜索", "梯度下降"], "answer": 1, "explanation": "PBA (Population Based Augmentation) 利用进化算法提升了搜索效率。", "pitfall": "PBA的核心是进化算法。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "α剪枝自动增强的主要特点是？", "options": ["所有样本采用相同增强策略", "为每个时序样本选择最合适的增强策略", "只选择 loss 最大的样本", "只选择 loss 最小的样本"], "answer": 1, "explanation": "α剪枝自动增强实现时序数据增强的“千人千面”，即为每个时序样本选择最合适的增强策略。", "pitfall": "与传统的自动增强不同，它是样本级的增强。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "在股票预测验证中，使用的数据集是？", "options": ["LibriSpeech", "Switchboard", "标准普尔500指数(S&P500)", "MNIST"], "answer": 2, "explanation": "股票预测验证使用的是标准普尔500指数(S&P500)数据集。", "pitfall": "注意区分不同实验使用的数据集。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "在股票预测验证中，使用的深度神经网络模型是？", "options": ["CNN", "RNN", "LSTM", "Transformer"], "answer": 2, "explanation": "使用深度神经网络模型 LSTM 利用历史数据预测未来股票价格。", "pitfall": "LSTM是处理时序数据的常用模型。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "图像领域的自动数据增强方法包括哪些？", "options": ["AutoAugment", "PBA", "RandAugment", "Spec Augment"], "answer": [0, 1, 2], "explanation": "图像领域的自动数据增强方法包括 AutoAugment、PBA 和 RandAugment。Spec Augment 是语音领域的。", "pitfall": "Spec Augment 不属于图像领域的自动增强方法。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "α剪枝自动增强的实现步骤包括哪些？", "options": ["执行 N 种增强策略得到 N 个增强样本", "计算预测误差 loss", "选择 loss 最大的 α 个和最小的 α 个增强样本", "增强样本汇总"], "answer": [0, 1, 2, 3], "explanation": "α剪枝自动增强的四个步骤：执行增强、计算loss、筛选样本、汇总样本。", "pitfall": "步骤顺序和内容需准确记忆。"}, {"kc_id": "kc4.45", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "在股票预测验证中，选择的数据增强方法包括哪些？", "options": ["Jitter", "Time Warp", "Scaling", "Reverse"], "answer": [0, 1, 2, 3], "explanation": "表中列出的10种方法包括 Jitter, Time Warp, Scaling, Reverse 等。", "pitfall": "这些都是时序数据增强的典型方法。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述 α剪枝自动增强的算法流程。", "options": [], "answer": "1. 执行 N 种增强策略得到 N 个增强样本；2. 将增强样本输入神经网络，计算预测误差 loss；3. 选择 loss 最大的 α 个和最小的 α 个增强样本；4. 增强样本汇总。", "explanation": "考察α剪枝自动增强的四个主要步骤。", "pitfall": "注意是选择loss最大和最小的各α个，以保证困难样本和容易样本的平衡。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "云核故障数据增强中，现网故障数据稀缺的原因是？", "options": ["核心网非常稳定，无故障率在99%以上", "实验室无法构造故障", "数据存储空间不足", "专家经验不足"], "answer": 0, "explanation": "核心网非常重要，无故障率在99%以上，因此核心网非常稳定，现网中很少出现故障。", "pitfall": "核心网的高稳定性导致故障数据稀缺。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "云核故障数据增强面临的挑战包括？", "options": ["现网故障数据稀缺", "实验室故障数据构造受限", "手工定位依赖专家经验且无法快速定位", "数据增强算法过于复杂"], "answer": [0, 1, 2], "explanation": "挑战包括现网故障数据稀缺、实验室故障数据构造受限，以及传统手工定位依赖专家经验且无法快速定位。", "pitfall": "数据增强算法复杂不是这里提到的主要挑战。"}, {"kc_id": "kc4.45", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述云核故障数据增强应用 Time GAN 的背景及面临的挑战。", "options": [], "answer": "背景：核心网出现问题时需快速定位根因，传统手工定位依赖专家经验且慢，需用机器学习算法学习专家经验快速定位。挑战：1. 现网故障数据稀缺（核心网无故障率99%以上）；2. 实验室故障数据构造受限（受工具限制，构造速度慢）。", "explanation": "考察云核故障数据增强的背景和两个主要挑战。", "pitfall": "需要准确描述两个挑战的具体原因。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "目前有155组故障数据包，算法对故障数据的需求为多少组？", "options": ["500组", "600组", "700组", "800组"], "answer": 2, "explanation": "根据文档，目前有155组故障数据包，算法对故障数据的需求为700组。", "pitfall": "注意区分现有数据量与需求数据量。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "Time GAN增强流程中，通过什么方法将曲线变化到频域以判断KPI曲线的周期性？", "options": ["小波变换", "傅里叶变换(FFT)", "拉普拉斯变换", "Z变换"], "answer": 1, "explanation": "文档指出，通过FFT（快速傅里叶变换）将曲线变化到频域，判断KPI曲线的周期性。", "pitfall": "FFT是频域分析的常用方法，需牢记。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Time GAN的训练不包含以下哪种损失？", "options": ["无监督损失", "监督损失", "重构损失", "对抗损失"], "answer": 3, "explanation": "Time GAN的训练包含三部分损失：无监督损失、监督损失和重构损失。", "pitfall": "Time GAN虽然有GAN，但其损失函数设计与传统GAN不同，不直接称为对抗损失。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "KPI分组中，不属于KPI序列相关性分析方法的是？", "options": ["斯皮尔曼相关系数", "最大互信息数", "动态时间规整", "皮尔逊相关系数"], "answer": 3, "explanation": "文档中提到的KPI序列相关性分析方法包括斯皮尔曼相关系数、最大互信息数和动态时间规整。", "pitfall": "皮尔逊和斯皮尔曼容易混淆，需注意区分。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "KPI时序数据增强（推理阶段）的输入是？", "options": ["全部KPI序列", "单条KPI序列", "多条相关KPI序列", "异常KPI时间段数据"], "answer": 1, "explanation": "推理阶段的输入为单条KPI序列，输出为增强KPI序列。", "pitfall": "训练阶段输入是全部KPI序列，推理阶段是单条KPI序列。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "在4G KPI数据集上验证，具有几个周期性以上的曲线余弦相似性达98.14%？", "options": ["一个", "两个", "三个", "四个"], "answer": 1, "explanation": "文档指出，在4G KPI数据集上进行验证，具有两个周期性以上的曲线余弦相似性达98.14%。", "pitfall": "注意是“两个周期性以上”。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "Time GAN数据增强方法已应用于哪个局点？", "options": ["北京铁路局数据中心局点", "上海铁路局数据中心局点", "广州铁路局数据中心局点", "深圳铁路局数据中心局点"], "answer": 1, "explanation": "文档明确提到该方法已应用于上海铁路局数据中心局点。", "pitfall": "注意地名与铁路局的对应。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Global-Local GAN的损失函数中，对整体的数据分布进行拟合的是？", "options": ["无监督学习 $\\mathcal{L}_{\\mathrm{U}}$", "监督学习 $\\mathcal{L}_{\\mathrm{S}}$", "重构学习 $\\mathcal{L}_{\\mathrm{R}}$", "对抗学习"], "answer": 0, "explanation": "无监督学习 $\\mathcal{L}_{\\mathrm{U}}$ 首先对整体的数据分布进行拟合，直接学习分布。", "pitfall": "区分无监督、监督和重构学习的作用。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Global-Local GAN的损失函数中，提供潜在嵌入空间的是？", "options": ["无监督学习 $\\mathcal{L}_{\\mathrm{U}}$", "监督学习 $\\mathcal{L}_{\\mathrm{S}}$", "重构学习 $\\mathcal{L}_{\\mathrm{R}}$", "对抗学习"], "answer": 2, "explanation": "重构学习 $\\mathcal{L}_{\\mathrm{R}}$ 完成了对整个数据的特征分布的拟合，提供潜在嵌入空间。", "pitfall": "重构损失的作用是提供潜在嵌入空间。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "basic", "type": "choice", "points": 4, "question": "在医疗数据中，属于全局特征的是？", "options": ["体温", "脉搏", "性别", "血压"], "answer": 2, "explanation": "全局特征是不会因为时间而改变的特征，如性别；局部特征是随时间而改变的特征，如生命特征。", "pitfall": "全局特征不随时间变化，局部特征随时间变化。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "数字孪生引擎（DTE）的特性中，表示资源占用少的是？", "options": ["全面", "实时", "轻量", "安全"], "answer": 2, "explanation": "轻量表示资源占用少。", "pitfall": "理解DTE各特性的含义。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "评价指标中，用于将高维数据降维到2维，使在图上直观展现的是？", "options": ["PCA", "t-SNE", "TSTR", "MAPE"], "answer": 1, "explanation": "t-SNE将高维数据降维到2维，使在图上直观展现。", "pitfall": "PCA也是降维，但t-SNE更强调直观展现（2维）。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "TSTR的中文含义是？", "options": ["训练真实, 测试合成", "训练合成, 测试真实", "训练合成, 测试合成", "训练真实, 测试真实"], "answer": 1, "explanation": "TSTR (Train Synthetic Test Real, 训练合成, 测试真实)。", "pitfall": "注意TSTR中S和R分别代表Synthetic和Real。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "根据课后习题，下列不属于时域增强算法的是？", "options": ["Flipping", "DBA", "AAFT", "Window warping"], "answer": 2, "explanation": "课后习题指出Flipping、DBA、Window warping属于时域增强，AAFT不属于。", "pitfall": "熟记课后习题中的分类。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "根据课后习题，STL算法的关键要素不包括？", "options": ["趋势", "季节", "残差", "方差"], "answer": 3, "explanation": "STL算法关键要素包括趋势、季节、残差，不包括方差。", "pitfall": "STL分解主要针对趋势、季节和残差。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "运维时序数据增强的Demo中，时序模型基于什么架构？", "options": ["CNN", "RNN", "Transformer", "LSTM"], "answer": 1, "explanation": "文档指出时序模型基于RNN，可扩展至CNN、Transformer等。", "pitfall": "Demo中明确是基于RNN。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "Time GAN增强流程主要包括哪些步骤？", "options": ["KPI文件输入", "傅里叶变换与周期性判断", "场景判断", "数据增强与后处理"], "answer": [0, 1, 2, 3], "explanation": "Time GAN增强流程包括：KPI文件输入、傅里叶变换与周期性判断、场景判断、数据增强、增强结果后处理、输出增强结果文件。", "pitfall": "流程顺序和完整性需牢记。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "Time GAN的训练包含的三部分损失是？", "options": ["无监督损失", "监督损失", "重构损失", "对抗损失"], "answer": [0, 1, 2], "explanation": "Time GAN的训练包含无监督损失、监督损失和重构损失。", "pitfall": "不要与传统GAN的对抗损失混淆。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "KPI序列相关性分析使用的方法包括？", "options": ["斯皮尔曼相关系数", "最大互信息数", "动态时间规整", "欧氏距离"], "answer": [0, 1, 2], "explanation": "文档中提到的相关性分析方法包括斯皮尔曼相关系数、最大互信息数和动态时间规整。", "pitfall": "注意不要选入未提及的欧氏距离。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "KPI时序数据增强（推理阶段）的输出结果包括？", "options": ["相似曲线", "异常前增强正常数据", "增强正常数据到7天", "不可用数据替换"], "answer": [0, 1, 2, 3], "explanation": "推理阶段输出结果包括：相似曲线、异常前增强正常数据、增强正常数据到7天、不可用数据替换。", "pitfall": "四项输出结果均需掌握。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "目前从网络设备采集数据存在的问题有？", "options": ["网络数据获取成本高", "特征缺失", "数据量过大导致无法存储", "数据安全性低"], "answer": [0, 1], "explanation": "文档指出目前采集数据存在网络数据获取成本高和特征缺失的问题。", "pitfall": "数据量大是事实，但文档强调的是获取成本高和低分辨率导致的特征缺失。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "构建网络数字孪生数据超分机制的技术挑战包括？", "options": ["实现孪生数据与现实网络环境的部分解耦", "解决细粒度网络数据获取困难、成本高的问题", "统计方法无法对非平稳数据进行预测", "需要对生成的高分辨率数据进行度量"], "answer": [0, 1, 2, 3], "explanation": "以上四点均为文档中提到的技术挑战。", "pitfall": "全面理解数据超分的技术挑战。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "数字孪生引擎（DTE）的特性包括？", "options": ["全面", "实时", "轻量", "免维护"], "answer": [0, 1, 2, 3], "explanation": "DTE的特性包括全面、实时、轻量、安全、免维护。", "pitfall": "安全也是特性之一，虽然选项未列全，但所列均正确。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "Global-Local GAN的损失函数设计包含哪些部分？", "options": ["无监督学习", "监督学习", "重构学习", "强化学习"], "answer": [0, 1, 2], "explanation": "Global-Local GAN的损失函数包含无监督学习、监督学习和重构学习。", "pitfall": "不要混淆强化学习。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "对时序数据，提出的两种特征是？", "options": ["全局特征", "局部特征", "静态特征", "动态特征"], "answer": [0, 1], "explanation": "时序数据应有全局特征（不随时间改变）和局部特征（随时间改变）。", "pitfall": "注意文档中的专有名词是全局和局部特征。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "运维时序数据增强验证结果中，评价指标包括？", "options": ["PCA", "t-SNE", "TSTR", "F1-Score"], "answer": [0, 1, 2], "explanation": "评价指标包括PCA、t-SNE和TSTR。", "pitfall": "F1-Score未在文档中作为数据增强的评价指标提及。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "根据课后习题，Auto Augment的子策略设计需要考虑哪些方面？", "options": ["数据增强操作的选择", "被执行的概率", "执行的幅度", "训练轮次"], "answer": [0, 1, 2], "explanation": "Auto Augment的子策略设计需要考虑数据增强操作的选择、被执行的概率和执行的幅度。", "pitfall": "训练轮次不属于子策略设计的范畴。"}, {"kc_id": "kc4.85", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "根据课后习题，在应用Time GAN进行医疗数据增强时，属于时态特征的有？", "options": ["性别", "年龄", "体温", "血压"], "answer": [2, 3], "explanation": "时态特征即随时间改变的特征，体温和血压属于此类；性别和年龄属于静态特征。", "pitfall": "年龄在某些情况下可视为静态，需根据课后习题答案判断。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述Time GAN增强流程的主要步骤。", "answer": "1. KPI文件输入；2. 傅里叶变换与周期性判断；3. 场景判断；4. 数据增强；5. 增强结果后处理；6. 输出增强结果文件。", "explanation": "根据文档3.1.2节，Time GAN增强流程包含这六个主要步骤。", "pitfall": "注意步骤的先后顺序和完整性。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述KPI分组的目的。", "answer": "将全部KPI序列进行相关性分析，将具有相关性的KPI分为一组，每一组作为训练数据训练一个模型，该模型能够充分学习一组KPI之间的相关性，保证在KPI数据增强时不丢失KPI间相关性。", "explanation": "根据文档3.1.3节，KPI分组的目的是保证增强时不丢失KPI间的相关性。", "pitfall": "核心在于“不丢失KPI间相关性”。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述Global-Local GAN中时序数据的全局特征和局部特征的区别。", "answer": "全局特征是不会因为时间而改变的特征，例如医疗数据中的性别；局部特征是随时间而改变的特征，例如生命特征（脉搏、呼吸、体温、血压等）。", "explanation": "根据文档3.2.2节，全局特征不随时间改变，局部特征随时间改变。", "pitfall": "举例时要注意特征的属性是否符合定义。"}, {"kc_id": "kc4.85", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述TSTR评估技术的原理。", "answer": "TSTR（Train Synthetic Test Real，训练合成，测试真实）是一种间接评估技术，在合成数据上训练预测模型，并在实际数据上验证，检验实际业务模型提升效果。", "explanation": "根据文档3.2验证结果部分，TSTR通过在合成数据上训练、真实数据上测试来评估数据增强的效果。", "pitfall": "注意是合成数据训练，真实数据测试。"}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "multi": "二、多选题", "tf": "三、判断题", "fill": "四、填空题", "short": "五、简答题", "calc": "六、计算题", "code": "七、代码题", "essay": "八、问答题", "comprehensive": "九、综合题"}, "section_order": ["choice", "multi", "tf", "fill", "short", "calc", "code", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "code_placeholder": "在此编写代码...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "partial_label": "部分正确", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+var __epaImages = {}; // { qid: [dataUrl, ...] } — pasted images per answer field
+
+// ─── Answer normalization (robust to how the JSON was authored) ──────
+// tf / choice answers may arrive as int index, boolean, letter ("A"),
+// or label string ("正确"/"错误"/"对"/"错"). All are coerced to an
+// option index so grading never silently fails on a type mismatch.
+
+function tfAnswerIndex(ans) {
+  // option 0 = true_label (正确), option 1 = false_label (错误)
+  // boolean: true → 正确(0), false → 错误(1)
+  if (typeof ans === 'boolean') return ans ? 0 : 1;
+  // number: treat as boolean (0=false→错误(1), non-zero=true→正确(0))
+  if (typeof ans === 'number') return ans ? 0 : 1;
+  var s = ('' + ans).trim().toLowerCase();
+  var truthy = ['t', 'true', '正确', '对', '是', 'yes', 'y', '√', '✓'];
+  var falsy  = ['f', 'false', '错误', '错', '否', 'no', 'n', '×', 'x'];
+  if (truthy.indexOf(s) !== -1) return 0;
+  if (falsy.indexOf(s) !== -1) return 1;
+  return ans ? 0 : 1;
+}
+
+function choiceAnswerIndex(ans, options) {
+  if (typeof ans === 'number') return ans;
+  var s = ('' + ans).trim();
+  if (/^[A-Za-z]$/.test(s)) return s.toUpperCase().charCodeAt(0) - 65;
+  if (/^\d+$/.test(s)) return parseInt(s, 10);
+  if (options) {
+    for (var i = 0; i < options.length; i++) {
+      if (('' + options[i]).trim() === s) return i;
+    }
+  }
+  return parseInt(s, 10);
+}
+
+function multiAnswerSet(ans, options) {
+  var arr = Array.isArray(ans) ? ans : [ans];
+  var set = {};
+  for (var i = 0; i < arr.length; i++) {
+    set[choiceAnswerIndex(arr[i], options)] = true;
+  }
+  return set;
+}
+
+// Normalize free text for fill-in-the-blank comparison: trim, lowercase,
+// drop surrounding whitespace and common punctuation, unify full/half width.
+function normText(s) {
+  s = ('' + s).trim().toLowerCase();
+  s = s.replace(/[\s　]+/g, '');
+  s = s.replace(/[.,;:!?。，、；：！？“”"'（）()【】\[\]<>《》]/g, '');
+  // full-width ASCII -> half-width
+  s = s.replace(/[！-～]/g, function (c) {
+    return String.fromCharCode(c.charCodeAt(0) - 0xfee0);
+  });
+  return s;
+}
+
+// How many blanks does a fill question have? Count underscore / ＿ runs.
+function fillBlankCount(question) {
+  var m = ('' + question).match(/(_{2,}|＿+)/g);
+  return m ? m.length : 0;
+}
+
+// Coerce a fill `answer` into an array (one entry per blank) of accepted
+// answer lists. Handles: string, [synonyms], [[blank1 syns],[blank2 syns]].
+function fillBlankAnswers(ans, nBlanks) {
+  if (nBlanks < 1) nBlanks = 1;
+  if (!Array.isArray(ans)) return padBlanks([[ans]], nBlanks);
+  if (ans.length && Array.isArray(ans[0])) return padBlanks(ans, nBlanks);
+  // flat array of strings
+  if (nBlanks === 1) return [ans];                 // synonyms for one blank
+  if (ans.length === nBlanks) {                    // one answer per blank
+    return ans.map(function (a) { return [a]; });
+  }
+  return padBlanks([ans], nBlanks);                // ambiguous -> all on blank 1
+}
+
+function padBlanks(arr, n) {
+  var out = arr.slice(0, n);
+  while (out.length < n) out.push(['']);
+  return out;
+}
+
+// ─── Build ───────────────────────────────────────────────────────────
+
+function build() {
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+
+  // Stable-sort questions by section order so headings group correctly
+  // regardless of input order.
+  var order = LABELS.section_order || [];
+  Q.forEach(function (q, i) { q._i = i; });
+  Q.sort(function (a, b) {
+    var oa = order.indexOf(a.type); if (oa === -1) oa = 99;
+    var ob = order.indexOf(b.type); if (ob === -1) ob = 99;
+    return oa - ob || a._i - b._i;
+  });
+
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    if (q.type !== sec) {
+      sec = q.type;
+      if (titles[q.type]) h += '<h3>' + titles[q.type] + '</h3>';
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i + 1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+
+    if (q.type === 'fill') {
+      h += '<div class="q-text">' + renderFill(q, qid) + '</div>';
+    } else {
+      h += '<div class="q-text">' + q.question + '</div>';
+    }
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65 + j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'multi') {
+      var mopts = q.options || [];
+      for (var k = 0; k < mopts.length; k++) {
+        h += '<label class="option" id="opt-' + qid + '-' + k + '" onclick="toggle(\'' + qid + '\',' + k + ')">';
+        h += '<input type="checkbox" name="' + qid + '" value="' + k + '">' + String.fromCharCode(65 + k) + '. ' + mopts[k] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else if (q.type === 'fill') {
+      // inputs already rendered inline inside q-text
+    } else if (q.type === 'code') {
+      h += '<textarea class="q-textarea q-code" id="text-' + qid + '" placeholder="' + (LABELS.code_placeholder || LABELS.placeholder) + '" rows="8" spellcheck="false"></textarea>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + (q.explanation || '') + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+  __epaPasteListeners(container);
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function (err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+// Render fill question text with inline <input> boxes replacing blanks.
+function renderFill(q, qid) {
+  var nBlanks = fillBlankCount(q.question);
+  var k = 0;
+  var html = ('' + q.question).replace(/(_{2,}|＿+)/g, function () {
+    var inp = '<input type="text" class="fill-input" id="fill-' + qid + '-' + k + '" autocomplete="off" spellcheck="false">';
+    k++;
+    return inp;
+  });
+  if (k === 0) {
+    // No markers in text -> append boxes based on answer shape, one per line
+    var n = fillBlankAnswers(q.answer, 1).length;
+    var ans = q.answer;
+    if (Array.isArray(ans)) n = Array.isArray(ans[0]) ? ans.length : (ans.length || 1);
+    if (n < 1) n = 1;
+    html += '<div>';
+    for (var b = 0; b < n; b++) {
+      html += '<div class="fill-blank-row">';
+      if (n > 1) html += '<span class="fill-tag">' + (b + 1) + '.</span>';
+      html += '<input type="text" class="fill-input" id="fill-' + qid + '-' + b + '" autocomplete="off" spellcheck="false">';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+// ─── Selection handlers ──────────────────────────────────────────────
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) all[i].classList.remove('selected');
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) target.classList.add('selected');
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) radio.checked = true;
+}
+
+function toggle(qid, idx) {
+  var box = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  var label = document.getElementById('opt-' + qid + '-' + idx);
+  if (!box) return;
+  box.checked = !box.checked;
+  if (label) label.classList.toggle('selected', box.checked);
+}
+
+// ─── Grading ─────────────────────────────────────────────────────────
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      score += gradeSingle(q, qid, card, badge, correctEl);
+    } else if (q.type === 'multi') {
+      score += gradeMulti(q, qid, card, badge, correctEl);
+    } else if (q.type === 'fill') {
+      score += gradeFill(q, qid, card, badge, correctEl);
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = roundScore(score);
+    sb.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var a = 0; a < opts.length; a++) opts[a].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var b = 0; b < tas.length; b++) tas[b].disabled = true;
+  var fis = document.querySelectorAll('.fill-input');
+  for (var c = 0; c < fis.length; c++) fis[c].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) { btn.disabled = true; btn.textContent = LABELS.graded_label; }
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function (err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+function roundScore(s) {
+  return Math.round(s * 10) / 10;
+}
+
+function gradeSingle(q, qid, card, badge, correctEl) {
+  var ansIdx = q.type === 'tf' ? tfAnswerIndex(q.answer) : choiceAnswerIndex(q.answer, q.options);
+  var radio = document.querySelector('input[name="' + qid + '"]:checked');
+  if (radio && parseInt(radio.value, 10) === ansIdx) {
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+    correctEl.innerHTML = '';
+    var ok = document.getElementById('opt-' + qid + '-' + ansIdx);
+    if (ok) ok.classList.add('correct-answer');
+    return q.points;
+  }
+  card.classList.add('wrong');
+  badge.className = 'badge badge-no';
+  badge.textContent = LABELS.wrong_label;
+  var ansText = q.type === 'choice'
+    ? String.fromCharCode(65 + ansIdx) + '. ' + (q.options ? q.options[ansIdx] : '')
+    : (ansIdx === 0 ? LABELS.true_label : LABELS.false_label);
+  correctEl.innerHTML = LABELS.answer_prefix + ansText;
+  if (radio) {
+    var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+    if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+  }
+  var corr = document.getElementById('opt-' + qid + '-' + ansIdx);
+  if (corr) corr.classList.add('correct-answer');
+  return 0;
+}
+
+function gradeMulti(q, qid, card, badge, correctEl) {
+  var want = multiAnswerSet(q.answer, q.options);
+  var wantKeys = Object.keys(want).map(Number);
+  var checked = document.querySelectorAll('input[name="' + qid + '"]:checked');
+  var picked = [];
+  for (var i = 0; i < checked.length; i++) picked.push(parseInt(checked[i].value, 10));
+
+  var anyWrong = false, hitCorrect = 0;
+  for (var p = 0; p < picked.length; p++) {
+    if (want[picked[p]]) hitCorrect++;
+    else anyWrong = true;
+  }
+
+  // reveal correct / wrong option markers
+  var mopts = q.options || [];
+  for (var j = 0; j < mopts.length; j++) {
+    var el = document.getElementById('opt-' + qid + '-' + j);
+    if (!el) continue;
+    if (want[j]) el.classList.add('correct-answer');
+    else if (picked.indexOf(j) !== -1) el.classList.add('wrong-answer');
+  }
+
+  var earned;
+  if (!anyWrong && hitCorrect === wantKeys.length && picked.length === wantKeys.length) {
+    earned = q.points;
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+    correctEl.innerHTML = '';
+  } else if (!anyWrong && hitCorrect > 0) {
+    // 少选不错选 -> partial credit
+    earned = roundScore(q.points * hitCorrect / wantKeys.length);
+    card.classList.add('partial');
+    badge.className = 'badge badge-partial';
+    badge.textContent = LABELS.partial_label;
+    correctEl.innerHTML = LABELS.answer_prefix + multiAnswerText(wantKeys, mopts);
+  } else {
+    earned = 0;
+    card.classList.add('wrong');
+    badge.className = 'badge badge-no';
+    badge.textContent = LABELS.wrong_label;
+    correctEl.innerHTML = LABELS.answer_prefix + multiAnswerText(wantKeys, mopts);
+  }
+  return earned;
+}
+
+function multiAnswerText(keys, options) {
+  return keys.sort(function (a, b) { return a - b; }).map(function (k) {
+    return String.fromCharCode(65 + k) + '. ' + (options ? options[k] : '');
+  }).join('  ');
+}
+
+// ─── Image paste support ─────────────────────────────────────────────
+
+function __epaPasteListeners(container) {
+  var tas = container.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) {
+    (function(ta) {
+      var qid = ta.id.replace('text-', '');
+      ta.addEventListener('paste', function(e) {
+        var items = e.clipboardData && e.clipboardData.items;
+        if (!items) return;
+        for (var j = 0; j < items.length; j++) {
+          if (items[j].type.indexOf('image') !== -1) {
+            e.preventDefault();
+            var file = items[j].getAsFile();
+            var reader = new FileReader();
+            reader.onload = (function(id, anchor) {
+              return function(ev) {
+                var dataUrl = ev.target.result;
+                if (!__epaImages[id]) __epaImages[id] = [];
+                __epaImages[id].push(dataUrl);
+
+                var wrap = document.createElement('div');
+                wrap.className = 'paste-img-wrap';
+                var img = document.createElement('img');
+                img.src = dataUrl;
+                var rm = document.createElement('button');
+                rm.className = 'paste-img-remove';
+                rm.title = '移除图片';
+                rm.textContent = '×';
+                rm.onclick = (function(url, w) {
+                  return function() {
+                    var idx = __epaImages[id].indexOf(url);
+                    if (idx !== -1) __epaImages[id].splice(idx, 1);
+                    w.parentNode.removeChild(w);
+                  };
+                })(dataUrl, wrap);
+                wrap.appendChild(img);
+                wrap.appendChild(rm);
+                anchor.parentNode.insertBefore(wrap, anchor.nextSibling);
+              };
+            })(qid, ta);
+            reader.readAsDataURL(file);
+          }
+        }
+      });
+    })(tas[i]);
+  }
+}
+
+// ─── Collect all user answers for export ─────────────────────────────
+
+function collectAnswers() {
+  var out = [];
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var userAnswer = null;
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      userAnswer = radio ? parseInt(radio.value, 10) : null;
+    } else if (q.type === 'multi') {
+      var checked = document.querySelectorAll('input[name="' + qid + '"]:checked');
+      userAnswer = [];
+      for (var c = 0; c < checked.length; c++) {
+        userAnswer.push(parseInt(checked[c].value, 10));
+      }
+    } else if (q.type === 'fill') {
+      var nBlanks = fillBlankCount(q.question);
+      var blanks = fillBlankAnswers(q.answer, nBlanks);
+      userAnswer = [];
+      for (var b = 0; b < blanks.length; b++) {
+        var inp = document.getElementById('fill-' + qid + '-' + b);
+        userAnswer.push(inp ? inp.value : '');
+      }
+    } else {
+      var ta = document.getElementById('text-' + qid);
+      userAnswer = ta ? ta.value : '';
+    }
+
+    out.push({
+      index: i,
+      type: q.type,
+      question: q.question,
+      options: q.options || null,
+      correct_answer: q.answer,
+      user_answer: userAnswer,
+      points: q.points,
+      explanation: q.explanation || '',
+      kc_id: q.kc_id || '',
+      images: (__epaImages[qid] || []).slice()
+    });
+  }
+  return out;
+}
+
+// ─── Save answers for AI grading ─────────────────────────────────────
+
+function saveForGrading() {
+  var answers = collectAnswers();
+  var chapterTitle = (document.title || '章节').replace(/\s+/g, '_');
+  var nowStr = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  var filename = chapterTitle + '_answers_' + nowStr + '.json';
+
+  var data = JSON.stringify({
+    chapter: document.title || '',
+    saved_at: new Date().toISOString(),
+    questions: answers
+  }, null, 2);
+
+  var blob = new Blob([data], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  var cmdEl = document.getElementById('epa-grade-cmd-text');
+  if (cmdEl) cmdEl.textContent = '/exampass grade "<下载目录>/' + filename + '"';
+  var modal = document.getElementById('epa-grade-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function __epaCloseGradeModal() {
+  var modal = document.getElementById('epa-grade-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function __epaCopyGradeCmd() {
+  var cmdEl = document.getElementById('epa-grade-cmd-text');
+  if (!cmdEl) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmdEl.textContent);
+  } else {
+    var range = document.createRange();
+    range.selectNodeContents(cmdEl);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('copy');
+    sel.removeAllRanges();
+  }
+  var btn = document.getElementById('epa-grade-copy-btn');
+  if (btn) { btn.textContent = '已复制'; setTimeout(function(){ btn.textContent = '复制命令'; }, 2000); }
+}
+
+function gradeFill(q, qid, card, badge, correctEl) {
+  var nBlanks = fillBlankCount(q.question);
+  var blanks = fillBlankAnswers(q.answer, nBlanks);
+  var n = blanks.length;
+  var hit = 0;
+  var displays = [];
+
+  for (var b = 0; b < n; b++) {
+    var inp = document.getElementById('fill-' + qid + '-' + b);
+    var accepted = blanks[b] || [''];
+    var user = inp ? normText(inp.value) : '';
+    var ok = false;
+    for (var a = 0; a < accepted.length; a++) {
+      if (accepted[a] !== '' && normText(accepted[a]) === user && user !== '') { ok = true; break; }
+    }
+    if (inp) inp.classList.add(ok ? 'fill-ok' : 'fill-no');
+    if (ok) hit++;
+    displays.push((n > 1 ? (b + 1) + '. ' : '') + accepted.filter(function (x) { return x !== ''; }).join(' / '));
+  }
+
+  var earned = roundScore(q.points * hit / n);
+  correctEl.innerHTML = LABELS.answer_prefix + displays.join('   ');
+
+  if (hit === n) {
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+  } else if (hit > 0) {
+    card.classList.add('partial');
+    badge.className = 'badge badge-partial';
+    badge.textContent = LABELS.partial_label;
+  } else {
+    card.classList.add('wrong');
+    badge.className = 'badge badge-no';
+    badge.textContent = LABELS.wrong_label;
+  }
+  return earned;
+}
+
+</script>
+<script>
+function __epaSwitch(tab) {
+  document.querySelectorAll('#epa-tabs .tab-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-tab') === tab); });
+  document.querySelectorAll('.tab-panel').forEach(function(p){
+    p.classList.toggle('active', p.id === 'panel-' + tab); });
+  // The test panel is display:none on load, so build()'s MathJax typeset ran
+  // on hidden content. Re-run build() the first time the panel is visible so
+  // it renders + typesets at the real size. Guarded so answers aren't wiped.
+  if(tab === 'test' && !window.__epaTestBuilt){
+    window.__epaTestBuilt = true;
+    if(typeof build === 'function'){ try { build(); } catch(err){} }
+  } else if(tab === 'test' && window.MathJax && MathJax.typesetPromise){
+    var panel = document.getElementById('panel-test');
+    if(panel) MathJax.typesetPromise([panel]).catch(function(){});
+  }
+  if(window.__epaFitFormulas) setTimeout(window.__epaFitFormulas, 50);
+  window.scrollTo(0, 0);
+}
+document.addEventListener('click', function(e){
+  var btn = e.target.closest('#epa-tabs .tab-btn'); if(!btn) return;
+  __epaSwitch(btn.getAttribute('data-tab'));
+});
+</script>
+</body>
+</html>

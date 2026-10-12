@@ -1,0 +1,55 @@
+# NexT 主题配置（覆盖 hexo-theme-next 默认配置）
+# 文档: https://theme-next.js.org/
+
+# 使用 npm 安装的主题，指定为空则从 node_modules 加载
+scheme: Muse
+
+# 菜单
+menu:
+  home: / || fa fa-home
+  tags: /tags/ || fa fa-tags
+  categories: /categories/ || fa fa-th
+  archives: /archives/ || fa fa-archive
+  about: /about/ || fa fa-user
+
+# 侧边栏头像
+avatar:
+  url: /images/avatar.png
+  rounded: true
+
+# 文章内代码块样式
+codeblock:
+  copy_button:
+    enable: true
+
+# 返回顶部
+back2top:
+  enable: true
+  sidebar: false
+
+# 阅读进度条
+reading_progress:
+  enable: true
+
+# 本地搜索（依赖 hexo-generator-searchdb 插件）
+search:
+  enable: true
+  service: hexo
+  placeholder: 搜索文章...
+
+# Giscus 评论（基于 GitHub Discussions）
+# 注意：NexT 8.29 不原生支持 giscus，通过 custom_file_path 注入 source/_data/giscus.njk 实现
+# 参数在 giscus.app 生成；仓库需安装 giscus app 并开启 Discussions
+custom_file_path:
+  comment: source/_data/giscus.njk
+
+# 页脚
+footer:
+  since: 2026
+  copyright: Agnon1573
+
+# 文章版权声明
+post_copyright:
+  enable: true
+  license: CC BY-NC-SA 4.0
+  license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
