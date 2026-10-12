@@ -49,8 +49,8 @@ MathJax = {
 
 body {
   font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
-  font-size: 12pt; line-height: 1.75; color: var(--ink);
-  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  font-size: 13.5pt; line-height: 1.75; color: var(--ink);
+  max-width: 1100px; margin: auto; padding: 28px 36px 60px;
   background: var(--paper);
 }
 
@@ -163,11 +163,17 @@ div.toc li { margin: 3px 0; font-size: 0.95em; }
 }
 
 /* ── Responsive ── */
+pre { overflow-x: auto; }
+pre, code { overflow-wrap: break-word; }
+@media (max-width: 1024px) {
+  body { max-width: 100%; padding: 20px 16px 48px; font-size: 12pt; }
+  table { font-size: 0.95em; }
+}
 @media (max-width: 640px) {
   body { max-width: 100%; padding: 12px 10px 40px; font-size: 11pt; }
   h1 { font-size: 1.3em; }
   h2 { font-size: 1.12em; }
-  table { font-size: 0.85em; }
+  table { font-size: 0.85em; display: block; overflow-x: auto; }
   td, th { padding: 4px 6px; }
   pre { font-size: 0.85em; padding: 6px; }
 }
@@ -2392,7 +2398,7 @@ end for
 
 <h3 id="s59620280">问题求解</h3>
 <p>Step 1：初始化 Q 值 = 1。</p>
-<p>Step 2：循环执行：按照状态约束 + Epsilon-greedy 策略决定是否向终端发送 11V 报文，存储经验 `<S, A, R, S′>`；从经验池取出 Batch 数据，计算 Target Q 值和预测 Q 值，使用 SGD 更新 Q 神经网络参数 θ；定期更新 Target Q 神经网络参数 θ′。</p>
+<p>Step 2：循环执行：按照状态约束 + Epsilon-greedy 策略决定是否向终端发送 11V 报文，存储经验 `&lt;S, A, R, S′>`；从经验池取出 Batch 数据，计算 Target Q 值和预测 Q 值，使用 SGD 更新 Q 神经网络参数 θ；定期更新 Target Q 神经网络参数 θ′。</p>
 
 <h2 id="s64285292">应用案例 Case 3: 4T波束优化 <span class="tag-freq">高频</span></h2>
 <h3 id="s17911910">背景与挑战</h3>
@@ -2429,7 +2435,7 @@ end for
 
 <h3 id="s88391355">求解过程</h3>
 <p>Step 1：初始化网络、epsilon-greedy 初始随机数。</p>
-<p>Step 2：循环执行：基于网络仿真器生成 State 张量；基于 State，依一定概率选择专家经验动作、随机动作和网络生成动作；动作执行，生成对应 reward 和状态转移态；样本池足够情况下，以 `<S, A, R, S'>` 刷新网络参数 θ。</p>
+<p>Step 2：循环执行：基于网络仿真器生成 State 张量；基于 State，依一定概率选择专家经验动作、随机动作和网络生成动作；动作执行，生成对应 reward 和状态转移态；样本池足够情况下，以 `&lt;S, A, R, S'>` 刷新网络参数 θ。</p>
 <div class="tldr">核心逻辑：专家经验 → State → 深度强化学习网络 → Action；价值评估：$Q(s,a;\theta) \approx Q^*(s,a)$；Loss ~ F (Gain)。</div>
 
 <h2 id="s29394671">论文与文档信息 <span class="tag-info">了解</span></h2>

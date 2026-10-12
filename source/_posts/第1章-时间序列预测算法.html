@@ -49,8 +49,8 @@ MathJax = {
 
 body {
   font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
-  font-size: 12pt; line-height: 1.75; color: var(--ink);
-  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  font-size: 13.5pt; line-height: 1.75; color: var(--ink);
+  max-width: 1100px; margin: auto; padding: 28px 36px 60px;
   background: var(--paper);
 }
 
@@ -163,11 +163,17 @@ div.toc li { margin: 3px 0; font-size: 0.95em; }
 }
 
 /* ── Responsive ── */
+pre { overflow-x: auto; }
+pre, code { overflow-wrap: break-word; }
+@media (max-width: 1024px) {
+  body { max-width: 100%; padding: 20px 16px 48px; font-size: 12pt; }
+  table { font-size: 0.95em; }
+}
 @media (max-width: 640px) {
   body { max-width: 100%; padding: 12px 10px 40px; font-size: 11pt; }
   h1 { font-size: 1.3em; }
   h2 { font-size: 1.12em; }
-  table { font-size: 0.85em; }
+  table { font-size: 0.85em; display: block; overflow-x: auto; }
   td, th { padding: 4px 6px; }
   pre { font-size: 0.85em; padding: 6px; }
 }
@@ -502,7 +508,7 @@ div.toc li { margin: 3px 0; font-size: 0.95em; }
 <ul>
 <li><span class="kp">分位数预测</span>：未来t时刻的p分位数 $f_{p, t}$</li>
 <li><span class="kp">分位数预测偏差</span>：
-$$Q_{p, t}=\left\{\begin{array}{ll}2(1-p)\left(f_{p, t}-y_{t}\right), & \text { if } y_{t}<f_{p, t} \\ 2 p\left(y_{t}-f_{p, t}\right), & \text { if } y_{t} \geq f_{p, t}\end{array}\right.$$</li>
+$$Q_{p, t}=\left\{\begin{array}{ll}2(1-p)\left(f_{p, t}-y_{t}\right), & \text { if } y_{t}&lt;f_{p, t} \\ 2 p\left(y_{t}-f_{p, t}\right), & \text { if } y_{t} \geq f_{p, t}\end{array}\right.$$</li>
 <li><span class="kp">区间预测</span>：未来t时刻的 $100(1-\alpha) \%$ 置信度的区间 $\left[\ell_{\alpha, t}, u_{\alpha, t}\right]$</li>
 <li><span class="kp">区间预测偏差</span>：
 $$W_{\alpha, t}=\left\{\begin{array}{ll}\left(u_{\alpha, t}-\ell_{\alpha, t}\right)+\frac{2}{\alpha}\left(\ell_{\alpha, t}-y_{t}\right) & \text { if } y_{t}<\ell_{\alpha, t} \\ \left(u_{\alpha, t}-\ell_{\alpha, t}\right) & \text { if } \ell_{\alpha, t} \leq y_{t} \leq u_{\alpha, t} \\ \left(u_{\alpha, t}-\ell_{\alpha, t}\right)+\frac{2}{\alpha}\left(y_{t}-u_{\alpha, t}\right) & \text { if } y_{t}>u_{\alpha, t} \end{array}\right.$$</li>
