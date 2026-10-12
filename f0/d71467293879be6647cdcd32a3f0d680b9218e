@@ -1,0 +1,19 @@
+.github/workflows/deploy.yml
+  s_dd2a80705097ef::t_dc89f125d8b9a8 29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "f0d71467293879be6647cdcd32a3f0d680b9218e",
+  "prompts": {},
+  "sessions": {
+    "s_dd2a80705097ef": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ed07c0599ffepUjAGNMk3RtbBY",
+        "model": "unknown"
+      },
+      "human_author": "z00504240 <zhaoqiming@huawei.com>"
+    }
+  }
+}
