@@ -94,7 +94,8 @@ hexo clean; hexo g
 
 - [ ] `git -C <博客目录> status` 无未提交的框架文件（package.json、package-lock.json、_config*.yml、themes/ 等）
 - [ ] 框架变更已提交并推送到 `hexo` 分支
-- [ ] gh-pages 分支为最新部署（`hexo deploy` 输出 INFO Deploy done）
+- [ ] GitHub Actions 工作流 **Deploy to GitHub Pages** 运行成功（仓库 Actions 页绿色对勾），gh-pages 分支已更新
+- [ ] 若 Install dependencies 步骤报 ENOTFOUND/网络错误：检查 package-lock.json 内 `resolved` URL 是否含 `mirrors.tools.huawei.com`（内网镜像，runner 不可达），按 rule.md 规则 2 替换为 registry.npmjs.org（2026-10-12 CI 曾因此连续 3 次失败，commit 9d30a9b 修复）
 
 ## 已知可忽略项
 

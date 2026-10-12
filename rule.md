@@ -10,9 +10,11 @@
 
 ## 规则 2：部署与分支
 
-- 部署产物只进 `gh-pages` 分支（通过 `hexo deploy`，SSH over 443：`git@ssh.github.com:Agnon1573/Blog.git`）。
+- **部署主线为 GitHub Actions**（2026-10-12 起）：推送 `hexo` 分支（或网页上直接 Commit）即自动构建并发布 `gh-pages`（工作流 `.github/workflows/deploy.yml`，改动涉及 `source/`、配置、依赖时触发）。
+- 部署产物只进 `gh-pages` 分支，由 Actions 写入（force_orphan 单提交快照），勿手动改动。
 - 源码（文章、配置、主题自定义）只进 `hexo` 分支，两者不混用。
-- 每次部署后，若源码有变动，同步提交 `hexo` 分支。
+- 本地 `hexo deploy` 仅作 Actions 故障时的备用：须先删除 `.deploy_git/` 目录（gh-pages 历史已被 Actions 重写，旧 .deploy_git 推送会被拒）。
+- **package-lock.json 的 `resolved` URL 必须指向公网 `registry.npmjs.org`**：本机 npm 配置的是华为内网镜像（`mirrors.tools.huawei.com`），本地执行会产生内网 URL 的 lock，GitHub runner 无法解析该域名（ENOTFOUND，曾致 CI 连续 3 次失败）。本地新增/升级依赖后，提交前须把 lock 内 `http://mirrors.tools.huawei.com/npm/` 全部替换为 `https://registry.npmjs.org/`（路径规则一致，直接字符串替换即可），并确认 lock 内 `huawei.com` 出现次数为 0。
 
 ## 规则 3：EPA 文章处理（2026-10-12 改版 + 目录上侧边栏二次改版）
 
