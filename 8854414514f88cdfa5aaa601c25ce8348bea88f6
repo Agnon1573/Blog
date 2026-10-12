@@ -1,0 +1,14 @@
+css/main.css
+  h_74cbe42fcea19d 1418
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "8854414514f88cdfa5aaa601c25ce8348bea88f6",
+  "prompts": {},
+  "humans": {
+    "h_74cbe42fcea19d": {
+      "author": "z00504240 <zhaoqiming@huawei.com>"
+    }
+  }
+}
