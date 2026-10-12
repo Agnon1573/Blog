@@ -1,0 +1,72 @@
+2026/10/12/hello-world/index.html
+  h_74cbe42fcea19d 148,154,159,267-278
+2026/10/12/第10章-AI模型压缩算法/index.html
+  h_74cbe42fcea19d 1-1836
+2026/10/12/第11章-AI分布式训练加速算法/index.html
+  h_74cbe42fcea19d 1-1796
+2026/10/12/第12章-随机梯度优化算法/index.html
+  h_74cbe42fcea19d 1-1833
+2026/10/12/第1章-时间序列预测算法/index.html
+  h_74cbe42fcea19d 1-1746
+2026/10/12/第2章-状态感知与知识推理算法/index.html
+  h_74cbe42fcea19d 1-2345
+2026/10/12/第3章-强化学习/index.html
+  h_74cbe42fcea19d 1-3023
+2026/10/12/第4章-时序数据增强/index.html
+  h_74cbe42fcea19d 1-1242
+2026/10/12/第5章-AI系统设计与算法建模/index.html
+  h_74cbe42fcea19d 1-1479
+2026/10/12/第6章-AUTOML超参优化算法/index.html
+  h_74cbe42fcea19d 1-1112
+2026/10/12/第7章-AI模型评估与优化/index.html
+  h_74cbe42fcea19d 1-2507
+2026/10/12/第8章-LLM关键技术详解/index.html
+  h_74cbe42fcea19d 1-2760
+2026/10/12/第9章-向量检索算法/index.html
+  h_74cbe42fcea19d 1-1958
+about/index.html
+  h_74cbe42fcea19d 148,154,159
+archives/2026/10/index.html
+  h_74cbe42fcea19d 144,150,155,180,185,188-227,248-387,394-396
+archives/2026/10/page/2/index.html
+  h_74cbe42fcea19d 1-296
+archives/2026/index.html
+  h_74cbe42fcea19d 144,150,155,180,185,188-227,248-387,394-396
+archives/2026/page/2/index.html
+  h_74cbe42fcea19d 1-296
+archives/index.html
+  h_74cbe42fcea19d 144,150,155,180,185,188-227,248-387,394-396
+archives/page/2/index.html
+  h_74cbe42fcea19d 1-296
+categories/index.html
+  h_74cbe42fcea19d 147,153,158,195,198
+css/main.css
+  h_74cbe42fcea19d 1418
+index.html
+  h_74cbe42fcea19d 144,150,155,181,199,211,219,233-683,685-686,688,690-1978,1997-19142
+page/2/index.html
+  h_74cbe42fcea19d 1-5914
+search.xml
+  h_74cbe42fcea19d 30-23798
+tags/Hexo/index.html
+  h_74cbe42fcea19d 144,150,155
+tags/index.html
+  h_74cbe42fcea19d 147,153,158,195,198
+tags/决策推理/index.html
+  h_74cbe42fcea19d 1-437
+tags/决策推理/page/2/index.html
+  h_74cbe42fcea19d 1-277
+tags/博客/index.html
+  h_74cbe42fcea19d 144,150,155
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "64887973a4a75b0fc96ca0aa19f750057935ebd5",
+  "prompts": {},
+  "humans": {
+    "h_74cbe42fcea19d": {
+      "author": "z00504240 <zhaoqiming@huawei.com>"
+    }
+  }
+}
