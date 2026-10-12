@@ -1,0 +1,64 @@
+.gitignore
+  h_74cbe42fcea19d 1-7
+README.md
+  h_74cbe42fcea19d 1-62
+_config.next.yml
+  h_74cbe42fcea19d 1-55
+_config.yml
+  h_74cbe42fcea19d 1-81
+package-lock.json
+  h_74cbe42fcea19d 1-3057
+package.json
+  h_74cbe42fcea19d 1-26
+scaffolds/draft.md
+  h_74cbe42fcea19d 1-4
+scaffolds/page.md
+  h_74cbe42fcea19d 1-4
+scaffolds/post.md
+  h_74cbe42fcea19d 1-6
+source/_data/giscus.njk
+  h_74cbe42fcea19d 1-17
+source/_posts/hello-world.md
+  h_74cbe42fcea19d 1-36
+source/_posts/第10章-AI模型压缩算法.html
+  h_74cbe42fcea19d 1-1845
+source/_posts/第11章-AI分布式训练加速算法.html
+  h_74cbe42fcea19d 1-1805
+source/_posts/第12章-随机梯度优化算法.html
+  h_74cbe42fcea19d 1-1842
+source/_posts/第1章-时间序列预测算法.html
+  h_74cbe42fcea19d 1-1755
+source/_posts/第2章-状态感知与知识推理算法.html
+  h_74cbe42fcea19d 1-2354
+source/_posts/第3章-强化学习.html
+  h_74cbe42fcea19d 1-3032
+source/_posts/第4章-时序数据增强.html
+  h_74cbe42fcea19d 1-1251
+source/_posts/第5章-AI系统设计与算法建模.html
+  h_74cbe42fcea19d 1-1488
+source/_posts/第6章-AUTOML超参优化算法.html
+  h_74cbe42fcea19d 1-1121
+source/_posts/第7章-AI模型评估与优化.html
+  h_74cbe42fcea19d 1-2516
+source/_posts/第8章-LLM关键技术详解.html
+  h_74cbe42fcea19d 1-2769
+source/_posts/第9章-向量检索算法.html
+  h_74cbe42fcea19d 1-1967
+source/about/index.md
+  h_74cbe42fcea19d 1-11
+source/categories/index.md
+  h_74cbe42fcea19d 1-4
+source/tags/index.md
+  h_74cbe42fcea19d 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "11b3dab31c9972e8aa341566b59d1a2b80aab23c",
+  "prompts": {},
+  "humans": {
+    "h_74cbe42fcea19d": {
+      "author": "z00504240 <zhaoqiming@huawei.com>"
+    }
+  }
+}
