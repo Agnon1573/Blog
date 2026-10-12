@@ -12,10 +12,27 @@ menu:
   archives: /archives/ || fa fa-archive
   about: /about/ || fa fa-user
 
+# 侧边栏（博客园风格：右侧，文章页自动展开）
+sidebar:
+  position: right
+  display: post
+
 # 侧边栏头像
 avatar:
   url: /images/avatar.png
   rounded: true
+
+# 数学公式（EPA 文章按需加载，front-matter mathjax: true）
+math:
+  mathjax:
+    enable: true
+    tags: none
+    display_overflow: scroll
+
+# 第三方库 CDN（mathjax 覆盖为 EPA 已验证的 jsdelivr 版本）
+vendors:
+  plugins: cdnjs
+  mathjax: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js
 
 # 文章内代码块样式
 codeblock:

@@ -5,29 +5,17 @@ categories:
   - 决策推理
 tags:
   - 决策推理
-layout: false
+mathjax: true
+description: 本章核心主题：1. 模型评估概念、1.1 模型评估技术发展与概念介绍、AI模型评估维度、AI模型评估流程、传统AI模型评估指标……。含完整知识清单（含必考/重点/高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。
 ---
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>第7章 AI模型评估与优化</title>
-<script>
-MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\(', '\)']],
-    displayMath: [['$$', '$$'], ['\[', '\]']]
-  }
-};
-</script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
-<style>
-/* === ExamPass Shared Styles === */
-/* Paper-like warm background, clean typography, responsive */
 
-:root {
-  --paper: #fdf6e3;
+<div class="epa-summary">
+  <p>本章核心主题：1. 模型评估概念、1.1 模型评估技术发展与概念介绍、AI模型评估维度、AI模型评估流程、传统AI模型评估指标……。含完整知识清单（含必考/重点/高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。</p>
+</div>
+<!--more-->
+<div class="epa-scope">
+<style>
+.epa-scope { --paper: #fdf6e3;
   --paper-dark: #f5ecd7;
   --ink: #2c2c2c;
   --ink-light: #555;
@@ -42,348 +30,216 @@ MathJax = {
   --wrong-bg: #fef2f2;
   --tag-bg: #fef3c7;
   --tag-text: #92400e;
-  --radius: 6px;
-}
-
-* { box-sizing: border-box; }
-
-body {
-  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
-  font-size: 13.5pt; line-height: 1.75; color: var(--ink);
-  max-width: 1100px; margin: auto; padding: 28px 36px 60px;
-  background: var(--paper);
-}
-
+  --radius: 6px; }
+.epa-scope, .epa-scope * { box-sizing: border-box; }
+.epa-scope { font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 13.5pt; line-height: 1.75; color: var(--ink); padding: 28px 36px 60px;
+  background: var(--paper); }
 @media print {
-  body { font-size: 10.5pt; background: #fff; }
-  .no-print { display: none !important; }
-  h1, h2, h3 { page-break-after: avoid; }
+.epa-scope { font-size: 10.5pt; background: #fff; }
+.epa-scope .no-print { display: none !important; }
+.epa-scope h1, .epa-scope h2, .epa-scope h3 { page-break-after: avoid; }
 }
-
-/* ── Header ── */
-#exampass-header {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 6px 0; margin-bottom: 0;
-}
-.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
-.header-url  { font-size: 0.78em; color: #999; }
-.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
-
-/* ── Typography ── */
-h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
-h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
-h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
-
-/* ── Tables ── */
-table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
-td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
-th { background: var(--paper-dark); font-weight: 700; }
-
-/* ── Knowledge point vs explanation ── */
-.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
-.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
-.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
-
-/* ── Block elements ── */
-blockquote {
-  border-left: 3px solid #c0392b; background: #fef9ef;
-  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
-}
-/* Modern monospace stack — avoids the ugly Courier New fallback on Windows. */
-:root {
-  --mono: "Cascadia Code", "JetBrains Mono", "Fira Code", "Source Code Pro",
-          Consolas, "SF Mono", Menlo, "DejaVu Sans Mono", monospace;
-}
-code {
-  font-family: var(--mono);
+.epa-scope #exampass-header { display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0; }
+.epa-scope .header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.epa-scope .header-url { font-size: 0.78em; color: #999; }
+.epa-scope .header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+.epa-scope h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+.epa-scope h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+.epa-scope h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+.epa-scope a { color: var(--accent); text-decoration: none; }
+.epa-scope a:hover { text-decoration: underline; }
+.epa-scope table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+.epa-scope td, .epa-scope th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+.epa-scope th { background: var(--paper-dark); font-weight: 700; }
+.epa-scope .kp { font-weight: 700; color: var(--ink); }
+.epa-scope .exp { font-weight: 400; color: var(--ink-light); }
+.epa-scope .exp em, .epa-scope .exp strong { color: var(--ink); }
+.epa-scope blockquote { border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em; }
+.epa-scope { --mono: "Cascadia Code", "JetBrains Mono", "Fira Code", "Source Code Pro",
+          Consolas, "SF Mono", Menlo, "DejaVu Sans Mono", monospace; }
+.epa-scope code { font-family: var(--mono);
   background: #eee8d8; color: #8a4b1e;
-  padding: 1px 5px; border-radius: 4px; font-size: 0.9em;
-}
-pre {
-  font-family: var(--mono);
+  padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+.epa-scope pre { font-family: var(--mono);
   background: #2d2a26; color: #ece6da;
   padding: 14px 16px; border-radius: var(--radius);
   overflow-x: auto; line-height: 1.6; font-size: 0.9em;
-  border: 1px solid #3d3934; tab-size: 2;
-}
-pre code {
-  background: none; color: inherit; padding: 0; font-size: 1em; border-radius: 0;
-}
-/* kp/exp spans inside <pre> must inherit the light code color, not their own dark color */
-pre .kp, pre .exp { color: inherit; }
-
-/* ── Long display formulas: scroll inside their column, never overflow ── */
-mjx-container[display="true"] {
-  max-width: 100%;
+  border: 1px solid #3d3934; tab-size: 2; }
+.epa-scope pre code { background: none; color: inherit; padding: 0; font-size: 1em; border-radius: 0; }
+.epa-scope pre .kp, .epa-scope pre .exp { color: inherit; }
+.epa-scope mjx-container[display="true"] { max-width: 100%;
   overflow-x: auto;
-  overflow-y: hidden;
-}
-
-/* ── TOC ── */
-div.toc {
-  background: var(--card-bg); padding: 14px 18px;
-  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
-}
-div.toc ul { padding-left: 18px; }
-div.toc li { margin: 3px 0; font-size: 0.95em; }
-
-/* ── Priority tags ── */
-.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
-.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
-.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
-.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
-
-/* ── Checkpoint self-test ── */
-.checkpoint {
-  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius);
+  overflow-y: hidden; }
+.epa-scope div.toc { background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px; }
+.epa-scope div.toc ul { padding-left: 18px; }
+.epa-scope div.toc li { margin: 3px 0; font-size: 0.95em; }
+.epa-scope .tag-must { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .tag-key { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .tag-freq { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .tag-info { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .checkpoint { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius);
   padding: 10px 16px; margin: 18px 0;
-  font-size: 0.95em;
-}
-.checkpoint::before {
-  content: '🧠 自测：';
-  font-weight: 700; color: #1e40af;
-}
-.checkpoint .cp-answer { margin-top: 10px; border-top: 1px dashed #bfdbfe; padding-top: 8px; }
-.checkpoint .cp-answer summary {
-  cursor: pointer; color: #1e40af; font-weight: 600; user-select: none;
-  list-style: none;
-}
-.checkpoint .cp-answer summary::before { content: '💡 '; }
-.checkpoint .cp-answer summary::-webkit-details-marker { display: none; }
-.checkpoint .cp-answer[open] summary { margin-bottom: 6px; }
-.checkpoint .cp-answer ol, .checkpoint .cp-answer p { font-weight: 400; color: var(--ink); }
-
-/* ── TL;DR summary ── */
-.tldr {
-  background: #fefce8; border-left: 3px solid #eab308;
+  font-size: 0.95em; }
+.epa-scope .checkpoint::before { content: '🧠 自测：';
+  font-weight: 700; color: #1e40af; }
+.epa-scope .checkpoint .cp-answer { margin-top: 10px; border-top: 1px dashed #bfdbfe; padding-top: 8px; }
+.epa-scope .checkpoint .cp-answer summary { cursor: pointer; color: #1e40af; font-weight: 600; user-select: none;
+  list-style: none; }
+.epa-scope .checkpoint .cp-answer summary::before { content: '💡 '; }
+.epa-scope .checkpoint .cp-answer summary::-webkit-details-marker { display: none; }
+.epa-scope .checkpoint .cp-answer[open] summary { margin-bottom: 6px; }
+.epa-scope .checkpoint .cp-answer ol, .epa-scope .checkpoint .cp-answer p { font-weight: 400; color: var(--ink); }
+.epa-scope .tldr { background: #fefce8; border-left: 3px solid #eab308;
   padding: 8px 14px; margin: 10px 0;
-  font-weight: 600; font-size: 0.95em;
-}
-
-/* ── Responsive ── */
-pre { overflow-x: auto; }
-pre, code { overflow-wrap: break-word; }
+  font-weight: 600; font-size: 0.95em; }
+.epa-scope pre { overflow-x: auto; }
+.epa-scope pre, .epa-scope code { overflow-wrap: break-word; }
 @media (max-width: 1024px) {
-  body { max-width: 100%; padding: 20px 16px 48px; font-size: 12pt; }
-  table { font-size: 0.95em; }
+.epa-scope {  padding: 20px 16px 48px; font-size: 12pt; }
+.epa-scope table { font-size: 0.95em; }
 }
 @media (max-width: 640px) {
-  body { max-width: 100%; padding: 12px 10px 40px; font-size: 11pt; }
-  h1 { font-size: 1.3em; }
-  h2 { font-size: 1.12em; }
-  table { font-size: 0.85em; display: block; overflow-x: auto; }
-  td, th { padding: 4px 6px; }
-  pre { font-size: 0.85em; padding: 6px; }
+.epa-scope {  padding: 12px 10px 40px; font-size: 11pt; }
+.epa-scope h1 { font-size: 1.3em; }
+.epa-scope h2 { font-size: 1.12em; }
+.epa-scope table { font-size: 0.85em; display: block; overflow-x: auto; }
+.epa-scope td, .epa-scope th { padding: 4px 6px; }
+.epa-scope pre { font-size: 0.85em; padding: 6px; }
 }
 @media (max-width: 400px) {
-  body { padding: 8px 6px 32px; font-size: 10.5pt; }
+.epa-scope { padding: 8px 6px 32px; font-size: 10.5pt; }
 }
-
-/* === Interactive Test Styles === */
-
-/* ── Score box ── */
-#score-box {
-  display: none; background: var(--paper-dark); color: var(--ink);
+.epa-scope #score-box { display: none; background: var(--paper-dark); color: var(--ink);
   padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
-  text-align: center; border: 1px solid var(--card-border);
-}
-#score-box .score-num { font-size: 2.2em; font-weight: 700; }
-#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
-
-/* ── Question card ── */
-.q-card {
-  background: var(--card-bg); border: 1px solid var(--card-border);
+  text-align: center; border: 1px solid var(--card-border); }
+.epa-scope #score-box .score-num { font-size: 2.2em; font-weight: 700; }
+.epa-scope #score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+.epa-scope .q-card { background: var(--card-bg); border: 1px solid var(--card-border);
   border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
-  transition: all 0.15s;
-}
-.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
-.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
-
-.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
-.q-text { margin-bottom: 8px; font-size: 0.98em; }
-
-/* ── Options (compact) ── */
-.option {
-  display: block; padding: 4px 10px; margin: 3px 0;
+  transition: all 0.15s; }
+.epa-scope .q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.epa-scope .q-card.wrong { border-left: 3px solid var(--wrong); background: #fef9f9; }
+.epa-scope .q-num { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.epa-scope .q-text { margin-bottom: 8px; font-size: 0.98em; }
+.epa-scope .option { display: block; padding: 4px 10px; margin: 3px 0;
   border: 1px solid var(--card-border); border-radius: 4px;
   cursor: pointer; transition: all 0.12s; font-size: 0.93em;
-  background: #fefcf5;
-}
-.option:hover            { background: #f0ede0; }
-.option input            { margin-right: 6px; }
-.option.selected         { border-color: var(--accent); background: #eff6ff; }
-.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
-.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
-
-/* ── Textareas (compact) ── */
-.q-textarea {
-  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  background: #fefcf5; }
+.epa-scope .option:hover { background: #f0ede0; }
+.epa-scope .option input { margin-right: 6px; }
+.epa-scope .option.selected { border-color: var(--accent); background: #eff6ff; }
+.epa-scope .option.correct-answer { border-color: var(--correct); background: var(--correct-bg); }
+.epa-scope .option.wrong-answer { border-color: var(--wrong); background: var(--wrong-bg); }
+.epa-scope .q-textarea { width: 100%; min-height: 56px; border: 1px solid var(--card-border);
   border-radius: 4px; padding: 6px 10px; font-family: inherit;
-  font-size: 0.93em; background: #fefcf5; resize: vertical;
-}
-.q-textarea:focus { outline: none; border-color: var(--accent); }
-.q-code {
-  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 0.93em; background: #fefcf5; resize: vertical; }
+.epa-scope .q-textarea:focus { outline: none; border-color: var(--accent); }
+.epa-scope .q-code { font-family: "Consolas", "Monaco", "Courier New", monospace;
   font-size: 0.88em; line-height: 1.5; background: #1e1e2e; color: #e0e0e0;
-  tab-size: 4; white-space: pre;
-}
-.q-code:focus { border-color: var(--accent); }
-
-/* ── Partial-credit badge ── */
-.badge-partial { background: #fef3c7; color: #92400e; }
-.q-card.partial { border-color: #f59e0b; }
-
-/* ── Result after grading ── */
-.result {
-  display: none; margin-top: 8px; padding: 8px 12px;
+  tab-size: 4; white-space: pre; }
+.epa-scope .q-code:focus { border-color: var(--accent); }
+.epa-scope .badge-partial { background: #fef3c7; color: #92400e; }
+.epa-scope .q-card.partial { border-color: #f59e0b; }
+.epa-scope .result { display: none; margin-top: 8px; padding: 8px 12px;
   background: #fefcf5; border: 1px solid var(--card-border);
-  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
-}
-.result .badge {
-  display: inline-block; padding: 1px 9px; border-radius: 3px;
-  font-weight: 700; font-size: 0.82em; margin-right: 6px;
-}
-.badge-ok  { background: var(--correct-bg); color: #166534; }
-.badge-no  { background: var(--wrong-bg); color: #991b1b; }
-.badge-ref { background: #dbeafe; color: #1e40af; }
-
-.result .explanation { margin-top: 4px; color: var(--ink); }
-.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
-
-/* ── Grading button ── */
-.grading-bar { text-align: center; margin: 20px 0; }
-.grading-bar button {
-  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6; }
+.epa-scope .result .badge { display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px; }
+.epa-scope .badge-ok { background: var(--correct-bg); color: #166534; }
+.epa-scope .badge-no { background: var(--wrong-bg); color: #991b1b; }
+.epa-scope .badge-ref { background: #dbeafe; color: #1e40af; }
+.epa-scope .result .explanation { margin-top: 4px; color: var(--ink); }
+.epa-scope .result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+.epa-scope .grading-bar { text-align: center; margin: 20px 0; }
+.epa-scope .grading-bar button { font-size: 1em; padding: 8px 32px; background: var(--accent);
   color: #fff; border: none; border-radius: var(--radius);
-  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
-}
-.grading-bar button:hover     { background: var(--accent-hover); }
-.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
-
-/* ── Fill-in-blank inputs ── */
-.fill-input {
-  border: 1px solid var(--card-border); border-radius: 3px;
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px; }
+.epa-scope .grading-bar button:hover { background: var(--accent-hover); }
+.epa-scope .grading-bar button:disabled { background: #bbb; cursor: not-allowed; }
+.epa-scope .fill-input { border: 1px solid var(--card-border); border-radius: 3px;
   padding: 2px 8px; font-family: inherit; font-size: 0.95em;
   background: #fefcf5; width: 140px; vertical-align: middle;
-  transition: border-color .12s;
-}
-.fill-input:focus { outline: none; border-color: var(--accent); }
-.fill-input.fill-ok { border-color: var(--correct); background: var(--correct-bg); }
-.fill-input.fill-no { border-color: var(--wrong); background: var(--wrong-bg); }
-/* stacked blanks (fill questions whose blank markers aren't in the text) */
-.fill-blank-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
-.fill-blank-row .fill-input { flex: 1; min-width: 0; width: auto; }
-.fill-tag { font-weight: 600; font-size: 0.9em; color: var(--ink-light); white-space: nowrap; }
-
-/* ── Pasted image preview ── */
-.paste-img-wrap {
-  margin-top: 6px; position: relative; display: inline-block; max-width: 100%;
-}
-.paste-img-wrap img {
-  max-width: 100%; max-height: 240px; border-radius: 4px;
-  border: 1px solid var(--divider); display: block;
-}
-.paste-img-remove {
-  position: absolute; top: 3px; right: 3px; width: 20px; height: 20px;
+  transition: border-color .12s; }
+.epa-scope .fill-input:focus { outline: none; border-color: var(--accent); }
+.epa-scope .fill-input.fill-ok { border-color: var(--correct); background: var(--correct-bg); }
+.epa-scope .fill-input.fill-no { border-color: var(--wrong); background: var(--wrong-bg); }
+.epa-scope .fill-blank-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+.epa-scope .fill-blank-row .fill-input { flex: 1; min-width: 0; width: auto; }
+.epa-scope .fill-tag { font-weight: 600; font-size: 0.9em; color: var(--ink-light); white-space: nowrap; }
+.epa-scope .paste-img-wrap { margin-top: 6px; position: relative; display: inline-block; max-width: 100%; }
+.epa-scope .paste-img-wrap img { max-width: 100%; max-height: 240px; border-radius: 4px;
+  border: 1px solid var(--divider); display: block; }
+.epa-scope .paste-img-remove { position: absolute; top: 3px; right: 3px; width: 20px; height: 20px;
   background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 50%;
-  cursor: pointer; font-size: 12px; line-height: 20px; text-align: center; padding: 0;
-}
-
-/* ── AI批改 save-for-grading button ── */
-.save-bar { text-align: center; margin: 10px 0 4px; }
-.save-bar button {
-  font-size: 0.95em; padding: 7px 22px; background: #7c5ccc;
+  cursor: pointer; font-size: 12px; line-height: 20px; text-align: center; padding: 0; }
+.epa-scope .save-bar { text-align: center; margin: 10px 0 4px; }
+.epa-scope .save-bar button { font-size: 0.95em; padding: 7px 22px; background: #7c5ccc;
   color: #fff; border: none; border-radius: var(--radius);
-  cursor: pointer; font-weight: 600;
-}
-.save-bar button:hover { background: #6748b4; }
-
-/* ── Grade export modal ── */
-#epa-grade-modal {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.62);
-  z-index: 9998; align-items: center; justify-content: center;
-}
-#epa-grade-modal.open { display: flex; }
-.epa-grade-dialog {
-  background: #fff; border-radius: 10px; padding: 24px 28px; max-width: 560px;
-  width: 90vw; box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-}
-.epa-grade-dialog h3 { margin: 0 0 10px; font-size: 1.1em; }
-.epa-grade-dialog p {
-  color: var(--ink-light); font-size: 0.93em; margin: 0 0 12px; line-height: 1.6;
-}
-.epa-grade-cmd {
-  background: #1e1e2e; color: #e0e0e0; border-radius: 6px; padding: 10px 14px;
+  cursor: pointer; font-weight: 600; }
+.epa-scope .save-bar button:hover { background: #6748b4; }
+.epa-scope #epa-grade-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.62);
+  z-index: 9998; align-items: center; justify-content: center; }
+.epa-scope #epa-grade-modal.open { display: flex; }
+.epa-scope .epa-grade-dialog { background: #fff; border-radius: 10px; padding: 24px 28px; max-width: 560px;
+  width: 90vw; box-shadow: 0 8px 32px rgba(0,0,0,0.22); }
+.epa-scope .epa-grade-dialog h3 { margin: 0 0 10px; font-size: 1.1em; }
+.epa-scope .epa-grade-dialog p { color: var(--ink-light); font-size: 0.93em; margin: 0 0 12px; line-height: 1.6; }
+.epa-scope .epa-grade-cmd { background: #1e1e2e; color: #e0e0e0; border-radius: 6px; padding: 10px 14px;
   font-family: "Consolas","Monaco","Courier New",monospace; font-size: 0.88em;
-  word-break: break-all; margin-bottom: 12px; user-select: all; white-space: pre-wrap;
-}
-.epa-grade-dialog-btns { display: flex; gap: 10px; justify-content: flex-end; }
-.epa-grade-dialog-btns button {
-  padding: 7px 18px; border-radius: 6px; border: none; cursor: pointer;
-  font-size: 0.93em; font-weight: 600;
-}
-.btn-copy { background: var(--accent); color: #fff; }
-.btn-copy:hover { background: var(--accent-hover); }
-.btn-close-modal { background: #e5e5e5; color: var(--ink); }
-.btn-close-modal:hover { background: #d5d5d5; }
-
-
-
-/* ── Combined page: top tab bar (清单 | 题目) ──
-   Sticky so 清单/测试 switching stays reachable after scrolling. This replaces
-   the old floating FAB, which was pinned bottom-right and permanently covered
-   (and click-blocked) the bottom-right slide card of the PPT 对照 rail. */
-#epa-tabs { position: sticky; top: 4px; z-index: 1000;
+  word-break: break-all; margin-bottom: 12px; user-select: all; white-space: pre-wrap; }
+.epa-scope .epa-grade-dialog-btns { display: flex; gap: 10px; justify-content: flex-end; }
+.epa-scope .epa-grade-dialog-btns button { padding: 7px 18px; border-radius: 6px; border: none; cursor: pointer;
+  font-size: 0.93em; font-weight: 600; }
+.epa-scope .btn-copy { background: var(--accent); color: #fff; }
+.epa-scope .btn-copy:hover { background: var(--accent-hover); }
+.epa-scope .btn-close-modal { background: #e5e5e5; color: var(--ink); }
+.epa-scope .btn-close-modal:hover { background: #d5d5d5; }
+.epa-scope #epa-tabs { position: sticky; top: 4px; z-index: 1000;
   display: flex; gap: 0; justify-content: center; margin: 6px auto 22px;
   max-width: 520px; border: 1px solid var(--divider); border-radius: 10px; overflow: hidden;
   background: var(--paper); box-shadow: 0 2px 10px rgba(0,0,0,0.10); }
-#epa-tabs .tab-btn { flex: 1; padding: 10px 18px; cursor: pointer; border: none;
+.epa-scope #epa-tabs .tab-btn { flex: 1; padding: 10px 18px; cursor: pointer; border: none;
   background: var(--paper-dark); color: var(--ink-light); font-size: 1.02em; font-weight: 600;
   font-family: inherit; transition: background .15s, color .15s; }
-#epa-tabs .tab-btn + .tab-btn { border-left: 1px solid var(--divider); }
-#epa-tabs .tab-btn.active { background: var(--accent); color: #fff; }
-#epa-tabs .tab-btn:not(.active):hover { background: #efe7d3; color: var(--ink); }
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-/* keep the test readable/centered even though the body is wide for the rail */
-#panel-test { max-width: 980px; margin: 0 auto; }
-/* When the tab bar is pinned at the top, drop the sticky slide rail below it so
-   the bar never covers the first slide card. `top` only affects the PINNED
-   position — initial layout still top-aligns the rail with the notes column. */
-.kn-rail { top: 60px; max-height: calc(100vh - 74px); }
-@media print { #epa-tabs { position: static; display: none; } .tab-panel { display: block !important; } }
-
+.epa-scope #epa-tabs .tab-btn + .tab-btn { border-left: 1px solid var(--divider); }
+.epa-scope #epa-tabs .tab-btn.active { background: var(--accent); color: #fff; }
+.epa-scope #epa-tabs .tab-btn:not(.active):hover { background: #efe7d3; color: var(--ink); }
+.epa-scope .tab-panel { display: none; }
+.epa-scope .tab-panel.active { display: block; }
+.epa-scope #panel-test { max-width: 980px; margin: 0 auto; }
+.epa-scope .kn-rail { top: 60px; max-height: calc(100vh - 74px); }
+@media print {
+.epa-scope #epa-tabs { position: static; display: none; }
+.epa-scope .tab-panel { display: block !important; }
+}
 </style>
-<style id="epa-toc-sidebar">
-[id] { scroll-margin-top: 14px; }
+<style>
+.epa-scope [id] { scroll-margin-top: 14px; }
+.epa-scope #panel-kn > h1:empty { display: none; }
 @media (min-width: 1280px) {
-  body { max-width: 1200px; }
-  #panel-kn > h1:empty { display: none; }
-  #panel-kn.active { display: flex; gap: 28px; align-items: flex-start; }
-  #panel-kn > .toc {
+  .epa-scope #panel-kn.active { display: flex; gap: 24px; align-items: flex-start; }
+  .epa-scope #panel-kn > .toc {
     position: sticky; top: 12px;
-    width: 258px; min-width: 258px; box-sizing: border-box;
+    width: 230px; min-width: 230px; box-sizing: border-box;
     max-height: calc(100vh - 24px); overflow-y: auto;
     margin: 0;
   }
-  #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
-  .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
-  .epa-main pre { max-width: 100%; overflow-x: auto; }
-  .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+  .epa-scope #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
 }
+.epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
+.epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
+.epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+/* NexT 布局适配：EPA 文章页隐藏主题右侧栏（正文自带 sticky TOC 侧栏），并加宽主列 */
+body:has(.epa-scope) .sidebar,
+body:has(.epa-scope) .sidebar-toggle { display: none !important; }
+body:has(.epa-scope) main,
+body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-width: 1160px !important; }
 </style>
-</head>
-<body>
-
-<header id="exampass-header">
-  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
-  <div class="header-right"><span class="header-url">ExamPass Assistant</span></div>
-</header>
-<hr class="header-divider">
-
-<h1>第7章 AI模型评估与优化</h1><div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
 <div class="toc">
 <h2>目录</h2>
 <ul>
@@ -566,7 +422,7 @@ pre, code { overflow-wrap: break-word; }
 <li><a href="#s27231163">课后习题 重点</a></li>
 <li><a href="#s50494058">致谢与版权声明 了解</a></li>
 </ul>
-</div>
+</div><div class="epa-main">
 <h2 id="s77435734">1. 模型评估概念</h2>
 
 <h3 id="s66398196">1.1 模型评估技术发展与概念介绍</h3>
@@ -1959,7 +1815,7 @@ pre, code { overflow-wrap: break-word; }
 <p>感谢全球技术服务部（GTS）及云核心网产品线相关同事对本课程的付出和贡献（内容包含借鉴的测试分委会课程）。</p>
 <p><span class="kp">华为愿景</span>：把数字世界带入每个人、每个家庭、每个组织，构建万物互联的智能世界。</p>
 <p><span class="kp">版权声明</span>：Copyright © 2018 Huawei Technologies Co., Ltd. All Rights Reserved.</p>
-<p><span class="kp">免责声明</span>：本文件中的信息可能包含预测性陈述，有许多因素可能导致实际结果和发展与预测性陈述中明示或暗示的内容存在重大差异。此类信息仅供参考，既不构成要约，也不构成接受。华为可能随时更改信息，恕不另行通知。</p></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<p><span class="kp">免责声明</span>：本文件中的信息可能包含预测性陈述，有许多因素可能导致实际结果和发展与预测性陈述中明示或暗示的内容存在重大差异。此类信息仅供参考，既不构成要约，也不构成接受。华为可能随时更改信息，恕不另行通知。</p></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
 <p style="text-align:center;color:var(--ink-light);font-size:0.95em">391题 · 满分2004分</p>
 
 <div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
@@ -2536,24 +2392,4 @@ document.addEventListener('click', function(e){
   __epaSwitch(btn.getAttribute('data-tab'));
 });
 </script>
-<script id="epa-toc-sidebar-js">
-(function () {
-  try {
-    var panel = document.getElementById('panel-kn');
-    var toc = panel && panel.querySelector(':scope > .toc');
-    if (!panel || !toc || panel.querySelector(':scope > .epa-main')) return;
-    var main = document.createElement('div');
-    main.className = 'epa-main';
-    var node = toc.nextSibling, moved = false;
-    while (node) {
-      var next = node.nextSibling;
-      main.appendChild(node);
-      moved = true;
-      node = next;
-    }
-    if (moved) panel.appendChild(main);
-  } catch (e) {}
-})();
-</script>
-</body>
-</html>
+</div>
