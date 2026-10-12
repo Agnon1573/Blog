@@ -1,0 +1,56 @@
+feature.md
+  s_26e8c7a4f66c4c::t_a9309731fd43ec 55-56
+  s_26e8c7a4f66c4c::t_34feed841eef8c 12,16-17,21,25,27-31
+  s_26e8c7a4f66c4c::t_a0636355e74aff 35-36
+  s_26e8c7a4f66c4c::t_793e790dd45e53 43
+test.md
+  s_26e8c7a4f66c4c::t_6a90272ba47608 90
+  s_26e8c7a4f66c4c::t_e6982276d45906 54,60-61,63-70,75-79
+rule.md
+  s_26e8c7a4f66c4c::t_bf4a903a96cba8 17,20-23
+source/_posts/第10章-AI模型压缩算法.html
+  h_74cbe42fcea19d 226,518,965,972,1084
+source/_posts/第11章-AI分布式训练加速算法.html
+  h_74cbe42fcea19d 226,715,720,745,749,759,767,771,774,777,780,783,786,792,799,803,806,809,813,817,820,823,826,830,833,836,839,842,846,854,857,860,864,953,960,1072
+source/_posts/第12章-随机梯度优化算法.html
+  h_74cbe42fcea19d 226,898,902,906,908,913,928,931,935,938,941,944,947,951,955,958,962,965,968,972,977,983,990,1102
+source/_posts/第1章-时间序列预测算法.html
+  h_74cbe42fcea19d 226,231,235,243,248,252,277,284,291,296,323,326,329,347,401,410,415,441,479,495,511,941,948,1060
+source/_posts/第2章-状态感知与知识推理算法.html
+  h_74cbe42fcea19d 226,1434,1441,1553
+source/_posts/第3章-强化学习.html
+  h_74cbe42fcea19d 226,245,250,255,263,267,833,837,940,955,961,966,975,980,1056,1073,1122-1123,2063,2070,2182
+source/_posts/第4章-时序数据增强.html
+  h_74cbe42fcea19d 226,491,498,610
+source/_posts/第5章-AI系统设计与算法建模.html
+  h_74cbe42fcea19d 226,598,604,611,620,638,646,655,665,680,687,799
+source/_posts/第6章-AUTOML超参优化算法.html
+  h_74cbe42fcea19d 226,376,383,495
+source/_posts/第7章-AI模型评估与优化.html
+  h_74cbe42fcea19d 226,281,290,300,304,316,330,1022,1029,1034,1619,1626,1738
+source/_posts/第8章-LLM关键技术详解.html
+  h_74cbe42fcea19d 226,1386,1392,1398,1802,1809,1921
+source/_posts/第9章-向量检索算法.html
+  h_74cbe42fcea19d 226,1082,1089,1201
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "3737c9faecb6f1e22fbd450aee354928b816e75b",
+  "prompts": {},
+  "humans": {
+    "h_74cbe42fcea19d": {
+      "author": "z00504240 <zhaoqiming@huawei.com>"
+    }
+  },
+  "sessions": {
+    "s_26e8c7a4f66c4c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ed2119a53ffePZIzJYaQ4s4JjA",
+        "model": "unknown"
+      },
+      "human_author": "z00504240 <zhaoqiming@huawei.com>"
+    }
+  }
+}
