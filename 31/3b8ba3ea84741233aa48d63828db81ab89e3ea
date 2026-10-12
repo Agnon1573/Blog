@@ -1,0 +1,16 @@
+package-lock.json
+  h_74cbe42fcea19d 14,1492-1503
+package.json
+  h_74cbe42fcea19d 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "313b8ba3ea84741233aa48d63828db81ab89e3ea",
+  "prompts": {},
+  "humans": {
+    "h_74cbe42fcea19d": {
+      "author": "z00504240 <zhaoqiming@huawei.com>"
+    }
+  }
+}
