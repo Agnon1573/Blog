@@ -27,7 +27,12 @@
 - 非 EPA 类文章使用默认 NexT 布局（不写 `layout: false`）。
 - 文章日期错开（精确到分钟），保证首页排序稳定。
 
-## 规则 5：环境注意
+## 规则 5：隐私安全（红线）
+
+- 严禁提交账号、密码、密钥、token 等隐私类文件或内容到 git（包括 .ssh 私钥、含 token 的配置、账号密码明文）。
+- 提交前检查 `git status` / `git diff --staged`，确认无敏感文件；一旦发现误提交，立即从历史中清除并作废泄露的凭据。
+
+## 规则 6：环境注意
 
 - 内网需走代理 proxyuk.huawei.com:8080；git push 大 body 走 HTTPS 会被 403 拦截，用 SSH。
 - hexo deploy 输出乱码是 PowerShell GBK 显示问题，不代表失败。
