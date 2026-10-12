@@ -1,0 +1,31 @@
+test.md
+  s_26e8c7a4f66c4c::t_5c1c2b642e310f 97
+  s_dd2a80705097ef::t_4d6cf68de3e669 98
+rule.md
+  s_dd2a80705097ef::t_e83edce6ba2e20 17
+  s_26e8c7a4f66c4c::t_0c19bbbd0d57f3 13-14,16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "52a9705de386d6b77a80e14e0c443fec54f5da56",
+  "prompts": {},
+  "sessions": {
+    "s_26e8c7a4f66c4c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ed2119a53ffePZIzJYaQ4s4JjA",
+        "model": "unknown"
+      },
+      "human_author": "z00504240 <zhaoqiming@huawei.com>"
+    },
+    "s_dd2a80705097ef": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ed07c0599ffepUjAGNMk3RtbBY",
+        "model": "unknown"
+      },
+      "human_author": "z00504240 <zhaoqiming@huawei.com>"
+    }
+  }
+}
