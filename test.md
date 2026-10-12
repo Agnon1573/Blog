@@ -46,6 +46,27 @@ hexo clean; hexo g
 - [ ] fontSize = `18px`（即 13.5pt）
 - [ ] padding 含 `28px 36px`
 
+### 3.1 目录侧边栏测试（视口 ≥1280px，EPA 文章）
+
+```js
+() => {
+  const panel = document.getElementById('panel-kn');
+  const toc = document.querySelector('#panel-kn > .toc');
+  const main = document.querySelector('#panel-kn > .epa-main');
+  return JSON.stringify({
+    patched: !!document.getElementById('epa-toc-sidebar'),
+    flex: getComputedStyle(panel).display === 'flex',
+    tocSticky: getComputedStyle(toc).position === 'sticky',
+    beside: main && main.getBoundingClientRect().x >= toc.getBoundingClientRect().right - 1
+  });
+}
+```
+
+- [ ] 四项全为 true
+- [ ] 滚动 4000px 后 TOC 仍固定在视口顶部（top≈12px）
+- [ ] tab 切换：切到"章节测试" panel-kn 隐藏，切回后 display 恢复 `flex`
+- [ ] 视口 <1280px：panel-kn display=`block`、toc position=`static`（回落 inline 目录）
+
 ## 4. 线上抽查（部署后）
 
 - [ ] 首页 https://agnon1573.github.io/Blog/ 正常列出文章

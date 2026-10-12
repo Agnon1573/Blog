@@ -356,6 +356,24 @@ pre, code { overflow-wrap: break-word; }
 @media print { #epa-tabs { position: static; display: none; } .tab-panel { display: block !important; } }
 
 </style>
+<style id="epa-toc-sidebar">
+[id] { scroll-margin-top: 14px; }
+@media (min-width: 1280px) {
+  body { max-width: 1200px; }
+  #panel-kn > h1:empty { display: none; }
+  #panel-kn.active { display: flex; gap: 28px; align-items: flex-start; }
+  #panel-kn > .toc {
+    position: sticky; top: 12px;
+    width: 258px; min-width: 258px; box-sizing: border-box;
+    max-height: calc(100vh - 24px); overflow-y: auto;
+    margin: 0;
+  }
+  #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
+  .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
+  .epa-main pre { max-width: 100%; overflow-x: auto; }
+  .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+}
+</style>
 </head>
 <body>
 
@@ -1122,6 +1140,25 @@ document.addEventListener('click', function(e){
   var btn = e.target.closest('#epa-tabs .tab-btn'); if(!btn) return;
   __epaSwitch(btn.getAttribute('data-tab'));
 });
+</script>
+<script id="epa-toc-sidebar-js">
+(function () {
+  try {
+    var panel = document.getElementById('panel-kn');
+    var toc = panel && panel.querySelector(':scope > .toc');
+    if (!panel || !toc || panel.querySelector(':scope > .epa-main')) return;
+    var main = document.createElement('div');
+    main.className = 'epa-main';
+    var node = toc.nextSibling, moved = false;
+    while (node) {
+      var next = node.nextSibling;
+      main.appendChild(node);
+      moved = true;
+      node = next;
+    }
+    if (moved) panel.appendChild(main);
+  } catch (e) {}
+})();
 </script>
 </body>
 </html>

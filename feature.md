@@ -18,6 +18,7 @@
 
 ## 样式（EPA 文章，CSS patch 已应用）
 
+- 目录侧边栏导航（≥1280px 宽屏）：`.toc` 通过 JS DOM 重排 + `#panel-kn.active { display: flex }` 变为左侧 258px sticky 侧栏（内部滚动、锚点偏移），内容并排 842px，body 加宽至 1200px；<1280px 自动回落为原 inline 目录（DOM 顺序不变）
 - 正文 max-width 1100px（原 860px）、padding 28px 36px
 - 字号 13.5pt（原 12pt）
 - 响应式断点：@media 1024px 平板（12pt、max-width 100%）；640px 手机（table 横向滚动、pre overflow-x auto）
