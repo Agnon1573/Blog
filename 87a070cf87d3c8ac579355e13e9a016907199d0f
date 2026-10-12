@@ -1,0 +1,19 @@
+rule.md
+  s_26e8c7a4f66c4c::t_7da451a73047bb 30-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "87a070cf87d3c8ac579355e13e9a016907199d0f",
+  "prompts": {},
+  "sessions": {
+    "s_26e8c7a4f66c4c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ed2119a53ffePZIzJYaQ4s4JjA",
+        "model": "unknown"
+      },
+      "human_author": "z00504240 <zhaoqiming@huawei.com>"
+    }
+  }
+}
