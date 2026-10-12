@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/Blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/Blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"agnon1573.github.io","root":"/Blog/","images":"/Blog/images","scheme":"Muse","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/Blog/js/config.js" defer></script>
+
+    <meta name="description" content="本章核心主题：时间序列预测算法、时间序列预测简介、传统时间序列预测方法、基于特征工程+机器学习的时间序列预测方法、基于深度学习的时间序列预测方法……。含完整知识清单（含必考&#x2F;重点&#x2F;高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第1章 时间序列预测算法">
+<meta property="og:url" content="https://agnon1573.github.io/Blog/2026/10/12/%E7%AC%AC1%E7%AB%A0-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="本章核心主题：时间序列预测算法、时间序列预测简介、传统时间序列预测方法、基于特征工程+机器学习的时间序列预测方法、基于深度学习的时间序列预测方法……。含完整知识清单（含必考&#x2F;重点&#x2F;高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-10-12T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-12T10:12:51.425Z">
+<meta property="article:author" content="Agnon1573">
+<meta property="article:tag" content="决策推理">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://agnon1573.github.io/Blog/2026/10/12/%E7%AC%AC1%E7%AB%A0-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B%E7%AE%97%E6%B3%95/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://agnon1573.github.io/Blog/2026/10/12/%E7%AC%AC1%E7%AB%A0-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B%E7%AE%97%E6%B3%95/","path":"2026/10/12/第1章-时间序列预测算法/","title":"第1章 时间序列预测算法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>第1章 时间序列预测算法 | 我的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+<script src="/Blog/js/utils.js" defer></script><script src="/Blog/js/motion.js" defer></script><script src="/Blog/js/sidebar.js" defer></script><script src="/Blog/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","display_overflow":"scroll","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"}}</script>
+<script src="/Blog/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/Blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/Blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录技术与生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/Blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/Blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/Blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/Blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/Blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#s77171517"><span class="nav-number">1.</span> <span class="nav-text">时间序列预测算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s28478421"><span class="nav-number">1.1.</span> <span class="nav-text">时间序列预测简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-1"><span class="nav-number">1.1.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-2"><span class="nav-number">1.1.2.</span> <span class="nav-text">时间序列分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-3"><span class="nav-number">1.1.3.</span> <span class="nav-text">时间序列平稳性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-4"><span class="nav-number">1.1.4.</span> <span class="nav-text">时间序列预测的评估方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-5"><span class="nav-number">1.1.5.</span> <span class="nav-text">时间序列预测的评价指标</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s39200640"><span class="nav-number">1.2.</span> <span class="nav-text">传统时间序列预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-6"><span class="nav-number">1.2.1.</span> <span class="nav-text">简单规则法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-7"><span class="nav-number">1.2.2.</span> <span class="nav-text">基于时间序列分解的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-8"><span class="nav-number">1.2.3.</span> <span class="nav-text">Facebook Prophet 时序预测算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-9"><span class="nav-number">1.2.4.</span> <span class="nav-text">基于经典统计学的方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s33880738"><span class="nav-number">1.3.</span> <span class="nav-text">基于特征工程+机器学习的时间序列预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-10"><span class="nav-number">1.3.1.</span> <span class="nav-text">基本思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-11"><span class="nav-number">1.3.2.</span> <span class="nav-text">时间序列特征工程常用特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-12"><span class="nav-number">1.3.3.</span> <span class="nav-text">交叉特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-13"><span class="nav-number">1.3.4.</span> <span class="nav-text">基于支持向量回归机的方法（SVR）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-14"><span class="nav-number">1.3.5.</span> <span class="nav-text">基于随机森林回归的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-15"><span class="nav-number">1.3.6.</span> <span class="nav-text">基于梯度提升回归树的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-16"><span class="nav-number">1.3.7.</span> <span class="nav-text">基于 Stacking&#x2F;Blending 集成学习的方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s64574688"><span class="nav-number">1.4.</span> <span class="nav-text">基于深度学习的时间序列预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-17"><span class="nav-number">1.4.1.</span> <span class="nav-text">基于循环神经网络的时间序列预测方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-18"><span class="nav-number">1.4.2.</span> <span class="nav-text">基于卷积神经网络的时间序列预测方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-19"><span class="nav-number">1.4.3.</span> <span class="nav-text">基于 Transformer 的时间序列预测方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-20"><span class="nav-number">1.4.4.</span> <span class="nav-text">基于图神经网络的时间序列预测方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s56215283"><span class="nav-number">2.</span> <span class="nav-text">基于树模型的回归方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s69259264"><span class="nav-number">2.1.</span> <span class="nav-text">基于随机森林回归的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s31581586"><span class="nav-number">2.2.</span> <span class="nav-text">基于梯度提升回归树的方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s27861572"><span class="nav-number">3.</span> <span class="nav-text">基于Stacking&#x2F;Blending集成学习的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s81723279"><span class="nav-number">3.1.</span> <span class="nav-text">Stacking集成学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s58138645"><span class="nav-number">3.2.</span> <span class="nav-text">Blending集成学习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s56162907"><span class="nav-number">4.</span> <span class="nav-text">循环神经网络（RNN）与LSTM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s28277372"><span class="nav-number">4.1.</span> <span class="nav-text">RNN基本概念 必考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s37429985"><span class="nav-number">4.2.</span> <span class="nav-text">传统RNN存在的问题 重点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s83973275"><span class="nav-number">4.3.</span> <span class="nav-text">长短期记忆（LSTM） 必考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s57812401"><span class="nav-number">5.</span> <span class="nav-text">基于卷积神经网络的时间序列预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s73749422"><span class="nav-number">5.1.</span> <span class="nav-text">CNN基本结构 重点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s25086805"><span class="nav-number">5.2.</span> <span class="nav-text">CNN在时序预测中的应用 高频</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s18226375"><span class="nav-number">6.</span> <span class="nav-text">基于Transformer的时间序列预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s35237112"><span class="nav-number">6.1.</span> <span class="nav-text">Encoder-Decoder 重点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s45842208"><span class="nav-number">6.2.</span> <span class="nav-text">Attention Model 必考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s57298168"><span class="nav-number">7.</span> <span class="nav-text">基于图神经网络的时间序列预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s54746624"><span class="nav-number">7.1.</span> <span class="nav-text">图神经网络（GNN） 了解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s47352668"><span class="nav-number">7.2.</span> <span class="nav-text">卷积图神经网络（GCN） 了解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s60110532"><span class="nav-number">7.3.</span> <span class="nav-text">T-GCN 了解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s54418684"><span class="nav-number">8.</span> <span class="nav-text">时间序列概率预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s58791005"><span class="nav-number">8.1.</span> <span class="nav-text">点预测+统计学习的方法——时间序列区间预测 重点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s46551853"><span class="nav-number">8.2.</span> <span class="nav-text">分位数损失函数法——时间序列分位数预测 必考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s22191562"><span class="nav-number">8.3.</span> <span class="nav-text">对数似然函数方法——时间序列概率分布预测 高频</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s55407648"><span class="nav-number">9.</span> <span class="nav-text">时间序列预测方法体系小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s11819994"><span class="nav-number">10.</span> <span class="nav-text">时间序列预测应用案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s55396270"><span class="nav-number">11.</span> <span class="nav-text">课程简介与目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s30850006"><span class="nav-number">12.</span> <span class="nav-text">1. 时间序列预测简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s70414105"><span class="nav-number">12.1.</span> <span class="nav-text">1.1 时间序列预测的基本概念 必考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s69820350"><span class="nav-number">12.2.</span> <span class="nav-text">时间序列（弱）平稳性 重点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s98032783"><span class="nav-number">12.3.</span> <span class="nav-text">时间序列（弱）平稳性检验方法 高频</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s70497038"><span class="nav-number">12.4.</span> <span class="nav-text">1.2 时间序列预测的挑战 了解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s44411942"><span class="nav-number">12.5.</span> <span class="nav-text">1.3 时间序列预测的评估方法 必考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s48315951"><span class="nav-number">13.</span> <span class="nav-text">2. 传统时间序列预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s91192287"><span class="nav-number">13.1.</span> <span class="nav-text">2.1 &amp; 2.2 简单规则法 了解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s51345381"><span class="nav-number">13.2.</span> <span class="nav-text">2.3 基于时间序列分解的方法 重点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s50599963"><span class="nav-number">13.3.</span> <span class="nav-text">2.4 基于经典统计学的方法 必考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s41473746"><span class="nav-number">14.</span> <span class="nav-text">3. 基于特征工程+机器学习的时间序列预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s62640335"><span class="nav-number">14.1.</span> <span class="nav-text">特征工程概述 重点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s43007126"><span class="nav-number">14.2.</span> <span class="nav-text">3.1 基于支持向量回归机（SVR）的时间序列预测方法 高频</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s33880738"><span class="nav-number">15.</span> <span class="nav-text">基于特征工程+机器学习的时间序列预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s86370881"><span class="nav-number">15.1.</span> <span class="nav-text">基于支持向量机回归机的时间序列预测方法 重点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s64474826"><span class="nav-number">15.2.</span> <span class="nav-text">基于随机森林回归的方法 高频</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s77008346"><span class="nav-number">15.3.</span> <span class="nav-text">基于梯度提升回归树的方法 必考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s40173289"><span class="nav-number">15.4.</span> <span class="nav-text">基于Stacking&#x2F;Blending集成学习的方法 重点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s64574688"><span class="nav-number">16.</span> <span class="nav-text">基于深度学习的时间序列预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s24531713"><span class="nav-number">16.1.</span> <span class="nav-text">基于循环神经网络的时间序列预测方法 必考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s17784478"><span class="nav-number">16.2.</span> <span class="nav-text">基于卷积神经网络的时间序列预测方法 高频</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s51786944"><span class="nav-number">16.3.</span> <span class="nav-text">基于Transformer的时间序列预测方法 重点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s88341069"><span class="nav-number">17.</span> <span class="nav-text">Global Attention 与 Local Attention</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s53682184"><span class="nav-number">18.</span> <span class="nav-text">Attention模型仍存在的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s13705982"><span class="nav-number">19.</span> <span class="nav-text">Attention函数的本质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s14104833"><span class="nav-number">20.</span> <span class="nav-text">Transformer网络结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s54201594"><span class="nav-number">20.1.</span> <span class="nav-text">核心特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s72312394"><span class="nav-number">20.2.</span> <span class="nav-text">Encoder结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s74370363"><span class="nav-number">20.3.</span> <span class="nav-text">Decoder结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s61053065"><span class="nav-number">20.4.</span> <span class="nav-text">Scaled Dot-Product Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s34430510"><span class="nav-number">20.5.</span> <span class="nav-text">Multi-Head Attention</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s38630476"><span class="nav-number">21.</span> <span class="nav-text">Transformer改进版</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s38096685"><span class="nav-number">21.1.</span> <span class="nav-text">Adversarial Sparse Transformer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s59920112"><span class="nav-number">21.2.</span> <span class="nav-text">Informer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s89659455"><span class="nav-number">22.</span> <span class="nav-text">电力变压器数据集（ETDataset）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s30992587"><span class="nav-number">22.1.</span> <span class="nav-text">数据列表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s57298168"><span class="nav-number">23.</span> <span class="nav-text">基于图神经网络的时间序列预测方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s11381011"><span class="nav-number">23.1.</span> <span class="nav-text">图的基础知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s10792881"><span class="nav-number">23.2.</span> <span class="nav-text">图神经网络（GNN）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s21763266"><span class="nav-number">23.3.</span> <span class="nav-text">将图与神经网络结合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s35729740"><span class="nav-number">23.4.</span> <span class="nav-text">图连接信息的利用与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s83916146"><span class="nav-number">24.</span> <span class="nav-text">图卷积神经网络 (GCN)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s11724533"><span class="nav-number">25.</span> <span class="nav-text">基于图神经网络的交通流量预测：T-GCN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s11500279"><span class="nav-number">26.</span> <span class="nav-text">事件分类与节假日预测模型 重点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s62432846"><span class="nav-number">27.</span> <span class="nav-text">6.2 时间序列预测案例——整网流量负载预测 必考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s40994366"><span class="nav-number">27.1.</span> <span class="nav-text">6.2.1 OBP立项关键竞争力指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s34324228"><span class="nav-number">27.2.</span> <span class="nav-text">6.2.2 数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s29565130"><span class="nav-number">27.3.</span> <span class="nav-text">6.2.3 算法评估指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s19625793"><span class="nav-number">27.4.</span> <span class="nav-text">6.2.4 现有技术与短板场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s83758253"><span class="nav-number">27.5.</span> <span class="nav-text">6.2.5 算法方案对比 高频</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s22955099"><span class="nav-number">27.6.</span> <span class="nav-text">6.2.6 实验对比与结果分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s38865638"><span class="nav-number">28.</span> <span class="nav-text">6.3 时间序列预测案例——新能源光伏发电功率预测 重点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s19854577"><span class="nav-number">28.1.</span> <span class="nav-text">收益产品与应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s74951109"><span class="nav-number">28.2.</span> <span class="nav-text">价值分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s79678453"><span class="nav-number">28.3.</span> <span class="nav-text">预测挑战与方案对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s47288088"><span class="nav-number">28.4.</span> <span class="nav-text">场景预测效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s68526578"><span class="nav-number">28.5.</span> <span class="nav-text">AI光储协同优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s18410490"><span class="nav-number">29.</span> <span class="nav-text">6.4 时间序列预测案例——微电网用电负荷预测 了解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s36870611"><span class="nav-number">29.1.</span> <span class="nav-text">背景概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s23346581"><span class="nav-number">29.2.</span> <span class="nav-text">技术沙盘（微电网EMS架构）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s29343238"><span class="nav-number">29.3.</span> <span class="nav-text">核心技术点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s15923775"><span class="nav-number">29.4.</span> <span class="nav-text">负荷预测方案与效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s12566718"><span class="nav-number">30.</span> <span class="nav-text">小结 了解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sec-auto-21"><span class="nav-number">31.</span> <span class="nav-text">章节测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sec-auto-22"><span class="nav-number">31.1.</span> <span class="nav-text">📋 AI批改任务已生成</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Agnon1573"
+      src="/Blog/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Agnon1573</p>
+  <div class="site-description" itemprop="description">一个基于 Hexo + NexT 的静态博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/Blog/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/Blog/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/Blog/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://agnon1573.github.io/Blog/2026/10/12/%E7%AC%AC1%E7%AB%A0-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/Blog/images/avatar.png">
+      <meta itemprop="name" content="Agnon1573">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+      <meta itemprop="description" content="一个基于 Hexo + NexT 的静态博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="第1章 时间序列预测算法 | 我的博客">
+      <meta itemprop="description" content="本章核心主题：时间序列预测算法、时间序列预测简介、传统时间序列预测方法、基于特征工程+机器学习的时间序列预测方法、基于深度学习的时间序列预测方法……。含完整知识清单（含必考&#x2F;重点&#x2F;高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第1章 时间序列预测算法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-10-12 12:00:00 / 修改时间：18:12:51" itemprop="dateCreated datePublished" datetime="2026-10-12T12:00:00+08:00">2026-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/Blog/categories/%E5%86%B3%E7%AD%96%E6%8E%A8%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">决策推理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">本章核心主题：时间序列预测算法、时间序列预测简介、传统时间序列预测方法、基于特征工程+机器学习的时间序列预测方法、基于深度学习的时间序列预测方法……。含完整知识清单（含必考/重点/高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+<div class="epa-summary">
+  <p>本章核心主题：时间序列预测算法、时间序列预测简介、传统时间序列预测方法、基于特征工程+机器学习的时间序列预测方法、基于深度学习的时间序列预测方法……。含完整知识清单（含必考/重点/高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。</p>
+</div>
+<span id="more"></span>
+<div class="epa-scope">
+<style>
+.epa-scope { --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px; }
+.epa-scope, .epa-scope * { box-sizing: border-box; }
+.epa-scope { font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 13.5pt; line-height: 1.75; color: var(--ink); padding: 28px 36px 60px;
+  background: var(--paper); }
+@media print {
+.epa-scope { font-size: 10.5pt; background: #fff; }
+.epa-scope .no-print { display: none !important; }
+.epa-scope h1, .epa-scope h2, .epa-scope h3 { page-break-after: avoid; }
+}
+.epa-scope #exampass-header { display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0; }
+.epa-scope .header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.epa-scope .header-url { font-size: 0.78em; color: #999; }
+.epa-scope .header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+.epa-scope h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+.epa-scope h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+.epa-scope h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+.epa-scope a { color: var(--accent); text-decoration: none; }
+.epa-scope a:hover { text-decoration: underline; }
+.epa-scope table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+.epa-scope td, .epa-scope th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+.epa-scope th { background: var(--paper-dark); font-weight: 700; }
+.epa-scope .kp { font-weight: 700; color: var(--ink); }
+.epa-scope .exp { font-weight: 400; color: var(--ink-light); }
+.epa-scope .exp em, .epa-scope .exp strong { color: var(--ink); }
+.epa-scope blockquote { border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em; }
+.epa-scope { --mono: "Cascadia Code", "JetBrains Mono", "Fira Code", "Source Code Pro",
+          Consolas, "SF Mono", Menlo, "DejaVu Sans Mono", monospace; }
+.epa-scope code { font-family: var(--mono);
+  background: #eee8d8; color: #8a4b1e;
+  padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+.epa-scope pre { font-family: var(--mono);
+  background: #2d2a26; color: #ece6da;
+  padding: 14px 16px; border-radius: var(--radius);
+  overflow-x: auto; line-height: 1.6; font-size: 0.9em;
+  border: 1px solid #3d3934; tab-size: 2; }
+.epa-scope pre code { background: none; color: inherit; padding: 0; font-size: 1em; border-radius: 0; }
+.epa-scope pre .kp, .epa-scope pre .exp { color: inherit; }
+.epa-scope mjx-container[display="true"] { max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden; }
+.epa-scope div.toc { background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px; }
+.epa-scope div.toc ul { padding-left: 18px; }
+.epa-scope div.toc li { margin: 3px 0; font-size: 0.95em; }
+.epa-scope .tag-must { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .tag-key { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .tag-freq { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .tag-info { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .checkpoint { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius);
+  padding: 10px 16px; margin: 18px 0;
+  font-size: 0.95em; }
+.epa-scope .checkpoint::before { content: '🧠 自测：';
+  font-weight: 700; color: #1e40af; }
+.epa-scope .checkpoint .cp-answer { margin-top: 10px; border-top: 1px dashed #bfdbfe; padding-top: 8px; }
+.epa-scope .checkpoint .cp-answer summary { cursor: pointer; color: #1e40af; font-weight: 600; user-select: none;
+  list-style: none; }
+.epa-scope .checkpoint .cp-answer summary::before { content: '💡 '; }
+.epa-scope .checkpoint .cp-answer summary::-webkit-details-marker { display: none; }
+.epa-scope .checkpoint .cp-answer[open] summary { margin-bottom: 6px; }
+.epa-scope .checkpoint .cp-answer ol, .epa-scope .checkpoint .cp-answer p { font-weight: 400; color: var(--ink); }
+.epa-scope .tldr { background: #fefce8; border-left: 3px solid #eab308;
+  padding: 8px 14px; margin: 10px 0;
+  font-weight: 600; font-size: 0.95em; }
+.epa-scope pre { overflow-x: auto; }
+.epa-scope pre, .epa-scope code { overflow-wrap: break-word; }
+@media (max-width: 1024px) {
+.epa-scope {  padding: 20px 16px 48px; font-size: 12pt; }
+.epa-scope table { font-size: 0.95em; }
+}
+@media (max-width: 640px) {
+.epa-scope {  padding: 12px 10px 40px; font-size: 11pt; }
+.epa-scope h1 { font-size: 1.3em; }
+.epa-scope h2 { font-size: 1.12em; }
+.epa-scope table { font-size: 0.85em; display: block; overflow-x: auto; }
+.epa-scope td, .epa-scope th { padding: 4px 6px; }
+.epa-scope pre { font-size: 0.85em; padding: 6px; }
+}
+@media (max-width: 400px) {
+.epa-scope { padding: 8px 6px 32px; font-size: 10.5pt; }
+}
+.epa-scope #score-box { display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border); }
+.epa-scope #score-box .score-num { font-size: 2.2em; font-weight: 700; }
+.epa-scope #score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+.epa-scope .q-card { background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s; }
+.epa-scope .q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.epa-scope .q-card.wrong { border-left: 3px solid var(--wrong); background: #fef9f9; }
+.epa-scope .q-num { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.epa-scope .q-text { margin-bottom: 8px; font-size: 0.98em; }
+.epa-scope .option { display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5; }
+.epa-scope .option:hover { background: #f0ede0; }
+.epa-scope .option input { margin-right: 6px; }
+.epa-scope .option.selected { border-color: var(--accent); background: #eff6ff; }
+.epa-scope .option.correct-answer { border-color: var(--correct); background: var(--correct-bg); }
+.epa-scope .option.wrong-answer { border-color: var(--wrong); background: var(--wrong-bg); }
+.epa-scope .q-textarea { width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical; }
+.epa-scope .q-textarea:focus { outline: none; border-color: var(--accent); }
+.epa-scope .q-code { font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 0.88em; line-height: 1.5; background: #1e1e2e; color: #e0e0e0;
+  tab-size: 4; white-space: pre; }
+.epa-scope .q-code:focus { border-color: var(--accent); }
+.epa-scope .badge-partial { background: #fef3c7; color: #92400e; }
+.epa-scope .q-card.partial { border-color: #f59e0b; }
+.epa-scope .result { display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6; }
+.epa-scope .result .badge { display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px; }
+.epa-scope .badge-ok { background: var(--correct-bg); color: #166534; }
+.epa-scope .badge-no { background: var(--wrong-bg); color: #991b1b; }
+.epa-scope .badge-ref { background: #dbeafe; color: #1e40af; }
+.epa-scope .result .explanation { margin-top: 4px; color: var(--ink); }
+.epa-scope .result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+.epa-scope .grading-bar { text-align: center; margin: 20px 0; }
+.epa-scope .grading-bar button { font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px; }
+.epa-scope .grading-bar button:hover { background: var(--accent-hover); }
+.epa-scope .grading-bar button:disabled { background: #bbb; cursor: not-allowed; }
+.epa-scope .fill-input { border: 1px solid var(--card-border); border-radius: 3px;
+  padding: 2px 8px; font-family: inherit; font-size: 0.95em;
+  background: #fefcf5; width: 140px; vertical-align: middle;
+  transition: border-color .12s; }
+.epa-scope .fill-input:focus { outline: none; border-color: var(--accent); }
+.epa-scope .fill-input.fill-ok { border-color: var(--correct); background: var(--correct-bg); }
+.epa-scope .fill-input.fill-no { border-color: var(--wrong); background: var(--wrong-bg); }
+.epa-scope .fill-blank-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+.epa-scope .fill-blank-row .fill-input { flex: 1; min-width: 0; width: auto; }
+.epa-scope .fill-tag { font-weight: 600; font-size: 0.9em; color: var(--ink-light); white-space: nowrap; }
+.epa-scope .paste-img-wrap { margin-top: 6px; position: relative; display: inline-block; max-width: 100%; }
+.epa-scope .paste-img-wrap img { max-width: 100%; max-height: 240px; border-radius: 4px;
+  border: 1px solid var(--divider); display: block; }
+.epa-scope .paste-img-remove { position: absolute; top: 3px; right: 3px; width: 20px; height: 20px;
+  background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 50%;
+  cursor: pointer; font-size: 12px; line-height: 20px; text-align: center; padding: 0; }
+.epa-scope .save-bar { text-align: center; margin: 10px 0 4px; }
+.epa-scope .save-bar button { font-size: 0.95em; padding: 7px 22px; background: #7c5ccc;
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; }
+.epa-scope .save-bar button:hover { background: #6748b4; }
+.epa-scope #epa-grade-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.62);
+  z-index: 9998; align-items: center; justify-content: center; }
+.epa-scope #epa-grade-modal.open { display: flex; }
+.epa-scope .epa-grade-dialog { background: #fff; border-radius: 10px; padding: 24px 28px; max-width: 560px;
+  width: 90vw; box-shadow: 0 8px 32px rgba(0,0,0,0.22); }
+.epa-scope .epa-grade-dialog h3 { margin: 0 0 10px; font-size: 1.1em; }
+.epa-scope .epa-grade-dialog p { color: var(--ink-light); font-size: 0.93em; margin: 0 0 12px; line-height: 1.6; }
+.epa-scope .epa-grade-cmd { background: #1e1e2e; color: #e0e0e0; border-radius: 6px; padding: 10px 14px;
+  font-family: "Consolas","Monaco","Courier New",monospace; font-size: 0.88em;
+  word-break: break-all; margin-bottom: 12px; user-select: all; white-space: pre-wrap; }
+.epa-scope .epa-grade-dialog-btns { display: flex; gap: 10px; justify-content: flex-end; }
+.epa-scope .epa-grade-dialog-btns button { padding: 7px 18px; border-radius: 6px; border: none; cursor: pointer;
+  font-size: 0.93em; font-weight: 600; }
+.epa-scope .btn-copy { background: var(--accent); color: #fff; }
+.epa-scope .btn-copy:hover { background: var(--accent-hover); }
+.epa-scope .btn-close-modal { background: #e5e5e5; color: var(--ink); }
+.epa-scope .btn-close-modal:hover { background: #d5d5d5; }
+.epa-scope #epa-tabs { position: sticky; top: 4px; z-index: 1000;
+  display: flex; gap: 0; justify-content: center; margin: 6px auto 22px;
+  max-width: 520px; border: 1px solid var(--divider); border-radius: 10px; overflow: hidden;
+  background: var(--paper); box-shadow: 0 2px 10px rgba(0,0,0,0.10); }
+.epa-scope #epa-tabs .tab-btn { flex: 1; padding: 10px 18px; cursor: pointer; border: none;
+  background: var(--paper-dark); color: var(--ink-light); font-size: 1.02em; font-weight: 600;
+  font-family: inherit; transition: background .15s, color .15s; }
+.epa-scope #epa-tabs .tab-btn + .tab-btn { border-left: 1px solid var(--divider); }
+.epa-scope #epa-tabs .tab-btn.active { background: var(--accent); color: #fff; }
+.epa-scope #epa-tabs .tab-btn:not(.active):hover { background: #efe7d3; color: var(--ink); }
+.epa-scope .tab-panel { display: none; }
+.epa-scope .tab-panel.active { display: block; }
+.epa-scope #panel-test { max-width: 980px; margin: 0 auto; }
+.epa-scope .kn-rail { top: 60px; max-height: calc(100vh - 74px); }
+@media print {
+.epa-scope #epa-tabs { position: static; display: none; }
+.epa-scope .tab-panel { display: block !important; }
+}
+</style>
+<style>
+.epa-scope [id] { scroll-margin-top: 14px; }
+.epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
+.epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
+.epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+</style>
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><div class="epa-main">
+<h2 id="s77171517">时间序列预测算法</h2>
+
+<h3 id="s28478421">时间序列预测简介</h3>
+
+<h4 id="sec-auto-1">基本概念</h4>
+<p><span class="kp">时间序列</span>：指按照时间先后顺序排列的数据序列。</p>
+<p><span class="kp">时间序列预测</span>：指根据历史时间序列数据提取规律、特征，建立模型对该序列未来变化趋势进行预测的过程，也即时间序列回归预测，可分为单步预测或者多步预测。</p>
+
+<h4 id="sec-auto-2">时间序列分解</h4>
+<p>一个时间序列一般可以分解为由趋势项、季节项、残差项等成分：</p>
+<ul>
+<li><span class="kp">趋势项</span>：指时间序列在较长一段时间内呈现出来的持续向上或者持续向下的变动。</li>
+<li><span class="kp">季节项</span>：指时间序列在一年内重复出现的周期性波动，如气候条件、生产条件、节假日等。</li>
+<li><span class="kp">残差项</span>：也称为不规则波动，指除去趋势、季节性、周期性外的随机波动。</li>
+</ul>
+
+<h4 id="sec-auto-3">时间序列平稳性</h4>
+<p><span class="kp">时间序列（弱）平稳</span>：序列中任意时刻数据的期望、方差和协方差不随时间而变。并不是所有的时间序列都是可预测的，而当一个时间序列的变化特征维持稳定，数据的历史分布和未来分布就会趋于一致，这时我们就可以根据历史数据对未来作出预测。</p>
+<blockquote>易错：“不是弱平稳的时间序列无法进行时间序列预测”该说法是错误的。</blockquote>
+<p><span class="kp">时间序列（弱）平稳性检验方法</span>：当一个时间序列的滞后算子多项式方程存在单位根时，我们认为该时间序列是非平稳的；反之，当该方程不存在单位根时，我们认为该时间序列是平稳的。常见的单位根检验方法有DF检验、ADF检验和PP检验。<span class="tag-key">重点</span></p>
+
+<h4 id="sec-auto-4">时间序列预测的评估方法</h4>
+<p><span class="kp">数据集划分</span>：时间序列的数据集划分为训练集和测试集时，要确保测试集的时间戳要晚于训练集时间戳，否则容易数据泄露和无法实际应用。</p>
+<p><span class="kp">划分方法</span>：常见方法有简单划分方法和时间序列K-Fold交叉验证划分方法。</p>
+
+<h4 id="sec-auto-5">时间序列预测的评价指标</h4>
+
+<p><span class="tag-must">必考</span> <strong>点预测评价指标</strong></p>
+<ul>
+<li><span class="kp">预测偏差</span>：$e_{T+h}=y_{T+h}-\hat{y}_{T+h|T}$</li>
+<li><span class="kp">平均绝对误差（MAE）</span>：$\mathrm{MAE}=\operatorname{mean}\left(\left|e_{t}\right|\right)$</li>
+<li><span class="kp">均方根误差（RMSE）</span>：$\mathrm{RMSE}=\sqrt{\operatorname{mean}\left(e_{t}^{2}\right)}$</li>
+<li><span class="kp">绝对百分比误差（APE）</span>：$APE_{t}=100\left|y_{t}-\hat{y}_{t}\right| / y_{t}$</li>
+<li><span class="kp">平均绝对百分比误差（MAPE）</span>：$\mathrm{MAPE}=\operatorname{mean}\left(APE_{t}\right)$</li>
+<li><span class="kp">分位数绝对百分比误差</span>：$APE_{p}=\operatorname{quantile}_{p}(APE)$，比如95%的绝对百分比误差小于10%。</li>
+<li><span class="kp">对称平均绝对百分比误差</span>：$\mathrm{sMAPE}=\operatorname{mean}\left(200\left|y_{t}-\hat{y}_{t}\right| /\left(y_{t}+\hat{y}_{t}\right)\right)$</li>
+</ul>
+
+<p><span class="tag-freq">高频</span> <strong>概率预测评价指标</strong></p>
+<ul>
+<li><span class="kp">分位数预测</span>：未来t时刻的p分位数 $f_{p, t}$</li>
+<li><span class="kp">分位数预测偏差</span>：
+$$Q_{p, t}=\left\{\begin{array}{ll}2(1-p)\left(f_{p, t}-y_{t}\right), & \text { if } y_{t}&lt;f_{p, t} \\ 2 p\left(y_{t}-f_{p, t}\right), & \text { if } y_{t} \geq f_{p, t}\end{array}\right.$$</li>
+<li><span class="kp">区间预测</span>：未来t时刻的 $100(1-\alpha) \%$ 置信度的区间 $\left[\ell_{\alpha, t}, u_{\alpha, t}\right]$</li>
+<li><span class="kp">区间预测偏差</span>：
+$$W_{\alpha, t}=\left\{\begin{array}{ll}\left(u_{\alpha, t}-\ell_{\alpha, t}\right)+\frac{2}{\alpha}\left(\ell_{\alpha, t}-y_{t}\right) & \text { if } y_{t}<\ell_{\alpha, t} \\ \left(u_{\alpha, t}-\ell_{\alpha, t}\right) & \text { if } \ell_{\alpha, t} \leq y_{t} \leq u_{\alpha, t} \\ \left(u_{\alpha, t}-\ell_{\alpha, t}\right)+\frac{2}{\alpha}\left(y_{t}-u_{\alpha, t}\right) & \text { if } y_{t}>u_{\alpha, t} \end{array}\right.$$</li>
+</ul>
+
+<h3 id="s39200640">传统时间序列预测方法</h3>
+
+<h4 id="sec-auto-6">简单规则法</h4>
+<p>包括朴素预测法、简单平均法。</p>
+<ul>
+<li><strong>优点</strong>：在较少数据的情况下即可进行预测。</li>
+<li><strong>缺点</strong>：预测精度不高。</li>
+</ul>
+
+<h4 id="sec-auto-7">基于时间序列分解的方法</h4>
+<p>对时间序列进行分解后，若发现分解时序项存在明显的可预测性，可以通过对分解时序项分别预测，然后再组合各预测分项即可获得原始时间序列的预测。一个时间序列往往由长期趋势（Trend，T）、季节性、随机波动组成，部分场景下可能包含相对季节性更细粒度的周期性。</p>
+<ul>
+<li><span class="kp">加法模型</span>：$Y_{t}=T_{t}+S_{t}+C_{t}+I_{t}$</li>
+<li><span class="kp">乘法模型</span>：$Y_{t}=T_{t} \times S_{t} \times C_{t} \times I_{t}$</li>
+</ul>
+
+<h4 id="sec-auto-8">Facebook Prophet 时序预测算法</h4>
+<p><span class="kp">Prophet</span>针对一维时间序列进行建模，将时间序列分为趋势、季节、节日三部分特征，是自动特征提取的线性回归模型。适用于少特征、规律性高、单维度的时间序列场景，同时能够考虑外部特征数据。</p>
+<p>$$y(t)=g(t)+s(t)+h(t)+\epsilon_{t}$$</p>
+<p>其中，$g(t)$为趋势项，$s(t)$为季节项，$h(t)$为节日项，$\epsilon_{t}$为随机项。</p>
+
+<h4 id="sec-auto-9">基于经典统计学的方法</h4>
+
+<p><span class="tag-key">重点</span> <strong>指数平滑</strong></p>
+<p>预测值使用加权平均值进行计算，其中权重随观测时间的久远程度呈指数型下降——最早的观察值被赋予最小的权值。</p>
+
+<p><strong>Holt-Winters 季节性方法</strong></p>
+<p>Holt（1957）和 Winters（1960）将Holt方法进行拓展用来捕获季节因素，包括预测方差和三个平滑方程（一个用于水平，一个用于趋势，另一个用于季节性分量）。</p>
+
+<p><span class="tag-must">必考</span> <strong>ARIMA 类预测算法</strong></p>
+<p>ARIMA模型旨在描绘数据的自回归性，其包括AR、MA、ARMA、ARIMA、SARIMA、SARIMAX等多种成分和变种。</p>
+<ul>
+<li><span class="kp">自回归模型 AR(p)</span>：基于目标变量历史数据的组合对目标变量进行预测。
+$$y_t = c + \phi_1 y_{t-1} + \phi_2 y_{t-2} + \cdots + \phi_p y_{t-p} + \varepsilon_t$$</li>
+<li><span class="kp">移动平均模型 MA(q)</span>：利用历史预测误差来建立一个类似回归的模型。
+$$y_t = c + \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t-2} + \cdots + \theta_q \varepsilon_{t-q}$$</li>
+<li><span class="kp">非季节性 ARIMA(p,d,q)</span>：将差分自回归模型以及移动平均模型结合起来（p-自回归模型，d-差分模型，q-移动平均模型）。
+$$y_t' = c + \phi_1 y_{t-1}' + \cdots + \phi_p y_{t-p}' + \theta_1 \varepsilon_{t-1} + \cdots + \theta_q \varepsilon_{t-q} + \varepsilon_t$$</li>
+<li><span class="kp">季节性 SARIMA(p,d,q,s,P,D,Q)</span>：在ARIMA模型多项式中引入了季节性的项。
+$$y_t = u_t + \eta_t$$
+$$\phi_p(L) \tilde{\phi}_P(L^s) \Delta^d \Delta_s^D u_t = A(t) + \theta_q(L) \tilde{\theta}_Q(L^s) \zeta_t$$</li>
+<li><span class="kp">带外生变量的季节性 SARIMAX</span>：在SARIMA模型多项式中引入外生变量的影响。
+$$y_t = \beta_t x_t + u_t$$
+$$\phi_p(L) \tilde{\phi}_P(L^s) \Delta^d \Delta_s^D u_t = A(t) + \theta_q(L) \tilde{\theta}_Q(L^s) \zeta_t$$</li>
+</ul>
+
+<h3 id="s33880738">基于特征工程+机器学习的时间序列预测方法</h3>
+
+<h4 id="sec-auto-10">基本思路</h4>
+<p>基于时间序列的特征工程，可将时间序列预测问题转化为回归预测问题，然后采用机器学习回归算法解决。</p>
+
+<h4 id="sec-auto-11">时间序列特征工程常用特征</h4>
+<p>日期时间特征、节假日特征、滞后特征、滑窗/扩展窗特征、同期值特征、交叉特征、业务域特征。</p>
+
+<h4 id="sec-auto-12">交叉特征</h4>
+<ul>
+<li><span class="kp">类别特征间组合</span>：构成新特征，比如星期和小时组合为 `Mon_10`（星期一的十点）。</li>
+<li><span class="kp">类别特征和连续特征</span>：
+<ol>
+<li>连续特征分桶后进行笛卡尔积；</li>
+<li>基于类别特征进行 groupby 操作构造的统计特征。</li>
+</ol>
+</li>
+<li><span class="kp">连续特征和连续特征</span>：
+<ol>
+<li>同比和环比（一阶差分）；</li>
+<li>二阶差分：反应变化趋势；</li>
+<li>比值。</li>
+</ol>
+</li>
+</ul>
+
+<h4 id="sec-auto-13">基于支持向量回归机的方法（SVR）</h4>
+<p><span class="kp">支持向量机回归算法（SVR）</span>是一种常见的多元拟合算法，也可以用于时间序列预测。</p>
+<p><strong>基本原理</strong>：给定容忍偏差 $\varepsilon$，给定训练集 $\{(x_1, y_1), (x_2, y_2), \cdots, (x_m, y_m)\}$，希望学习到拟合模型 $f(x) = w^T x + b$，使训练集中所有样本点尽可能在 $f(x) \pm \varepsilon$ 的间隔带内。</p>
+<p><strong>Loss 定义</strong>：对于带内样本点，误差在容忍范围内，无需统计loss；对于带外样本点，误差需要扣除容忍偏差 $\varepsilon$。
+$$loss = \min_w \frac{1}{2} \|w\|^2 + C \sum_{i=1}^m L_\varepsilon(f(x_i) - y_i)$$
+其中：
+$$L_\varepsilon(z) = \begin{cases} 0, & |z| \le \varepsilon \\ |z| - \varepsilon, & \text{otherwise} \end{cases}$$</p>
+<p><strong>支持向量</strong>：支持向量是离分隔超平面最近的那些点。超平面方程为 $w^T x + b = 0$，间隔 $\gamma = \frac{2}{\|w\|}$。</p>
+<p><strong>支持向量回归机求解</strong>：通过引入松弛变量和损失函数最小化问题求解，得到支持向量机回归（SVR）解模型：
+$$f(x) = \sum_{i=1}^{n} (\alpha_i - \alpha_i^*) x_i^T x + b$$
+其中，$x_i$为训练样本的向量，$x_i^T$为训练样本向量的转置，$\alpha_i - \alpha_i^*$为训练样本的系数，$b$为偏置（以上参数根据训练集计算得到）。</p>
+<ul>
+<li>对于 $x_i$ 间隔带内的样本，$\alpha_i - \alpha_i^* = 0$；</li>
+<li>对于 $x_i$ 间隔带外的样本，$\alpha_i - \alpha_i^* \neq 0$，这些样本称为支持向量（即支持向量是训练集的子集）。</li>
+</ul>
+<p><strong>支持向量回归机核化</strong>：SVR解模型只应用到 $x$ 空间中，即 $x, y$ 在该空间中线性相关。根据 $x, y$ 内在联系的不同，也可以将 $x_i^T x$ 替换为其它核函数，即 $x, y$ 在其它特征空间中实现线性相关。常见核函数如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>表达式</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>线性核</td>
+<td>$x_i^T x$</td>
+<td>无</td>
+</tr>
+<tr>
+<td>多项式核</td>
+<td>$(x_i^T x)^d$</td>
+<td>$d \geq 1$为多项式的次数</td>
+</tr>
+<tr>
+<td>高斯核</td>
+<td>$\exp\left(-\frac{\|x - x_i\|^2}{2\sigma^2}\right)$</td>
+<td>$\sigma > 0$为高斯核的带宽</td>
+</tr>
+<tr>
+<td>拉普拉斯核</td>
+<td>$\exp\left(-\frac{\|x - x_i\|}{\sigma}\right)$</td>
+<td>$\sigma > 0$</td>
+</tr>
+<tr>
+<td>Sigmoid核</td>
+<td>$\tanh(\beta x_i^T x + \theta)$</td>
+<td>$\tanh$为双曲正切函数，$\beta > 0, \theta < 0$</td>
+</tr>
+</tbody>
+</table>
+<blockquote>易错：核函数选择是SVR的最大变数，若核函数选择不当，则样本可能映射到不合适的特征空间，很可能导致性能不佳。</blockquote>
+
+<h4 id="sec-auto-14">基于随机森林回归的方法</h4>
+<p><span class="kp">随机森林回归算法</span>是决策树回归的组合算法，将许多回归决策树组合到一起，以降低过拟合的风险，是一种典型的 <span class="kp">bagging 集成算法</span>。</p>
+<p>随机森林构建过程主要有两类随机：</p>
+<ol>
+<li>在随机森林的每棵树构建时的样本都是由训练集经过<strong>有放回抽样</strong>（即 bootstrap sample，自助式采样法）得来的，采样包括对<strong>样本</strong>和<strong>特征</strong>的随机采样。</li>
+<li>在构建树的过程中进行结点分割时，选择的分割点是所有特征的最佳分割点，或特征的大小为 `max_features` 的随机子集的最佳分割。</li>
+</ol>
+<p><strong>优点</strong>：算法简单、易于并行执行、可以减小预测方差。<br><strong>缺点</strong>：可解释性差、模型计算量大。</p>
+
+<h4 id="sec-auto-15">基于梯度提升回归树的方法</h4>
+<p><span class="kp">梯度提升回归树</span>是<strong>弱预测模型的集成</strong>，如采用典型的决策树作为弱预测模型，这时则为梯度提升树（GBT或GBDT），用于解决回归问题。像其他提升方法一样，它以分阶段的方式构建模型，但它通过允许对任意可微分损失函数进行优化作为对一般提升方法的推广，应用广泛。</p>
+<p>常见梯度提升回归树算法有：GBDT、XGBoost、LightGBM、CatBoost。</p>
+<div class="tldr">在数据量和计算机配置够的情况下，CatBoost 是精度最好的梯度提升算法开源框架。</div>
+
+<h4 id="sec-auto-16">基于 Stacking/Blending 集成学习的方法</h4>
+<p><span class="kp">Stacking 和 Blending 模型</span>都是一种<strong>层次模型集成框架</strong>。与 bagging 和 boosting 方法不同（后两者建立在相同算法（通常是CART）的基本模型上），Stacking 和 Blending 的<strong>基础模型和元模型可以是任何机器学习算法</strong>，如决策树、随机森林、支持向量机等。</p>
+
+<p><strong>Stacking 集成学习</strong>：Stacking 模型通过结合各种分类器或回归器来提高建模精度。最简单的堆叠模型通常包含2个层次：</p>
+<ul>
+<li><strong>第一层</strong>：由基本模型组成，依靠不同种类的算法从原始数据集中学习生成元特征数据集。</li>
+<li><strong>第二层</strong>：元学习器，应用元特征数据集学习获得最终结果。第二层模型可以实现对第一层模型的线性或者非线性映射学习，比多模型结果平均方法可以进一步提升模型精度。</li>
+</ul>
+<p><strong>关键要点</strong>：</p>
+<ul>
+<li>Stacking 集成时，第二层模型的训练是在第一层模型的 <strong>K-Folder 交叉验证</strong>的元特征上学习训练的。</li>
+<li><strong>优点</strong>：保证了所有训练集数据参与模型训练。</li>
+<li><strong>缺点</strong>：训练计算量大。</li>
+<li><strong>两个阶段</strong>：① 在训练集上训练多个基础模型；② 将基础模型的预测结果作为新的特征输入到一个元模型中进行训练和预测。</li>
+</ul>
+
+<p><strong>Blending 集成学习</strong>：Blending 集成时，第二层模型的训练是在第一层模型通过 <strong>leave-out 方法</strong>留出一部分训练数据集（通常为10%或20%）作为验证集的元特征上学习训练的。</p>
+<p><strong>关键要点</strong>：</p>
+<ul>
+<li><strong>优点</strong>：比传统 Stacking 模型简单、计算快。</li>
+<li><strong>缺点</strong>：非全部训练集参与第一层模型训练。</li>
+<li><strong>三个阶段</strong>：① 在训练集上将数据分成两部分，一部分用于训练多个基础模型，另一部分作为新的验证集；② 将基础模型在验证集上的预测结果作为新的特征输入到一个元模型中进行训练和预测；③ 在测试集上使用基础模型和元模型进行预测。</li>
+</ul>
+
+<h3 id="s64574688">基于深度学习的时间序列预测方法</h3>
+
+<h4 id="sec-auto-17">基于循环神经网络的时间序列预测方法</h4>
+
+<p><span class="kp">循环神经网络（RNN）</span>，该算法是一种常见的神经网络类算法，常用于序列预测。</p>
+<ul>
+<li>RNN 由传统全连接神经网络演化而来，主要变化点为隐含层中引入了<strong>前一时刻的隐含层信息</strong>，该改进有效地处理了序列中输入的前后联系。</li>
+<li>当用于时间序列预测时，RNN 的输入输出相同，但输出提前一帧，即<strong>当前帧+前期积累信息→下一帧</strong>。</li>
+</ul>
+<p><strong>传统 RNN 存在的问题：</strong></p>
+<ol>
+<li>传统 RNN 中，当前帧输出值只跟当前帧输入值、前一帧隐含层相关；显然，RNN 只有<strong>短期记忆能力</strong>，无法处理较长的输入序列。</li>
+<li>由于 RNN 的递归结构，训练过程中容易出现<strong>梯度消失和梯度爆炸</strong>，从而导致模型训练困难。</li>
+</ol>
+
+<p><span class="kp">长短期记忆（LSTM）</span>该算法是传统 RNN 的一种改进。</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>状态位</th>
+<th>记忆能力</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传统 RNN</td>
+<td>仅状态位 H</td>
+<td>前后帧之间只能传递<strong>短期记忆</strong></td>
+</tr>
+<tr>
+<td>LSTM</td>
+<td>状态位 H、C</td>
+<td>前后帧之间既能传递<strong>短期记忆</strong>，又能传递<strong>长期记忆</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>优势</strong>：能够有选择性地保留、遗忘部分信息，能够处理有效的长期信息。</p>
+<p><strong>缺点</strong>：能够缓解梯度消失和梯度爆炸，但网络结构更为复杂，待训练参数增加，导致复杂度上升。由于递归迭代的网络结构，难以通过并行化实现效率提升（RNN 类算法通病）。</p>
+
+<h4 id="sec-auto-18">基于卷积神经网络的时间序列预测方法</h4>
+<p><span class="kp">卷积神经网络（CNN）</span>，该算法是一种常见的神经网络类算法，常用于二维数据（如图像）处理与分析。</p>
+<p>CNN 一般由<strong>卷积层</strong>和<strong>池化层</strong>交错叠加，并在最后拼接<strong>全连接层</strong>而成，其中：</p>
+<ul>
+<li><span class="kp">卷积层</span>：将卷积算子在输入矩阵中滑动卷积，依次计算卷积和形成新矩阵。</li>
+<li><span class="kp">池化层</span>：在输入矩阵中滑动小窗，并在小窗内求最大值或其它池化操作，形成新矩阵。</li>
+<li><span class="kp">全连接层</span>：将输入矩阵一维化，并以全连接的方式映射到下一层。</li>
+</ul>
+<p>CNN 也可以用于时间序列预测，一般需要将一维的时间序列二维化，例如：将历史数据按天、周等周期切段后拼接在一起形成“图像”。</p>
+<p><strong>相对于 RNN，CNN 的主要优势在于：</strong></p>
+<ol>
+<li><span class="kp">平移不变性</span>，在特征提取时不会破坏信号频谱。</li>
+<li>能够较好地处理信号的历史同比信息。</li>
+<li>方便通过<strong>并行化</strong>提升训练、推理效率。</li>
+</ol>
+
+<h4 id="sec-auto-19">基于 Transformer 的时间序列预测方法</h4>
+
+<p><span class="kp">Encoder-Decoder</span> 之间唯一的联系是一个<strong>固定长度的语境向量</strong>，Encoder 要将整个序列的信息压缩进一个固定长度的向量中。这样做存在两个弊端：</p>
+<ol>
+<li>语境向量可能无法完全表示整个序列的信息。</li>
+<li>先输入到网络的内容携带的信息会被后输入的信息覆盖掉，<strong>输入序列越长，这个现象就越严重</strong>。</li>
+</ol>
+
+<p><span class="kp">Attention Model</span>：Attention 机制是一种能够学习输入序列间、输出序列间的关联关系的机制。</p>
+<p>Attention model 虽然解决了输入序列仅有一个 context vector 的缺点，但依旧存在问题：</p>
+<ol>
+<li>Context Vector 计算的是输入序列、目标状态的关联，却<strong>忽略了输入序列间的关联</strong>，和目标序列间的关联性。</li>
+<li>不管是 Seq2seq 或是 Attention model，其中使用的都是 RNN，RNN 的缺点就是<strong>无法并行化</strong>处理，导致模型训练的时间很长。</li>
+<li>仍然无法解决序列间长距离的依赖性。</li>
+</ol>
+
+<h4 id="sec-auto-20">基于图神经网络的时间序列预测方法</h4>
+
+<p><span class="kp">图神经网络（GNN）</span>可以对图上所有属性（节点、边、全局信息）进行优化变化，同时保持住图的对称信息。使用<strong>信息传递的框架</strong>，输入是图，输出也是图。</p>
+<p>GNN 的输入包含以下几个部分：顶点信息、边信息、全局信息、顶点之间的连接信息。</p>
+<p><strong>GNN 网络的优化</strong>：消息传递 + 全局变量。</p>
+
+<p><span class="kp">卷积图神经网络（GCN）</span>是一个多层的图卷积神经网络，每一个卷积层仅处理<strong>一阶邻域信息</strong>，通过叠加若干卷积层可以实现<strong>多阶邻域的信息传递</strong>。</p>
+
+<p><span class="kp">T-GCN</span>：两层 GCN 捕获<strong>空间依赖关系</strong>，Gated GRU 获取<strong>时间相关性</strong>。</p>
+
+<h2 id="s56215283">基于树模型的回归方法</h2>
+
+<h3 id="s69259264">基于随机森林回归的方法</h3>
+<p>随机森林回归算法是决策树回归的组合算法，将许多回归决策树组合到一起，以降低过拟合的风险，是一种典型的Bagging集成算法。</p>
+<p><strong>构建过程的两类随机性：</strong></p>
+<ol>
+<li>在随机森林的每棵树构建时的样本都是由训练集经过有放回抽样（如Bootstrap sample 自助式采样法）得来的，采样包括对样本和特征的随机采样。</li>
+<li>在构建树的过程中进行结点分割时，选择的分割点是所有特征的最佳分割点，或特征大小为 `max_features` 的随机子集的最佳分割点。</li>
+</ol>
+<p><strong>原理分析：</strong></p>
+<ul>
+<li>单个决策树通常表现出很高的方差，并且往往会过拟合。</li>
+<li>在森林中引入随机性产生的决策树具有一定的解耦预测误差。</li>
+<li>通过取这些预测的平均值，可以抵消掉一些误差。随机森林通过结合不同预测来减少方差，有时以增加一点偏差为代价。</li>
+<li>在现实中，方差减少通常是值得关注的，因此产生了一个整体更好的模型。</li>
+</ul>
+<p><strong>优缺点：</strong></p>
+<ul>
+<li><strong>优点</strong>：算法简单、易于并行执行、可以减小预测方差。</li>
+<li><strong>缺点</strong>：可解释性差、模型计算量大。</li>
+</ul>
+
+<h3 id="s31581586">基于梯度提升回归树的方法</h3>
+<p>梯度提升回归树是弱预测模型的集成，如采用典型的决策树作为弱预测模型，这时则为梯度提升树（GBT或GBDT），用于解决回归问题。像其他提升方法一样，它以分阶段的方式构建模型，但它通过允许对任意可微分损失函数进行优化作为对一般提升方法的推广，应用广泛。</p>
+<p><strong>常见算法：</strong> GBDT、XGBoost、LightGBM和CatBoost等。整体来说，在数据量和计算机配置足够的情况下，CatBoost是精度最好的梯度提升算法开源框架。</p>
+<p><strong>模型结构与预测过程：</strong></p>
+<p>输入：
+$$
+\left[\begin{array}{c} x \text { predictors } \\ y \text { target } \end{array}\right]
+$$</p>
+<p>回归树迭代过程：
+$$
+\begin{aligned}
+& \left[x_{i}, y-\hat{y}^{(0)}\right] \rightarrow\left[x_{i}, y-\hat{y}^{(1)}\right] \rightarrow \cdots \rightarrow\left[x_{i}, y-\hat{y}^{(T-1)}\right] \\
+& f_{1}\left(x ; \Theta_{1}\right) \quad f_{2}\left(x ; \Theta_{2}\right) \quad f_{T}\left(x ; \Theta_{T}\right) \\
+& \hat{y}^{(0)}+v f_{1}\left(x ; \Theta_{1}\right) \quad \hat{y}^{(1)}+v f_{2}\left(x ; \Theta_{2}\right) \quad \hat{y}^{(T-1)}+v f_{T}\left(x ; \Theta_{T}\right)
+\end{aligned}
+$$</p>
+<p>模型预测：$\hat{y}^{(0)}=0 \rightarrow \hat{y}^{(1)} \rightarrow \hat{y}^{(2)} \rightarrow \cdots \rightarrow \hat{y}^{(T)}$</p>
+
+<h2 id="s27861572">基于Stacking/Blending集成学习的方法</h2>
+<p>Stacking和Blending模型都是一种层次模型集成框架，与Bagging和Boosting方法不同（后两者建立在相同算法通常是CART的基本模型上）。Stacking和Blending的基础模型和元模型可以是任何机器学习算法，如决策树、随机森林、支持向量机等。</p>
+
+<h3 id="s81723279">Stacking集成学习</h3>
+<p>Stacking模型通过结合各种分类器或回归器来提高建模精度。最简单的堆叠模型通常包含2个层次：由基本模型组成的第一层和包含元学习器的第二层。第一层的基本模型依靠不同种类的算法从原始数据集中学习生成元特征数据集，第二层元学习器应用元特征数据集学习获得最终结果。第二层模型可以实现对第一层模型的线性或非线性映射学习，比多模型结果平均方法可以进一步提升模型精度。</p>
+<ul>
+<li><strong>机制</strong>：第二层模型的训练是在第一层模型的k-fold交叉验证的元特征上学习训练的。</li>
+<li><strong>优点</strong>：保证了所有训练集数据参与模型训练。</li>
+<li><strong>缺点</strong>：训练计算量大。</li>
+<li><strong>阶段</strong>：首先在训练集上训练多个基础模型，然后将基础模型的预测结果作为新的特征输入到一个元模型中进行训练和预测。</li>
+</ul>
+
+<h3 id="s58138645">Blending集成学习</h3>
+<ul>
+<li><strong>机制</strong>：第二层模型的训练是在第一层模型通过hold-out方法留出一部分训练数据集（通常为10%或20%）作为验证集的元特征上学习训练的
+
+<h2 id="s56162907">循环神经网络（RNN）与LSTM</h2>
+<h3 id="s28277372">RNN基本概念 <span class="tag-must">必考</span></h3>
+<p><span class="kp">循环神经网络</span>是一种常见的神经网络类算法，常用于序列预测。RNN由传统全连接神经网络演化而来，主要变化点为隐含层中引入了前一时刻的隐含层信息，该改进有效地处理了序列中输入的前后联系。当用于时间序列预测时，RNN的输入输出相同，但输出提前一帧，即"当前帧 + 前期积累信息 → 下一帧"。</p>
+<h3 id="s37429985">传统RNN存在的问题 <span class="tag-key">重点</span></h3>
+<p>当前帧输出值只跟当前帧输入值、前一帧隐含层相关，显然RNN只有短期记忆能力，无法处理较长的输入序列。由于RNN的递归结构，训练过程中容易出现<span class="kp">梯度消失和梯度爆炸</span>，从而导致模型训练困难。</p>
+<h3 id="s83973275">长短期记忆（LSTM） <span class="tag-must">必考</span></h3>
+<p><span class="kp">长短期记忆</span>是对传统RNN的一种改进。传统RNN中只包含状态位 $H$，前后帧之间只能传递短期记忆；LSTM中包含状态位 $H$ 和 $C$，前后帧之间既能传递短期记忆，又能传递长期记忆。</p>
+<p>$C$ 变化缓慢 $\longrightarrow$ $C^t$ 是在 $C^{t-1}$ 基础上增加某些信息；$H$ 变化较快 $\longrightarrow$ $H^t$ 和 $H^{t-1}$ 可能差异很大。</p>
+<div class="tldr">LSTM优缺点：优势是能够有选择性地保留、遗忘部分信息，能够处理有效的长期信息；缺点是能够缓解梯度消失和梯度爆炸，但网络结构更为复杂，待训练参数增加，导致复杂度上升；由于递归迭代的网络结构，难以通过并行化实现效率提升（RNN类算法通病）。</div>
+<blockquote>易错：LSTM只能缓解梯度消失和梯度爆炸，并不能完全解决；且RNN类算法由于递归结构均难以并行化。</blockquote>
+<div class="checkpoint">LSTM中状态位C和H的区别是什么？<details class="cp-answer"><summary>参考答案</summary>C变化缓慢，传递长期记忆；H变化较快，传递短期记忆。</details></div>
+
+<h2 id="s57812401">基于卷积神经网络的时间序列预测方法</h2>
+<h3 id="s73749422">CNN基本结构 <span class="tag-key">重点</span></h3>
+<p><span class="kp">卷积神经网络</span>常用于二维数据处理与分析。一般由卷积层和池化层交错叠加，并在最后拼接全连接层而成：</p>
+<p><span class="kp">卷积层</span>：将卷积算子在输入矩阵中滑动卷积，依次计算卷积和形成新矩阵。<br>
+<span class="kp">池化层</span>：在输入矩阵中滑动小窗，并在小窗内求最大值或其它池化操作，形成新矩阵。<br>
+<span class="kp">全连接层</span>：将输入矩阵一维化，并以全连接的方式映射到下一层。</p>
+<h3 id="s25086805">CNN在时序预测中的应用 <span class="tag-freq">高频</span></h3>
+<p>CNN用于时间序列预测，一般需要将一维的时间序列二维化，例如将历史数据按天、周等周期切段后拼接在一起形成"图像"。</p>
+<div class="tldr">CNN相对于RNN的主要优势：平移不变性，在特征提取时不会破坏信号频谱；能够较好地处理信号的历史同比信息；方便通过并行化提升训练、推理效率。</div>
+
+<h2 id="s18226375">基于Transformer的时间序列预测方法</h2>
+<h3 id="s35237112">Encoder-Decoder <span class="tag-key">重点</span></h3>
+<p>Encoder-Decoder之间唯一的联系是一个固定长度的<span class="kp">语境向量</span>，Encoder要将整个序列的信息压缩进一个固定长度的向量中。</p>
+<blockquote>易错：固定长度的语境向量存在两个弊端：1. 可能无法完全表示整个序列的信息；2. 先输入的内容携带的信息会被后输入的信息覆盖掉，输入序列越长，现象越严重。</blockquote>
+<h3 id="s45842208">Attention Model <span class="tag-must">必考</span></h3>
+<p><span class="kp">Attention机制</span>是一种能够学习输入序列间、输出序列间的关联关系的机制。虽然Attention model解决了输入序列仅有一个Context Vector的缺点，但依旧存在问题：</p>
+<p>Context Vector计算的是输入序列、目标状态的关联，却忽略了输入序列间的关联和目标序列间的关联性；不管是Seq2Seq或是Attention model，其中使用的都是RNN，RNN的缺点就是无法并行化处理，导致模型训练的时间很长；仍然无法解决序列间长距离的依赖性。</p>
+
+<h2 id="s57298168">基于图神经网络的时间序列预测方法</h2>
+<h3 id="s54746624">图神经网络（GNN） <span class="tag-info">了解</span></h3>
+<p><span class="kp">图神经网络</span>可以对图上所有属性（节点、边、全局信息）进行优化变化，同时保持住图的对称信息。使用信息传递的框架，输入是图，输出也是图。GNN的输入包含：顶点信息、边信息、全局信息、顶点之间的连接信息。GNN网络的优化通常涉及消息传递机制和全局变量的引入。</p>
+<h3 id="s47352668">卷积图神经网络（GCN） <span class="tag-info">了解</span></h3>
+<p><span class="kp">GCN</span>是一个多层的图卷积神经网络，每一个卷积层仅处理一阶邻域信息，通过叠加若干卷积层可以实现多阶邻域的信息传递。</p>
+<h3 id="s60110532">T-GCN <span class="tag-info">了解</span></h3>
+<p>两层GCN捕获空间依赖关系；Gated GRU获取时间相关性。</p>
+
+<h2 id="s54418684">时间序列概率预测方法</h2>
+<h3 id="s58791005">点预测+统计学习的方法——时间序列区间预测 <span class="tag-key">重点</span></h3>
+<p>基于训练或者验证集误差的区间估计法：首先建立时间序列预测的点预测模型，然后假设误差服从正态分布，估计出置信度对应的误差的上下限，再把它们加入到时间序列点预测的值或者序列中，即获得了时间序列的区间预测。</p>
+<h3 id="s46551853">分位数损失函数法——时间序列分位数预测 <span class="tag-must">必考</span></h3>
+<p><span class="kp">分位数损失函数</span>法通过设定不同的分位数q来获取预测区间：</p>
+<p>q=0.95：预测值尽可能大于真实值，预测区间的上限。<br>
+q=0.5：退化为 MAE（平均绝对误差）。<br>
+q=0.05：预测值尽可能小于真实值，预测区间的下限。</p>
+<blockquote>易错：GBDT 也可以使用分位数损失函数，像 LightGBM 和 XGBoost 的 objective 里面也都有 quantile 这个选项，也都可以输出区间预测。</blockquote>
+<h3 id="s22191562">对数似然函数方法——时间序列概率分布预测 <span class="tag-freq">高频</span></h3>
+<p>首先指定一个预测值服从的概率分布（如正态分布），然后使用神经网络模型分别预测这个概率分布的参数（比如正态分布就是预测其均值和方差），接着构造<span class="kp">对数似然函数</span>作为损失函数，优化这个损失函数就可以得到概率分布的参数，最后就可以得到预测时每一步的概率分布。得到了概率分布，就可以通过<span class="kp">蒙特卡洛采样</span>的方式来生成预测值和区间预测。</p>
+
+<h2 id="s55407648">时间序列预测方法体系小结</h2>
+<table>
+<tr><th>方法类别</th><th>代表方法</th><th>优点</th><th>缺点</th></tr>
+<tr><td>传统统计方法</td><td>简单规则法、时间序列分解、指数平滑、Holt-Winters、ARIMA类</td><td>模型简单、计算快、可解释性好、容易外推、少量数据即可</td><td>模型表达能力弱、泛化性能差</td></tr>
+<tr><td>机器学习方法</td><td>特征工程+SVR/随机森林/GBDT、Stacking/Blending集成</td><td>模型表达能力强、可以引入很多种影响因子、精度高、鲁棒性好</td><td>特征工程耗时耗力，依赖专家经验，外推能力弱</td></tr>
+<tr><td>深度学习方法</td><td>RNN/LSTM、CNN、Transformer、GNN/GCN/T-GCN</td><td>不需要复杂的特征工程、模型表达能力强、端到端训练、支持定制化loss函数</td><td>需要大量数据，数据量不足时效果不好</td></tr>
+<tr><td>概率预测方法</td><td>区间估计、分位数回归、概率分布预测（对数似然）</td><td>—</td><td>—</td></tr>
+</table>
+
+<h2 id="s11819994">时间序列预测应用案例</h2>
+<p>基于深度学习方法的<span class="kp">时空流量预测</span>案例；基于改进 ARIMA 的<span class="kp">整网流量负载</span>案例；基于特征工程+机器学习方法的<span class="kp">新能源光功率预测</span>案例；基于特征工程+机器学习方法的<span class="kp">微电网用电负荷预测</span>案例。</p>
+
+<h2 id="s55396270">课程简介与目标</h2>
+<p>本课程首先介绍了时间序列预测的基本概念、挑战和预测效果的评估方法，然后深入讲解了包括传统时间序列预测方法、基于特征工程+机器学习的方法、深度学习端到端的时序预测方法、时间序列概率预测方法等时间序列预测的基本原理和常用方法，最后以华为公司业务中典型时间序列预测应用案例分析为结尾。</p>
+<div class="tldr">培训目标：掌握时间序列预测的基本概念、预测效果的评估方法和指标；掌握时间序列预测的基本原理和常用方法；能够根据业务需求和数据特点，选用合适预测方法和评估指标，解决实际业务问题。</div>
+
+<h2 id="s30850006">1. 时间序列预测简介</h2>
+<h3 id="s70414105">1.1 时间序列预测的基本概念 <span class="tag-must">必考</span></h3>
+<p><span class="kp">时间序列</span>：是指按照时间先后顺序排列的数据序列。<span class="kp">时序预测</span>：是指根据历史时间序列数据提取规律、特征，建立模型对该序列未来变化趋势进行预测的过程，也即时间序列回归预测，可分为单步预测或者多步预测。</p>
+<p>一个时间序列一般可以分解为由趋势项、季节项、残差项等成分：<br>
+<span class="kp">趋势项</span>：指时间序列在较长一段时间内呈现出来的持续向上或者持续向下的变动；<br>
+<span class="kp">季节项</span>：指时间序列在一年内重复出现的周期性波动；<br>
+<span class="kp">残差项</span>：也称为不规则波动，指除去趋势、季节性、周期性外的随机波动。只含有随机波动的序列也称为平稳序列。</p>
+<h3 id="s69820350">时间序列（弱）平稳性 <span class="tag-key">重点</span></h3>
+<p><span class="kp">时间序列（弱）平稳</span>：序列中任意时刻数据的期望、方差和协方差不随时间而变。当一个时间序列的变化特征维持稳定，数据的历史分布和未来分布就会趋于一致，这时我们就可以根据历史数据对未来作出预测。</p>
+<h3 id="s98032783">时间序列（弱）平稳性检验方法 <span class="tag-freq">高频</span></h3>
+<p>当一个时间序列的滞后算子多项式方程存在<span class="kp">单位根</span>时，我们认为该时间序列是非平稳的；反之，当该方程不存在单位根时，我们认为该时间序列是平稳的。常见的单位根检验方法有：DF检验、ADF检验和PP检验。</p>
+<h3 id="s70497038">1.2 时间序列预测的挑战 <span class="tag-info">了解</span></h3>
+<p>时间序列具有连续性、随机性以及周期性。考虑到不同领域差异性，存在以下一系列挑战：不同领域时间序列复杂度、影响因素、时间粒度差异巨大；数据多寡和完整性差异巨大；消耗的资源和时间容忍度差异巨大；可预测性差异性大；期望预测精度差异巨大；数据漂移现象；人才稀缺。</p>
+<h3 id="s44411942">1.3 时间序列预测的评估方法 <span class="tag-must">必考</span></h3>
+<p>时间序列的数据集划分为训练集和测试集时，要确保测试集的时间戳要晚于训练集时间戳，否则容易数据泄露和无法实际应用。常见方法包括简单划分方法和时间序列k-folder交叉验证划分方法。</p>
+<p>常用点预测评价指标包括：预测偏差、平均绝对误差（MAE）、均方根误差（RMSE）、绝对百分比误差（APE）、平均绝对百分比误差（MAPE）、分位数绝对百分比误差、对称平均绝对百分比误差。</p>
+<p>常用概率预测评价指标包括：分位数预测偏差、区间预测偏差。</p>
+<blockquote>易错：时间序列划分数据集时，测试集的时间戳必须晚于训练集时间戳，不能随机打乱。</blockquote>
+
+<h2 id="s48315951">2. 传统时间序列预测方法</h2>
+<h3 id="s91192287">2.1 & 2.2 简单规则法 <span class="tag-info">了解</span></h3>
+<p>朴素预测法：$y_{t+1} = y_t$，将前一天的曲线平移一个周期作为预测曲线。求平均预测法：$y_{t+1} = \text{过去一段时间} y \text{的均值}$，将过去n天同期数据求平均作为预测曲线。</p>
+<h3 id="s51345381">2.3 基于时间序列分解的方法 <span class="tag-key">重点</span></h3>
+<p>时间序列往往由长期趋势、季节性、随机波动、周期性组成。可以通过两类主要模型形成时间序列：<br>
+<span class="kp">加法模型</span>：$Y_t = T_t + S_t + C_t + I_t$<br>
+<span class="kp">乘法模型</span>：$Y_t = T_t \times S_t \times C_t \times I_t$</p>
+<p><span class="kp">Facebook Prophet时序预测算法</span>：针对一维时间序列进行建模，将时间序列分为趋势、季节、节日三部分特征，是一种自动特征提取的线性回归模型。公式为：$y(t) = g(t) + s(t) + h(t) + \varepsilon_t$。</p>
+<h3 id="s50599963">2.4 基于经典统计学的方法 <span class="tag-must">必考</span></h3>
+<p><span class="kp">简单的指数平滑</span>：预测值使用加权平均值进行计算，其中权重随观测时间的久远程度呈指数型下降。</p>
+<p><span class="kp">Holt-Winters季节性方法</span>：将Holt方法进行拓展用来捕获季节因素，包括预测方差和三个平滑方程（一个用于水平，一个用于趋势，另一个用于季节性分量）。</p>
+<p><span class="kp">ARIMA类预测算法</span>：旨在描绘数据的自回归性，其包括AR、MA、ARIMA、SARIMA、SARIMAX等多种成分和变种。<br>
+自回归模型 AR(p)：基于目标变量历史数据的组合对目标变量进行预测。<br>
+移动平均模型 MA(q)：利用历史预测误差来建立一个类似回归的模型。<br>
+非季节性 ARIMA(p,d,q)：将差分、自回归模型以及移动平均模型结合起来。<br>
+季节性 SARIMA(p,d,q,s,P,D,Q)：在ARIMA模型多项式中引入季节性的项。<br>
+带外生变量的季节性 SARIMAX：在SARIMA模型多项式中引入外生变量的影响。</p>
+
+<h2 id="s41473746">3. 基于特征工程+机器学习的时间序列预测方法</h2>
+<h3 id="s62640335">特征工程概述 <span class="tag-key">重点</span></h3>
+<p>基于时间序列的特征工程，可将时间序列预测问题转化为回归预测问题，然后采用机器学习回归算法解决。输入特征主要包括：日期时间相关特征、滞后特征、滑窗/扩展窗特征、同期值特征、交叉特征、业务域特征、节假日特征。</p>
+<h3 id="s43007126">3.1 基于支持向量回归机（SVR）的时间序列预测方法 <span class="tag-freq">高频</span></h3>
+<p><span class="kp">支持向量机回归机（SVR）</span>是一种常见的多元拟合算法。给定容忍偏差 $\epsilon$，希望学习到拟合模型 $f(\mathbf{x}) = \mathbf{w}^T\mathbf{x} + b$，使训练集中所有样本点尽可能在 $f(\mathbf{x}) \pm \epsilon$ 的间隔带内。</p>
+<p>SVR损失函数定义：对于间隔带内的样本点，误差在容忍范围内，无需统计loss；对于间隔带外的样本点，误差需要扣除容忍偏差 $\epsilon$。优化目标为：$\min_{\mathbf{w}, b} \frac{1}{2}\|\mathbf{w}\|^2 + C\sum_{i=1}^{m} l_\epsilon(f(\mathbf{x}_i) - y_i)$。</p>
+
+<h2 id="s33880738">基于特征工程+机器学习的时间序列预测方法</h2>
+
+<h3 id="s86370881">基于支持向量机回归机的时间序列预测方法 <span class="tag-key">重点</span></h3>
+<p>SVR通过引入拉格朗日函数对loss函数最小化问题求解，得到SVR解模型：$$f(\mathbf{x}) = \sum_{i=1}^{m} (\hat{\alpha}_i - \alpha_i) \mathbf{x}_i^T \mathbf{x} + b$$。其中，$\mathbf{x}$ 为待预测样本的特征向量，$\mathbf{x}_i$ 为训练集样本的特征向量；$\hat{\alpha}_i - \alpha_i$ 为各训练集样本的系数，$b$ 为截距。</p>
+<p>对于 $\epsilon$-间隔带内样本，$\hat{\alpha}_i - \alpha_i = 0$；对于 $\epsilon$-间隔带外样本，$\hat{\alpha}_i - \alpha_i \neq 0$，这些样本称为<span class="kp">支持向量</span>（即支持向量是训练集的子集）。</p>
+<p>SVR解模型将 $\mathbf{x}$ 投影到 $\mathbf{x}_i^T\mathbf{x}$ 空间中，使 $\mathbf{x}$-$y$ 在该空间中线性相关。根据 $\mathbf{x}$-$y$ 内在联系的不同，也可以将 $\mathbf{x}_i^T\mathbf{x}$ 替换为其它<span class="kp">核函数</span>，使 $\mathbf{x}$-$y$ 在其它特征空间中实现线性相关。常见核函数包括：线性核、多项式核、高斯核、拉普拉斯核、Sigmoid核。</p>
+<blockquote>易错：核函数选择是SVR的最大变数，若核函数选择不当，则样本可能映射到不合适的特征空间，很可能导致性能不佳。</blockquote>
+<div class="tldr">核心要点：SVR的解仅依赖于支持向量（间隔带外样本），通过核函数可以将数据映射到高维特征空间实现线性回归。</div>
+<div class="checkpoint">SVR中的支持向量是指什么？<details class="cp-answer"><summary>参考答案</summary>支持向量是指位于 $\epsilon$-间隔带外的训练集样本，它们的系数 $\hat{\alpha}_i - \alpha_i \neq 0$，是决定SVR模型的关键样本。</details></div>
+
+<h3 id="s64474826">基于随机森林回归的方法 <span class="tag-freq">高频</span></h3>
+<p>随机森林回归算法是决策树回归的组合算法，将许多回归决策树组合到一起，以降低过拟合的风险，是一种典型的<span class="kp">Bagging集成算法</span>。</p>
+<p>随机森林构建过程主要有两类随机：</p>
+<p>1. <span class="kp">样本随机采样</span>：在随机森林的每棵树构建时的样本都是由训练集经过有放回抽样（如 Bootstrap Sample 自助式采样法）得来的，采样包括对样本和特征的随机采样。</p>
+<p>2. <span class="kp">特征随机选择</span>：在构建树的过程中进行结点分割时，选择的分割点是所有特征的最佳分割点，或特征的大小为 max_features 的随机子集的最佳分割。</p>
+<p>单个决策树通常表现出很高的方差并且往往会过拟合。在森林中注入随机性产生的决策树具有一定的解耦预测误差。通过取这些预测的平均值，可以抵消掉一些误差。随机森林通过组合不同的树来减少方差，有时以增加一点点偏差为代价。</p>
+<div class="tldr">核心要点：随机森林通过样本随机采样和特征随机选择构建多棵决策树，并通过平均预测结果来降低方差，减少过拟合风险。</div>
+<div class="checkpoint">随机森林构建过程中的两类随机是什么？<details class="cp-answer"><summary>参考答案</summary>样本随机采样（有放回抽样）和特征随机选择（节点分割时选择随机子集）。</details></div>
+
+<h3 id="s77008346">基于梯度提升回归树的方法 <span class="tag-must">必考</span></h3>
+<p>梯度提升回归树是弱预测模型的集成，如采用典型的决策树作为弱预测模型，这时则为<span class="kp">梯度提升树（GBT或GBDT）</span>，用于解决回归问题。它以分阶段的方式构建模型，通过允许对任意可微分损失函数进行优化，作为对一般提升方法的推广。</p>
+<p>常见梯度提升回归树算法有：GBDT、XGBoost、LightGBM、CatBoost等。</p>
+<p>模型预测过程：ŷ⁽⁰⁾ = 0 → ŷ⁽¹⁾ → ŷ⁽²⁾ → … → ŷ⁽ᵀ⁾。每一棵树拟合前一棵树的残差。</p>
+<div class="tldr">核心要点：在数据量和计算机配置足够的情况下，CatBoost是精度最好的梯度提升算法开源框架。</div>
+
+<h3 id="s40173289">基于Stacking/Blending集成学习的方法 <span class="tag-key">重点</span></h3>
+<p>Stacking和Blending模型都是一种层次模型集成框架，与Bagging和Boosting方法不同，它们建立在相同算法（通常是CART）的基本模型上。</p>
+<p><span class="kp">Stacking模型</span>最简单的堆叠模型通常包含2个层次：第一层由基本模型组成，依靠不同种类的算法从原始数据集中学习生成元特征数据集；第二层包含元学习器，应用元特征数据集学习获得最终结果。第二层模型的训练是在第一层模型的 k-fold交叉验证 的元特征上学习训练的。优点是保证了所有训练集数据参与模型训练，缺点是训练计算量大。</p>
+<p><span class="kp">Blending集成</span>第二层模型的训练是在第一层模型的通过 leave-out方法 留出一部分训练数据集（通常为10%或20%）作为验证集的元特征上学习训练的。优点是比传统Stacking模型简单、计算快，缺点是非全部训练集参与第一层模型训练。</p>
+<div class="tldr">核心要点：Stacking使用k-fold交叉验证生成元特征，Blending使用留出法生成元特征。</div>
+<div class="checkpoint">Stacking和Blending在生成第二层训练数据时有何区别？<details class="cp-answer"><summary>参考答案</summary>Stacking使用第一层模型的k-fold交叉验证的元特征，而Blending使用leave-out方法留出部分训练数据作为验证集的元特征。</details></div>
+
+<h2 id="s64574688">基于深度学习的时间序列预测方法</h2>
+
+<h3 id="s24531713">基于循环神经网络的时间序列预测方法 <span class="tag-must">必考</span></h3>
+<p><span class="kp">循环神经网络（RNN）</span>由传统全连接神经网络演化而来，主要变化点为隐含层中引入了前一时刻的隐含层信息，该改进有效地处理了序列中输入的前后联系。当用于时间序列预测时，RNN的输入输出相同，但输出提前一帧，即：当前帧 + 前期积累信息 → 下一帧。</p>
+<p>RNN计算公式：$$H_t = f(U \cdot X_t + W \cdot H_{t-1})$$，$$Y_t = g(V \cdot H_t)$$。其中：U、W、V为待训练参数。</p>
+<p>传统RNN存在的问题：当前帧输出值只跟当前帧输入值、前一帧隐含层相关，只有短期记忆能力，无法处理较长的输入序列。由于RNN的递归结构，训练过程中容易出现<span class="kp">梯度消失和梯度爆炸</span>，从而导致模型训练困难。</p>
+<p><span class="kp">LSTM（长短期记忆网络）</span>是传统RNN的一种改进。传统RNN中只包含状态位H，前后帧之间只能传递短期记忆。LSTM中包含状态位H和C，前后帧之间既能传递短期记忆，又能传递长期记忆。C变化缓慢，H变化较快。</p>
+<p>LSTM网络模型底层是 z, zᵢ, z_f, z_o 四个状态位：</p>
+<p>- <span class="kp">z_f 为遗忘门控</span>：控制长期记忆状态位 c_(t-1) 中哪些信息需要被遗忘。</p>
+<p>- <span class="kp">zᵢ 为记忆门控</span>：控制当前输入 x_t 和前一帧状态位 h_(t-1) 中哪些信息需要被记忆。</p>
+<p>- <span class="kp">z_o 为输出门控</span>：控制哪些信息需要被输出到状态位 h_t 和 y_t。</p>
+<p>LSTM上层主要根据这四个状态位更新状态位 h_t 和 c_t，并形成网络输出 y_t。</p>
+<div class="tldr">核心要点：LSTM通过引入遗忘门、记忆门和输出门，能够有选择性地保留、遗忘部分信息，处理有效的长期信息，缓解了梯度消失和梯度爆炸问题。</div>
+<blockquote>易错：LSTM能够缓解梯度消失和梯度爆炸，但网络结构更为复杂，待训练参数增加；且由于递归迭代的网络结构，难以通过并行化实现效率提升（RNN类算法通病）。</blockquote>
+<div class="checkpoint">LSTM中的三个门控分别是什么？各自的作用是什么？<details class="cp-answer"><summary>参考答案</summary>三个门控是遗忘门控（控制长期记忆的遗忘）、记忆门控（控制当前输入和前一帧状态的记忆）、输出门控（控制输出到状态位和网络输出的信息）。</details></div>
+
+<h3 id="s17784478">基于卷积神经网络的时间序列预测方法 <span class="tag-freq">高频</span></h3>
+<p><span class="kp">卷积神经网络（CNN）</span>一般由卷积层和池化层交错叠加，并在最后拼接全连接层而成。卷积层将卷积算子在输入矩阵中滑动卷积，依次计算卷积和形成新矩阵；池化层在输入矩阵中滑动小窗，并在小窗内求最大值或其它池化操作，形成新矩阵；全连接层将输入矩阵一维化，并以全连接的方式映射到下一层。</p>
+<p>CNN也可以用于时间序列预测，一般需要将一维的时间序列二维化。例如，将历史数据按天、周等周期切段后拼接在一起形成"图像"。</p>
+<p>相对于RNN，CNN的主要优势在于：</p>
+<p>1. <span class="kp">平移不变性</span>：在特征提取时不会破坏信号频谱。</p>
+<p>2. <span class="kp">周期性信息提取</span>：能够较好地处理信号的历史同比信息。</p>
+<p>3. <span class="kp">并行化效率高</span>：方便通过并行化提升训练、推理效率。</p>
+<p>CNN时间序列预测流程：历史数据按周期切段，拼接后形成"图像" → 输入CNN进行特征提取 → 结合辅助信息，输出预测结果（长期预测）。一般CNN迭代流程包含水平通道和垂直通道的特征提取，并结合辅助信息进行预测。</p>
+<div class="tldr">核心要点：CNN用于时间序列预测时需将一维数据二维化，其优势在于平移不变性、周期性信息提取和并行化效率高。</div>
+
+<h3 id="s51786944">基于Transformer的时间序列预测方法 <span class="tag-key">重点</span></h3>
+<p>传统Seq2Seq模型中，Encoder-Decoder之间唯一的联系是一个固定长度的<span class="kp">语境向量</span>。Encoder要将整个序列的信息压缩进一个固定长度的向量中，存在两个弊端：</p>
+<p>1. 语境向量可能无法完全表示整个序列的信息。</p>
+<p>2. 先输入到网络的内容携带的信息会被后输入的信息覆盖掉，输入序列越长，这个现象就越严重。</p>
+<p>深度学习中的<span class="kp">Attention机制</span>借鉴了人类的注意力思维方式。人类视觉能够在众多干扰信息中专注于某些需要重点关注的目标区域，然后对这一区域投入更多的注意力资源，以获取更多所需要关注目标的细节信息。</p>
+<div class="tldr">核心要点：传统Seq2Seq模型受限于固定长度的语境向量，Attention机制通过动态分配注意力资源解决了长序列信息丢失和覆盖的问题。</div>
+<div class="checkpoint">传统Seq2Seq模型使用固定长度语境向量存在哪些弊端？<details class="cp-answer"><summary>参考答案</summary>1. 语境向量可能无法完全表示整个序列的信息；2. 先输入的信息容易被后输入的信息覆盖，输入序列越长现象越严重。</details></div>
+
+<h2 id="s88341069">Global Attention 与 Local Attention</h2>
+<p><span class="kp">Global Attention</span>：计算目标状态与所有输入序列状态的关联，得到全局对齐权重。</p>
+<p><span class="kp">Local Attention</span>：计算目标状态与局部输入序列状态的关联，得到局部对齐权重和位置。</p>
+<p>相关公式：</p>
+<p>$$\tilde{h}_t = \tanh(W_c[h_t, c_t])$$</p>
+<p>$$c_t = \sum_{i=1}^n \alpha_{t,i} \overline{h_i}$$</p>
+<p>$$\alpha_{t,i} = \text{align}(y_t, x_i) = \frac{\exp(score(h_t, \overline{h_i}))}{\sum_{j=1}^n \exp(score(h_t, \overline{h_j}))}$$</p>
+
+<h2 id="s53682184">Attention模型仍存在的问题</h2>
+<p>Attention model虽然解决了输入序列仅有一个context vector的缺点，但依旧存在问题：</p>
+<p>1. <span class="kp">关联信息缺失</span>：Context Vector计算的是输入序列、目标状态的关联，却忽略了输入序列间的关联，以及目标序列间的关联性。</p>
+<p>2. <span class="kp">无法并行化</span>：不管是Seq2seq或是Attention model，其中使用的都是RNN，RNN的缺点就是无法并行化处理，导致模型训练的时间很长。</p>
+<p>3. <span class="kp">长距离依赖问题</span>：仍然无法解决序列间长距离的依赖性。</p>
+<div class="tldr">Attention模型虽然解决了单一上下文向量问题，但仍存在关联信息缺失、无法并行化和长距离依赖问题。</div>
+
+<h2 id="s13705982">Attention函数的本质</h2>
+<p>Attention函数的本质可以被描述为一个查询（<span class="kp">Query</span>）到一系列（键<span class="kp">Key</span>-值<span class="kp">Value</span>）对的映射。给定Target中的某个元素Query，通过计算Query和各个Key的相似性或者相关性，得到每个Key对应Value的权重系数，然后对Value进行加权求和，即得到了最终的Attention数值。</p>
+<p>$$\text{Attention}(Query, Source) = \sum_{i=1}^{n} \text{Similarity}(Query, Key_i) \cdot Value_i$$</p>
+<div class="checkpoint">Attention函数的本质是什么？<details class="cp-answer"><summary>参考答案</summary>Attention函数的本质可以被描述为一个查询到一系列（键-值）对的映射，通过计算Query和各个Key的相似性得到Value的权重系数并加权求和。</details></div>
+
+<h2 id="s14104833">Transformer网络结构</h2>
+<p>Transformer网络结构出自Google 2017年论文《Attention Is All You Need》。<span class="tag-must">必考</span></p>
+
+<h3 id="s54201594">核心特点</h3>
+<p><span class="kp">Encoder-Decoder结构</span>：采用"搭积木"方式堆叠</p>
+<p><span class="kp">残差连接</span>：缓解深层网络梯度消失问题</p>
+<p><span class="kp">LayerNorm</span>：层归一化，加速训练</p>
+<p><span class="kp">时序位置信息</span>：引入位置编码，捕捉序列顺序信息</p>
+
+<h3 id="s72312394">Encoder结构</h3>
+<p>结构流程：Inputs → Input Embedding + Positional Encoding → [Multi-Head Attention → Add & Norm → Feed Forward → Add & Norm] × Nx</p>
+<p>具体包含：多头注意力机制、残差连接、LayerNorm、前馈神经网络。</p>
+
+<h3 id="s74370363">Decoder结构</h3>
+<p>结构流程：Outputs (shifted right) → Output Embedding + Positional Encoding → [Masked Multi-Head Attention → Add & Norm → Multi-Head Attention → Add & Norm → Feed Forward → Add & Norm] × Nx → Linear → Softmax → Output Probabilities</p>
+<p><span class="kp">Mask的作用</span>：在训练的时候，保证解码器无法看到预测时刻之后的数据，与模型预测时保持一致。</p>
+<blockquote>易错：Decoder中的Masked Multi-Head Attention是为了在训练时防止看到未来信息，保证与预测时的一致性。</blockquote>
+
+<h3 id="s61053065">Scaled Dot-Product Attention</h3>
+<p>结构：MatMul (Q, K) → Scale → Mask (opt.) → SoftMax → MatMul (with V)</p>
+<p>使用内积计算相似度。</p>
+<p>公式：</p>
+<p>$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$</p>
+
+<h3 id="s34430510">Multi-Head Attention</h3>
+<p>模拟卷积神经网络，多通道输出，学习多种模式；投影到低维空间，降低计算复杂度；增加模型的可学习参数。</p>
+<p>结构：将Q, K, V通过Linear层分头计算Scaled Dot-Product Attention，然后Concat并乘以权重矩阵$W^O$输出。</p>
+<p>公式：</p>
+<p>$$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, ..., \text{head}_h)W^O$$</p>
+<p>$$\text{where head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$</p>
+<div class="tldr">Multi-Head Attention通过将Q,K,V投影到低维空间分头计算，再拼接输出，模拟CNN多通道效果，降低计算复杂度并增加可学习参数。</div>
+
+<h2 id="s38630476">Transformer改进版</h2>
+
+<h3 id="s38096685">Adversarial Sparse Transformer</h3>
+<p><span class="kp">判别器</span>：最小化交叉熵损失函数，将输入序列分类为预测值或真实值。</p>
+<p><span class="kp">生成器</span>：最小化预测序列和真实数据之间的分位数损失。</p>
+<p><span class="kp">互补机制</span>：分位数损失和对抗性损失可以互补。一方面，分位数损失帮助生成器捕获时间序列的整体模式并给出对应真实值的预测，可以防止判别器快速收敛到局部最优；另一方面，判别器从全局角度对预测进行正则化。</p>
+
+<h3 id="s59920112">Informer</h3>
+<p><span class="kp">ProbSparse Self-attention mechanism</span>：时间和空间复杂度为O(L log L)。</p>
+<p><span class="kp">Self-attention distilling</span>：通过减半级联层输入，强化主导注意力元素，增强长序预测能力。</p>
+<p><span class="kp">Generative style decoder（生成式解码器）</span>：通过一次前向传播预测，相比于传统迭代预测，大幅提升推理效率。</p>
+
+<h2 id="s89659455">电力变压器数据集（ETDataset）</h2>
+<p>该仓库提供了涉及电力变压器的多个数据集，用于支撑"长时间序列"相关的研究。所有的数据都经过了预处理，并且以.csv的格式存储。这些数据的时间跨度为2016年7月到2018年7月。</p>
+
+<h3 id="s30992587">数据列表</h3>
+<p><span class="kp">ETT-small</span>：含有2个电力变压器（来自2个站点）的数据，包括负载、油温。</p>
+<p><span class="kp">ETT-large</span>：含有39个电力变压器（来自39个站点）的数据，包括负载、油温。</p>
+<p><span class="kp">ETT-full</span>：含有69个电力变压器（来自39个站点）的数据，包括负载、油温、位置、气候、需求。</p>
+
+<h2 id="s57298168">基于图神经网络的时间序列预测方法</h2>
+
+<h3 id="s11381011">图的基础知识</h3>
+<p><span class="kp">Vertex (or node) embedding</span>：节点嵌入</p>
+<p><span class="kp">Edge (or link) attributes and embedding</span>：边属性及边嵌入</p>
+<p><span class="kp">Global (or master node) embedding</span>：全局嵌入</p>
+
+<h3 id="s10792881">图神经网络（GNN）</h3>
+<p><span class="kp">定义</span>：图神经网络可以对图上所有属性（节点、边、全局信息）进行优化变化，同时保持住图的对称信息。使用信息传递的框架，输入是图，输出也是图。</p>
+<p>GNN层结构示例：Layer N (graph in): $U_n$, $V_n$, $E_n$；Update functions: $f_{U_n}$, $f_{V_n}$, $f_{E_n}$；Layer N+1 (graph out): $U_{n+1}$, $V_{n+1}$, $E_{n+1}$；Graph Independent Layer: update function $f = \dots$</p>
+
+<h3 id="s21763266">将图与神经网络结合</h3>
+<p>图数据表示示例：Nodes: [0, 1, 1, 0, 0, 1, 1, 1]；Edges: [2, 1, 1, 1, 2, 1, 1]；Adjacency List: [[1, 0], [2, 0], [4, 3], [6, 2], [7, 3], [7, 4], [7, 5]]；Global: 0</p>
+<p>最简单的实现及其局限：流程为Input Graph → GNN blocks → Transformed Graph → Classification layer → Prediction (node, edge, or global predictions) $Y$。这是一个端到端的预测任务。</p>
+<blockquote>易错：最简单的GNN实现没有使用图的连接信息，并未把整个图的信息更新进顶点、边的属性里，没有充分利用图的信息。</blockquote>
+
+<h3 id="s35729740">图连接信息的利用与优化</h3>
+<p><span class="kp">信息传递机制</span>：1. 不同顶点汇聚操作；2. 从相邻节点汇聚信息；3. 变换信息；4. 用新信息更新图。</p>
+<p>Graph Nets Layer 结构与 Weave Layer 结构均包含更新函数和池化函数。</p>
+<p>节点更新过程涉及相邻节点嵌入、相邻边嵌入、全局嵌入、节点嵌入，通过条件函数（如Concatenation, Linear Layer and Add, FiLM Layer等）和更新函数得到更新后的节点嵌入。</p>
+<p><span class="kp">大规模图的处理</span>：如果图比较大，连接比较稀疏，信息传递需要比较长的时间。此时，全局变量可以看作一个master node（主节点），可以和所有的顶点相连，可以和所有的边相连，从而加速信息传播。</p>
+
+<h2 id="s83916146">图卷积神经网络 (GCN)</h2>
+<p>GCN 包含输入层、隐藏层和输出层，其前向传播公式如下：</p>
+<p>$$H^{(l+1)} = \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})$$</p>
+<p>简化形式为：</p>
+<p>$$H^{(l+1)} = \sigma(\tilde{A}H^{(l)}W^{(l)})$$</p>
+<p>矩阵计算示例中，加入自连接的邻接矩阵 $\tilde{A}$ 将自身的节点信息考虑进来，将节点本身和邻居的信息都考虑进来，对节点进行归一化。</p>
+<div class="checkpoint">GCN前向传播的简化公式是什么？<details class="cp-answer"><summary>参考答案</summary>$H^{(l+1)} = \sigma(\tilde{A}H^{(l)}W^{(l)})$</details></div>
+
+<h2 id="s11724533">基于图神经网络的交通流量预测：T-GCN</h2>
+<p><span class="kp">论文</span>：T-GCN: A Temporal Graph Convolutional Network for Traffic Prediction</p>
+<p><span class="kp">路网构建</span>：道路作为节点，道路连接作为边，构成图 $G = (V, E)$。节点信息包括交通速度、交通流量、交通密度等。</p>
+<p><span class="kp">模型结构</span>：输入序列 $X_{t-n}, \dots, X_t$；空间特征提取通过 GCN 提取；时间特征提取通过 GRU 提取；输出预测 $X_{t+T}$。</p>
+<p>网络细节：两层 GCN 捕获空间依赖关系，公式为 $f ( X , A ) = \sigma \left( \widehat { A } \text{ReLU} \left( \widehat { A } X W _ { 0 } \right) W _ { 1 } \right)$；Gated GRU 获取时间相关性，构成 Temporal Graph Convolutional Network。</p>
+<p>实验设置：XX地区156条
+
+<h2 id="s11500279">事件分类与节假日预测模型 <span class="tag-key">重点</span></h2>
+<p>在时间序列预测中，事件通常分为以下几类：<span class="kp">周期性事件</span>（依据已知周期发生的时间，如周末、节假日、月末周六等）、<span class="kp">非周期性事件</span>（未知确切发生时间但过去已有类似事件发生，如两会、周年事件等）、<span class="kp">全局事件</span>（所有节点均会发生的事件）和<span class="kp">局部事件</span>（局部节点发生的事件）。</p>
+<p>基于统一编码的节假日预测模型结合了Scalar Projection和Local Time Stamp Position Embeddings（$E_0 \dots E_7$）。Global Time Stamp包含Week Embeddings、Month Embeddings、Holiday Embeddings（$H_1, H_2$ 等）。</p>
+<div class="tldr">验证效果：SDWAN流量预测（小时级，3个月历史，5分钟采样）和XX局点验证（天级，1年历史，天级别采样）的预测精度均 > 85%。</div>
+
+<h2 id="s62432846">6.2 时间序列预测案例——整网流量负载预测 <span class="tag-must">必考</span></h2>
+
+<h3 id="s40994366">6.2.1 OBP立项关键竞争力指标</h3>
+<p>在主动预防专题中，流量预测算法准确率提升，在节假日场景下提前30天预测准确率由82%提升到95%。</p>
+
+<h3 id="s34324228">6.2.2 数据集</h3>
+<p>数据集包含A、B、C、D 4个局点，10个站点，每天峰值采样。数据量跨度从2016年11月到2019年9月不等。</p>
+
+<h3 id="s29565130">6.2.3 算法评估指标</h3>
+<p>提前30天预测过节期间流量，计算预测值的SMAPE误差。$y_{true}$ 为过节期间真实流量，$y_{predict}$ 为过节期间流量预测值（大长假 $n=7$，小长假 $n=3$）。</p>
+<p>公式：$$SMAPE = \frac{1}{n} \times \sum_{i=1}^{n} \frac{\left| y_{true} - y_{predict} \right|}{\left( y_{true} + y_{predict} \right) / 2}$$</p>
+
+<h3 id="s19625793">6.2.4 现有技术与短板场景</h3>
+<p>产品现有方法采用<span class="kp">Prophet开源工具</span>，对时间序列的趋势分量、周期分量、节假日效应回归建模，预测每项成分相加得到整体预测，在A局点数据上平均准确率82%（平时）。</p>
+<blockquote>易错：Prophet在非节假日预测较准，但在特定短板场景下误差极大。C局点因未知原因流量下滑导致预测误差42%；D局点因用户行为模式改变导致预测误差33%。</blockquote>
+
+<h3 id="s83758253">6.2.5 算法方案对比 <span class="tag-freq">高频</span></h3>
+<p><strong>一、Prophet（现有技术）</strong>：基于STL分解考虑趋势项、周期项、节假日效应。包含饱和增长模型和分段线性模型的趋势模型，基于傅里叶级数的周期模型，以及节假日及突发事件模型。</p>
+<p><strong>二、ARIMA</strong>：需要根据ACF和PACF确定超参 $(p, d, q)$。能精细刻画平稳序列的波动，对短期预测较准确，但未对季节性、节假日建模。</p>
+<p><strong>三、线性回归</strong>：简单、稳健，通过拟合趋势外推给出预测结果，适合短期趋势预测，需要与历史节假日波动量融合形成更准确的预测。</p>
+<p><strong>四、Sequence2Sequence模型</strong>：提供一种嵌入相关影响因素（如用户数、天气、日期、节假日等）的方法，解决多特征输入问题，可以预测未来一段时间的数据。</p>
+
+<h3 id="s22955099">6.2.6 实验对比与结果分析</h3>
+<p>分别使用线性回归、ARIMA、Sequence-to-Sequence模型在4个局点的10个站点数据上进行测试，与产品现有技术做性能（SMAPE）对比。ARIMA模型各局点基于预测前全量历史数据的自相关和偏相关性确定超参 p/d/q；线性回归和Seq2Seq模型各局点超参一致。</p>
+<div class="tldr">结果分析：当前使用ARIMA模型趋势外延+春节波动量比例放大（MIRAI算法）的方法，在部分规律性较强的6个站点上（A2、A3、A4、B3、C、D），准确率达95%以上。受套餐发放、突发月末效应、未知原因用户数降低等因素影响，A1、B1、B2、B4 4个站点的准确率有待进一步提升。</div>
+
+<h2 id="s38865638">6.3 时间序列预测案例——新能源光伏发电功率预测 <span class="tag-key">重点</span></h2>
+
+<h3 id="s19854577">收益产品与应用场景</h3>
+<p>收益产品包括地面光储电站、地面纯光电站、分布式光储电站及综合能源。应用场景涵盖光储出力波动平滑、功率预测偏差校准（降低考核罚款）、电站功率优化与控制、支撑电力市场现货交易、发电量预测、支撑虚拟电站（VPP）及园区级电力市场交易等。</p>
+
+<h3 id="s74951109">价值分析</h3>
+<p>当前痛点在于新能源消纳困难，考核罚款多；纯光场景功率预测精度提升遇技术瓶颈；电力市场交易逐渐兴起，需要"电站智能交易大脑"。业界常见做法为多气象源+机器学习/深度学习。华为经验在于光储融合的功率预报及电站智能交易大脑，结合逆变器和储能优势，构建行业领先纯光功率预测技术。</p>
+
+<h3 id="s79678453">预测挑战与方案对比</h3>
+<p>挑战包括：新建电站数据少（1~6个月）且存在季节性特征；预测时间步长多（24或96步）；分布式光储协同优化要求预测精度高；对计算资源消耗要求较高。</p>
+<table>
+<tr><th>维度</th><th>传统方案</th><th>华为方案：特征工程 + 机器学习 + 滚动预测</th></tr>
+<tr><td>数据需求</td><td>要求数年运行数据</td><td>1-3个月数据即可获得不错效果</td></tr>
+<tr><td>气象源</td><td>多种高精度气象源</td><td>单一气象源即可</td></tr>
+<tr><td>模型复杂度</td><td>多模型集成或复杂深度学习模型</td><td>模型轻量化</td></tr>
+<tr><td>模型适应性</td><td>数据漂移易致模型精度退化</td><td>模型在线学习，适应数据漂移</td></tr>
+</table>
+
+<h3 id="s47288088">场景预测效果</h3>
+<p><strong>户用分布式场景</strong>：光伏装机容量10kW左右，波动大，预测难度大。XX国300户户用光功率预测平均准确率达90%（使用GBDT_lightgbm模型）。</p>
+<p><strong>工商业分布式场景</strong>：光伏装机容量100kW-几MW，预测难度较低。XX国69个MW级工商业光伏电站光功率预测未来24小时1小时粒度平均准确率93.6% / 月均绝对偏差3.6% / 月均合格率97.8%。</p>
+
+<h3 id="s68526578">AI光储协同优化</h3>
+<p>创新性提出<span class="kp">"边-云协同"算法框架</span>，借鉴MPC思想进行模型预测滚动优化，关键技术点包括：短期负荷预测技术、短期光伏出力预测技术、云端调度建模与求解技术、边侧SOC智能跟踪技术。</p>
+<div class="tldr">实现了峰谷价差场景下的户用光储协同优化实际收益达到理论天花板的85%以上，处于业界第一梯队。</div>
+
+<h2 id="s18410490">6.4 时间序列预测案例——微电网用电负荷预测 <span class="tag-info">了解</span></h2>
+
+<h3 id="s36870611">背景概述</h3>
+<p>能源微网经济调度与运行优化在多种场景均有广泛需求。通过<span class="kp">发电预测、用电负荷预测、数学建模与运筹优化、强化学习</span>等技术，构建多尺度能源微网系统的"源网荷储"协同和负荷管理优化。</p>
+
+<h3 id="s23346581">技术沙盘（微电网EMS架构）</h3>
+<p>包含输入数据（公用事业、运行模式、气象预测、市场、分布式能源、实时/历史数据）、预测模块（负荷、价格、DER预测）、优化与控制模块（最优能量调度、网络/资源/消费者优化、实时控制/监控）以及分析与建模模块。</p>
+
+<h3 id="s29343238">核心技术点</h3>
+<p>关键技术涵盖发电/用能时序预测（NWP、ARIMA、GBDT、LSTM）、运筹调度优化（调度算法、启发式算法）、数学建模（业务抽象建模能力）和架构与工程化（算法架构与实现、部署、加密）。</p>
+
+<h3 id="s15923775">负荷预测方案与效果</h3>
+<p>负荷预测算法主要采用<span class="kp">特征工程 + 机器学习 + 滚动预测</span>。</p>
+<ul>
+<li>未来24小时1小时粒度预测：30个XX国中小型工商业负荷预测，AI算法平均预测准确率89.5% VS 持续法82%。</li>
+<li>未来24小时15分钟粒度预测：30个XX国中小型工商业负荷预测，AI预测平均准确率88.5% VS 持续法83.5%。</li>
+</ul>
+
+<h2 id="s12566718">小结 <span class="tag-info">了解</span></h2>
+<p>本章涉及的案例包括：基于深度学习方法的时空流量预测案例、基于改进ARIMA的整网流量负载案例、基于特征工程 + 机器学习方法的新能源光功率预测案例、基于特征工程 + 机器学习方法的微电网用电负荷预测案例。</p>
+
+<div class="checkpoint">微电网EMS架构中预测模块包含哪些内容？<details class="cp-answer"><summary>参考答案</summary>预测模块包含负荷预测、价格预测（Price Forecasting）和分布式能源预测（DER Forecasting）。</details></div>
+<div class="checkpoint">华为在光伏发电功率预测中的方案相比传统方案有何优势？<details class="cp-answer"><summary>参考答案</summary>华为方案采用特征工程 + 机器学习 + 滚动预测，仅需1-3个月数据和单一气象源即可获得不错效果，模型轻量化且支持在线学习适应数据漂移，而传统方案需要数年数据和多种高精度气象源，且模型复杂易受数据漂移影响。</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center" id="sec-auto-21">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">190题 · 满分952分</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+<div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3 id="sec-auto-22">📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+
+
+<script>
+var Q = [{"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "时间序列分解中，指时间序列在较长一段时间内呈现出来的持续向上或者持续向下的变动称为：", "options": ["趋势项", "季节项", "残差项", "周期项"], "answer": 0, "explanation": "趋势项指时间序列在较长一段时间内呈现出来的持续向上或者持续向下的变动。", "pitfall": "容易将趋势项与季节项或周期项混淆，季节项是一年内的周期性波动。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "当一个时间序列的滞后算子多项式方程存在单位根时，我们认为该时间序列是：", "options": ["平稳的", "非平稳的", "白噪声", "随机游走"], "answer": 1, "explanation": "当一个时间序列的滞后算子多项式方程存在单位根时，我们认为该时间序列是非平稳的；反之，不存在单位根时为平稳的。", "pitfall": "注意存在单位根是非平稳，不存在单位根才是平稳。"}, {"kc_id": "kc1.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在进行时间序列预测的数据集划分时，必须确保：", "options": ["测试集的时间戳早于训练集时间戳", "测试集的时间戳晚于训练集时间戳", "训练集和测试集时间戳随机分布", "测试集和训练集时间戳相同"], "answer": 1, "explanation": "时间序列的数据集划分为训练集和测试集时，要确保测试集的时间戳要晚于训练集时间戳，否则容易数据泄露和无法实际应用。", "pitfall": "时间序列不能像普通数据那样随机打乱划分，必须考虑时间先后顺序。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "Facebook Prophet 时序预测算法将时间序列分为哪三部分特征？", "options": ["趋势、季节、节日", "趋势、周期、残差", "水平、趋势、季节", "自回归、差分、移动平均"], "answer": 0, "explanation": "Prophet针对一维时间序列进行建模，将时间序列分为趋势、季节、节日三部分特征，公式为 y(t)=g(t)+s(t)+h(t)+εt。", "pitfall": "Prophet的组成部分与一般的时间序列分解（趋势、季节、残差）略有不同，它特别强调了节日项。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "在ARIMA(p,d,q)模型中，d代表的是：", "options": ["自回归模型阶数", "差分模型阶数", "移动平均模型阶数", "季节性周期"], "answer": 1, "explanation": "ARIMA(p,d,q)中，p为自回归模型，d为差分模型，q为移动平均模型。", "pitfall": "容易混淆p、d、q分别代表的含义，d是差分阶数。"}, {"kc_id": "kc1.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在支持向量回归机（SVR）中，支持向量是指：", "options": ["间隔带内的样本点", "间隔带外的样本点", "所有训练样本点", "距离原点最近的样本点"], "answer": 1, "explanation": "对于间隔带外的样本，其系数 αi - αi* ≠ 0，这些样本称为支持向量，即支持向量是训练集的子集。", "pitfall": "在SVM分类中支持向量是落在间隔边界上的点，而在SVR中是落在间隔带之外的点。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "随机森林回归算法是一种典型的什么集成算法？", "options": ["Boosting", "Bagging", "Stacking", "Blending"], "answer": 1, "explanation": "随机森林回归算法是决策树回归的组合算法，将许多回归决策树组合到一起，以降低过拟合的风险，是一种典型的Bagging集成算法。", "pitfall": "容易将随机森林的Bagging思想与GBDT的Boosting思想混淆。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "在数据量和计算机配置够的情况下，以下哪个被认为是精度最好的梯度提升算法开源框架？", "options": ["GBDT", "XGBoost", "LightGBM", "CatBoost"], "answer": 3, "explanation": "整体来说，在数据量和计算机配置够的情况下，CatBoost是精度最好的梯度提升算法开源框架。", "pitfall": "XGBoost和LightGBM也很流行，但文档指出CatBoost在条件足够时精度最好。"}, {"kc_id": "kc1.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Stacking集成学习中，第二层模型的训练是在第一层模型的什么特征上学习训练的？", "options": ["测试集特征", "K-Fold交叉验证的元特征", "留出法的验证集元特征", "原始数据特征"], "answer": 1, "explanation": "Stacking集成时，第二层模型的训练是在第一层模型的K-Folder交叉验证的元特征上学习训练的。", "pitfall": "Stacking使用K-Fold交叉验证，而Blending使用leave-out方法留出一部分数据。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "传统RNN在处理时间序列时存在的主要问题是：", "options": ["只能处理短期记忆，容易梯度消失或爆炸", "无法提取空间特征", "计算量过大无法并行", "无法处理非线性关系"], "answer": 0, "explanation": "传统RNN只有短期记忆能力，无法处理较长的输入序列，且由于递归结构，训练过程中容易出现梯度消失和梯度爆炸。", "pitfall": "RNN的梯度问题是由其递归结构和激活函数导致的，这是其通病。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "LSTM相比传统RNN，在状态位上增加了什么以传递长期记忆？", "options": ["状态位 H", "状态位 C", "状态位 X", "状态位 Z"], "answer": 1, "explanation": "传统RNN仅有状态位H，LSTM有状态位H和C，前后帧之间既能传递短期记忆，又能传递长期记忆。", "pitfall": "H是短期记忆状态，C是细胞状态用于长期记忆。"}, {"kc_id": "kc1.1", "cognitive_level": "analyze", "difficulty": "hard", "type": "choice", "points": 4, "question": "相对于RNN，CNN用于时间序列预测的主要优势不包括：", "options": ["平移不变性", "方便通过并行化提升效率", "能够较好地处理信号的历史同比信息", "天然适合处理变长序列的长距离依赖"], "answer": 3, "explanation": "CNN的优势在于平移不变性、处理历史同比信息和并行化提升效率。天然适合处理变长序列长距离依赖是Transformer或LSTM的特性，不是CNN的主要优势。", "pitfall": "CNN在处理长距离依赖上不如Transformer，且通常需要将一维序列二维化。"}, {"kc_id": "kc1.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Encoder-Decoder框架中，Encoder和Decoder之间唯一的联系是：", "options": ["注意力权重矩阵", "固定长度的语境向量", "隐藏层状态序列", "词嵌入矩阵"], "answer": 1, "explanation": "Encoder-Decoder之间唯一的联系是一个固定长度的语境向量，Encoder要将整个序列的信息压缩进这个向量中。", "pitfall": "Attention机制正是为了解决固定长度语境向量信息丢失的问题而提出的。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "T-GCN模型中，用于获取时间相关性的组件是：", "options": ["两层GCN", "Gated GRU", "LSTM", "CNN"], "answer": 1, "explanation": "T-GCN中，两层GCN捕获空间依赖关系，Gated GRU获取时间相关性。", "pitfall": "容易混淆GCN和GRU在T-GCN中分别负责的空间和时间维度。"}, {"kc_id": "kc1.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Blending集成学习的缺点是：", "options": ["训练计算量大", "非全部训练集参与第一层模型训练", "无法使用不同的机器学习算法", "容易过拟合"], "answer": 1, "explanation": "Blending集成时留出一部分数据作为验证集，导致非全部训练集参与第一层模型训练，这是其缺点。", "pitfall": "Blending相比Stacking计算更快，但牺牲了部分训练数据。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "以下哪个指标是对称平均绝对百分比误差？", "options": ["MAE", "RMSE", "MAPE", "sMAPE"], "answer": 3, "explanation": "sMAPE是对称平均绝对百分比误差，公式为 mean(200|yt-yt_hat|/(yt+yt_hat))。", "pitfall": "MAPE是平均绝对百分比误差，sMAPE是对称版本，分母使用了实际值与预测值的平均。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "一个时间序列一般可以分解为哪些成分？", "options": ["趋势项", "季节项", "残差项", "周期项"], "answer": [0, 1, 2], "explanation": "一个时间序列一般可以分解为由趋势项、季节项、残差项等成分，部分场景下可能包含相对季节性更细粒度的周期性。", "pitfall": "周期项在某些分解中存在，但最基本的是趋势、季节和残差。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "常见的单位根检验方法有：", "options": ["DF检验", "ADF检验", "PP检验", "t检验"], "answer": [0, 1, 2], "explanation": "常见的单位根检验方法有DF检验、ADF检验和PP检验。", "pitfall": "t检验是普通的均值检验，不是时间序列平稳性检验方法。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "以下哪些属于点预测的评价指标？", "options": ["MAE", "RMSE", "MAPE", "区间预测偏差"], "answer": [0, 1, 2], "explanation": "MAE、RMSE、MAPE均为点预测评价指标，区间预测偏差属于概率预测评价指标。", "pitfall": "注意区分点预测和概率预测（如分位数预测、区间预测）的指标。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "时间序列特征工程常用的特征包括：", "options": ["日期时间特征", "滞后特征", "滑窗/扩展窗特征", "同期值特征"], "answer": [0, 1, 2, 3], "explanation": "时间序列特征工程常用特征包括日期时间特征、节假日特征、滞后特征、滑窗/扩展窗特征、同期值特征、交叉特征、业务域特征。", "pitfall": "这些都是时间序列特有的特征工程方法，不要遗漏。"}, {"kc_id": "kc1.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 4, "question": "关于交叉特征的构造，以下说法正确的是：", "options": ["类别特征间可以组合构成新特征", "连续特征分桶后可以进行笛卡尔积", "基于类别特征进行groupby操作可以构造统计特征", "连续特征和连续特征间可以进行同比和环比"], "answer": [0, 1, 2, 3], "explanation": "交叉特征包括类别特征间组合、类别特征和连续特征组合（分桶笛卡尔积、groupby统计）、连续特征和连续特征组合（同比环比、二阶差分、比值）。", "pitfall": "交叉特征不仅限于类别变量，连续变量之间也可以通过差分、比值等方式构造交叉特征。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "以下哪些是常见的SVR核函数？", "options": ["线性核", "多项式核", "高斯核", "Sigmoid核"], "answer": [0, 1, 2, 3], "explanation": "常见核函数包括线性核、多项式核、高斯核、拉普拉斯核和Sigmoid核。", "pitfall": "拉普拉斯核也是常见核函数之一，不要遗漏。"}, {"kc_id": "kc1.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 4, "question": "随机森林回归算法的优点包括：", "options": ["算法简单", "易于并行执行", "可以减小预测方差", "可解释性强"], "answer": [0, 1, 2], "explanation": "随机森林的优点是算法简单、易于并行执行、可以减小预测方差。缺点是可解释性差、模型计算量大。", "pitfall": "随机森林由多棵树组成，可解释性通常较差，不如单棵决策树。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "以下哪些属于常见的梯度提升回归树算法？", "options": ["GBDT", "XGBoost", "LightGBM", "CatBoost"], "answer": [0, 1, 2, 3], "explanation": "常见梯度提升回归树算法有GBDT、XGBoost、LightGBM和CatBoost。", "pitfall": "这些都是Boosting家族的树模型算法。"}, {"kc_id": "kc1.1", "cognitive_level": "analyze", "difficulty": "hard", "type": "multi", "points": 4, "question": "关于Stacking和Blending集成学习，以下说法正确的是：", "options": ["两者都是层次模型集成框架", "两者的基础模型和元模型可以是任何机器学习算法", "Stacking使用K-Fold交叉验证生成元特征", "Blending使用leave-out方法留出数据生成元特征"], "answer": [0, 1, 2, 3], "explanation": "Stacking和Blending都是层次模型集成框架，基础模型和元模型可以是任何算法。Stacking使用K-Fold，Blending使用leave-out留出法。", "pitfall": "两者的核心区别在于第二层元模型训练数据的生成方式不同。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "传统RNN存在的问题包括：", "options": ["只有短期记忆能力", "无法处理较长的输入序列", "容易出现梯度消失", "容易出现梯度爆炸"], "answer": [0, 1, 2, 3], "explanation": "传统RNN只有短期记忆能力，无法处理较长输入序列，且由于递归结构容易出现梯度消失和梯度爆炸。", "pitfall": "梯度消失和梯度爆炸是RNN递归结构和反向传播算法共同导致的。"}, {"kc_id": "kc1.1", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 4, "question": "CNN一般由哪些层交错叠加并在最后拼接全连接层而成？", "options": ["卷积层", "池化层", "全连接层", "循环层"], "answer": [0, 1, 2], "explanation": "CNN一般由卷积层和池化层交错叠加，并在最后拼接全连接层而成。", "pitfall": "循环层是RNN的结构，不属于CNN。"}, {"kc_id": "kc1.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 4, "question": "Attention Model虽然解决了输入序列仅有一个context vector的缺点，但依旧存在的问题有：", "options": ["忽略了输入序列间的关联", "使用的RNN无法并行化处理", "无法解决序列间长距离的依赖性", "无法处理变长序列"], "answer": [0, 1, 2], "explanation": "Attention model存在的问题：忽略了输入序列间和目标序列间的关联；使用的RNN无法并行化；仍然无法解决序列间长距离依赖性。", "pitfall": "Attention本身可以处理变长序列，这是其基本能力。"}, {"kc_id": "kc1.1", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 4, "question": "简述时间序列（弱）平稳性的概念及其常见的检验方法。", "answer": "时间序列（弱）平稳是指序列中任意时刻数据的期望、方差和协方差不随时间而变。当一个时间序列的变化特征维持稳定，数据的历史分布和未来分布就会趋于一致。常见的检验方法是单位根检验，当一个时间序列的滞后算子多项式方程存在单位根时为非平稳，反之为平稳。常见的单位根检验方法有DF检验、ADF检验和PP检验。", "explanation": "考察时间序列平稳性的定义和检验方法。需要提到期望、方差、协方差不随时间变化，以及单位根检验（DF、ADF、PP）。", "pitfall": "注意“不是弱平稳的时间序列无法进行时间序列预测”该说法是错误的。"}, {"kc_id": "kc1.1", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 4, "question": "简述ARIMA(p,d,q)模型中p、d、q的含义及模型的基本原理。", "answer": "ARIMA模型旨在描绘数据的自回归性。其中p代表自回归模型（AR）的阶数，d代表差分模型（差分次数），q代表移动平均模型（MA）的阶数。其基本原理是将差分自回归模型以及移动平均模型结合起来，通过对原始时间序列进行d阶差分使其平稳，然后建立AR和MA模型进行预测。", "explanation": "考察ARIMA模型参数的含义及原理。p是自回归阶数，d是差分阶数，q是移动平均阶数。", "pitfall": "容易混淆p和q的含义，p是自回归（历史值），q是移动平均（历史误差）。"}, {"kc_id": "kc1.1", "cognitive_level": "analyze", "difficulty": "hard", "type": "short", "points": 4, "question": "比较Stacking和Blending集成学习方法的异同。", "answer": "相同点：两者都是层次模型集成框架，基础模型和元模型可以是任何机器学习算法，通过第一层基础模型生成元特征，第二层元模型学习最终结果。不同点：1. 机制不同：Stacking第二层模型在第一层模型的K-Fold交叉验证元特征上训练；Blending第二层模型在第一层模型通过leave-out方法留出数据集的元特征上训练。2. 优缺点不同：Stacking保证所有训练集数据参与模型训练，但计算量大；Blending比Stacking简单、计算快，但非全部训练集参与第一层模型训练。", "explanation": "考察Stacking和Blending的区别。核心在于元特征的生成方式：K-Fold vs leave-out，以及由此带来的优缺点。", "pitfall": "不要混淆两者的数据划分方式，Stacking用交叉验证，Blending用留出法。"}, {"kc_id": "kc1.1", "cognitive_level": "analyze", "difficulty": "hard", "type": "short", "points": 4, "question": "简述LSTM相比传统RNN的改进及其优缺点。", "answer": "改进：传统RNN仅有状态位H，只能传递短期记忆；LSTM增加了状态位C，前后帧之间既能传递短期记忆，又能传递长期记忆，能够有选择性地保留、遗忘部分信息。优点：能够处理有效的长期信息，缓解了梯度消失和梯度爆炸问题。缺点：网络结构更为复杂，待训练参数增加，导致复杂度上升；由于递归迭代的网络结构，难以通过并行化实现效率提升。", "explanation": "考察LSTM的原理及优缺点。改进在于引入了细胞状态C和门控机制。优点是缓解梯度问题，处理长期依赖；缺点是复杂度高，无法并行化。", "pitfall": "LSTM只是缓解而非完全解决梯度消失问题，且依然存在无法并行化的通病。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "RNN在时间序列预测中，当前帧的输出值主要与什么相关？", "options": ["当前帧输入值、前一帧隐含层", "当前帧输入值、后一帧隐含层", "前一帧输入值、当前帧隐含层", "后一帧输入值、前一帧隐含层"], "answer": 0, "explanation": "RNN当前帧输出值只跟当前帧输入值、前一帧隐含层相关。", "pitfall": "容易混淆前后帧的关系，RNN是利用前一时刻的隐含层信息。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "传统RNN存在的主要问题是什么？", "options": ["只能处理短期记忆，无法处理较长输入序列", "容易出现梯度消失和梯度爆炸", "网络结构过于简单", "无法处理时间序列数据"], "answer": 1, "explanation": "传统RNN由于递归结构，训练过程中容易出现梯度消失和梯度爆炸，导致模型训练困难。同时它只有短期记忆能力。", "pitfall": "虽然RNN只有短期记忆能力，但题目问的是训练过程中的主要问题，即梯度消失和爆炸。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "LSTM中用于传递长期记忆的状态位是？", "options": ["H", "C", "X", "Y"], "answer": 1, "explanation": "LSTM中包含状态位H和C，前后帧之间既能传递短期记忆（H），又能传递长期记忆（C）。", "pitfall": "H是短期记忆，C是长期记忆，容易记反。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "关于LSTM中状态位C和H的变化特点，下列说法正确的是？", "options": ["C变化较快，H变化缓慢", "C变化缓慢，H变化较快", "C和H都变化缓慢", "C和H都变化较快"], "answer": 1, "explanation": "C变化缓慢，C^t是在C^{t-1}基础上增加某些信息；H变化较快，H^t和H^{t-1}可能差异很大。", "pitfall": "C代表长期记忆，所以变化缓慢；H代表短期记忆，所以变化较快。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "CNN用于时间序列预测时，一般需要先将数据进行什么处理？", "options": ["将一维的时间序列二维化", "将时间序列进行差分", "将时间序列进行平滑处理", "将时间序列进行归一化"], "answer": 0, "explanation": "CNN也可以用于时间序列预测，一般需要将一维的时间序列二维化，例如将历史数据按天、周等周期切段后拼接在一起形成“图像”。", "pitfall": "CNN常用于图像处理，用于时序时需要先二维化。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "CNN相对于RNN在时间序列预测中的主要优势不包括？", "options": ["平移不变性，在特征提取时不会破坏信号频谱", "能够较好地处理信号的历史同比信息", "方便通过并行化提升训练、推理效率", "能够更好地处理序列中输入的前后联系"], "answer": 3, "explanation": "处理序列中输入的前后联系是RNN的优势，不是CNN的优势。", "pitfall": "注意题目问的是“不包括”，处理前后联系是RNN的特点。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "Encoder-Decoder模型中，Encoder和Decoder之间唯一的联系是？", "options": ["一个固定长度的语境向量", "注意力权重矩阵", "隐藏层状态", "输入序列本身"], "answer": 0, "explanation": "Encoder-Decoder之间唯一的联系是一个固定长度的语境向量，Encoder要将整个序列的信息压缩进一个固定长度的向量中。", "pitfall": "Attention机制就是为了解决这个固定长度语境向量的问题而提出的。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Attention机制主要解决了什么问题？", "options": ["输入序列仅有一个Context Vector的缺点", "RNN无法并行化处理的问题", "序列间长距离的依赖性", "梯度消失和梯度爆炸"], "answer": 0, "explanation": "Attention机制解决了输入序列仅有一个Context Vector的缺点，但依旧存在无法并行化、无法解决长距离依赖等问题。", "pitfall": "Attention并没有解决RNN无法并行化和长距离依赖的问题。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "GNN的输入不包含以下哪项？", "options": ["顶点信息", "边信息", "全局信息", "时间信息"], "answer": 3, "explanation": "GNN的输入包含顶点信息、边信息、全局信息、顶点之间的连接信息。不包含时间信息。", "pitfall": "GNN处理的是图结构数据，基础输入不直接包含时间信息。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "GCN中每一个卷积层仅处理几阶邻域信息？", "options": ["一阶", "二阶", "三阶", "多阶"], "answer": 0, "explanation": "GCN是一个多层的图卷积神经网络，每一个卷积层仅处理一阶邻域信息，通过叠加若干卷积层可以实现多阶邻域的信息传递。", "pitfall": "单层只处理一阶，多层叠加才能处理多阶。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "T-GCN中用于获取时间相关性的模块是？", "options": ["两层GCN", "Gated GRU", "LSTM", "Transformer"], "answer": 1, "explanation": "T-GCN使用两层GCN捕获空间依赖关系，使用Gated GRU获取时间相关性。", "pitfall": "GCN负责空间，GRU负责时间。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "基于点预测+统计学习的区间预测法，通常假设误差服从什么分布？", "options": ["正态分布", "均匀分布", "泊松分布", "指数分布"], "answer": 0, "explanation": "基于训练或者验证集误差的区间估计法，首先建立时间序列预测的点预测模型，然后假设误差服从正态分布，估计出置信度对应的误差的上下限。", "pitfall": "统计学习方法中常假设误差服从正态分布。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "分位数损失函数法中，q=0.5时退化为哪种误差？", "options": ["MAE（平均绝对误差）", "MSE（均方误差）", "RMSE（均方根误差）", "MAPE（平均绝对百分比误差）"], "answer": 0, "explanation": "分位数损失函数法中，q=0.5时退化为MAE（平均绝对误差）。", "pitfall": "q=0.5是中位数，对应MAE。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "对数似然函数方法中，预测正态分布需要预测其什么参数？", "options": ["均值和方差", "均值和标准差", "方差和偏度", "偏度和峰度"], "answer": 0, "explanation": "使用神经网络模型分别预测这个概率分布的参数（比如正态分布就是预测其均值和方差），接着构造对数似然函数作为损失函数。", "pitfall": "正态分布由均值和方差决定。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "时间序列分解中，表示较长一段时间内持续向上或向下的变动的是？", "options": ["趋势项", "季节项", "残差项", "周期项"], "answer": 0, "explanation": "趋势项指时间序列在较长一段时间内呈现出来的持续向上或者持续向下的变动。", "pitfall": "季节项是一年内的周期波动，趋势项是长期走向。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "时间序列弱平稳性要求序列的期望、方差和什么不随时间而变？", "options": ["协方差", "偏度", "峰度", "中位数"], "answer": 0, "explanation": "时间序列（弱）平稳：序列中任意时刻数据的期望、方差和协方差不随时间而变。", "pitfall": "弱平稳只要求期望、方差和协方差不变，不要求高阶矩。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "常见的单位根检验方法不包括？", "options": ["DF检验", "ADF检验", "PP检验", "F检验"], "answer": 3, "explanation": "常见的单位根检验方法有DF检验、ADF检验和PP检验。F检验是方差分析中使用的，不是单位根检验。", "pitfall": "F检验用于比较方差，不是检验平稳性。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "朴素预测法的公式是？", "options": ["y_{t+1} = y_t", "y_{t+1} = 过去一段时间y的均值", "y_{t+1} = y_t + y_{t-1}", "y_{t+1} = 0"], "answer": 0, "explanation": "朴素预测法是将前一天的曲线平移一个周期作为预测曲线，公式为y_{t+1} = y_t。", "pitfall": "朴素预测法就是直接用上一时刻的值作为下一时刻的预测值。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "Facebook Prophet算法将时间序列分为趋势、季节和什么三部分特征？", "options": ["节日", "残差", "周期", "随机"], "answer": 0, "explanation": "Prophet针对一维时间序列进行建模，将时间序列分为趋势、季节、节日三部分特征。", "pitfall": "Prophet特有的就是加入了节日特征。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "简单的指数平滑中，权重随观测时间的久远程度呈什么趋势下降？", "options": ["指数型", "线性", "对数型", "常数"], "answer": 0, "explanation": "简单的指数平滑预测值使用加权平均值进行计算，其中权重随观测时间的久远程度呈指数型下降。", "pitfall": "指数平滑的名字就来源于权重呈指数下降。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "传统RNN存在的问题有哪些？", "options": ["只有短期记忆能力，无法处理较长的输入序列", "训练过程中容易出现梯度消失和梯度爆炸", "网络结构过于复杂，参数过多", "难以通过并行化实现效率提升"], "answer": [0, 1], "explanation": "传统RNN只有短期记忆能力，且由于递归结构容易出现梯度消失和梯度爆炸。网络结构复杂和难以并行化是LSTM和RNN通病，但题目问的是传统RNN的主要问题。", "pitfall": "难以并行化是RNN类算法通病，但传统RNN最核心的问题是短期记忆和梯度问题。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "LSTM相对于传统RNN的优势有哪些？", "options": ["能够有选择性地保留、遗忘部分信息", "能够处理有效的长期信息", "完全解决了梯度消失和梯度爆炸问题", "网络结构更为简单，待训练参数减少"], "answer": [0, 1], "explanation": "LSTM的优势是能够有选择性地保留、遗忘部分信息，能够处理有效的长期信息。它只能缓解而非完全解决梯度问题，且网络结构更复杂，参数增加。", "pitfall": "LSTM只是缓解梯度问题，且结构更复杂。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "CNN用于时间序列预测时，相对于RNN的主要优势包括？", "options": ["平移不变性，在特征提取时不会破坏信号频谱", "能够较好地处理信号的历史同比信息", "方便通过并行化提升训练、推理效率", "能够更好地处理序列中输入的前后联系"], "answer": [0, 1, 2], "explanation": "CNN相对于RNN的主要优势包括平移不变性、处理历史同比信息好、方便并行化。处理前后联系是RNN的优势。", "pitfall": "处理前后联系是RNN的强项，不是CNN的优势。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "Encoder-Decoder模型存在的弊端有哪些？", "options": ["语境向量可能无法完全表示整个序列的信息", "先输入到网络的内容携带的信息会被后输入的信息覆盖掉", "输入序列越长，信息覆盖现象越严重", "无法处理变长序列"], "answer": [0, 1, 2], "explanation": "Encoder-Decoder的弊端在于语境向量可能无法完全表示整个序列的信息，且先输入的信息会被后输入的信息覆盖，输入序列越长现象越严重。", "pitfall": "Encoder-Decoder是可以处理变长序列的。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "Attention model依旧存在的问题有哪些？", "options": ["忽略了输入序列间的关联和目标序列间的关联性", "使用的RNN无法并行化处理，导致模型训练时间长", "仍然无法解决序列间长距离的依赖性", "语境向量无法完全表示整个序列的信息"], "answer": [0, 1, 2], "explanation": "Attention model解决了只有一个Context Vector的缺点，但忽略了输入序列间和目标序列间的关联性，且RNN无法并行化，仍无法解决长距离依赖。", "pitfall": "语境向量无法完全表示整个序列的信息是Encoder-Decoder的问题，Attention已经解决了这个。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "GNN网络的输入包含哪些部分？", "options": ["顶点信息", "边信息", "全局信息", "顶点之间的连接信息"], "answer": [0, 1, 2, 3], "explanation": "GNN的输入包含顶点信息、边信息、全局信息、顶点之间的连接信息。", "pitfall": "图结构的基本要素都要包含。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "时间序列概率预测方法包括哪些？", "options": ["点预测+统计学习的方法（区间预测）", "分位数损失函数法（分位数预测）", "对数似然函数方法（概率分布预测）", "蒙特卡洛模拟法"], "answer": [0, 1, 2], "explanation": "时间序列概率预测方法包括点预测+统计学方法、分位数损失函数法、对数似然损失函数法。蒙特卡洛采样是对数似然方法中生成预测值的手段。", "pitfall": "蒙特卡洛采样是生成预测值的手段，不是独立的预测方法类别。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "GBDT可以使用分位数损失函数，以下哪些算法有quantile选项？", "options": ["LightGBM", "XGBoost", "SVR", "ARIMA"], "answer": [0, 1], "explanation": "LightGBM 和 XGBoost 的 objective 里面都有 quantile 这个选项，都可以输出区间预测。", "pitfall": "SVR和ARIMA不是基于树的GBDT算法。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "时间序列预测方法体系中，深度学习方法的优点有哪些？", "options": ["不需要复杂的特征工程", "模型表达能力强", "端到端训练", "支持定制化loss函数", "少量数据即可表现良好"], "answer": [0, 1, 2, 3], "explanation": "深度学习方法的优点包括不需要复杂的特征工程、模型表达能力强、端到端训练、支持定制化loss函数。缺点是需要大量数据，数据量不足时效果不好。", "pitfall": "深度学习需要大量数据，少量数据效果不好。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "时间序列预测面临的挑战包括哪些？", "options": ["不同领域时间序列复杂度、影响因素、时间粒度差异巨大", "不同领域的时间序列数据的数据多寡和完整性差异巨大", "不同领域对时间序列预测消耗的资源和时间容忍度差异巨大", "时间序列数据中数据漂移现象，极大增加了预测难度"], "answer": [0, 1, 2, 3], "explanation": "时间序列预测面临的挑战包括不同领域复杂度差异、数据多寡和完整性差异、资源时间容忍度差异、可预测性差异、期望精度差异、数据漂移现象以及人才稀缺等。", "pitfall": "这些都是时间序列预测在实际应用中面临的挑战。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "时间序列数据集划分为训练集和测试集时，常见的方法有？", "options": ["简单划分方法", "时间序列k-folder交叉验证划分方法", "随机划分方法", "留一法"], "answer": [0, 1], "explanation": "时间序列数据划分常见方法包括简单划分方法和时间序列k-folder交叉验证划分方法。不能使用随机划分，因为要确保测试集的时间戳晚于训练集。", "pitfall": "时间序列不能随机划分，否则会数据泄露。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "常用点预测评价指标包括哪些？", "options": ["平均绝对误差（MAE）", "均方根误差（RMSE）", "平均绝对百分比误差（MAPE）", "对称平均绝对百分比误差"], "answer": [0, 1, 2, 3], "explanation": "常用点预测评价指标包括MAE、RMSE、APE、MAPE、分位数绝对百分比误差、sMAPE等。", "pitfall": "这些都是常见的点预测评价指标。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "时间序列一般可以分解为哪些成分？", "options": ["趋势项", "季节项", "残差项", "周期项"], "answer": [0, 1, 2, 3], "explanation": "一个时间序列一般可以分解为由趋势项、季节项、残差项等成分，部分场景下还包含周期项。", "pitfall": "不要遗漏周期项，虽然不是所有序列都有，但它是分解的成分之一。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "基于时间序列的特征工程，输入特征主要包括哪些类型？", "options": ["日期时间相关特征", "滞后特征", "滑窗/扩展窗特征", "同期值特征", "业务域特征"], "answer": [0, 1, 2, 3, 4], "explanation": "输入特征主要包括日期时间相关特征、滞后特征、滑窗/扩展窗特征、同期值特征、交叉特征、业务域特征、节假日特征等。", "pitfall": "特征工程是机器学习方法的核心，这些特征类型都要掌握。"}, {"kc_id": "kc1.33", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "ARIMA类预测算法包括哪些变种？", "options": ["AR", "MA", "ARMA", "SARIMAX"], "answer": [0, 1, 2, 3], "explanation": "ARIMA模型旨在描绘数据的自回归性，其包括AR、MA、ARMA、ARIMA、SARIMA、SARIMAX等多种成分和变种。", "pitfall": "这些都是ARIMA家族的成员。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述LSTM中状态位C和H的变化特点及其作用。", "answer": "LSTM中包含状态位H和C。C变化缓慢，C^t是在C^{t-1}基础上增加某些信息，用于传递长期记忆；H变化较快，H^t和H^{t-1}可能差异很大，用于传递短期记忆。通过这两个状态位，LSTM能够有选择性地保留、遗忘部分信息，从而处理有效的长期信息。", "explanation": "LSTM通过引入C和H两个状态位，分别处理长期和短期记忆，解决了传统RNN只有短期记忆的问题。", "pitfall": "容易混淆C和H哪个是长期哪个是短期，C变化慢对应长期，H变化快对应短期。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述CNN用于时间序列预测时，如何将一维时间序列二维化。", "answer": "CNN用于时间序列预测时，一般需要将一维的时间序列二维化，例如将历史数据按天、周等周期切段后拼接在一起形成“图像”。这样就可以利用CNN的卷积层和池化层进行特征提取。", "explanation": "将一维时序数据按周期切段拼接成二维矩阵，使其符合CNN的输入要求，同时保留周期性特征。", "pitfall": "不能直接将一维数据输入CNN，需要进行二维化处理。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述基于点预测+统计学习的时间序列区间预测方法的基本步骤。", "answer": "首先建立时间序列预测的点预测模型，然后假设误差服从正态分布，估计出置信度对应的误差的上下限，再把它们加入到时间序列点预测的值或者序列中，即获得了时间序列的区间预测。", "explanation": "该方法基于点预测模型，通过假设误差分布来估计区间，关键在于误差分布的假设和上下限的估计。", "pitfall": "必须先有点预测模型，再基于误差分布进行区间估计。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述时间序列弱平稳性的定义及其检验方法。", "answer": "时间序列（弱）平稳是指序列中任意时刻数据的期望、方差和协方差不随时间而变。常见的检验方法是单位根检验，当一个时间序列的滞后算子多项式方程存在单位根时为非平稳，反之为平稳。常见的单位根检验方法有DF检验、ADF检验和PP检验。", "explanation": "弱平稳性要求期望、方差和协方差不变，通过单位根检验来判断。", "pitfall": "弱平稳只要求二阶矩及以下不变，不要求高阶矩。"}, {"kc_id": "kc1.33", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述基于特征工程+机器学习的时间序列预测方法中，将时序预测转化为回归问题的输入特征类型。", "answer": "输入特征主要包括：日期时间相关特征（年月日等）、滞后特征（y(t-d)）、滑窗/扩展窗特征（统计值如均值、方差等）、同期值特征（前n个周期的同期特征）、交叉特征（类别特征组合等）、业务域特征（气象、排产等先验知识）、节假日特征等。", "explanation": "通过构建这些特征，将时间序列的时序信息转化为机器学习模型可以处理的回归特征矩阵。", "pitfall": "特征类型很多，容易遗漏业务域特征和交叉特征。"}, {"kc_id": "kc1.73", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "在SVR求解模型中，支持向量是指什么？", "options": ["间隔带内的样本", "间隔带外的样本", "所有的训练集样本", "待预测的样本"], "answer": 1, "explanation": "对于ε-间隔带外样本，系数不为0，这些样本称为支持向量。", "pitfall": "容易混淆间隔带内外样本的系数，间隔带内样本系数为0，不是支持向量。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述SVR的核化原理及其作用。", "options": [], "answer": "SVR解模型将x投影到xi^T*x空间中，使x-y在该空间中线性相关。根据x-y内在联系的不同，可以将xi^T*x替换为其它核函数，使x-y在其它特征空间中实现线性相关。核函数的作用是将低维空间的非线性关系映射到高维特征空间中的线性关系，但核函数选择是SVR的最大变数，选择不当会导致性能不佳。", "explanation": "核化通过映射将非线性问题转化为线性问题，核函数的选择直接决定了映射后的特征空间是否适合线性回归。", "pitfall": "忽略核函数选择不当可能导致的性能下降问题。"}, {"kc_id": "kc1.73", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "随机森林回归算法是一种典型的什么集成算法？", "options": ["Boosting", "Bagging", "Stacking", "Blending"], "answer": 1, "explanation": "随机森林回归算法是决策树回归的组合算法，是一种典型的Bagging集成算法。", "pitfall": "容易与Boosting算法混淆，随机森林是通过有放回抽样构建多棵树并取平均，属于Bagging。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "随机森林构建过程中的两类随机指的是什么？", "options": ["样本随机采样", "特征随机选择", "权重随机分配", "损失函数随机选择"], "answer": [0, 1], "explanation": "随机森林构建过程主要有两类随机：样本随机采样（有放回抽样）和特征随机选择（节点分割时选择随机子集的最佳分割）。", "pitfall": "可能会误选权重或损失函数的随机，随机森林不涉及这些。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于随机森林回归算法的优缺点，以下说法正确的是？", "options": ["算法简单", "易于并行执行", "可解释性强", "模型计算量大"], "answer": [0, 1, 3], "explanation": "随机森林的优点是算法简单、易于并行执行、可以减小预测方差；缺点是可解释性差、模型计算量大。", "pitfall": "随机森林由多棵决策树组成，通常被认为是“黑盒”模型，可解释性差。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "随机森林通过组合不同的树来减少方差，其代价是什么？", "options": ["增加过拟合风险", "增加一点点偏差", "降低模型并行度", "减少特征数量"], "answer": 1, "explanation": "随机森林通过组合不同的树来减少方差，有时以增加一点点偏差为代价。", "pitfall": "通常认为降低方差会提高模型整体性能，但可能会略微增加偏差。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述随机森林如何通过注入随机性来抵消预测误差。", "options": [], "answer": "单个决策树通常表现出很高的方差并容易过拟合。在随机森林中注入随机性（样本随机采样和特征随机选择）产生的决策树具有一定的解耦预测误差。通过取这些预测的平均值，可以抵消掉一些误差，从而减少方差，产生整体更好的模型。", "explanation": "利用Bagging的思想，通过样本和特征的随机化使各棵树相互独立，平均后能显著降低方差。", "pitfall": "忽略“解耦预测误差”这一关键概念。"}, {"kc_id": "kc1.73", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "梯度提升回归树是以什么方式构建模型的？", "options": ["并行方式", "分阶段方式", "随机方式", "层次方式"], "answer": 1, "explanation": "像其他提升方法一样，梯度提升回归树以分阶段的方式构建模型。", "pitfall": "容易与随机森林的并行构建方式混淆。"}, {"kc_id": "kc1.73", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "以下哪些属于常见的梯度提升回归树算法？", "options": ["GBDT", "XGBoost", "LightGBM", "CatBoost"], "answer": [0, 1, 2, 3], "explanation": "常见的梯度提升回归树算法包括GBDT、XGBoost、LightGBM和CatBoost等。", "pitfall": "无特殊易错点，均为常见算法。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "根据文档中的算法性能对比，在数据量和计算机配置足够的情况下，哪种算法是精度最好的梯度提升算法开源框架？", "options": ["XGBoost", "LightGBM", "CatBoost", "H2O"], "answer": 2, "explanation": "整体来说，在数据量和计算机配置足够的情况下，CatBoost是精度最好的梯度提升算法开源框架。", "pitfall": "可能会误选XGBoost或LightGBM，但文档明确指出CatBoost精度最好。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在梯度提升回归树的预测过程中，第一棵树的输入是什么？", "options": ["原始特征x", "前一棵树的残差", "初始预测值0加上原始特征x", "原始标签y"], "answer": 2, "explanation": "模型预测过程为：ŷ⁽⁰⁾ = 0 → ŷ⁽¹⁾ → ... 第一棵树的输入为(x, y)，输出为ŷ⁽⁰⁾ + v·f₁(x; Θ₁)，其中ŷ⁽⁰⁾ = 0。", "pitfall": "容易忽略初始预测值ŷ⁽⁰⁾ = 0。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述梯度提升回归树的基本原理。", "options": [], "answer": "梯度提升回归树是弱预测模型的集成，采用决策树作为弱预测模型时称为梯度提升树（GBT或GBDT）。它以分阶段的方式构建模型，通过允许对任意可微分损失函数进行优化，作为对一般提升方法的推广。每一棵新树学习的是之前所有树的结论和的残差，逐步逼近真实值。", "explanation": "核心在于分阶段加法模型和损失函数的梯度优化，通过拟合残差不断减小预测误差。", "pitfall": "未能提及“任意可微分损失函数”这一推广特性。"}, {"kc_id": "kc1.73", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "Stacking模型的最简单堆叠模型通常包含几个层次？", "options": ["1个", "2个", "3个", "4个"], "answer": 1, "explanation": "最简单的堆叠模型通常包含2个层次：第一层由基本模型组成，第二层包含元学习器。", "pitfall": "无特殊易错点。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在Stacking集成中，第二层模型的训练是在第一层模型的什么数据上学习训练的？", "options": ["全部训练集直接推理结果", "k-fold交叉验证的元特征", "leave-out方法留出的验证集元特征", "测试集推理结果"], "answer": 1, "explanation": "Stacking中第二层模型的训练是在第一层模型的k-fold交叉验证的元特征上学习训练的。", "pitfall": "容易与Blending的leave-out方法混淆。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Blending集成中，第二层模型的训练是在第一层模型的什么数据上学习训练的？", "options": ["k-fold交叉验证的元特征", "leave-out方法留出的验证集元特征", "全部训练集直接推理结果", "测试集推理结果"], "answer": 1, "explanation": "Blending中第二层模型的训练是在第一层模型的通过leave-out方法留出一部分训练数据集作为验证集的元特征上学习训练的。", "pitfall": "容易与Stacking的k-fold交叉验证混淆。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于Stacking和Blending的对比，以下说法正确的是？", "options": ["Stacking使用k-fold交叉验证生成元特征", "Blending使用leave-out方法生成元特征", "Stacking比Blending计算快", "Blending保证了所有训练集数据参与第一层模型训练"], "answer": [0, 1], "explanation": "Stacking使用k-fold交叉验证，保证所有数据参与训练但计算量大；Blending使用leave-out方法，计算快但非全部数据参与第一层训练。", "pitfall": "混淆两者的优缺点，Stacking计算量大，Blending计算快。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述Stacking集成模型的优点和缺点。", "options": [], "answer": "Stacking集成模型的优点是保证了所有训练集数据参与模型训练；缺点是训练计算量大，因为第二层模型的训练是在第一层模型的k-fold交叉验证的元特征上学习训练的。", "explanation": "k-fold交叉验证需要多次训练第一层模型，导致计算成本显著增加。", "pitfall": "忽略k-fold交叉验证带来的计算开销。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于Blending集成模型的优缺点，以下说法正确的是？", "options": ["比传统Stacking模型简单", "计算快", "所有训练集数据都参与了第一层模型训练", "训练计算量大"], "answer": [0, 1], "explanation": "Blending的优点是比传统Stacking模型简单、计算快；缺点是非全部训练集参与第一层模型训练。", "pitfall": "误认为Blending使用了全部训练集数据。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "basic", "type": "choice", "points": 4, "question": "循环神经网络（RNN）与传统全连接神经网络的主要变化点是什么？", "options": ["增加了池化层", "隐含层中引入了前一时刻的隐含层信息", "使用了卷积算子", "引入了注意力机制"], "answer": 1, "explanation": "RNN由传统全连接神经网络演化而来，主要变化点为隐含层中引入了前一时刻的隐含层信息，有效处理了序列中输入的前后联系。", "pitfall": "容易与CNN或Transformer的特点混淆。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "当RNN用于时间序列预测时，其输入输出的关系是？", "options": ["输入输出相同，且同步", "输入输出相同，但输出提前一帧", "输入为多维，输出为一维", "输入为前一帧，输出为当前帧"], "answer": 1, "explanation": "当用于时间序列预测时，RNN的输入输出相同，但输出提前一帧，即当前帧+前期积累信息→下一帧。", "pitfall": "忽略“输出提前一帧”这一时序预测的关键特征。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "传统RNN存在哪些问题？", "options": ["只有短期记忆能力", "无法处理较长的输入序列", "容易出现梯度消失", "容易出现梯度爆炸"], "answer": [0, 1, 2, 3], "explanation": "传统RNN只有短期记忆能力，无法处理较长输入序列；且由于递归结构，训练中容易出现梯度消失和梯度爆炸。", "pitfall": "漏选梯度爆炸，梯度消失和爆炸在RNN中常常同时出现。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "传统RNN中，当前帧输出值与哪些因素相关？", "options": ["当前帧输入值和前一帧隐含层", "当前帧输入值和后一帧隐含层", "所有历史帧的输入值", "当前帧输入值和所有未来帧隐含层"], "answer": 0, "explanation": "传统RNN中，当前帧输出值只跟当前帧输入值、前一帧隐含层相关。", "pitfall": "误认为RNN能记住所有历史信息，实际上它只有短期记忆。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述循环神经网络（RNN）的基本原理及其在时间序列预测中的应用方式。", "options": [], "answer": "RNN由传统全连接神经网络演化而来，在隐含层中引入了前一时刻的隐含层信息（H_t = f(U·X_t + W·H_{t-1})），有效处理了序列中输入的前后联系。在时间序列预测中，RNN的输入输出相同，但输出提前一帧，即利用当前帧输入和前期积累的隐含层信息来预测下一帧的输出。", "explanation": "核心在于隐含层的状态传递，使得网络具备了记忆历史信息的能力。", "pitfall": "未能写出隐含层状态传递的公式或逻辑。"}, {"kc_id": "kc1.73", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "LSTM（长短期记忆网络）中包含哪些状态位？", "options": ["只有H", "H和C", "只有C", "H、C和Z"], "answer": 1, "explanation": "传统RNN中只包含状态位H，而LSTM中包含状态位H和C，前后帧之间既能传递短期记忆，又能传递长期记忆。", "pitfall": "容易漏选C，C是LSTM区别于传统RNN的关键。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "LSTM网络模型底层的四个状态位包括哪些？", "options": ["z (状态位)", "z_i (记忆门控)", "z_f (遗忘门控)", "z_o (输出门控)"], "answer": [0, 1, 2, 3], "explanation": "LSTM网络模型底层是z, z_i, z_f, z_o四个状态位。", "pitfall": "可能会漏选z，z是用于生成候选记忆的状态位。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在LSTM中，控制长期记忆状态位c_(t-1)中哪些信息需要被遗忘的是哪个门控？", "options": ["记忆门控 z_i", "遗忘门控 z_f", "输出门控 z_o", "状态位 z"], "answer": 1, "explanation": "z_f为遗忘门控，用于控制长期记忆状态位c_(t-1)中哪些信息需要被遗忘。", "pitfall": "混淆各门控的功能。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "关于LSTM的优缺点，以下说法正确的是？", "options": ["能够有选择性地保留、遗忘部分信息", "能够处理有效的长期信息", "网络结构简单，待训练参数少", "难以通过并行化实现效率提升"], "answer": [0, 1, 3], "explanation": "LSTM的优势是能选择性保留/遗忘信息，处理长期信息；缺点是网络结构复杂，参数增加，且由于递归迭代难以并行化提升效率。", "pitfall": "误认为LSTM结构简单，实际上它比传统RNN复杂得多。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在LSTM中，关于状态位C和H的变化特点，说法正确的是？", "options": ["C变化快，H变化慢", "C变化缓慢，H变化较快", "C和H都变化缓慢", "C和H都变化较快"], "answer": 1, "explanation": "C变化缓慢，c^t是在c^{t-1}的基础上增加某些信息得到的；H变化较快，h^t和h^{t-1}可能会有很大的不同。", "pitfall": "混淆C和H的变化速度。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述LSTM中遗忘门控、记忆门控和输出门控的作用。", "options": [], "answer": "遗忘门控用于控制长期记忆状态位c_{t-1}中哪些信息需要被遗忘；记忆门控用于控制当前输入x_t和前一帧状态位h_{t-1}中哪些信息需要被记忆；输出门控用于控制哪些信息需要被输出到状态位h_t和y_t。", "explanation": "三个门控协同工作，实现了对记忆信息的精确控制，从而缓解了梯度消失并保留了长期依赖。", "pitfall": "混淆记忆门控和输出门控的作用对象。"}, {"kc_id": "kc1.73", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "卷积神经网络（CNN）一般由哪些层交错叠加并在最后拼接而成？", "options": ["卷积层", "池化层", "全连接层", "循环层"], "answer": [0, 1, 2], "explanation": "CNN一般由卷积层和池化层交错叠加，并在最后拼接全连接层而成。", "pitfall": "误将循环层加入CNN的结构中。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在CNN中，卷积层的主要功能是什么？", "options": ["在输入矩阵中滑动小窗求最大值", "将输入矩阵一维化", "将卷积算子在输入矩阵中滑动卷积，计算卷积和形成新矩阵", "实现序列的前后联系"], "answer": 2, "explanation": "卷积层的功能是将卷积算子在输入矩阵中滑动卷积，依次计算卷积和形成新矩阵。", "pitfall": "混淆卷积层和池化层的功能。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在CNN中，池化层的主要功能是什么？", "options": ["将卷积算子在输入矩阵中滑动卷积", "在输入矩阵中滑动小窗，并在小窗内求最大值或其它池化操作", "将输入矩阵一维化并全连接映射", "提取长期记忆信息"], "answer": 1, "explanation": "池化层的功能是在输入矩阵中滑动小窗，并在小窗内求最大值或其它池化操作，形成新矩阵。", "pitfall": "混淆池化层和卷积层的操作。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "相对于RNN，CNN在时间序列预测中的主要优势包括哪些？", "options": ["平移不变性", "周期性信息提取", "并行化效率高", "能够更好地处理长期依赖"], "answer": [0, 1, 2], "explanation": "CNN的主要优势在于平移不变性、周期性信息提取和并行化效率高。", "pitfall": "误认为CNN比RNN更擅长处理长期依赖，实际上LSTM等RNN变体在长依赖上更有优势。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "CNN用于时间序列预测时，一般需要如何处理一维的时间序列数据？", "options": ["直接输入一维数据", "将历史数据按周期切段后拼接在一起形成“图像”", "将其转化为图结构数据", "使用一维卷积但不做二维化"], "answer": 1, "explanation": "CNN用于时间序列预测一般需要将一维的时间序列二维化，例如将历史数据按天、周等周期切段后拼接在一起形成“图像”。", "pitfall": "忽略二维化步骤，直接使用一维卷积虽然可行，但文档强调二维化以利用CNN的二维处理优势。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "在CNN+时间序列预测的网络结构中，一般包含哪些通道的特征提取？", "options": ["水平通道", "垂直通道", "对角通道", "环形通道"], "answer": [0, 1], "explanation": "一般CNN迭代流程包含水平通道和垂直通道的特征提取，并结合辅助信息进行预测。", "pitfall": "无特殊易错点。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述CNN用于时间序列预测的流程。", "options": [], "answer": "首先将历史数据按周期切段，拼接后形成“图像”；然后将二维化后的数据输入CNN进行特征提取（包含水平通道和垂直通道的特征提取）；最后结合辅助信息（如Customer ID、Month、Day等），经过Dropout层和全连接层，输出预测结果。", "explanation": "关键在于数据的二维化处理和多通道特征提取。", "pitfall": "遗漏辅助信息的结合或二维化步骤。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "传统Seq2Seq模型中，Encoder-Decoder之间通过固定长度的语境向量联系，这种做法存在哪些弊端？", "options": ["语境向量可能无法完全表示整个序列的信息", "先输入的内容携带的信息会被后输入的信息覆盖掉", "输入序列越长，信息覆盖现象越严重", "无法处理变长序列"], "answer": [0, 1, 2], "explanation": "固定长度语境向量的弊端包括：无法完全表示整个序列信息，先输入信息被后输入信息覆盖，且输入序列越长覆盖越严重。", "pitfall": "误选“无法处理变长序列”，Seq2Seq本身是可以处理变长序列的，只是效果不好。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "深度学习中的Attention机制借鉴了人类的什么思维方式？", "options": ["逻辑推理", "注意力思维方式", "归纳总结", "联想记忆"], "answer": 1, "explanation": "深度学习中的Attention机制借鉴了人类的注意力思维方式，能够在众多干扰信息中专注于某些需要重点关注的目标区域。", "pitfall": "无特殊易错点。"}, {"kc_id": "kc1.73", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述传统Seq2Seq模型的局限性以及Attention机制如何解决这一问题。", "options": [], "answer": "传统Seq2Seq模型将整个序列的信息压缩进一个固定长度的语境向量中，导致语境向量可能无法完全表示整个序列的信息，且先输入的信息会被后输入的信息覆盖，序列越长现象越严重。Attention机制借鉴人类注意力思维方式，在处理序列时不再使用单一的固定语境向量，而是为每个输入元素分配不同的权重，使得模型能够重点关注当前输出所需的关键输入区域，从而有效缓解了信息丢失和覆盖问题。", "explanation": "Attention通过动态权重分配打破了固定长度向量的瓶颈。", "pitfall": "未能准确描述Attention如何解决信息覆盖问题（即动态权重分配）。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "basic", "type": "choice", "points": 4, "question": "Global Attention与Local Attention的主要区别是什么？", "options": ["Global Attention计算目标状态与所有输入序列状态的关联，Local Attention计算与局部输入序列状态的关联", "Global Attention只计算局部关联，Local Attention计算全局关联", "Global Attention使用RNN，Local Attention使用CNN", "Global Attention计算复杂度低，Local Attention计算复杂度高"], "answer": 0, "explanation": "Global Attention计算目标状态与所有输入序列状态的关联，得到全局对齐权重；Local Attention计算目标状态与局部输入序列状态的关联，得到局部对齐权重和位置。", "pitfall": "容易混淆全局和局部的计算范围，注意Global是针对所有输入序列。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 4, "question": "Attention模型虽然解决了输入序列仅有一个context vector的缺点，但依旧存在哪些问题？", "options": ["关联信息缺失", "无法并行化", "长距离依赖问题", "梯度爆炸问题"], "answer": [0, 1, 2], "explanation": "Attention model存在的问题包括：1.关联信息缺失（忽略了输入序列间和目标序列间的关联）；2.无法并行化（使用RNN导致无法并行）；3.长距离依赖问题（仍然无法解决）。", "pitfall": "容易忽略RNN导致的无法并行化问题，以及序列间关联缺失的问题。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 4, "question": "简述Attention函数的本质。", "options": [], "answer": "Attention函数的本质可以被描述为一个查询到一系列（键Key-值Value）对的映射。给定Target中的某个元素Query，通过计算Query和各个Key的相似性或者相关性，得到每个Key对应Value的权重系数，然后对Value进行加权求和，即得到了最终的Attention数值。", "explanation": "Attention本质是Query与Key-Value对的映射，通过相似度计算权重并加权求和。", "pitfall": "需要准确描述Query、Key、Value三者的关系及计算过程。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "Transformer网络结构中，为了捕捉序列顺序信息引入了什么机制？", "options": ["残差连接", "LayerNorm", "位置编码", "多头注意力"], "answer": 2, "explanation": "Transformer引入了位置编码来捕捉序列顺序信息，因为自注意力机制本身不具备位置感知能力。", "pitfall": "容易将位置编码与残差连接或LayerNorm混淆。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在Transformer的Decoder结构中，Mask的作用是什么？", "options": ["加速模型训练", "防止梯度消失", "保证解码器无法看到预测时刻之后的数据", "减少模型参数量"], "answer": 2, "explanation": "Mask的作用是在训练的时候，保证解码器无法看到预测时刻之后的数据，与模型预测时保持一致。", "pitfall": "容易忽略Mask是为了保持训练和预测时的一致性。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "Scaled Dot-Product Attention中使用什么方法计算相似度？", "options": ["余弦相似度", "内积", "欧氏距离", "皮尔逊相关系数"], "answer": 1, "explanation": "Scaled Dot-Product Attention使用内积计算相似度，公式为Attention(Q, K, V) = softmax(QK^T/√dk)V。", "pitfall": "注意是内积，并且经过了Scale缩放。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 4, "question": "关于Multi-Head Attention，以下说法正确的是？", "options": ["模拟卷积神经网络，多通道输出，学习多种模式", "投影到低维空间，降低计算复杂度", "增加模型的可学习参数", "将Q, K, V通过Linear层分头计算后直接相加输出"], "answer": [0, 1, 2], "explanation": "Multi-Head Attention将Q, K, V通过Linear层分头计算Scaled Dot-Product Attention，然后Concat并乘以权重矩阵WO输出，而不是直接相加。它具有多通道学习、降维和增加参数的特点。", "pitfall": "分头计算后是Concat拼接并乘以权重矩阵，不是直接相加。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 4, "question": "简述Transformer中Multi-Head Attention的作用及结构。", "options": [], "answer": "作用：模拟卷积神经网络多通道输出，学习多种模式；投影到低维空间降低计算复杂度；增加模型可学习参数。结构：将Q, K, V通过Linear层分头计算Scaled Dot-Product Attention，然后Concat并乘以权重矩阵WO输出。", "explanation": "Multi-Head Attention通过分头计算和拼接，增强了模型的表达能力。", "pitfall": "结构描述中容易漏掉最后的乘以权重矩阵WO步骤。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "hard", "type": "choice", "points": 4, "question": "Adversarial Sparse Transformer中，生成器最小化什么损失？", "options": ["交叉熵损失", "分位数损失", "对抗性损失", "均方误差损失"], "answer": 1, "explanation": "生成器最小化预测序列和真实数据之间的分位数损失；判别器最小化交叉熵损失函数。", "pitfall": "容易混淆生成器和判别器的损失函数。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "hard", "type": "multi", "points": 4, "question": "Informer模型相比传统Transformer有哪些改进？", "options": ["ProbSparse Self-attention mechanism", "Self-attention distilling", "Generative style decoder", "引入了残差连接"], "answer": [0, 1, 2], "explanation": "Informer的改进包括：ProbSparse Self-attention mechanism（复杂度O(L log L)）、Self-attention distilling（减半级联层输入）和Generative style decoder（一次前向传播预测）。", "pitfall": "残差连接是Transformer本身就有的，不是Informer的改进。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "电力变压器数据集（ETDataset）中，ETT-full数据集包含了哪些内容？", "options": ["负载、油温", "负载、油温、位置", "负载、油温、位置、气候、需求", "仅包含油温"], "answer": 2, "explanation": "ETT-full含有69个电力变压器的数据，包括负载、油温、位置、气候、需求。", "pitfall": "容易将ETT-small、ETT-large和ETT-full的内容混淆。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "图神经网络（GNN）的输入和输出是什么？", "options": ["输入是图，输出是标量", "输入是向量，输出是图", "输入是图，输出也是图", "输入是矩阵，输出是向量"], "answer": 2, "explanation": "GNN使用信息传递的框架，输入是图，输出也是图，可以对图上所有属性进行优化变化。", "pitfall": "GNN保持图的结构，输入输出均为图。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "最简单的GNN实现存在什么局限性？", "options": ["计算复杂度过高", "没有使用图的连接信息，未充分利用图的信息", "无法处理全局信息", "只能用于有向图"], "answer": 1, "explanation": "最简单的GNN实现没有使用图的连接信息，并没有把整个图的信息更新进顶点、边的属性里，没有充分利用图的信息。", "pitfall": "注意是最简单的GNN实现，它忽略了图的拓扑连接信息。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 4, "question": "图连接信息利用中的信息传递机制包括哪些步骤？", "options": ["不同顶点汇聚操作", "从相邻节点汇聚信息", "变换信息", "用新信息更新图"], "answer": [0, 1, 2, 3], "explanation": "信息传递机制包括：1.不同顶点汇聚操作；2.从相邻节点汇聚信息；3.变换信息；4.用新信息更新图。", "pitfall": "四个步骤缺一不可，需完整记忆。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "hard", "type": "multi", "points": 4, "question": "在GNN的节点更新过程中，更新节点嵌入需要用到哪些信息？", "options": ["相邻节点嵌入", "相邻边嵌入", "全局嵌入", "节点本身嵌入"], "answer": [0, 1, 2, 3], "explanation": "节点更新过程需要综合相邻节点嵌入、相邻边嵌入、全局嵌入和节点本身嵌入，通过条件函数和更新函数得到更新后的节点嵌入。", "pitfall": "容易漏掉全局嵌入或相邻边嵌入。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在处理大规模且连接稀疏的图时，如何加速信息传播？", "options": ["增加GNN层数", "使用全局变量作为master node与所有顶点和边相连", "丢弃稀疏连接的节点", "使用更复杂的激活函数"], "answer": 1, "explanation": "如果图比较大，连接稀疏，全局变量可以看作一个master node（主节点），可以和所有的顶点相连，可以和所有的边相连，从而加速信息传播。", "pitfall": "注意是利用全局变量作为主节点来加速，而不是简单地增加层数。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 4, "question": "简述图神经网络（GNN）中信息传递机制的步骤。", "options": [], "answer": "1.不同顶点汇聚操作；2.从相邻节点汇聚信息；3.变换信息；4.用新信息更新图。", "explanation": "信息传递机制通过这四个步骤实现图节点和边信息的更新。", "pitfall": "步骤顺序和内容需准确描述。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "hard", "type": "choice", "points": 4, "question": "图卷积神经网络（GCN）的前向传播简化公式为？", "options": ["H^(l+1) = σ(A H^(l) W^(l))", "H^(l+1) = σ(D^-1 A H^(l) W^(l))", "H^(l+1) = σ(Ã H^(l) W^(l))", "H^(l+1) = σ(A D^-1 H^(l) W^(l))"], "answer": 2, "explanation": "GCN前向传播公式为H^(l+1) = σ(D̃^(-1/2) Ã D̃^(-1/2) H^(l) W^(l))，简化形式为H^(l+1) = σ(Ã H^(l) W^(l))，其中Ã是加入自连接的邻接矩阵。", "pitfall": "注意Ã是加入了自连接的邻接矩阵，不是原始的A。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 4, "question": "在GCN中，加入自连接的邻接矩阵Ã的作用是什么？", "options": ["将自身的节点信息考虑进来", "将节点本身和邻居的信息都考虑进来", "对节点进行归一化", "减少模型参数量"], "answer": [0, 1, 2], "explanation": "加入自连接将自身的节点信息考虑进来，将节点本身和邻居的信息都考虑进来，对节点进行归一化。", "pitfall": "加入自连接主要是为了聚合自身信息，不是为了减少参数。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "T-GCN模型中，用于提取空间特征和时间特征的组件分别是？", "options": ["GCN和GRU", "CNN和LSTM", "GRU和GCN", "LSTM和CNN"], "answer": 0, "explanation": "T-GCN通过GCN提取空间特征，通过GRU提取时间特征。", "pitfall": "容易混淆空间和时间特征提取的组件对应关系。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 4, "question": "在基于图神经网络的交通流量预测T-GCN中，节点信息可以包含哪些？", "options": ["交通速度", "交通流量", "交通密度", "道路连接"], "answer": [0, 1, 2], "explanation": "节点信息包括交通速度、交通流量、交通密度等；道路连接作为边构成图。", "pitfall": "道路连接是边的信息，不是节点信息。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在基于训练或验证集误差的区间估计法中，获得区间预测的步骤正确的是？", "options": ["建立模型 -> 计算误差标准差 -> 给定置信度计算上下限 -> 点预测结果加减上下限", "建立模型 -> 给定置信度 -> 计算误差标准差 -> 点预测结果加减上下限", "计算误差标准差 -> 建立模型 -> 给定置信度计算上下限 -> 点预测结果加减上下限", "建立模型 -> 计算误差标准差 -> 点预测结果加减上下限 -> 给定置信度计算上下限"], "answer": 0, "explanation": "步骤为：1.建立时间序列预测模型；2.估计预测误差标准差；3.给定置信度，计算正态分布的上下限；4.时间序列点预测结果+误差上下限，获得区间预测。", "pitfall": "必须先有模型和误差标准差，才能根据置信度计算上下限。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "在分位数损失函数中，当q=0.5时，该损失函数等价于什么？", "options": ["MSE（均方误差）", "MAE（平均绝对误差）", "交叉熵损失", "Huber损失"], "answer": 1, "explanation": "当q=0.5时，两边的权重相等，这个损失函数就和MAE一样。", "pitfall": "容易与MSE混淆，q=0.5时是MAE。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 4, "question": "以下哪些模型可以使用分位数损失函数进行区间预测？", "options": ["MQRNN", "LightGBM", "XGBoost", "传统ARIMA模型"], "answer": [0, 1, 2], "explanation": "MQRNN采用Encoder LSTM和Decoder LSTM结构；GBDT如LightGBM和XGBoost的objective里面也有quantile选项，同样可以使用该损失进行区间预测。", "pitfall": "传统ARIMA通常不直接使用分位数损失函数。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 4, "question": "简述基于分位数损失函数法进行时间序列区间预测的原理。", "options": [], "answer": "分位数损失函数左边项代表预测值小于真实值的loss，右边项代表预测值大于真实值时的loss。当q取较大值（如0.95）时，模型会尽可能使预测值大于真实值，起到拉高预测值的作用，作为区间上限；当q取较小值（如0.05）时，模型会尽可能使预测值小于真实值，起到拉低预测值的作用，作为区间下限。通过训练不同q值的模型，即可得到预测区间。", "explanation": "通过调整q值，控制模型对高估或低估的惩罚权重，从而得到区间的上下限。", "pitfall": "需要解释清楚q值大小与上下限的对应关系及原因。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 4, "question": "使用对数似然函数方法进行概率预测时，主要步骤包括哪些？", "options": ["指定预测值服从的概率分布", "使用神经网络预测概率分布的参数", "构造对数似然函数作为损失函数并优化", "通过蒙特卡洛采样生成预测值和区间"], "answer": [0, 1, 2, 3], "explanation": "对数似然函数方法的步骤包括：指定概率分布、预测分布参数、构造并优化对数似然损失函数、通过采样生成预测结果。", "pitfall": "四个步骤缺一不可，注意最后是通过采样生成预测。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "hard", "type": "choice", "points": 4, "question": "DeepAR模型在测试阶段如何生成预测序列？", "options": ["直接输出神经网络的预测均值", "通过采样服从预测分布的值生成预测序列", "使用线性回归外推", "通过求解解析方程生成"], "answer": 1, "explanation": "在测试阶段，DeepAR通过采样服从预测分布的值（即采样z~l(·|θ)）生成预测序列。", "pitfall": "DeepAR是概率预测，测试阶段是通过采样生成的，而不是直接输出点值。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 4, "question": "时空流量预测中，网络预测痛点主要包括哪些？", "options": ["预测需求多（资源预测、流量预测）", "网络KPI影响因素复杂，预测难度大", "网络拓扑数据采集不完整", "模型训练时间过长"], "answer": [0, 1], "explanation": "网络预测痛点包括预测需求多（路由器资源类KPI、各网络流量预测）和网络KPI影响因素复杂（网络级流量需考虑空间相关，重大事件节假日流量建模难度大）。数据不完整性属于技术挑战。", "pitfall": "注意区分预测痛点和技术挑战，数据不完整性属于技术挑战。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 4, "question": "时空流量预测面临的技术挑战包括哪些？", "options": ["多维时间序列预测（重大事件与节假日流量数据少）", "多数据源融合（拓扑、配置、历史流量）", "数据不完整性（拓扑、配置采集不完整）", "缺乏合适的预测算法"], "answer": [0, 1, 2], "explanation": "技术挑战包括多维时间序列预测、时空预测（多数据源融合、数据不完整性）。", "pitfall": "缺乏算法不是主要挑战，文中提到支持多种SOTA算法。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "在网络级流量预测模型中，T-GCN的输入不包括以下哪项？", "options": ["多网络端口历史流量数据", "网络拓扑信息", "未来流量数据", "隐藏状态序列"], "answer": 2, "explanation": "模型接口输入为多网络端口历史流量数据、网络拓扑信息（可选）。未来流量是输出，隐藏状态是模型中间过程。", "pitfall": "未来流量是预测目标，属于输出，不是输入。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 4, "question": "节假日流量预测模型（LSTM AutoEncoder）的损失函数由哪几部分组成？", "options": ["重构损失 L_reconstruction", "输出损失 L_output", "对抗损失", "正则化损失"], "answer": [0, 1], "explanation": "损失函数LOSS = L_reconstruction + L_output，其中重构损失是Encoder输入与重构序列的L1损失，输出损失是Decoder输出与真实值的对比损失。", "pitfall": "注意该模型没有对抗损失和正则化损失。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 4, "question": "简述节假日流量预测模型（LSTM AutoEncoder）的算法方案及损失函数。", "options": [], "answer": "算法方案：Encoder输入历史流量、时间特征和事件特征，得到重构序列及embedding；Decoder输出预测序列，拼接时间特征和事件特征，与真实值对比。损失函数：LOSS = L_reconstruction + L_output，其中L_reconstruction为输入与重构序列的L1损失，L_output为预测输出与真实值的损失。", "explanation": "该模型利用AutoEncoder结构，同时优化重构和预测两个任务，损失函数为两者之和。", "pitfall": "容易漏掉重构损失部分，以及输入输出中包含的时间特征和事件特征。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "时空流量预测中，支持的多维流量预测是通过什么方式辅助增强预测效果的？", "options": ["通过学习不同流量序列的相同模式", "通过增加数据采样频率", "通过引入外部天气数据", "通过人工专家规则"], "answer": 0, "explanation": "多维流量预测通过学习不同流量序列的相同模式，辅助增强流量预测效果。", "pitfall": "注意是学习相同模式，而不是单纯增加数据量或引入外部数据。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "在T-GCN时空相关性学习中，上下文向量是如何计算的？", "options": ["Attention score与隐藏状态相乘", "隐藏状态直接相加", "Attention score与输入序列相乘", "输入序列与输出序列相乘"], "answer": 0, "explanation": "通过Multi-layer Perceptron计算Attention score，然后计算上下文向量：a_i × h_i = c_i，即Attention score与隐藏状态相乘。", "pitfall": "上下文向量是Attention score与隐藏状态h相乘，不要与输入X混淆。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "网络级流量预测中，将交通流量类比到网络流量，网络设备相当于交通流量中的什么？", "options": ["交通探测点", "道路", "车辆", "限速"], "answer": 0, "explanation": "对比项中，节点对应交通探测点和网络设备；链路对应道路和网络链路；流对应车辆和网络流量；链路性能对应限速和带宽。", "pitfall": "注意区分节点、链路、流和链路性能的对应关系。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "时空流量预测的验证效果中，平均准确率（MAPE）要求达到多少？", "options": ["> 75%", "> 80%", "> 85%", "> 90%"], "answer": 2, "explanation": "验证效果显示，平均准确率（MAPE）> 85%。", "pitfall": "注意区分整体验证效果（>85%）和运营商具体验证效果（>90%）。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 4, "question": "时空流量预测支持哪些流量模式预测？", "options": ["稳态流量序列预测", "趋势型流量序列预测", "周期型流量序列预测", "周期及趋势型流量序列预测"], "answer": [0, 1, 2, 3], "explanation": "支持多种流量模式预测，如稳态流量、趋势流量、周期流量及相互组合模式。", "pitfall": "四种模式均支持，包括组合模式。"}, {"kc_id": "kc1.112", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在预测流程中，根据预测需求及可预测性评估结果，选择合适的预测算法的模块是？", "options": ["数据预处理", "预测需求分析模块", "算法选择模块", "模型评估"], "answer": 2, "explanation": "算法选择模块负责根据预测需求及可预测性评估结果，选择合适的预测算法。", "pitfall": "注意是算法选择模块，而不是预测需求分析模块。"}, {"kc_id": "kc1.112", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "A运营商网络级流量预测的验证结果中，预测精度达到了多少？", "options": ["> 85%", "> 88%", "> 90%", "> 95%"], "answer": 2, "explanation": "A运营商验证结果：预测精度 > 90%。", "pitfall": "A运营商和B运营商的预测精度均大于90%。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "依据已知周期发生的时间，如周末、节假日、月末周六等，这类事件属于？", "options": ["周期性事件", "非周期性事件", "全局事件", "局部事件"], "answer": 0, "explanation": "周期性事件是指依据已知周期发生的时间，如周末、节假日、月末周六等。", "pitfall": "容易与非周期性事件混淆，非周期性事件是未知确切发生时间但过去已有类似事件发生。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "SDWAN流量预测验证中，历史观测数据的时间长度和采样率分别是？", "options": ["1年历史观测数据，天级别采样率", "3个月历史观测数据，5分钟采样率", "6个月历史观测数据，小时级采样率", "1个月历史观测数据，分钟级采样率"], "answer": 1, "explanation": "SDWAN流量预测验证使用3个月历史观测数据，5分钟采样率，预测精度 > 85%。", "pitfall": "注意区分SDWAN流量预测与XX局点验证的数据条件，XX局点为1年历史观测数据，天级别采样率。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "在OBP立项关键竞争力指标中，节假日场景下提前30天预测准确率由82%提升到了多少？", "options": ["85%", "90%", "95%", "98%"], "answer": 2, "explanation": "主动预防专题中，流量预测算法准确率提升，在节假日场景下提前30天预测准确率由82%提升到95%。", "pitfall": "准确率提升目标为95%，不要与平时的82%混淆。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在整网流量负载预测的算法评估指标SMAPE中，大长假的n值取多少？", "options": ["3", "5", "7", "10"], "answer": 2, "explanation": "大长假 n=7，小长假 n=3。", "pitfall": "大长假和小长假的n值不同，大长假为7，小长假为3。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "C局点在19年1月出现未知原因流量下滑，导致其预测误差达到多少？", "options": ["33%", "42%", "52%", "62%"], "answer": 1, "explanation": "短板场景1：C局点（预测误差42%）。C局点19年1月出现未知原因流量下滑。", "pitfall": "C局点误差为42%，D局点误差为33%，不要记反。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "ARIMA模型需要根据什么来确定超参 (p, d, q)？", "options": ["ACF和PACF", "趋势分量和周期分量", "傅里叶级数", "梯度下降"], "answer": 0, "explanation": "ARIMA需要根据ACF（自相关函数）和PACF（偏自相关函数）确定超参 (p, d, q)。", "pitfall": "ACF和PACF是时间序列分析中确定ARIMA参数的经典方法。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下关于线性回归模型在时间序列预测中的特点，说法错误的是？", "options": ["简单、稳健", "通过拟合出的趋势进行外推给出预测结果", "适合对短期趋势的预测", "能够精细刻画平稳序列的波动"], "answer": 3, "explanation": "能够精细刻画平稳序列的波动是ARIMA模型的特点，线性回归需要与历史节假日波动量融合形成更准确的预测。", "pitfall": "注意区分线性回归和ARIMA的特点，ARIMA擅长刻画平稳序列波动。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "在10个站点春节期间预测准确率对比中，哪个模型在部分规律性较强的6个站点上准确率达95%以上？", "options": ["产品现有技术", "线性回归 + 节日流量波动比例放大", "ARIMA + 节日流量波动比例放大", "Sequence2Sequence"], "answer": 2, "explanation": "当前使用ARIMA模型趋势外延+春节波动量比例放大（MIRAI算法）的方法，在部分规律性较强的6个站点上准确率达95%以上。", "pitfall": "MIRAI算法是基于ARIMA模型的改进。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "传统光伏功率预测方案通常要求多少运行数据？", "options": ["1-3个月", "1-6个月", "数年", "1年"], "answer": 2, "explanation": "传统方案要求数年运行数据，而华为方案仅需1-3个月数据即可获得不错效果。", "pitfall": "华为方案数据需求少，传统方案数据需求大。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "户用分布式光伏电站的光伏装机容量一般在多少左右？", "options": ["10kW", "100kW", "1MW", "10MW"], "answer": 0, "explanation": "户用分布式场景光伏装机容量一般在10kW左右，规模较小，波动更大，预测难度大。", "pitfall": "工商业分布式一般在100kW-几MW左右。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "XX国69个MW级工商业光伏电站光功率预测平均准确率达到了多少？", "options": ["85%", "90%", "93.6%", "95%"], "answer": 2, "explanation": "XX国69个MW级工商业光伏电站光功率预测平均准确率93.6%。", "pitfall": "户用场景平均准确率为90%，工商业为93.6%。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "AI光储协同优化创新性地提出了什么算法框架？", "options": ["联邦学习", "边-云协同", "强化学习", "迁移学习"], "answer": 1, "explanation": "创新性地提出“边-云协同”算法框架，借鉴MPC思想进行模型预测滚动优化。", "pitfall": "边-云协同是核心框架，借鉴了MPC思想。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "微电网未来24小时1小时粒度负荷预测中，AI算法平均预测准确率为？", "options": ["82%", "88.5%", "89.5%", "93.6%"], "answer": 2, "explanation": "未来24小时1小时粒度预测：30个XX国中小型工商业负荷预测，AI算法平均预测准确率89.5%。", "pitfall": "15分钟粒度预测准确率为88.5%，1小时粒度为89.5%。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "基于统一编码的节假日预测模型中，Global Time Stamp 不包含以下哪项？", "options": ["Week Embeddings", "Month Embeddings", "Holiday Embeddings", "Local Time Stamp Position Embeddings"], "answer": 3, "explanation": "Local Time Stamp Position Embeddings 是与 Scalar Projection 结合的，Global Time Stamp 包含 Week Embeddings、Month Embeddings、Holiday Embeddings。", "pitfall": "区分Local和Global Time Stamp的包含内容。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "D局点发生用户行为模式改变，导致预测误差为33%，其具体表现为？", "options": ["未知原因流量下滑", "19年春节期间流量低于节前", "套餐发放影响", "突发月末效应"], "answer": 1, "explanation": "短板场景2：D局点（预测误差33%）。D局点发生用户行为模式改变，19年春节期间流量低于节前。", "pitfall": "C局点是未知原因流量下滑，D局点是用户行为模式改变。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下哪个模型提供了一种嵌入相关影响因素的方法，如用户数、天气、日期、节假日等，解决多特征输入问题？", "options": ["Prophet", "ARIMA", "线性回归", "Sequence2Sequence"], "answer": 3, "explanation": "Sequence2Sequence模型提供一种嵌入相关影响因素的方法，解决多特征输入问题，可以预测未来一段时间的数据。", "pitfall": "Seq2Seq擅长处理多特征输入序列预测。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "在光伏发电预测中，华为方案在模型适应性方面表现如何？", "options": ["数据漂移易致模型精度退化", "模型在线学习，能够适应数据漂移", "需要数年运行数据", "多模型集成"], "answer": 1, "explanation": "华为方案模型在线学习，能够适应数据漂移，而传统方案数据漂移易致模型精度退化。", "pitfall": "在线学习是华为方案适应数据漂移的关键。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "微电网EMS架构中，优化与控制模块不包含以下哪项？", "options": ["Optimal Energy Scheduling", "Network / Resources / Consumer / Optimization", "Real Time Control / Monitoring", "Load Forecasting"], "answer": 3, "explanation": "Load Forecasting（负荷预测）属于预测模块，不属于优化与控制模块。", "pitfall": "注意区分预测模块和优化控制模块的内容。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "Prophet模型中，基于傅里叶级数建模的是哪一部分？", "options": ["趋势模型", "周期模型", "节假日及突发事件模型", "残差模型"], "answer": 1, "explanation": "Prophet的周期模型基于傅里叶级数建模。", "pitfall": "趋势模型是饱和增长或分段线性，节假日模型是窗口函数。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "对于光伏发电预测，预测时间步长一般为多少步？", "options": ["12或者24", "24或者96", "48或者168", "7或者30"], "answer": 1, "explanation": "预测时间步长相对较多，一般为24或者96步（即未来24小时1小时粒度/15分钟粒度）。", "pitfall": "24步对应1小时粒度，96步对应15分钟粒度。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "事件分类包括以下哪些类型？", "options": ["周期性事件", "非周期性事件", "全局事件", "局部事件"], "answer": [0, 1, 2, 3], "explanation": "事件分类包括：周期性事件、非周期性事件、全局事件、局部事件。", "pitfall": "四类事件均需掌握。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "基于统一编码的节假日预测模型中，Global Time Stamp 包含哪些 Embeddings？", "options": ["Week Embeddings", "Month Embeddings", "Holiday Embeddings", "Local Time Stamp Position Embeddings"], "answer": [0, 1, 2], "explanation": "Global Time Stamp 包含 Week Embeddings、Month Embeddings、Holiday Embeddings。Local Time Stamp Position Embeddings 是与 Scalar Projection 结合的。", "pitfall": "Local Time Stamp Position Embeddings 不属于 Global Time Stamp。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "整网流量负载预测的数据集包含了哪些局点？", "options": ["A", "B", "C", "D"], "answer": [0, 1, 2, 3], "explanation": "数据集包含A、B、C、D 4个局点，10个站点，每天峰值采样。", "pitfall": "四个局点均包含在内。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "Prophet开源工具对时间序列的哪些分量进行回归建模？", "options": ["趋势分量", "周期分量", "节假日效应", "随机噪声"], "answer": [0, 1, 2], "explanation": "Prophet对时间序列的趋势分量、周期分量、节假日效应回归建模，预测每项成分，相加得到整体预测。", "pitfall": "随机噪声不是Prophet建模的主要分量。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "关于ARIMA模型的特点，以下说法正确的是？", "options": ["需要根据ACF和PACF确定超参", "能精细刻画平稳序列的波动", "对短期的预测较准确", "对季节性、节假日进行了建模"], "answer": [0, 1, 2], "explanation": "ARIMA需要根据ACF和PACF确定超参 (p, d, q)，能精细刻画平稳序列的波动，对于短期的预测较准确，但未对季节性、节假日建模。", "pitfall": "ARIMA未对季节性、节假日建模，这是其短板。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "在10个站点春节期间预测准确率对比中，目前受哪些因素影响导致A1、B1、B2、B4 4个站点的准确率有待进一步提升？", "options": ["套餐发放", "突发月末效应", "未知原因用户数降低", "气象条件恶劣"], "answer": [0, 1, 2], "explanation": "由于受套餐发放、突发月末效应、未知原因用户数降低等因素影响，A1、B1、B2、B4 4个站点的准确率有待进一步提升。", "pitfall": "气象条件不是整网流量负载预测的主要影响因素。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "光伏发电功率预测的收益产品包括哪些？", "options": ["地面光储电站", "地面纯光电站", "分布式光储电站", "综合能源"], "answer": [0, 1, 2, 3], "explanation": "收益产品包括：地面光储电站、地面纯光电站、分布式光储电站 & 综合能源。", "pitfall": "四类收益产品均需掌握。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "华为在光伏预测中的经验优势体现在哪些方面？", "options": ["结合华为在逆变器和储能领域的TOP级优势", "海量数据", "全球采购优质气象源", "构建行业领先纯光功率预测技术"], "answer": [0, 1, 2, 3], "explanation": "华为经验：结合华为在逆变器和储能领域的TOP级优势 + 海量数据 + 全球采购优质气象源，构建行业领先纯光功率预测技术等。", "pitfall": "华为的优势在于光储融合、数据与气象源。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "光伏发电功率预测面临的挑战包括哪些？", "options": ["电站多为新建电站，积累运行数据较少", "预测时间步长相对较多", "预测精度对光储调度优化收益影响大", "对预测模型计算资源消耗要求较高"], "answer": [0, 1, 2, 3], "explanation": "挑战包括：数据少且存在季节性、步长多、精度要求高、计算资源消耗要求较高。", "pitfall": "四个挑战均需掌握。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "相比于传统方案，华为光伏预测方案的特点包括哪些？", "options": ["1-3个月数据即可获得不错效果", "单一气象源即可", "模型轻量化", "模型在线学习，能够适应数据漂移"], "answer": [0, 1, 2, 3], "explanation": "华为方案：1-3个月数据即可，单一气象源即可，模型轻量化，模型在线学习能够适应数据漂移。", "pitfall": "与传统方案对比记忆。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "AI光储协同优化的“边-云协同”算法框架主要包括哪些关键技术点？", "options": ["短期负荷预测技术", "短期光伏出力预测技术", "云端调度建模与求解技术", "边侧SOC智能跟踪技术"], "answer": [0, 1, 2, 3], "explanation": "主要包括4个关键技术点：短期负荷预测技术、短期光伏出力预测技术、云端调度建模与求解技术、边侧SOC智能跟踪技术。", "pitfall": "四个技术点均需掌握。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "微电网EMS架构中，输入数据包括哪些？", "options": ["Utility Data", "Weather Forecast", "Market Data", "Distributed Energy Resources"], "answer": [0, 1, 2, 3], "explanation": "输入数据包括：Utility Data、Operational Mode、Weather Forecast、Market Data、Distributed Energy Resources、Real Time Data / Historical Data。", "pitfall": "输入数据类型多样，需全面了解。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "微电网核心技术点涵盖的技术方向包括哪些？", "options": ["发电/用能时序预测", "运筹调度优化", "数学建模", "架构与工程化"], "answer": [0, 1, 2, 3], "explanation": "核心技术点包括：发电/用能时序预测、运筹调度优化、数学建模、架构与工程化四个技术方向。", "pitfall": "四个方向均需掌握。"}, {"kc_id": "kc1.151", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "负荷预测算法主要采用的技术包括哪些？", "options": ["特征工程", "机器学习", "滚动预测", "强化学习"], "answer": [0, 1, 2], "explanation": "负荷预测算法也主要是采用特征工程 + 机器学习 + 滚动预测。", "pitfall": "强化学习是微网优化的技术之一，但负荷预测主要用前三者。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "Sequence2Sequence模型在时间序列预测中的特点包括哪些？", "options": ["提供一种嵌入相关影响因素的方法", "解决多特征输入问题", "可以预测未来一段时间的数据", "基于STL分解考虑趋势项、周期项"], "answer": [0, 1, 2], "explanation": "Sequence2Sequence模型提供一种嵌入相关影响因素的方法，如用户数、天气、日期、节假日等，解决多特征输入问题，可以预测未来一段时间的数据。基于STL分解的是Prophet模型。", "pitfall": "注意与Prophet模型特点区分。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述周期性事件和非周期性事件的区别，并各举一例。", "answer": "周期性事件是指依据已知周期发生的时间，如周末、节假日、月末周六等。非周期性事件是指未知确切发生时间的事件，但过去已有类似事件发生，如两会、周年事件等。", "explanation": "考察对事件分类定义的理解和举例。", "pitfall": "非周期性事件并非完全不发生，而是发生时间不确切。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述Prophet模型的组成部分及其特点。", "answer": "Prophet模型基于STL分解，主要包含趋势模型（饱和增长模型、分段线性模型）、周期模型（基于傅里叶级数）和节假日及突发事件模型。其特点是通过拟合每项成分实现时间序列的预测，对非节假日的预测较准。", "explanation": "考察Prophet的三大组成部分及特点。", "pitfall": "容易遗漏趋势模型的具体形式或周期模型的数学基础。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "光伏发电功率预测面临哪些挑战？", "answer": "1. 电站多为新建电站，积累运行数据较少（一般只有1~6个月数据），且光伏出力存在明显季节性特征。2. 预测时间步长相对较多（一般为24或者96步）。3. 在户用和工商业场景等分布式光储协同优化业务中，预测精度对光储调度优化收益影响大，要求预测精度高。4. 对预测模型计算资源消耗要求较高。", "explanation": "考察光伏预测面临的四大挑战。", "pitfall": "需全面回答数据、步长、精度要求和资源消耗四个方面。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "华为光伏预测方案与传统方案相比有哪些优势？", "answer": "1. 数据需求：华为方案仅需1-3个月数据即可获得不错效果，传统方案要求数年运行数据。2. 气象源：华为方案单一气象源即可，传统方案需多种高精度气象源。3. 模型复杂度：华为方案模型轻量化，传统方案为多模型集成或复杂深度学习模型。4. 模型适应性：华为方案模型在线学习，能够适应数据漂移，传统方案数据漂移易致模型精度退化。", "explanation": "考察华为方案在数据、气象源、复杂度和适应性四个维度的优势。", "pitfall": "需对比记忆，不要遗漏维度。"}, {"kc_id": "kc1.151", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述AI光储协同优化的“边-云协同”算法框架及其关键技术点。", "answer": "AI光储协同优化创新性地提出“边-云协同”算法框架，借鉴MPC思想进行模型预测滚动优化。其主要包括4个关键技术点：1. 短期负荷预测技术；2. 短期光伏出力预测技术；3. 云端调度建模与求解技术；4. 边侧SOC智能跟踪技术。该框架实现了峰谷价差场景下的户用光储协同优化实际收益达到理论天花板的85%以上。", "explanation": "考察边-云协同框架的思想及四个关键技术点。", "pitfall": "容易遗漏MPC思想或四个技术点中的某一个。"}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "multi": "二、多选题", "tf": "三、判断题", "fill": "四、填空题", "short": "五、简答题", "calc": "六、计算题", "code": "七、代码题", "essay": "八、问答题", "comprehensive": "九、综合题"}, "section_order": ["choice", "multi", "tf", "fill", "short", "calc", "code", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "code_placeholder": "在此编写代码...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "partial_label": "部分正确", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+var __epaImages = {}; // { qid: [dataUrl, ...] } — pasted images per answer field
+
+// ─── Answer normalization (robust to how the JSON was authored) ──────
+// tf / choice answers may arrive as int index, boolean, letter ("A"),
+// or label string ("正确"/"错误"/"对"/"错"). All are coerced to an
+// option index so grading never silently fails on a type mismatch.
+
+function tfAnswerIndex(ans) {
+  // option 0 = true_label (正确), option 1 = false_label (错误)
+  // boolean: true → 正确(0), false → 错误(1)
+  if (typeof ans === 'boolean') return ans ? 0 : 1;
+  // number: treat as boolean (0=false→错误(1), non-zero=true→正确(0))
+  if (typeof ans === 'number') return ans ? 0 : 1;
+  var s = ('' + ans).trim().toLowerCase();
+  var truthy = ['t', 'true', '正确', '对', '是', 'yes', 'y', '√', '✓'];
+  var falsy  = ['f', 'false', '错误', '错', '否', 'no', 'n', '×', 'x'];
+  if (truthy.indexOf(s) !== -1) return 0;
+  if (falsy.indexOf(s) !== -1) return 1;
+  return ans ? 0 : 1;
+}
+
+function choiceAnswerIndex(ans, options) {
+  if (typeof ans === 'number') return ans;
+  var s = ('' + ans).trim();
+  if (/^[A-Za-z]$/.test(s)) return s.toUpperCase().charCodeAt(0) - 65;
+  if (/^\d+$/.test(s)) return parseInt(s, 10);
+  if (options) {
+    for (var i = 0; i < options.length; i++) {
+      if (('' + options[i]).trim() === s) return i;
+    }
+  }
+  return parseInt(s, 10);
+}
+
+function multiAnswerSet(ans, options) {
+  var arr = Array.isArray(ans) ? ans : [ans];
+  var set = {};
+  for (var i = 0; i < arr.length; i++) {
+    set[choiceAnswerIndex(arr[i], options)] = true;
+  }
+  return set;
+}
+
+// Normalize free text for fill-in-the-blank comparison: trim, lowercase,
+// drop surrounding whitespace and common punctuation, unify full/half width.
+function normText(s) {
+  s = ('' + s).trim().toLowerCase();
+  s = s.replace(/[\s　]+/g, '');
+  s = s.replace(/[.,;:!?。，、；：！？“”"'（）()【】\[\]<>《》]/g, '');
+  // full-width ASCII -> half-width
+  s = s.replace(/[！-～]/g, function (c) {
+    return String.fromCharCode(c.charCodeAt(0) - 0xfee0);
+  });
+  return s;
+}
+
+// How many blanks does a fill question have? Count underscore / ＿ runs.
+function fillBlankCount(question) {
+  var m = ('' + question).match(/(_{2,}|＿+)/g);
+  return m ? m.length : 0;
+}
+
+// Coerce a fill `answer` into an array (one entry per blank) of accepted
+// answer lists. Handles: string, [synonyms], [[blank1 syns],[blank2 syns]].
+function fillBlankAnswers(ans, nBlanks) {
+  if (nBlanks < 1) nBlanks = 1;
+  if (!Array.isArray(ans)) return padBlanks([[ans]], nBlanks);
+  if (ans.length && Array.isArray(ans[0])) return padBlanks(ans, nBlanks);
+  // flat array of strings
+  if (nBlanks === 1) return [ans];                 // synonyms for one blank
+  if (ans.length === nBlanks) {                    // one answer per blank
+    return ans.map(function (a) { return [a]; });
+  }
+  return padBlanks([ans], nBlanks);                // ambiguous -> all on blank 1
+}
+
+function padBlanks(arr, n) {
+  var out = arr.slice(0, n);
+  while (out.length < n) out.push(['']);
+  return out;
+}
+
+// ─── Build ───────────────────────────────────────────────────────────
+
+function build() {
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+
+  // Stable-sort questions by section order so headings group correctly
+  // regardless of input order.
+  var order = LABELS.section_order || [];
+  Q.forEach(function (q, i) { q._i = i; });
+  Q.sort(function (a, b) {
+    var oa = order.indexOf(a.type); if (oa === -1) oa = 99;
+    var ob = order.indexOf(b.type); if (ob === -1) ob = 99;
+    return oa - ob || a._i - b._i;
+  });
+
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    if (q.type !== sec) {
+      sec = q.type;
+      if (titles[q.type]) h += '<h3 id="sec-auto-23">' + titles[q.type] + '</h3>';
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i + 1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+
+    if (q.type === 'fill') {
+      h += '<div class="q-text">' + renderFill(q, qid) + '</div>';
+    } else {
+      h += '<div class="q-text">' + q.question + '</div>';
+    }
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65 + j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'multi') {
+      var mopts = q.options || [];
+      for (var k = 0; k < mopts.length; k++) {
+        h += '<label class="option" id="opt-' + qid + '-' + k + '" onclick="toggle(\'' + qid + '\',' + k + ')">';
+        h += '<input type="checkbox" name="' + qid + '" value="' + k + '">' + String.fromCharCode(65 + k) + '. ' + mopts[k] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else if (q.type === 'fill') {
+      // inputs already rendered inline inside q-text
+    } else if (q.type === 'code') {
+      h += '<textarea class="q-textarea q-code" id="text-' + qid + '" placeholder="' + (LABELS.code_placeholder || LABELS.placeholder) + '" rows="8" spellcheck="false"></textarea>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + (q.explanation || '') + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+  __epaPasteListeners(container);
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function (err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+// Render fill question text with inline <input> boxes replacing blanks.
+function renderFill(q, qid) {
+  var nBlanks = fillBlankCount(q.question);
+  var k = 0;
+  var html = ('' + q.question).replace(/(_{2,}|＿+)/g, function () {
+    var inp = '<input type="text" class="fill-input" id="fill-' + qid + '-' + k + '" autocomplete="off" spellcheck="false">';
+    k++;
+    return inp;
+  });
+  if (k === 0) {
+    // No markers in text -> append boxes based on answer shape, one per line
+    var n = fillBlankAnswers(q.answer, 1).length;
+    var ans = q.answer;
+    if (Array.isArray(ans)) n = Array.isArray(ans[0]) ? ans.length : (ans.length || 1);
+    if (n < 1) n = 1;
+    html += '<div>';
+    for (var b = 0; b < n; b++) {
+      html += '<div class="fill-blank-row">';
+      if (n > 1) html += '<span class="fill-tag">' + (b + 1) + '.</span>';
+      html += '<input type="text" class="fill-input" id="fill-' + qid + '-' + b + '" autocomplete="off" spellcheck="false">';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+// ─── Selection handlers ──────────────────────────────────────────────
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) all[i].classList.remove('selected');
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) target.classList.add('selected');
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) radio.checked = true;
+}
+
+function toggle(qid, idx) {
+  var box = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  var label = document.getElementById('opt-' + qid + '-' + idx);
+  if (!box) return;
+  box.checked = !box.checked;
+  if (label) label.classList.toggle('selected', box.checked);
+}
+
+// ─── Grading ─────────────────────────────────────────────────────────
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      score += gradeSingle(q, qid, card, badge, correctEl);
+    } else if (q.type === 'multi') {
+      score += gradeMulti(q, qid, card, badge, correctEl);
+    } else if (q.type === 'fill') {
+      score += gradeFill(q, qid, card, badge, correctEl);
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = roundScore(score);
+    sb.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var a = 0; a < opts.length; a++) opts[a].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var b = 0; b < tas.length; b++) tas[b].disabled = true;
+  var fis = document.querySelectorAll('.fill-input');
+  for (var c = 0; c < fis.length; c++) fis[c].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) { btn.disabled = true; btn.textContent = LABELS.graded_label; }
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function (err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+function roundScore(s) {
+  return Math.round(s * 10) / 10;
+}
+
+function gradeSingle(q, qid, card, badge, correctEl) {
+  var ansIdx = q.type === 'tf' ? tfAnswerIndex(q.answer) : choiceAnswerIndex(q.answer, q.options);
+  var radio = document.querySelector('input[name="' + qid + '"]:checked');
+  if (radio && parseInt(radio.value, 10) === ansIdx) {
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+    correctEl.innerHTML = '';
+    var ok = document.getElementById('opt-' + qid + '-' + ansIdx);
+    if (ok) ok.classList.add('correct-answer');
+    return q.points;
+  }
+  card.classList.add('wrong');
+  badge.className = 'badge badge-no';
+  badge.textContent = LABELS.wrong_label;
+  var ansText = q.type === 'choice'
+    ? String.fromCharCode(65 + ansIdx) + '. ' + (q.options ? q.options[ansIdx] : '')
+    : (ansIdx === 0 ? LABELS.true_label : LABELS.false_label);
+  correctEl.innerHTML = LABELS.answer_prefix + ansText;
+  if (radio) {
+    var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+    if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+  }
+  var corr = document.getElementById('opt-' + qid + '-' + ansIdx);
+  if (corr) corr.classList.add('correct-answer');
+  return 0;
+}
+
+function gradeMulti(q, qid, card, badge, correctEl) {
+  var want = multiAnswerSet(q.answer, q.options);
+  var wantKeys = Object.keys(want).map(Number);
+  var checked = document.querySelectorAll('input[name="' + qid + '"]:checked');
+  var picked = [];
+  for (var i = 0; i < checked.length; i++) picked.push(parseInt(checked[i].value, 10));
+
+  var anyWrong = false, hitCorrect = 0;
+  for (var p = 0; p < picked.length; p++) {
+    if (want[picked[p]]) hitCorrect++;
+    else anyWrong = true;
+  }
+
+  // reveal correct / wrong option markers
+  var mopts = q.options || [];
+  for (var j = 0; j < mopts.length; j++) {
+    var el = document.getElementById('opt-' + qid + '-' + j);
+    if (!el) continue;
+    if (want[j]) el.classList.add('correct-answer');
+    else if (picked.indexOf(j) !== -1) el.classList.add('wrong-answer');
+  }
+
+  var earned;
+  if (!anyWrong && hitCorrect === wantKeys.length && picked.length === wantKeys.length) {
+    earned = q.points;
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+    correctEl.innerHTML = '';
+  } else if (!anyWrong && hitCorrect > 0) {
+    // 少选不错选 -> partial credit
+    earned = roundScore(q.points * hitCorrect / wantKeys.length);
+    card.classList.add('partial');
+    badge.className = 'badge badge-partial';
+    badge.textContent = LABELS.partial_label;
+    correctEl.innerHTML = LABELS.answer_prefix + multiAnswerText(wantKeys, mopts);
+  } else {
+    earned = 0;
+    card.classList.add('wrong');
+    badge.className = 'badge badge-no';
+    badge.textContent = LABELS.wrong_label;
+    correctEl.innerHTML = LABELS.answer_prefix + multiAnswerText(wantKeys, mopts);
+  }
+  return earned;
+}
+
+function multiAnswerText(keys, options) {
+  return keys.sort(function (a, b) { return a - b; }).map(function (k) {
+    return String.fromCharCode(65 + k) + '. ' + (options ? options[k] : '');
+  }).join('  ');
+}
+
+// ─── Image paste support ─────────────────────────────────────────────
+
+function __epaPasteListeners(container) {
+  var tas = container.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) {
+    (function(ta) {
+      var qid = ta.id.replace('text-', '');
+      ta.addEventListener('paste', function(e) {
+        var items = e.clipboardData && e.clipboardData.items;
+        if (!items) return;
+        for (var j = 0; j < items.length; j++) {
+          if (items[j].type.indexOf('image') !== -1) {
+            e.preventDefault();
+            var file = items[j].getAsFile();
+            var reader = new FileReader();
+            reader.onload = (function(id, anchor) {
+              return function(ev) {
+                var dataUrl = ev.target.result;
+                if (!__epaImages[id]) __epaImages[id] = [];
+                __epaImages[id].push(dataUrl);
+
+                var wrap = document.createElement('div');
+                wrap.className = 'paste-img-wrap';
+                var img = document.createElement('img');
+                img.src = dataUrl;
+                var rm = document.createElement('button');
+                rm.className = 'paste-img-remove';
+                rm.title = '移除图片';
+                rm.textContent = '×';
+                rm.onclick = (function(url, w) {
+                  return function() {
+                    var idx = __epaImages[id].indexOf(url);
+                    if (idx !== -1) __epaImages[id].splice(idx, 1);
+                    w.parentNode.removeChild(w);
+                  };
+                })(dataUrl, wrap);
+                wrap.appendChild(img);
+                wrap.appendChild(rm);
+                anchor.parentNode.insertBefore(wrap, anchor.nextSibling);
+              };
+            })(qid, ta);
+            reader.readAsDataURL(file);
+          }
+        }
+      });
+    })(tas[i]);
+  }
+}
+
+// ─── Collect all user answers for export ─────────────────────────────
+
+function collectAnswers() {
+  var out = [];
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var userAnswer = null;
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      userAnswer = radio ? parseInt(radio.value, 10) : null;
+    } else if (q.type === 'multi') {
+      var checked = document.querySelectorAll('input[name="' + qid + '"]:checked');
+      userAnswer = [];
+      for (var c = 0; c < checked.length; c++) {
+        userAnswer.push(parseInt(checked[c].value, 10));
+      }
+    } else if (q.type === 'fill') {
+      var nBlanks = fillBlankCount(q.question);
+      var blanks = fillBlankAnswers(q.answer, nBlanks);
+      userAnswer = [];
+      for (var b = 0; b < blanks.length; b++) {
+        var inp = document.getElementById('fill-' + qid + '-' + b);
+        userAnswer.push(inp ? inp.value : '');
+      }
+    } else {
+      var ta = document.getElementById('text-' + qid);
+      userAnswer = ta ? ta.value : '';
+    }
+
+    out.push({
+      index: i,
+      type: q.type,
+      question: q.question,
+      options: q.options || null,
+      correct_answer: q.answer,
+      user_answer: userAnswer,
+      points: q.points,
+      explanation: q.explanation || '',
+      kc_id: q.kc_id || '',
+      images: (__epaImages[qid] || []).slice()
+    });
+  }
+  return out;
+}
+
+// ─── Save answers for AI grading ─────────────────────────────────────
+
+function saveForGrading() {
+  var answers = collectAnswers();
+  var chapterTitle = (document.title || '章节').replace(/\s+/g, '_');
+  var nowStr = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  var filename = chapterTitle + '_answers_' + nowStr + '.json';
+
+  var data = JSON.stringify({
+    chapter: document.title || '',
+    saved_at: new Date().toISOString(),
+    questions: answers
+  }, null, 2);
+
+  var blob = new Blob([data], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  var cmdEl = document.getElementById('epa-grade-cmd-text');
+  if (cmdEl) cmdEl.textContent = '/exampass grade "<下载目录>/' + filename + '"';
+  var modal = document.getElementById('epa-grade-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function __epaCloseGradeModal() {
+  var modal = document.getElementById('epa-grade-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function __epaCopyGradeCmd() {
+  var cmdEl = document.getElementById('epa-grade-cmd-text');
+  if (!cmdEl) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmdEl.textContent);
+  } else {
+    var range = document.createRange();
+    range.selectNodeContents(cmdEl);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('copy');
+    sel.removeAllRanges();
+  }
+  var btn = document.getElementById('epa-grade-copy-btn');
+  if (btn) { btn.textContent = '已复制'; setTimeout(function(){ btn.textContent = '复制命令'; }, 2000); }
+}
+
+function gradeFill(q, qid, card, badge, correctEl) {
+  var nBlanks = fillBlankCount(q.question);
+  var blanks = fillBlankAnswers(q.answer, nBlanks);
+  var n = blanks.length;
+  var hit = 0;
+  var displays = [];
+
+  for (var b = 0; b < n; b++) {
+    var inp = document.getElementById('fill-' + qid + '-' + b);
+    var accepted = blanks[b] || [''];
+    var user = inp ? normText(inp.value) : '';
+    var ok = false;
+    for (var a = 0; a < accepted.length; a++) {
+      if (accepted[a] !== '' && normText(accepted[a]) === user && user !== '') { ok = true; break; }
+    }
+    if (inp) inp.classList.add(ok ? 'fill-ok' : 'fill-no');
+    if (ok) hit++;
+    displays.push((n > 1 ? (b + 1) + '. ' : '') + accepted.filter(function (x) { return x !== ''; }).join(' / '));
+  }
+
+  var earned = roundScore(q.points * hit / n);
+  correctEl.innerHTML = LABELS.answer_prefix + displays.join('   ');
+
+  if (hit === n) {
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+  } else if (hit > 0) {
+    card.classList.add('partial');
+    badge.className = 'badge badge-partial';
+    badge.textContent = LABELS.partial_label;
+  } else {
+    card.classList.add('wrong');
+    badge.className = 'badge badge-no';
+    badge.textContent = LABELS.wrong_label;
+  }
+  return earned;
+}
+
+</script>
+<script>
+function __epaSwitch(tab) {
+  document.querySelectorAll('#epa-tabs .tab-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-tab') === tab); });
+  document.querySelectorAll('.tab-panel').forEach(function(p){
+    p.classList.toggle('active', p.id === 'panel-' + tab); });
+  // The test panel is display:none on load, so build()'s MathJax typeset ran
+  // on hidden content. Re-run build() the first time the panel is visible so
+  // it renders + typesets at the real size. Guarded so answers aren't wiped.
+  if(tab === 'test' && !window.__epaTestBuilt){
+    window.__epaTestBuilt = true;
+    if(typeof build === 'function'){ try { build(); } catch(err){} }
+  } else if(tab === 'test' && window.MathJax && MathJax.typesetPromise){
+    var panel = document.getElementById('panel-test');
+    if(panel) MathJax.typesetPromise([panel]).catch(function(){});
+  }
+  if(window.__epaFitFormulas) setTimeout(window.__epaFitFormulas, 50);
+  window.scrollTo(0, 0);
+}
+document.addEventListener('click', function(e){
+  var btn = e.target.closest('#epa-tabs .tab-btn'); if(!btn) return;
+  __epaSwitch(btn.getAttribute('data-tab'));
+});
+</script>
+</div>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/Blog/tags/%E5%86%B3%E7%AD%96%E6%8E%A8%E7%90%86/" rel="tag"># 决策推理</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Blog/2026/10/12/%E7%AC%AC2%E7%AB%A0-%E7%8A%B6%E6%80%81%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%9F%A5%E8%AF%86%E6%8E%A8%E7%90%86%E7%AE%97%E6%B3%95/" rel="prev" title="第2章 状态感知与知识推理算法">
+                  <i class="fa fa-angle-left"></i> 第2章 状态感知与知识推理算法
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments giscus">
+  <script src="https://giscus.app/client.js"
+          data-repo="Agnon1573/Blog"
+          data-repo-id="R_kgDOVFbcMg"
+          data-category="Announcements"
+          data-category-id="DIC_kwDOVFbcMs4DH9pc"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="top"
+          data-theme="light"
+          data-lang="zh-CN"
+          crossorigin="anonymous"
+          async>
+  </script>
+</div>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Agnon1573</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

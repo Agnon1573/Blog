@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/Blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/Blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"agnon1573.github.io","root":"/Blog/","images":"/Blog/images","scheme":"Muse","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/Blog/js/config.js" defer></script>
+
+    <meta name="description" content="本章核心主题：一、AI算法目标定义、原始业务需求到AI算法建模、需求分析过程、算法目标的定义、如何评价一个问题是否适合用AI算法解决……。含完整知识清单（含必考&#x2F;重点&#x2F;高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第5章 AI系统设计与算法建模">
+<meta property="og:url" content="https://agnon1573.github.io/Blog/2026/10/12/%E7%AC%AC5%E7%AB%A0-AI%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E7%AE%97%E6%B3%95%E5%BB%BA%E6%A8%A1/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="本章核心主题：一、AI算法目标定义、原始业务需求到AI算法建模、需求分析过程、算法目标的定义、如何评价一个问题是否适合用AI算法解决……。含完整知识清单（含必考&#x2F;重点&#x2F;高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-10-12T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-12T10:12:51.431Z">
+<meta property="article:author" content="Agnon1573">
+<meta property="article:tag" content="决策推理">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://agnon1573.github.io/Blog/2026/10/12/%E7%AC%AC5%E7%AB%A0-AI%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E7%AE%97%E6%B3%95%E5%BB%BA%E6%A8%A1/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://agnon1573.github.io/Blog/2026/10/12/%E7%AC%AC5%E7%AB%A0-AI%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E7%AE%97%E6%B3%95%E5%BB%BA%E6%A8%A1/","path":"2026/10/12/第5章-AI系统设计与算法建模/","title":"第5章 AI系统设计与算法建模"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>第5章 AI系统设计与算法建模 | 我的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+<script src="/Blog/js/utils.js" defer></script><script src="/Blog/js/motion.js" defer></script><script src="/Blog/js/sidebar.js" defer></script><script src="/Blog/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","display_overflow":"scroll","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"}}</script>
+<script src="/Blog/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/Blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/Blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录技术与生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/Blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/Blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/Blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/Blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/Blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#s49634596"><span class="nav-number">1.</span> <span class="nav-text">一、AI算法目标定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s91816092"><span class="nav-number">1.1.</span> <span class="nav-text">原始业务需求到AI算法建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s63668436"><span class="nav-number">1.2.</span> <span class="nav-text">需求分析过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s91202452"><span class="nav-number">1.3.</span> <span class="nav-text">算法目标的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s79541885"><span class="nav-number">1.4.</span> <span class="nav-text">如何评价一个问题是否适合用AI算法解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s60993490"><span class="nav-number">2.</span> <span class="nav-text">二、AI算法建模分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s51925902"><span class="nav-number">2.1.</span> <span class="nav-text">按照业务问题划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s78452439"><span class="nav-number">2.2.</span> <span class="nav-text">从模型构造来区分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s91240439"><span class="nav-number">2.3.</span> <span class="nav-text">按照模型构造划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s81042709"><span class="nav-number">2.4.</span> <span class="nav-text">按照学习对象划分 重点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s18019889"><span class="nav-number">2.5.</span> <span class="nav-text">按照学习方法划分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s88298718"><span class="nav-number">3.</span> <span class="nav-text">三、模型选择方法和原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s11657652"><span class="nav-number">3.1.</span> <span class="nav-text">常见困难及应对策略 高频</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s39344775"><span class="nav-number">3.2.</span> <span class="nav-text">数据量受限场景下的建模问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s67765843"><span class="nav-number">3.3.</span> <span class="nav-text">标注不完备场景下的建模问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s44089805"><span class="nav-number">3.4.</span> <span class="nav-text">数据不均衡场景的建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s13023715"><span class="nav-number">3.5.</span> <span class="nav-text">算力受限场景下的建模问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s85227581"><span class="nav-number">4.</span> <span class="nav-text">四、复杂场景的系统设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s43273952"><span class="nav-number">4.1.</span> <span class="nav-text">复杂系统的分解原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s31500724"><span class="nav-number">4.2.</span> <span class="nav-text">复杂系统的综合设计原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s90256260"><span class="nav-number">4.3.</span> <span class="nav-text">复杂系统的均衡问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s81557133"><span class="nav-number">5.</span> <span class="nav-text">五、基于演进思路的建模方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s15265920"><span class="nav-number">5.1.</span> <span class="nav-text">自监督大模型的优势 重点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s21423494"><span class="nav-number">6.</span> <span class="nav-text">5. 基于演进思路的建模方法（高阶） 重点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s78998961"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 基于产品生命周期的演进建模思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s26852355"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 基于开放世界的演进建模思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s32721399"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s66959226"><span class="nav-number">7.</span> <span class="nav-text">如何评价一个问题是否适合用AI算法解决？ 必考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s87685413"><span class="nav-number">7.1.</span> <span class="nav-text">传统软件算法 vs AI算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s20859233"><span class="nav-number">7.2.</span> <span class="nav-text">评估维度对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s22240164"><span class="nav-number">8.</span> <span class="nav-text">数据评价维度 高频</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s27146494"><span class="nav-number">8.1.</span> <span class="nav-text">数据维度总览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s81381479"><span class="nav-number">8.2.</span> <span class="nav-text">数据评估注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s72931587"><span class="nav-number">9.</span> <span class="nav-text">算力评价维度 了解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s91442449"><span class="nav-number">9.1.</span> <span class="nav-text">各阶段算力评估总表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s10557973"><span class="nav-number">9.2.</span> <span class="nav-text">算力评估要点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s29413876"><span class="nav-number">10.</span> <span class="nav-text">算法目标定义 重点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s60798674"><span class="nav-number">10.1.</span> <span class="nav-text">算法目标定义的重要性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s12001073"><span class="nav-number">10.2.</span> <span class="nav-text">例1：运维故障定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s91052637"><span class="nav-number">10.3.</span> <span class="nav-text">例2：多次检测任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s25863455"><span class="nav-number">10.4.</span> <span class="nav-text">关键权衡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s27313311"><span class="nav-number">11.</span> <span class="nav-text">如何选择合适的模型？各种维度的建模方法划分 高频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s90689970"><span class="nav-number">12.</span> <span class="nav-text">数据模型和算法模型 重点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s84261855"><span class="nav-number">12.1.</span> <span class="nav-text">数据模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s76505481"><span class="nav-number">12.2.</span> <span class="nav-text">算法模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s73573983"><span class="nav-number">12.3.</span> <span class="nav-text">选择原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s36997956"><span class="nav-number">13.</span> <span class="nav-text">生成式模型和判别式模型 必考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s19580295"><span class="nav-number">13.1.</span> <span class="nav-text">生成式模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s35696399"><span class="nav-number">13.2.</span> <span class="nav-text">判别式模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s79306743"><span class="nav-number">14.</span> <span class="nav-text">监督学习与无监督学习 高频</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s68966930"><span class="nav-number">14.1.</span> <span class="nav-text">监督学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s57565425"><span class="nav-number">14.2.</span> <span class="nav-text">无监督学习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s67961340"><span class="nav-number">15.</span> <span class="nav-text">半监督学习与自监督学习 重点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s12810055"><span class="nav-number">15.1.</span> <span class="nav-text">半监督学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s31321138"><span class="nav-number">15.2.</span> <span class="nav-text">自监督学习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s38557894"><span class="nav-number">16.</span> <span class="nav-text">强化学习的思路和适用范围 了解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s81893958"><span class="nav-number">16.1.</span> <span class="nav-text">强化学习的核心要素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s28850460"><span class="nav-number">16.2.</span> <span class="nav-text">强化学习的适用范围</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s49871632"><span class="nav-number">17.</span> <span class="nav-text">典型的业务问题分类 高频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s82412467"><span class="nav-number">18.</span> <span class="nav-text">AI算法设计面临的实际困难 重点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s77815531"><span class="nav-number">19.</span> <span class="nav-text">数据量受限场景下的建模问题 必考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s87598008"><span class="nav-number">19.1.</span> <span class="nav-text">一、增加数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s32101579"><span class="nav-number">19.2.</span> <span class="nav-text">二、GAN数据生成技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s10782048"><span class="nav-number">19.3.</span> <span class="nav-text">三、Diffusion Model数据生成技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s18098791"><span class="nav-number">20.</span> <span class="nav-text">与VAE的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s14836219"><span class="nav-number">21.</span> <span class="nav-text">四、对抗数据生成方法案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s14402665"><span class="nav-number">21.1.</span> <span class="nav-text">方案框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s21353154"><span class="nav-number">21.2.</span> <span class="nav-text">关键技术分解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s23047502"><span class="nav-number">22.</span> <span class="nav-text">五、CV数据仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s40112373"><span class="nav-number">22.1.</span> <span class="nav-text">核心流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s32437732"><span class="nav-number">22.2.</span> <span class="nav-text">仿真要素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s24784139"><span class="nav-number">22.3.</span> <span class="nav-text">应用输出流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s27105023"><span class="nav-number">22.4.</span> <span class="nav-text">核心优势</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s71721594"><span class="nav-number">23.</span> <span class="nav-text">六、选择合适的模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s43361937"><span class="nav-number">23.1.</span> <span class="nav-text">sklearn传统机器学习方法选择地图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s31052154"><span class="nav-number">23.2.</span> <span class="nav-text">选择建议总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s20515188"><span class="nav-number">24.</span> <span class="nav-text">4.3 复杂场景的均衡问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s74181351"><span class="nav-number">25.</span> <span class="nav-text">5. 基于演进思路的建模方法（高阶）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s78998961"><span class="nav-number">25.1.</span> <span class="nav-text">5.1 基于产品生命周期的演进建模思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s80707789"><span class="nav-number">25.2.</span> <span class="nav-text">5.1.1 从产品生命周期视角看数据积累策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s91024600"><span class="nav-number">25.3.</span> <span class="nav-text">5.1.2 从产品生命周期视角看建模思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s26852355"><span class="nav-number">25.4.</span> <span class="nav-text">5.2 基于开放世界的演进建模思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s55202312"><span class="nav-number">26.</span> <span class="nav-text">基于产品生命周期的演进建模思路——如何将有限数据集的模型推广到各种商用环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#s89779537"><span class="nav-number">26.1.</span> <span class="nav-text">一、问题的根源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s84887064"><span class="nav-number">26.2.</span> <span class="nav-text">二、解决策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-1"><span class="nav-number">26.2.1.</span> <span class="nav-text">1. 不同方向的解决措施</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-2"><span class="nav-number">26.2.2.</span> <span class="nav-text">2. 泛化性提升路径与演进阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-3"><span class="nav-number">26.2.3.</span> <span class="nav-text">3. 其他技术路线汇总</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s90293954"><span class="nav-number">26.3.</span> <span class="nav-text">三、基于产品演进的建模思路——多种下游任务场景下的建模问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-4"><span class="nav-number">26.3.1.</span> <span class="nav-text">自监督大模型方案</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s52905167"><span class="nav-number">26.4.</span> <span class="nav-text">四、基于开放世界的持续演进问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-5"><span class="nav-number">26.4.1.</span> <span class="nav-text">Lifelong Learning System 流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-6"><span class="nav-number">26.4.2.</span> <span class="nav-text">常见持续学习范式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s19553890"><span class="nav-number">26.5.</span> <span class="nav-text">五、基于开放场景的学习问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-7"><span class="nav-number">26.5.1.</span> <span class="nav-text">开放场景学习整体流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sec-auto-8"><span class="nav-number">26.5.2.</span> <span class="nav-text">持续学习策略（三种模型更新策略）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#s61038959"><span class="nav-number">26.6.</span> <span class="nav-text">六、小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sec-auto-9"><span class="nav-number">27.</span> <span class="nav-text">章节测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sec-auto-10"><span class="nav-number">27.1.</span> <span class="nav-text">📋 AI批改任务已生成</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Agnon1573"
+      src="/Blog/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Agnon1573</p>
+  <div class="site-description" itemprop="description">一个基于 Hexo + NexT 的静态博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/Blog/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/Blog/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/Blog/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://agnon1573.github.io/Blog/2026/10/12/%E7%AC%AC5%E7%AB%A0-AI%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E7%AE%97%E6%B3%95%E5%BB%BA%E6%A8%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/Blog/images/avatar.png">
+      <meta itemprop="name" content="Agnon1573">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+      <meta itemprop="description" content="一个基于 Hexo + NexT 的静态博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="第5章 AI系统设计与算法建模 | 我的博客">
+      <meta itemprop="description" content="本章核心主题：一、AI算法目标定义、原始业务需求到AI算法建模、需求分析过程、算法目标的定义、如何评价一个问题是否适合用AI算法解决……。含完整知识清单（含必考&#x2F;重点&#x2F;高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第5章 AI系统设计与算法建模
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-10-12 08:00:00 / 修改时间：18:12:51" itemprop="dateCreated datePublished" datetime="2026-10-12T08:00:00+08:00">2026-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/Blog/categories/%E5%86%B3%E7%AD%96%E6%8E%A8%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">决策推理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">本章核心主题：一、AI算法目标定义、原始业务需求到AI算法建模、需求分析过程、算法目标的定义、如何评价一个问题是否适合用AI算法解决……。含完整知识清单（含必考/重点/高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+<div class="epa-summary">
+  <p>本章核心主题：一、AI算法目标定义、原始业务需求到AI算法建模、需求分析过程、算法目标的定义、如何评价一个问题是否适合用AI算法解决……。含完整知识清单（含必考/重点/高频标注）与章节测试（选择、填空、简答，支持在线作答、自动评分与答案解析）。</p>
+</div>
+<span id="more"></span>
+<div class="epa-scope">
+<style>
+.epa-scope { --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px; }
+.epa-scope, .epa-scope * { box-sizing: border-box; }
+.epa-scope { font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 13.5pt; line-height: 1.75; color: var(--ink); padding: 28px 36px 60px;
+  background: var(--paper); }
+@media print {
+.epa-scope { font-size: 10.5pt; background: #fff; }
+.epa-scope .no-print { display: none !important; }
+.epa-scope h1, .epa-scope h2, .epa-scope h3 { page-break-after: avoid; }
+}
+.epa-scope #exampass-header { display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0; }
+.epa-scope .header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.epa-scope .header-url { font-size: 0.78em; color: #999; }
+.epa-scope .header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+.epa-scope h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+.epa-scope h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+.epa-scope h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+.epa-scope a { color: var(--accent); text-decoration: none; }
+.epa-scope a:hover { text-decoration: underline; }
+.epa-scope table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+.epa-scope td, .epa-scope th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+.epa-scope th { background: var(--paper-dark); font-weight: 700; }
+.epa-scope .kp { font-weight: 700; color: var(--ink); }
+.epa-scope .exp { font-weight: 400; color: var(--ink-light); }
+.epa-scope .exp em, .epa-scope .exp strong { color: var(--ink); }
+.epa-scope blockquote { border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em; }
+.epa-scope { --mono: "Cascadia Code", "JetBrains Mono", "Fira Code", "Source Code Pro",
+          Consolas, "SF Mono", Menlo, "DejaVu Sans Mono", monospace; }
+.epa-scope code { font-family: var(--mono);
+  background: #eee8d8; color: #8a4b1e;
+  padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+.epa-scope pre { font-family: var(--mono);
+  background: #2d2a26; color: #ece6da;
+  padding: 14px 16px; border-radius: var(--radius);
+  overflow-x: auto; line-height: 1.6; font-size: 0.9em;
+  border: 1px solid #3d3934; tab-size: 2; }
+.epa-scope pre code { background: none; color: inherit; padding: 0; font-size: 1em; border-radius: 0; }
+.epa-scope pre .kp, .epa-scope pre .exp { color: inherit; }
+.epa-scope mjx-container[display="true"] { max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden; }
+.epa-scope div.toc { background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px; }
+.epa-scope div.toc ul { padding-left: 18px; }
+.epa-scope div.toc li { margin: 3px 0; font-size: 0.95em; }
+.epa-scope .tag-must { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .tag-key { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .tag-freq { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .tag-info { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.epa-scope .checkpoint { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius);
+  padding: 10px 16px; margin: 18px 0;
+  font-size: 0.95em; }
+.epa-scope .checkpoint::before { content: '🧠 自测：';
+  font-weight: 700; color: #1e40af; }
+.epa-scope .checkpoint .cp-answer { margin-top: 10px; border-top: 1px dashed #bfdbfe; padding-top: 8px; }
+.epa-scope .checkpoint .cp-answer summary { cursor: pointer; color: #1e40af; font-weight: 600; user-select: none;
+  list-style: none; }
+.epa-scope .checkpoint .cp-answer summary::before { content: '💡 '; }
+.epa-scope .checkpoint .cp-answer summary::-webkit-details-marker { display: none; }
+.epa-scope .checkpoint .cp-answer[open] summary { margin-bottom: 6px; }
+.epa-scope .checkpoint .cp-answer ol, .epa-scope .checkpoint .cp-answer p { font-weight: 400; color: var(--ink); }
+.epa-scope .tldr { background: #fefce8; border-left: 3px solid #eab308;
+  padding: 8px 14px; margin: 10px 0;
+  font-weight: 600; font-size: 0.95em; }
+.epa-scope pre { overflow-x: auto; }
+.epa-scope pre, .epa-scope code { overflow-wrap: break-word; }
+@media (max-width: 1024px) {
+.epa-scope {  padding: 20px 16px 48px; font-size: 12pt; }
+.epa-scope table { font-size: 0.95em; }
+}
+@media (max-width: 640px) {
+.epa-scope {  padding: 12px 10px 40px; font-size: 11pt; }
+.epa-scope h1 { font-size: 1.3em; }
+.epa-scope h2 { font-size: 1.12em; }
+.epa-scope table { font-size: 0.85em; display: block; overflow-x: auto; }
+.epa-scope td, .epa-scope th { padding: 4px 6px; }
+.epa-scope pre { font-size: 0.85em; padding: 6px; }
+}
+@media (max-width: 400px) {
+.epa-scope { padding: 8px 6px 32px; font-size: 10.5pt; }
+}
+.epa-scope #score-box { display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border); }
+.epa-scope #score-box .score-num { font-size: 2.2em; font-weight: 700; }
+.epa-scope #score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+.epa-scope .q-card { background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s; }
+.epa-scope .q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.epa-scope .q-card.wrong { border-left: 3px solid var(--wrong); background: #fef9f9; }
+.epa-scope .q-num { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.epa-scope .q-text { margin-bottom: 8px; font-size: 0.98em; }
+.epa-scope .option { display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5; }
+.epa-scope .option:hover { background: #f0ede0; }
+.epa-scope .option input { margin-right: 6px; }
+.epa-scope .option.selected { border-color: var(--accent); background: #eff6ff; }
+.epa-scope .option.correct-answer { border-color: var(--correct); background: var(--correct-bg); }
+.epa-scope .option.wrong-answer { border-color: var(--wrong); background: var(--wrong-bg); }
+.epa-scope .q-textarea { width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical; }
+.epa-scope .q-textarea:focus { outline: none; border-color: var(--accent); }
+.epa-scope .q-code { font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 0.88em; line-height: 1.5; background: #1e1e2e; color: #e0e0e0;
+  tab-size: 4; white-space: pre; }
+.epa-scope .q-code:focus { border-color: var(--accent); }
+.epa-scope .badge-partial { background: #fef3c7; color: #92400e; }
+.epa-scope .q-card.partial { border-color: #f59e0b; }
+.epa-scope .result { display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6; }
+.epa-scope .result .badge { display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px; }
+.epa-scope .badge-ok { background: var(--correct-bg); color: #166534; }
+.epa-scope .badge-no { background: var(--wrong-bg); color: #991b1b; }
+.epa-scope .badge-ref { background: #dbeafe; color: #1e40af; }
+.epa-scope .result .explanation { margin-top: 4px; color: var(--ink); }
+.epa-scope .result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+.epa-scope .grading-bar { text-align: center; margin: 20px 0; }
+.epa-scope .grading-bar button { font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px; }
+.epa-scope .grading-bar button:hover { background: var(--accent-hover); }
+.epa-scope .grading-bar button:disabled { background: #bbb; cursor: not-allowed; }
+.epa-scope .fill-input { border: 1px solid var(--card-border); border-radius: 3px;
+  padding: 2px 8px; font-family: inherit; font-size: 0.95em;
+  background: #fefcf5; width: 140px; vertical-align: middle;
+  transition: border-color .12s; }
+.epa-scope .fill-input:focus { outline: none; border-color: var(--accent); }
+.epa-scope .fill-input.fill-ok { border-color: var(--correct); background: var(--correct-bg); }
+.epa-scope .fill-input.fill-no { border-color: var(--wrong); background: var(--wrong-bg); }
+.epa-scope .fill-blank-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+.epa-scope .fill-blank-row .fill-input { flex: 1; min-width: 0; width: auto; }
+.epa-scope .fill-tag { font-weight: 600; font-size: 0.9em; color: var(--ink-light); white-space: nowrap; }
+.epa-scope .paste-img-wrap { margin-top: 6px; position: relative; display: inline-block; max-width: 100%; }
+.epa-scope .paste-img-wrap img { max-width: 100%; max-height: 240px; border-radius: 4px;
+  border: 1px solid var(--divider); display: block; }
+.epa-scope .paste-img-remove { position: absolute; top: 3px; right: 3px; width: 20px; height: 20px;
+  background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 50%;
+  cursor: pointer; font-size: 12px; line-height: 20px; text-align: center; padding: 0; }
+.epa-scope .save-bar { text-align: center; margin: 10px 0 4px; }
+.epa-scope .save-bar button { font-size: 0.95em; padding: 7px 22px; background: #7c5ccc;
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; }
+.epa-scope .save-bar button:hover { background: #6748b4; }
+.epa-scope #epa-grade-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.62);
+  z-index: 9998; align-items: center; justify-content: center; }
+.epa-scope #epa-grade-modal.open { display: flex; }
+.epa-scope .epa-grade-dialog { background: #fff; border-radius: 10px; padding: 24px 28px; max-width: 560px;
+  width: 90vw; box-shadow: 0 8px 32px rgba(0,0,0,0.22); }
+.epa-scope .epa-grade-dialog h3 { margin: 0 0 10px; font-size: 1.1em; }
+.epa-scope .epa-grade-dialog p { color: var(--ink-light); font-size: 0.93em; margin: 0 0 12px; line-height: 1.6; }
+.epa-scope .epa-grade-cmd { background: #1e1e2e; color: #e0e0e0; border-radius: 6px; padding: 10px 14px;
+  font-family: "Consolas","Monaco","Courier New",monospace; font-size: 0.88em;
+  word-break: break-all; margin-bottom: 12px; user-select: all; white-space: pre-wrap; }
+.epa-scope .epa-grade-dialog-btns { display: flex; gap: 10px; justify-content: flex-end; }
+.epa-scope .epa-grade-dialog-btns button { padding: 7px 18px; border-radius: 6px; border: none; cursor: pointer;
+  font-size: 0.93em; font-weight: 600; }
+.epa-scope .btn-copy { background: var(--accent); color: #fff; }
+.epa-scope .btn-copy:hover { background: var(--accent-hover); }
+.epa-scope .btn-close-modal { background: #e5e5e5; color: var(--ink); }
+.epa-scope .btn-close-modal:hover { background: #d5d5d5; }
+.epa-scope #epa-tabs { position: sticky; top: 4px; z-index: 1000;
+  display: flex; gap: 0; justify-content: center; margin: 6px auto 22px;
+  max-width: 520px; border: 1px solid var(--divider); border-radius: 10px; overflow: hidden;
+  background: var(--paper); box-shadow: 0 2px 10px rgba(0,0,0,0.10); }
+.epa-scope #epa-tabs .tab-btn { flex: 1; padding: 10px 18px; cursor: pointer; border: none;
+  background: var(--paper-dark); color: var(--ink-light); font-size: 1.02em; font-weight: 600;
+  font-family: inherit; transition: background .15s, color .15s; }
+.epa-scope #epa-tabs .tab-btn + .tab-btn { border-left: 1px solid var(--divider); }
+.epa-scope #epa-tabs .tab-btn.active { background: var(--accent); color: #fff; }
+.epa-scope #epa-tabs .tab-btn:not(.active):hover { background: #efe7d3; color: var(--ink); }
+.epa-scope .tab-panel { display: none; }
+.epa-scope .tab-panel.active { display: block; }
+.epa-scope #panel-test { max-width: 980px; margin: 0 auto; }
+.epa-scope .kn-rail { top: 60px; max-height: calc(100vh - 74px); }
+@media print {
+.epa-scope #epa-tabs { position: static; display: none; }
+.epa-scope .tab-panel { display: block !important; }
+}
+</style>
+<style>
+.epa-scope [id] { scroll-margin-top: 14px; }
+.epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
+.epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
+.epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+</style>
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><div class="epa-main">
+<h2 id="s49634596">一、AI算法目标定义</h2>
+<h3 id="s91816092">原始业务需求到AI算法建模</h3>
+<p>核心流程为：<span class="kp">原始业务需求</span> → 问题定义 → AI算法建模。AI算法建模的核心问题包括：如何分析原始业务需求，对现实、复杂的系统进行分析和拆解；定义合理的算法目标和可靠的检验方法；关注数据的可获得性、数量、质量等问题；选择合适的AI算法模型以及求解方法、训练方法。</p>
+<div class="tldr">AI算法建模的核心是将需求问题转化为AI算法问题描述（包含输入输出、指标定义、过程描述、验收方法等），包含单一特性需求和复杂系统需求。</div>
+
+<h3 id="s63668436">需求分析过程</h3>
+<p>原始需求中无法直接得出AI的需求定义，需要按照原始需求分析方法进行分解：</p>
+<ul>
+<li><span class="kp">原始需求IR</span>：描述客户的需求或者分解的业务问题，体现不同客户对产品的要求。</li>
+<li><span class="kp">系统需求SR</span>：系统/产品视角，描述需求。系统需求分析时，需要考虑是否具有集成的AI需求。</li>
+<li><span class="kp">分配需求AR</span>：内部模块视角，分配需求，各模块进行具体需求实现。AI需求本质上属于实现的方法，因此需要将AI需求分解到各实现模块。</li>
+</ul>
+<blockquote>易错：原始需求中无法直接推导出AI算法需求，需要在系统需求分析中识别AI需求，在分配需求（AR）层面进行AI需求分解。</blockquote>
+
+<h3 id="s91202452">算法目标的定义</h3>
+<p>将需求描述转化为AI算法定义是至关重要的一步，需回答四个核心问题：是否用AI（Why）、做到什么程度（What）、如何达成（How）以及条件是否具备（评估）。<span class="tag-must">必考</span></p>
+<p>算法目标的定义需要明确以下维度：<span class="kp">评价方式</span>、<span class="kp">准确率目标</span>、<span class="kp">性能目标</span>、<span class="kp">算力目标</span>。同时需要评估商用目标与算法能力之间的差距。</p>
+
+<h3 id="s79541885">如何评价一个问题是否适合用AI算法解决</h3>
+<p>AI适合以下场景：数据容易获取；规则难以描述；结果受到复杂的物理世界规律影响；不要求极高的可靠性（99.99%）的场景。</p>
+<div class="checkpoint">问题：AI算法适合解决哪些场景的问题？<details class="cp-answer"><summary>参考答案</summary>适合数据容易获取、规则难以描述、结果受复杂物理世界规律影响、不要求极高可靠性的场景。</details></div>
+
+<h2 id="s60993490">二、AI算法建模分类</h2>
+<h3 id="s51925902">按照业务问题划分</h3>
+<p>主要分为<span class="kp">回归模型</span>（预测连续数值）和<span class="kp">分类模型</span>（分配到预定义类别）。此外还包括聚类、降维、排序、生成等问题。</p>
+
+<h3 id="s78452439">从模型构造来区分</h3>
+<ul>
+<li><span class="kp">数据模型</span>：算法结构已知，而参数未知。例如：线性回归模型、逻辑回归模型、决策树模型。</li>
+<li><span class="kp">算法模型</span>：算法结构与参数都未知。例如：神经网络模型、随机森林等。</li>
+</ul>
+
+<h3 id="s91240439">按照模型构造划分</h3>
+<ul>
+<li><span class="kp">参数模型</span>：参数有限，形式预先设定。</li>
+<li><span class="kp">非参数模型</span>：参数随数据量增长而增长。</li>
+</ul>
+
+<h3 id="s81042709">按照学习对象划分 <span class="tag-key">重点</span></h3>
+<p><span class="kp">生成式模型</span>：学习的对象是输入x和输出y的联合分布p(x, y)。学习数据的分布，可以生成新数据。典型模型：朴素贝叶斯法、高斯混合模型、马尔可夫模型等。</p>
+<ul>
+<li>优点：过拟合可能性较小；当观察的数据分布与真实世界整体分布接近时，有较好的泛化能力。</li>
+<li>缺点：鲁棒性较差，容易受异常数据影响；需要大量数据进行复杂计算。</li>
+</ul>
+<p><span class="kp">判别式模型</span>：学习的对象是输入x的条件下，输出y的条件分布p(y|x)。学习输入和输出之间的关系，预测新输出。典型模型：线性回归、k近邻法、最大熵模型、支持向量机、决策树等。</p>
+<ul>
+<li>优点：在小数据集上表现较好；计算量小于生成式模型。</li>
+<li>缺点：更加容易过拟合。</li>
+</ul>
+<blockquote>易错：生成式模型学习联合分布p(x,y)，判别式模型学习条件分布p(y|x)。判别式模型更容易过拟合，但计算量较小。</blockquote>
+
+<h3 id="s18019889">按照学习方法划分</h3>
+<p>包括<span class="kp">监督学习</span>、<span class="kp">无监督学习</span>、<span class="kp">半监督学习</span>、<span class="kp">自监督学习</span>、<span class="kp">强化学习</span>。</p>
+<p>半监督学习的典型假设：平滑假设、聚类假设、流形假设。</p>
+<p><span class="kp">强化学习</span>本质上是马尔科夫决策过程（MDP），是一个迭代式过程，解决探索-利用之间的矛盾。理论上只要能形成反馈的环境都适合使用。不适用场景：环境无法给出反馈或无法及时反馈；反馈状态错误或不准确；环境快速变化；试错成本高的场景。</p>
+
+<h2 id="s88298718">三、模型选择方法和原则</h2>
+<h3 id="s11657652">常见困难及应对策略 <span class="tag-freq">高频</span></h3>
+<table>
+<tr><th>困难类型</th><th>具体问题</th><th>应对策略</th></tr>
+<tr><td>数据缺乏</td><td>数据量少、不全、获取成本高</td><td>数据生成、数据增强、数据仿真、无监督/自监督、主动学习、置信学习</td></tr>
+<tr><td>标注受限</td><td>无标注、不全、错误</td><td>主动学习、置信学习</td></tr>
+<tr><td>数据不均衡</td><td>类别不均衡、正例少</td><td>数据方法、模型方法、异常检测</td></tr>
+<tr><td>推理资源受限</td><td>算力不足、内存/存储受限</td><td>模型量化、剪枝、蒸馏、压缩、AutoML</td></tr>
+</table>
+
+<h3 id="s39344775">数据量受限场景下的建模问题</h3>
+<p>增加数据的解决思路：实际数据（海纳百川）、数据增强（举一反三）、仿真数据（无中生有）。</p>
+<p><span class="kp">GAN数据生成技术</span>：生成器生成样本，判别器判断真伪，相互博弈。改进出了CycleGAN、CGAN、Pix2Pix以控制生成方向。优点是无决定性偏差、无变分下界；缺点是存在训练不稳定、模式坍塌、梯度消失等问题。</p>
+<p><span class="kp">Diffusion Model数据生成技术</span>：最大优势是训练简单，表现超过GAN；缺点是采样速度较慢。</p>
+<p><span class="kp">选择合适的模型</span>：数据量少于50个先获取数据；数据量多于50个，若有标签，大于10万选SVM或深度学习，小于10万尝试SVM或集成方法；若无标签，大于50个选K-Means等聚类算法。神经网络算法对小数据集更容易过拟合。</p>
+
+<h3 id="s67765843">标注不完备场景下的建模问题</h3>
+<p>分为不完全监督（主动学习、直推学习）、不确切监督（半监督学习）、不准确监督（多示例学习、带噪学习、众包模式、置信学习）。</p>
+<p><span class="kp">主动学习</span>过程：从未标注样本中选择高价值样本由专家标注，训练模型，再预测并选择未标注样本，循环更新。选择策略包括Margin sampling、Least confident、Entropy。</p>
+<blockquote>易错：主动学习在工业界应用存在障碍，因为现实数据有噪声、深度学习迭代代价大、缺乏普适性方法、将数据工程与模型训练变成迭代过程。</blockquote>
+
+<h3 id="s44089805">数据不均衡场景的建模</h3>
+<p><span class="kp">数据方法</span>：欠采样（ENN、Tomeklink、NearMiss）、过采样（SMOTE、Borderline-SMOTE、ADASYN、Mixup）、数据生成。</p>
+<p><span class="kp">模型方法</span>：多模型融合（如EasyEnsemble）、损失函数设计（类别加权Loss、Focal loss、GHM loss）。</p>
+<p><span class="kp">其他方法</span>：自监督预训练与独立分类器、异常检测、自监督+少样本迁移、对比学习。</p>
+
+<h3 id="s13023715">算力受限场景下的建模问题</h3>
+<p><span class="kp">选择亲和硬件的模型</span>：有加速计算能力选多组卷积模型；有树模型加速能力选树类模型；有其他加速硬件选非树计算模型。</p>
+<p><span class="kp">基于NAS的硬件亲和网络结构搜索</span>：通过SuperNet结构等可微结构在训练中搜索模型结构，结合terminal反馈的真实性能数据进行多目标优化，平衡性能、Flash、内存限制。</p>
+<p><span class="kp">分级模型设计</span>：根据计算能力是否充足，设计分级的数据预处理和特征计算流程。</p>
+
+<h2 id="s85227581">四、复杂场景的系统设计</h2>
+<h3 id="s43273952">复杂系统的分解原则</h3>
+<p>遵循高内聚低耦合、单一职责、接口清晰、可独立验证的原则。</p>
+
+<h3 id="s31500724">复杂系统的综合设计原则</h3>
+<p>单纯的AI算法受限于各种因素，可通过合理的系统设计解决。遵循渐进式集成、全局优化、标准化接口、容错设计。</p>
+<p><span class="kp">多级正交模型</span>：对于极速要求Recall的复杂系统，通过多个维度具有正交性的小模型串联，获得高准确率，达到类似E2E模型的效果。</p>
+<p><span class="kp">E2E多特征融合建模</span>：融合路径为专家规则/先验知识 + 统计特征 + Embedding特征 -> 算法模型。融合方式分为前调融合、中间融合和后调融合。融合类型包括不同维度特征融合和多尺度特征融合。</p>
+
+<h3 id="s90256260">复杂系统的均衡问题</h3>
+<p>复杂系统需要对各种约束进行分析，提炼关键要素和次要约束，综合解决各类Trade-off。主要均衡维度包括：误报与漏报、成本与性能、准确率与性能、准确率与泛化性、当期与长尾均衡。</p>
+<div class="tldr">解决策略：抓住主要矛盾，解决客户的关键诉求，适当牺牲次要目标；升维思考，从更高维度解决问题。</div>
+
+<h2 id="s81557133">五、基于演进思路的建模方法</h2>
+<h3 id="s15265920">自监督大模型的优势 <span class="tag-key">重点</span></h3>
+<ul>
+<li>预训练自监督，无需标注，数据标注成本低。</li>
+<li>天然的多任务属性，下游不同任务可以共用无标注领域数据。</li>
+<li>泛化能力优于监督学习模型。</li>
+<li>减少维护代价，下游任务变化仅需标注少量数据。</li>
+</ul>
+<blockquote>易错：大模型算力、训练数据、模型结构设计能力门槛高，容易形成技术断裂点，是目前各个AI巨头公司发展的方向。</blockquote>
+
+<h2 id="s21423494">5. 基于演进思路的建模方法（高阶） <span class="tag-key">重点</span></h2>
+<h3 id="s78998961">5.1 基于产品生命周期的演进建模思路</h3>
+<p>AI系统设计需要考虑产品在不同生命周期阶段的需求变化：</p>
+<p><span class="kp">初期（验证期）</span>：需求验证，数据量少。建模策略为快速原型验证，简单模型先行。</p>
+<p><span class="kp">成长期（规模化）</span>：数据积累，用户增长。建模策略为持续优化模型，引入更复杂算法。</p>
+<p><span class="kp">成熟期（稳定）</span>：性能和稳定性要求高。建模策略为系统化调优，完善运维机制。</p>
+<p><span class="kp">衰退期/转型期</span>：业务调整或技术升级。建模策略为模型迭代，技术栈平滑迁移。</p>
+<div class="tldr">关键原则：模型的演进应与产品发展节奏相匹配，避免过度设计或设计不足。</div>
+
+<h3 id="s26852355">5.2 基于开放世界的演进建模思路</h3>
+<p><span class="kp">开放世界建模</span>指系统需要面对训练时未见过的场景和类别：</p>
+<p><span class="kp">增量学习</span>：模型需要在不遗忘旧知识的前提下学习新知识。</p>
+<p><span class="kp">开集识别</span>：识别并拒绝未知类别的输入。</p>
+<p><span class="kp">持续学习</span>：在动态变化的数据分布中保持稳定的性能。</p>
+<p><span class="kp">人机协同循环</span>：将自动识别的不确定样本交给人处理，并将人工反馈用于后续训练迭代。</p>
+
+<h3 id="s32721399">5.3 小结</h3>
+<p>AI系统建模不是一次性的活动，而是伴随产品生命周期的持续演进过程。需要在不同阶段设计最合适的模型复杂度。开放世界建模要求AI系统具备持续学习新知识、识别未知类别的能力，而不是仅限于训练时的封闭集合。</p>
+
+<h2 id="s66959226">如何评价一个问题是否适合用AI算法解决？ <span class="tag-must">必考</span></h2>
+<h3 id="s87685413">传统软件算法 vs AI算法</h3>
+<p><span class="kp">传统软件算法</span>整体结构类似树模型，软件工程师直接通过 if-else + 循环编写业务软件代码，基于明确规则进行判断。</p>
+<p><span class="kp">AI算法</span>则是AI算法工程师编写训练代码，从数据中生成业务模型（类似代码）。例如通过数据训练决策树模型，根据特征进行分支判断，最终得出结论。</p>
+
+<h3 id="s20859233">评估维度对比</h3>
+<p><span class="kp">数据获取的难易程度</span>：AI算法容易，传统软件方法困难。AI算法通过数据来提取知识或者规则，传统软件方法不依赖于数据或者依赖少。</p>
+<p><span class="kp">规则描述的难易程度</span>：AI算法困难，传统软件方法容易。对于能够使用明确规则描述的问题，可以使用传统软件方法解决；如果规则无法明确描述或者问题过于复杂，人为描述容易出现遗漏或者冲突，可以通过AI算法解决。</p>
+<p><span class="kp">搜索空间大小</span>：AI算法庞大，传统软件方法中等以下。规则明确但搜索空间巨大的问题，可以通过AI解决，比如 AlphaGo、AlphaFold2 等。</p>
+<p><span class="kp">安全性、可靠性要求</span>：AI算法中等以下，传统软件方法极高。如果业务需要极高的准确率（大于99%），并且无法通过组合方法解决，则不适合AI解决。当前AI主流技术通过概率模型，无法解决极高可靠性要求的问题。</p>
+<p><span class="kp">影响问题的因素</span>：AI算法外部因素为主，传统软件方法内部因素为主。传统软件在边界确定的场景下表现稳定，感知类问题一般与复杂的外部因素相关，AI算法能力远超传统算法。</p>
+<div class="tldr">AI适合数据容易获取、规则难以描述，并且结果受到复杂的物理世界规律影响，且不要求极高可靠性（99.99%）的场景。</div>
+<blockquote>易错：不要认为AI算法能解决所有问题。对于要求极高可靠性（如路由算法）或规则明确且搜索空间小的问题，传统软件方法更优。</blockquote>
+
+<h2 id="s22240164">数据评价维度 <span class="tag-freq">高频</span></h2>
+<h3 id="s27146494">数据维度总览</h3>
+<p><span class="kp">数据定义</span>：明确一条数据的组成，如正样本（施工时数据）和负样本（环境背景数据）。</p>
+<p><span class="kp">数据来源</span>：客户现网、实验场。</p>
+<p><span class="kp">数据采集方案</span>：客户现网通过数据上云持续获得；实验场进行各种构造施工验证不同场景下的入侵数据。</p>
+<p><span class="kp">数据标注策略</span>：人工标注、主动学习标注等相结合。</p>
+<p><span class="kp">当前已有数据量</span>与<span class="kp">数据积累计划</span>：明确当前及未来的正负样本积累目标。</p>
+
+<h3 id="s81381479">数据评估注意事项</h3>
+<p>如果缺乏数据，并且也缺乏稳定的数据采集来源，并且无法通过仿真或者构造实验环境等方式获得，则需要审视是否适合用机器学习的方法来解决。</p>
+<p>图片、视频、声音和文字类的样本可以通过外部数据渠道进行采购，从而快速地建立基本的数据集，而开源的数据集也是可以进行模型的预训练等工作。但是最终要取得较好的效果，还是需要一定数量的自有数据集。</p>
+<p>ICT领域的数据集一般无法通过开放渠道获得，需要跟运营商签署许可协议进行合法采集。</p>
+<p>数据缺乏有效的标注，则需要考虑标注的难易程度和代价，需要考虑能否通过快速的标记或者其他维度的信息进行低成本的标注。此外，可以考虑自监督、半监督学习等方法，减少对标注数据的依赖。</p>
+
+<h2 id="s72931587">算力评价维度 <span class="tag-info">了解</span></h2>
+<h3 id="s91442449">各阶段算力评估总表</h3>
+<p><span class="kp">离线训练阶段</span>：包括特征工程、特征处理、模型训练。需评估算力消耗、内存带宽消耗（减少内存读写次数、评估内存/显存占用）和IO开销（大量IO操作、小文件占用大量IO问题）。</p>
+<p><span class="kp">在线推理阶段</span>：包括特征处理、模型推理、后端处理。需评估推理过程的算力、内存读写带宽和IO开销。</p>
+<p><span class="kp">在线更新</span>：包括在线迁移或微调。需评估迁移阶段的算力、读写带宽和IO开销。</p>
+
+<h3 id="s10557973">算力评估要点</h3>
+<p>算力评价需要考虑各种异构的硬件的算力开销，以及内存带宽、IO开销等问题。ICT的推理场景多样，需要满足各种不同算力的硬件的推理，需要对其硬件能力进行充分的理解再选择合理的算法模型。</p>
+
+<h2 id="s29413876">算法目标定义 <span class="tag-key">重点</span></h2>
+<h3 id="s60798674">算法目标定义的重要性</h3>
+<p>合理定义AI算法目标是进行AI算法建模的关键前提，直接影响到算法的选型和代价。大部分的问题，并非需要极高的准确率才能商用，只需要能够满足用户需求即可。</p>
+
+<h3 id="s12001073">例1：运维故障定位</h3>
+<p>某产品线客户的运维需求：需要能够快速界定故障，提升故障定位效率，快速恢复业务。产品线分解目标为对于xx类故障达到90%查全率、95%查准率，对于yy类故障达到50%查全率、96%查准率。</p>
+<p>通过AI辅助定位，可以将每个故障的定位时长大幅减少，整体定位效率提升9倍。对于客户来说，有明显的提升效率的收益，如果能够进一步提升准确率，则可以将定位效率进一步提升。</p>
+
+<h3 id="s91052637">例2：多次检测任务</h3>
+<p>举例某个检测任务，可以多次进行检测，单次检测的准确率为90%，可以进行多次检测。每轮检测时间15s，检测允许的时长为90s。客户期望的检出能力，漏报率小于99.9%，误报次数小于0.1次/km/day。</p>
+<p>按照单次检测准确率为85%计算，算法检出能力虽然不是随机抽样概率问题，但是可以近似认为，多次抽样之间是独立同分布的。通过多轮次的检测，其检出能力为：Acc = sum(C(M,n) * acc^n * (1-acc)^(M-n))。</p>
+
+<h3 id="s25863455">关键权衡</h3>
+<p>更进一步，偏向于查准率还是查全率，则是另一个需要权衡的目标，需要根据客户的实际需求进行提炼。</p>
+<div class="checkpoint">问题：在算法目标定义中，如何权衡查准率和查全率？<details class="cp-answer"><summary>参考答案</summary>需要根据客户的实际需求进行提炼。例如在故障定位中，可能更看重查全率以避免漏报，而在某些告警场景中可能更看重查准率以减少误报干扰。</details></div>
+
+<h2 id="s27313311">如何选择合适的模型？各种维度的建模方法划分 <span class="tag-freq">高频</span></h2>
+<p>按业务问题划分：回归模型、分类模型。</p>
+<p>按模型构造划分：参数模型、非参数模型。</p>
+<p>按学习对象划分：生成式模型、判别式模型。</p>
+<p>按学习方法划分：监督学习、无监督学习、半监督学习、自监督学习、强化学习。</p>
+<p>通过选择、组合、排列，适配目标场景。</p>
+
+<h2 id="s90689970">数据模型和算法模型 <span class="tag-key">重点</span></h2>
+<p>分类模型从模型构造来区分，可以分成数据模型和算法模型。</p>
+<h3 id="s84261855">数据模型</h3>
+<p><span class="kp">数据模型</span>：算法结构已知，而参数未知。将输入x到输出y的关系看成黑盒，认为这个黑盒里装着一组未知的参数θ，学习的对象是这组参数。典型例子：线性回归模型、决策树模型。</p>
+<h3 id="s76505481">算法模型</h3>
+<p><span class="kp">算法模型</span>：算法结构与参数都未知。认为这个黑盒里装着一个未知的映射f()，学习的对象也是这个映射。典型例子：随机森林模型。</p>
+<h3 id="s73573983">选择原则</h3>
+<p>如果某个问题的数据分布满足一个已知的分布，则可以直接使用数据模型。一般复杂的问题，往往其分布未知，或者遵循复杂的分布，则可以使用算法模型进行求解。</p>
+
+<h2 id="s36997956">生成式模型和判别式模型 <span class="tag-must">必考</span></h2>
+<h3 id="s19580295">生成式模型</h3>
+<p><span class="kp">生成式模型</span>：学习的对象是输入x和输出y的联合分布 p(x, y) = p(y) * p(x|y)。强调数据自身分布。</p>
+<p>建模过程：模型通过观察给定的数据计算出y的分布；分别计算不同y类别下的x分布概率；计算某个类别的联合概率分布；对于给定的一个新的样本，通过联合概率大小预测其类别。</p>
+<p>典型模型：朴素贝叶斯法、高斯混合模型、马尔可夫模型等。</p>
+<p>优点：较小的过拟合可能，当观察的数据的分布与真实世界的整体数据集的分布接近时，有较好的泛化能力。缺点：鲁棒性较差，容易受到一些异常数据的影响，从而得出错误的分布。需要大量的数据进行复杂计算。</p>
+
+<h3 id="s35696399">判别式模型</h3>
+<p><span class="kp">判别式模型</span>：学习的对象是输入x的条件下，输出y的条件分布 p(y|x)。强调数据边界。</p>
+<p>建模过程：在已知某样本的特征为x的条件下，计算该样本类别为各类的概率，选择概率最大的类别作为该样本的预测类别。</p>
+<p>典型模型：线性回归、k近邻法、决策树、最大熵模型、支持向量机等。</p>
+<p>优点：在小数据集上的表现较好，计算量小于生成式模型。缺点：更加容易过拟合。</p>
+<blockquote>易错：生成式模型学习联合概率，判别式模型学习条件概率，不要混淆两者的学习对象和典型模型。</blockquote>
+
+<h2 id="s79306743">监督学习与无监督学习 <span class="tag-freq">高频</span></h2>
+<h3 id="s68966930">监督学习</h3>
+<p><span class="kp">监督学习</span>：训练数据既有特征又有标签，通过训练使得机器能自己找到特征和标签之间的联系，然后在面对没有标签的数据时可以判断出其正确的标签。核心思想是基于完全标注的信息，实现模型与数据分布的近似。</p>
+<p>按照学习的任务目标可以大致分为回归算法（需要连续值的标注）和分类算法（输出的是类别，如图像目标检测、图像分割等）。</p>
+
+<h3 id="s57565425">无监督学习</h3>
+<p><span class="kp">无监督学习</span>：根据类别未知（没有被标记）的训练样本解决模式识别中的各种问题。核心思想是自身规律的学习和理解，结合人的认知，完成学习过程。</p>
+<p>分为两类问题：<span class="kp">聚类</span>（将对象分组为聚类，使得组内相似性最大）和<span class="kp">关联</span>（查找大型数据库中变量之间的关系，如市场篮子分析）。无监督学习算法很多时候用于特征工程以及数据的处理过程。</p>
+
+<h2 id="s67961340">半监督学习与自监督学习 <span class="tag-key">重点</span></h2>
+<h3 id="s12810055">半监督学习</h3>
+<p><span class="kp">半监督学习</span>：使用大量的未标记数据，以及同时使用标记数据，来进行模式识别工作。核心思想是内部数据的规律以及少量参考信息之间的关系，能够揭示未知的规律和分布。</p>
+<p>典型假设：平滑假设、聚类假设、流形假设。</p>
+
+<h3 id="s31321138">自监督学习</h3>
+<p><span class="kp">自监督学习</span>：对于无标签数据，通过设计辅助任务来挖掘数据自身的表征特性作为监督信息，来提升模型的特征提取能力。核心思想是数据内部的维度间关系是其外在表现的本源信息。</p>
+<p>例如在 NLP 任务中，通过构造随机 mask 单词的任务进行模型训练。2021 年 MAE 的发表，使得自监督的方法也被应用于 CV 领域。</p>
+
+<h2 id="s38557894">强化学习的思路和适用范围 <span class="tag-info">了解</span></h2>
+<h3 id="s81893958">强化学习的核心要素</h3>
+<p><span class="kp">强化学习</span>：模拟人和动物的学习过程。智能体通过观察环境获得 Observation，执行 Action 作用于 Environment，并从环境获得 Reward 作为训练信号更新参数。这是一个包含内循环与外循环的迭代过程。</p>
+<p>本质：强化学习马尔可夫决策过程、迭代式过程、解决探索-利用之间的矛盾。</p>
+
+<h3 id="s28850460">强化学习的适用范围</h3>
+<p>包含要素：智能体、状态、奖赏、动作、环境。理论上只要能够形成反馈的环境都适合使用强化学习方法。</p>
+<p>不适用的场景：环境无法给出反馈或者无法及时给出反馈；反馈的状态错误或者不准确；环境快速变化，需要能够快速获得准确的应对；试错成本高的场景。</p>
+
+<h2 id="s49871632">典型的业务问题分类 <span class="tag-freq">高频</span></h2>
+<p><span class="kp">回归模型</span>：对统计关系进行定量描述的一种数学模型，研究的是因变量（目标）和自变量（预测器）之间的关系。需要定量的预测结果，具备更大的难度。</p>
+<p><span class="kp">分类模型</span>：目标是定性，将目标按照多种类别进行划分。仅需定性的预测，难度降低。</p>
+<p>在同等条件下，回归问题的求解难度普遍高于分类问题。如果追求回归问题的更小的 bias，可能造成难以泛化的问题。如果转换为分类问题，则需要的数据量以及模型求解的难度都有一定程度的降低。</p>
+
+<h2 id="s82412467">AI算法设计面临的实际困难 <span class="tag-key">重点</span></h2>
+<p><span class="kp">数据缺乏</span>：数据量少、数据不全、数据获取成本高。</p>
+<p><span class="kp">标注受限</span>：基本无标注、数据标注不全、数据标注错误。</p>
+<p><span class="kp">数据不均衡</span>：样本类别不均衡、正例极少。</p>
+<p><span class="kp">推理资源受限</span>：算力不足、内存吞吐受限、内存不足、存储不足。</p>
+
+<h2 id="s77815531">数据量受限场景下的建模问题 <span class="tag-must">必考</span></h2>
+<h3 id="s87598008">一、增加数据</h3>
+<p>主要挑战：数据采集的代价、成本较大；多样性无法保证，模型泛化能力较弱；各种 corner case 难以获得，需要通过数据仿真与合成方法生成。</p>
+<p>关键技术①：数据采集能力、压缩能力、存储能力。核心要求：采得全、压得实、存得住。</p>
+<p>关键技术②：数据生成技术、数据合成技术、风格迁移。涉及 AutoEncoder 编解码过程，典型应用为背景数据+入侵数据组合生成。核心思想：举一反三。</p>
+<p>关键技术③：物理仿真数据。核心思想：无中生有。用于生成 corner case，提升数据多样性。</p>
+<div class="tldr">解决思路：通过实际数据 + 数据增强 + 仿真数据相结合的方式，解决数据问题，提供满足业务发展诉求的数据资产；形成闭环的数据验证工具链，能够快速进行研发闭环验证。</div>
+
+<h3 id="s32101579">二、GAN数据生成技术</h3>
+<p><span class="kp">生成器</span>：随机输入一个噪声变量，生成器随即生成一个样本。<span class="kp">判别器</span>：判断生成样本是否真实。两者相互博弈，直到最终生成器能生成判别器无法分辨的逼真样本。</p>
+<p>原始GAN的局限：在数据生成方向上无法进行控制，随机生成样本，因此生成的样本难以用于后端任务训练。改进版本：CycleGAN、CGAN、Pix2Pix 等模型，可以按照既定的目标进行数据生成。</p>
+<p>CycleGAN 原理：通过两个生成器完成风格的连续迁移。两类损失函数：生成损失（采用 L2 Loss）和判别损失。其他变体：PNGAN（姿态迁移）、CamStyle（摄像头迁移）。</p>
+<p>优点：相比 VAE 等方法，没有引入决定性偏置，无变分下界，无需设计复杂损失函数。缺点：原始 GAN 存在训练不稳定、收敛问题、模式坍塌、梯度消失等问题。</p>
+
+<h3 id="s10782048">三、Diffusion Model数据生成技术</h3>
+<p><span class="kp">Diffusion Model</span>定义了一个类似变分后验的马尔可夫链的平稳分布。</p>
+<p><span class="kp">前向扩散过程</span>：向真实图片逐步加入纯高斯噪声（马尔科夫过程），经历T次加噪后变为纯高斯噪声。</p>
+<p><span class="kp">反向扩散过程</span>：学习从纯高斯噪声逐步还原到真实图片。</p>
+<p>训练思路：通过人为构造一个新的分布p，目标转为缩小分布p和分布q（真实分布）之间的差距。通过不断修改p的参数去缩小差距，当p和q足够相似时，就可以用p替代q。</p>
+
+<h2 id="s18098791">与VAE的关系</h2>
+<p>对比 <span class="kp">VAE</span> 与 <span class="kp">Diffusion Model</span>：</p>
+<ul>
+<li><p><span class="kp">本质</span>：VAE是基于梯度的encoder-decoder架构；Diffusion Model本质是SDE（Stochastic Differential Equation）/ Markov架构。</p></li>
+<li><p><span class="kp">学习方式</span>：VAE的encoder学高斯分布的均值和方差，decoder用变分后验学习生成能力；Diffusion Model借鉴神经网络前向/反向传播概念，但不基于可微梯度，属于数学层面创新。</p></li>
+<li><p><span class="kp">隐变量Z</span>：VAE作为先验条件（变分先验）；Diffusion Model作为类似变分后验的马尔可夫链的平稳分布。</p></li>
+</ul>
+<div class="tldr">Diffusion Model优势在于训练简单，在很多任务中表现已超过GAN；不足是采样速度较慢，学术界已有大量研究使其速度问题得到一定改善。</div>
+
+<h2 id="s14836219">四、对抗数据生成方法案例</h2>
+<h3 id="s14402665">方案框架</h3>
+<p><span class="kp">对抗学习思路</span>：通过提取不同类别数据的语义进行合成，生成目标域的合成数据。</p>
+<p>整体方案：对源域和目标域进行解构的特征学习，得到事件和环境的解耦特征。然后交换彼此的事件特征，再与本域的环境特征组合，合成符合本域环境的新的事件数据。</p>
+<h3 id="s21353154">关键技术分解</h3>
+<p>1. <span class="kp">关键技术1：编码器和解码器生成数据</span> <span class="tag-key">重点</span></p>
+<p>基于AutoEncoder，设计实现数据编码器En和解码器De，数据经过En和De生成新数据，在模型判别精度上不劣化。公式：Loss = ||X - X'||。流程：X → En → Z → De → X'。</p>
+<p>2. <span class="kp">关键技术2：入侵特征和环境特征可拆分合并</span></p>
+<p>设计实现判别器D，拆分入侵样本特征和背景上的入侵表征，并重新组合，使得重组样本与真实样本近似。涉及MAE Loss与MMD Loss，实现入侵特征与环境特征的拆分与重组。</p>
+<p>3. <span class="kp">关键技术3：特定入侵语义和特定背景语义组合数据</span></p>
+<p>设计实现增加特定入侵语义Za和特定背景语义Zb，组合生成具有特定语义（特定入侵+特定背景）的数据。通过En提取Za和Zb，利用De进行重组，结合MAE Loss和MMD Loss，生成如"入侵+特定背景"等组合数据。</p>
+
+<h2 id="s23047502">五、CV数据仿真</h2>
+<h3 id="s40112373">核心流程</h3>
+<p>通过<span class="kp">CG技术</span>为CV算法提供训练数据，是业界趋势（例如Tesla采用Houdini进行建模，生成偶发性场景进行自动驾驶验证或训练）。</p>
+<h3 id="s32437732">仿真要素</h3>
+<ul>
+<li><p><span class="kp">3D模型</span>：车辆模型、人物模型、场景模型等</p></li>
+<li><p><span class="kp">渲染图像</span>：模拟对焦系统生成不同分辨率的图像（如4M、7M、10M）</p></li>
+<li><p><span class="kp">自动标注</span>：语义分割、3D目标检测、深度估计等</p></li>
+</ul>
+<h3 id="s24784139">应用输出流程</h3>
+<p>3D模型 → 渲染图像 → 自动标注</p>
+<h3 id="s27105023">核心优势</h3>
+<div class="tldr">CV数据仿真的核心优势：自由控制场景、零成本、零误差。</div>
+
+<h2 id="s71721594">六、选择合适的模型</h2>
+<p>当实际数据量不足时，可以考虑对数据量要求较小的算法模型。相比深度学习，<span class="kp">传统机器学习</span>对数据量的要求较少，适合解决比较简单、数据量较少的场景问题。</p>
+<h3 id="s43361937">sklearn传统机器学习方法选择地图</h3>
+<p><span class="tag-freq">高频</span></p>
+<ul>
+<li><p>IF 数据量少于50个 → 数据样本太少，先获取更多数据</p></li>
+<li><p>ELSE 数据量多于50个：</p>
+<ul>
+<li>IF 分类问题：</li>
+<li>IF 数据有标签：</li>
+<li>IF 数据量 > 10万 → 选择SGD分类器</li>
+<li>ELSE → 先尝试线性SVM分类器，如果效果不好，再尝试其他算法</li>
+<li>IF 特征为文本 → 选择朴素贝叶斯SVM</li>
+<li>ELSE → 先尝试kNN，效果不好则尝试SVM + 集成方法</li>
+<li>ELSE 数据无标签 → 选择各种聚类算法</li>
+<li>ELSE 非分类问题：</li>
+<li>IF 需要预测数量（回归问题）：</li>
+<li>IF 数据量 > 10万 → 选择SGD线性回归</li>
+<li>ELSE → 根据数据特征选择：Lasso回归、Ridge回归、集成方法、SVM等</li>
+<li>ELSE 需要数据可视化 → 考虑降维方法</li>
+<li>ELSE 需要输出数据结构 → sklearn无法解决</li>
+</ul>
+</li>
+</ul>
+<h3 id="s31052154">选择建议总结</h3>
+<div class="tldr">
+传统机器学习方法：sklearn建议的最低门槛是50个样本以上。数据量>10万，可选择SVM、SGD分类器；数据量<10万，可选择KNN、SVM
+
+<h2 id="s20515188">4.3 复杂场景的均衡问题</h2>
+<p>复杂系统需要对各种约束进行分析，提炼出关键要素和次要约束。针对不同的约束进行算法和模型的设计，结合软件架构和模型选型，综合解决复杂系统的各种冲突问题。</p>
+
+<h2 id="s74181351">5. 基于演进思路的建模方法（高阶）</h2>
+<h3 id="s78998961">5.1 基于产品生命周期的演进建模思路</h3>
+<h3 id="s80707789">5.1.1 从产品生命周期视角看数据积累策略</h3>
+<p>随着产品周期（<span class="kp">孵化阶段</span> → <span class="kp">试点阶段</span> → <span class="kp">小批量阶段</span> → <span class="kp">大批量阶段</span> → <span class="kp">场景复制</span>）和数据量的增长，数据积累策略需随之演进：</p>
+<ul>
+<li><span class="kp">孵化阶段</span>：产品启动阶段，数据缺乏，需要关注如何快速获得启动数据集。</li>
+<li><span class="kp">试点阶段</span>：重点关注如何采集更加全面的数据集。</li>
+<li><span class="kp">小批量阶段</span>：重点关注采集多样性数据，结合数据合成，进行泛化实验。</li>
+<li><span class="kp">大批量阶段</span>：重点关注长尾数据采集，关注单场景共性Top问题解决。</li>
+<li><span class="kp">场景复制</span>：重点关注多场景共享数据与差异数据的构建，快速场景复制能力。</li>
+</ul>
+
+<h3 id="s91024600">5.1.2 从产品生命周期视角看建模思路</h3>
+<p>随着产品从孵化到成熟，场景从单场景向多场景扩展，算法能力从快速验证向差异化竞争力演进，建模思路也随之调整：</p>
+<ul>
+<li><span class="kp">产品孵化</span>：单场景，场景可行性、快速验证。利用内外部可获得的开放数据集和已有预训练模型快速进行原型验证，完成可行性论证。</li>
+<li><span class="kp">产品早期</span>：单场景，基本可用。关注主流单场景进行突破，通过简单模型组合形成基本可用的算法能力。</li>
+<li><span class="kp">产品上量</span>：多场景，领先。关注多场景适应能力，模型泛化性，可以通过E2E建模提升竞争力，实现算法能力领先。</li>
+<li><span class="kp">产品成熟</span>：多场景，差异化竞争力。关注多场景复制能力，差异化竞争力构筑，可持续领先的断裂点算法竞争力构筑。</li>
+</ul>
+<div class="tldr">预训练模型在孵化阶段发挥关键作用，可加速原型验证流程。</div>
+
+<h3 id="s26852355">5.2 基于开放世界的演进建模思路</h3>
+<p>本章节内容在原文档中未展开，待补充。</p>
+
+<h2 id="s55202312">基于产品生命周期的演进建模思路——如何将有限数据集的模型推广到各种商用环境</h2>
+<h3 id="s89779537">一、问题的根源</h3>
+<p><span class="tag-must">必考</span> <span class="kp">核心痛点</span>：单个局点训练得到的模型，迁移到其他局点时准确率劣化严重。</p>
+<p><span class="kp">根源分析</span>：数据量少、数据多样性缺乏、模型能力不足。</p>
+<p><span class="tag-key">重点</span> <span class="kp">深层原因——独立同分布（IID）假设的局限</span>：传统学习方式的关键假设是 <span class="kp">IID（Independently and Identically Distributed，独立同分布）</span> 数据集，即要求训练数据集和实际工作数据集是IID的。模型在IID数据集上学习特征，能在IID数据上实现良好的泛化。然而，实际商用环境中各个局点的数据往往呈现 <span class="kp">Non-IID</span> 特征，训练数据与实际部署环境的数据分布不一致，导致模型泛化能力急剧下降。</p>
+<blockquote>易错：实际商用环境数据往往呈现Non-IID特征，而非IID，这是导致模型迁移准确率劣化的深层原因。</blockquote>
+
+<h3 id="s84887064">二、解决策略</h3>
+<p><span class="kp">总体目标</span>：一般局点无需重训模型，特殊局点可由渠道现场完成重训，无需将数据回传研发进行重训。</p>
+<p>AI泛化增强措施框架：<span class="kp">基础模型泛化提升</span> + <span class="kp">支持在线微调</span></p>
+<h4 id="sec-auto-1">1. 不同方向的解决措施</h4>
+<ul>
+<li><span class="kp">数据层面</span>：真实采集 + 数据生成，解决数据多样性问题。</li>
+<li><span class="kp">基础模型泛化能力提升</span>：域泛化（DG, Domain Generalization）、Stable learning（稳定学习）、提升基础模型的泛化能力。</li>
+<li><span class="kp">快速模型迁移</span>：域适应（DA, Domain Adaptation）、小样本迁移、对比学习、实现快速模型迁移。</li>
+</ul>
+<h4 id="sec-auto-2">2. 泛化性提升路径与演进阶段</h4>
+<ul>
+<li><span class="kp">基础模型（大数据离线训练）</span>：万量级样本，多站数据联合，离线训练，保证模型基础泛化性，快速满足样本量要求。</li>
+<li><span class="kp">单站在线学习（小样本在线训练）</span>：百量级样本，单站数据，在线训练，提升环境适应性，降低研发投入。</li>
+<li><span class="kp">网络级在线学习</span>：多站联合数据，多站数据，联合在线训练，持续优化，随时间推移不断提升。</li>
+</ul>
+<div class="tldr">演进阶段效果：基础模型阶段已覆盖环境准确率满足要求；单站在线学习阶段未覆盖特殊环境准确率提升至满足要求；网络级在线学习阶段随着时间推移持续优化。</div>
+<h4 id="sec-auto-3">3. 其他技术路线汇总</h4>
+<ul>
+<li><span class="kp">提升样本统计范围</span>：形成训练与实际IID。</li>
+<li><span class="kp">学习多种IID组成的数据集</span>：提升基础模型的 Non-IID 泛化性。</li>
+<li><span class="kp">具体技术</span>：稳定学习、对抗学习、联邦学习、多任务学习、迁移学习、持续学习、元学习、融入先验（在线、迁移学习）。</li>
+</ul>
+
+<h3 id="s90293954">三、基于产品演进的建模思路——多种下游任务场景下的建模问题</h3>
+<p><span class="tag-freq">高频</span> 背景：商用产品需要持续更新迭代，AI系统需要面对场景的不断扩展和延伸，如何构建持续演进的能力是关键。</p>
+<h4 id="sec-auto-4">自监督大模型方案</h4>
+<p><span class="tag-key">重点</span> 1. 训练方式：通过<span class="kp">数据增强方法</span>获得同一个数据的多个不同 view，将不同 view 之间的交叉熵作为损失函数，进行大模型的预训练，从而获得基于<span class="kp">多维时序振动特征</span>的特征提取大模型，减轻单个数据集过拟合。数据增强方式包括：Multi-crops（多裁剪）、遮蔽、裁剪、缩放、加噪。</p>
+<p>2. 架构示意：</p>
+<ul>
+<li><span class="kp">后端特征提取器</span>：基于无标签时序多维数据训练的200B级参数大模型（如光纤传感大模型）。</li>
+<li><span class="kp">前端任务分类器</span>：针对不同下游场景（如A场景、B场景）进行Few-shot learning。</li>
+</ul>
+<p>3. 大模型关键参数：</p>
+<ul>
+<li><span class="kp">数据规模</span>：TB级数据（无标签数据）。</li>
+<li><span class="kp">参数规模</span>：200B级参数。</li>
+<li><span class="kp">算力需求</span>：PB级算力。</li>
+</ul>
+<p>4. 大模型训练依赖的综合能力：依赖<span class="kp">内存调度能力、分布式计算能力、通讯调度能力、调优能力</span>，是算法、数据、框架、资源调度等全栈和全流程的综合能力。</p>
+<div class="tldr">5. 自监督大模型的核心优势：低成本（无需标注）、多任务属性（共用无标注数据）、强泛化能力（优于监督学习）、低维护代价（仅需少量标注）、技术壁垒（算力/数据/结构门槛高，易形成断裂点）。</div>
+
+<h3 id="s52905167">四、基于开放世界的持续演进问题</h3>
+<p><span class="tag-info">了解</span> AI系统面临的开放世界问题是普遍的，需要不断迭代更新，通过学习新的数据，获得持续演进的能力，或者<span class="kp">终身学习能力</span>。</p>
+<h4 id="sec-auto-5">Lifelong Learning System 流程</h4>
+<ol>
+<li><span class="kp">任务按序到达</span>：接收带标签的数据。</li>
+<li><span class="kp">知识迁移</span>：从之前学习的任务中迁移知识，学习新模型。</li>
+<li><span class="kp">知识存储</span>：将新知识存储到知识库供未来使用。</li>
+<li><span class="kp">知识精炼</span>：对现有的历史知识库进行提炼和更新。</li>
+</ol>
+<p>主要组成部分：<span class="kp">知识选择</span>（选择最相关的历史知识）、<span class="kp">知识学习</span>（利用历史知识和当前任务学习）、<span class="kp">知识存储</span>（存储新知识）。</p>
+<h4 id="sec-auto-6">常见持续学习范式</h4>
+<ul>
+<li><span class="kp">学习方式1：直接扩展新记忆体</span>（参数隔离）：隔离历史任务参数，使其不再参与新任务的学习。</li>
+<li><span class="kp">学习方式2：固化重要记忆体</span>（正则化）：固定历史任务中重要的参数不更新，保持重要记忆体的Activations。</li>
+<li><span class="kp">学习方式3：记忆回放 & 记忆唤醒</span>（经验回放）：维护少量历史任务数据子集或生成器，结合新任务进行回放。</li>
+</ul>
+
+<h3 id="s19553890">五、基于开放场景的学习问题</h3>
+<p>场景背景：涉及多种工程机械类型，已知类别（挖机、人工挖掘、夯土机、环境背景）与未知类别（地质勘探机、盾构机）。</p>
+<h4 id="sec-auto-7">开放场景学习整体流程</h4>
+<ol>
+<li><span class="kp">区分是否见过（已知/未知识别）</span>：使用 Encoder-Decoder（自编码器/解码器）计算还原误差。见过的样本重构误差小，没见过的样本重构误差大。通过设定还原误差阈值，区分已知与未知类别。</li>
+<li><span class="kp">I级与II级分类</span>：I级分类模型区分威胁与非威胁；II级分类模型对已知类别和未知类别进行细分。</li>
+<li><span class="kp">Cluster聚类</span>：对未知类别进行聚类，发现新类别。</li>
+<li><span class="kp">人工标签</span>：人工参与对聚类出的新类别进行标注。</li>
+<li><span class="kp">持续学习</span>：采用三种策略进行模型更新。</li>
+<li><span class="kp">模型自动更新</span>：完成新知识的融入并自动更新部署。</li>
+</ol>
+<blockquote>易错：已知样本重构误差小，未知样本重构误差大，通过设定还原误差阈值来区分。</blockquote>
+<h4 id="sec-auto-8">持续学习策略（三种模型更新策略）</h4>
+<ul>
+<li><span class="kp">新老数据重新训练</span>：全量模型重新在线训练。</li>
+<li><span class="kp">正则方式</span>：仅用新数据训练，对模型参数进行监督。</li>
+<li><span class="kp">模型隔离/fine-tune</span>：前几层保留，采用fine-tune方式训练后面几层。</li>
+</ul>
+
+<h3 id="s61038959">六、小结</h3>
+<ul>
+<li>从<span class="kp">产品演进</span>的思路考虑整个AI算法建模的技术演进。</li>
+<li>针对<span class="kp">不同阶段</span>设计不同的算法进行解决。</li>
+<li>与<span class="kp">产品生命周期同步演进</span>，从 Demo → 小规模商用 → 大规模商用 → 竞争力增强等阶段进行整体考虑。</li>
+</ul>
+
+<div class="checkpoint">IID假设在商用环境中面临什么挑战？<details class="cp-answer"><summary>参考答案</summary>传统学习假设训练数据与实际工作数据是独立同分布（IID）的，但实际商用环境数据往往呈现Non-IID特征，导致训练数据与部署环境数据分布不一致，模型泛化能力急剧下降，迁移到其他局点时准确率劣化严重。</details></div>
+<div class="checkpoint">自监督大模型的核心优势有哪些？<details class="cp-answer"><summary>参考答案</summary>1. 低成本：预训练自监督，无需标注；2. 多任务属性：下游不同任务可共用无标注领域数据；3. 强泛化能力：优于监督学习模型；4. 低维护代价：下游任务变化仅需少量标注；5. 技术壁垒：算力、数据、模型结构门槛高。</details></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center" id="sec-auto-9">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">144题 · 满分814分</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+<div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3 id="sec-auto-10">📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+
+
+<script>
+var Q = [{"kc_id": "kc5.1", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "AI算法建模的核心流程是？", "options": ["原始业务需求 → 算法实现 → 问题定义", "原始业务需求 → 问题定义 → AI算法建模", "问题定义 → 原始业务需求 → AI算法建模", "AI算法建模 → 问题定义 → 原始业务需求"], "answer": 1, "explanation": "AI算法建模的核心流程为：原始业务需求 → 问题定义 → AI算法建模。", "pitfall": "注意流程的先后顺序，需求在前，定义在中，建模在后。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "basic", "type": "choice", "points": 4, "question": "在需求分析过程中，分配需求（AR）的视角是？", "options": ["客户视角", "系统/产品视角", "内部模块视角", "算法视角"], "answer": 2, "explanation": "分配需求（AR）是内部模块视角，分配需求，各模块进行具体需求实现。", "pitfall": "容易混淆IR（客户视角）、SR（系统/产品视角）和AR（内部模块视角）。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下哪种场景不适合用AI算法解决？", "options": ["数据容易获取的场景", "规则难以描述的场景", "要求极高可靠性（99.99%）的场景", "结果受到复杂的物理世界规律影响的场景"], "answer": 2, "explanation": "AI算法适合不要求极高可靠性（99.99%）的场景，因为AI模型通常具有一定的误判率，难以达到绝对的极高可靠性。", "pitfall": "AI适合复杂、规则难描述的场景，但对于极高可靠性要求的场景需谨慎。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "算法结构已知，而参数未知的模型是？", "options": ["数据模型", "算法模型", "参数模型", "非参数模型"], "answer": 0, "explanation": "数据模型是指算法结构已知，而参数未知的模型，例如线性回归模型、逻辑回归模型、决策树模型。", "pitfall": "注意区分数据模型与算法模型，算法模型是结构与参数都未知。"}, {"kc_id": "kc5.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下属于生成式模型的是？", "options": ["支持向量机", "决策树", "朴素贝叶斯法", "k近邻法"], "answer": 2, "explanation": "典型的生成式模型包括朴素贝叶斯法、高斯混合模型、马尔可夫模型等。", "pitfall": "容易将生成式模型与判别式模型混淆，SVM、决策树、KNN均属于判别式模型。"}, {"kc_id": "kc5.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下属于判别式模型的是？", "options": ["高斯混合模型", "马尔可夫模型", "支持向量机", "朴素贝叶斯法"], "answer": 2, "explanation": "典型的判别式模型包括线性回归、k近邻法、最大熵模型、支持向量机、决策树等。", "pitfall": "支持向量机是判别式模型的典型代表。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "强化学习的本质是？", "options": ["马尔科夫决策过程", "条件分布学习", "联合分布学习", "无监督聚类"], "answer": 0, "explanation": "基础的强化学习本质上是一个马尔可夫决策过程（MDP），再叠加机器学习成为一个具备学习能力的MDP过程。", "pitfall": "强化学习的核心是马尔可夫决策过程。"}, {"kc_id": "kc5.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "在数据量受限场景下，Sklearn建议的最低数据量门槛是？", "options": ["10个", "50个", "100个", "1000个"], "answer": 1, "explanation": "Sklearn建议的最低门槛是50个以上，可以进行一些尝试。如果数据量少于50个，则数据太小，先获取更多数据。", "pitfall": "记住Sklearn给出的经验阈值是50。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "原始GAN在数据生成中存在的主要问题不包括？", "options": ["训练不稳定", "模式坍塌", "梯度消失", "引入决定性偏差"], "answer": 3, "explanation": "原始GAN存在训练不稳定、收敛问题、模式坍塌、梯度消失等问题。相比VAE等方法，GAN没有引入决定性偏差。", "pitfall": "GAN相比VAE的优点就是没有引入决定性偏差，无变分下界。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "相比GAN，Diffusion Model的最大优势是？", "options": ["采样速度快", "训练简单", "生成分辨率高", "模型参数少"], "answer": 1, "explanation": "Diffusion Model的最大优势是训练简单，在很多任务中的表现已经超过了GAN。当前最大缺点是采样速度较慢。", "pitfall": "Diffusion Model训练简单但采样慢，与GAN的特点有区别。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "主动学习中，选择带标注高价值样本的策略不包括？", "options": ["Margin sampling", "Least confident", "Entropy", "Random sampling"], "answer": 3, "explanation": "选择带标注高价值样本的策略包括：Margin sampling、Least confident、Entropy。Random sampling是随机采样，不属于主动学习的高价值选择策略。", "pitfall": "主动学习的核心是选择最有价值的样本，而非随机选择。"}, {"kc_id": "kc5.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "针对数据不均衡问题，以下属于数据方法的是？", "options": ["Focal loss", "EasyEnsemble", "SMOTE", "异常检测"], "answer": 2, "explanation": "数据方法包括欠采样（ENN、Tomeklink、NearMiss）和过采样（SMOTE、Borderline-SMOTE、ADASYN、Mixup）以及数据生成。", "pitfall": "Focal loss属于损失函数设计，EasyEnsemble属于多模型融合，均属于模型方法。"}, {"kc_id": "kc5.1", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "针对数据不均衡问题，以下属于模型方法的是？", "options": ["SMOTE", "Mixup", "Focal loss", "对比学习"], "answer": 2, "explanation": "模型方法包括多模型融合（如EasyEnsemble）和损失函数设计（类别加权Loss、Focal loss、GHM loss）。", "pitfall": "SMOTE和Mixup是数据层面的过采样方法。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "在算力受限场景下，如果有树模型加速能力，应尽量选择？", "options": ["多组卷积计算模型", "树类模型", "非树计算模型", "Transformer模型"], "answer": 1, "explanation": "如果有树模型加速能力，应尽量选择树类模型，以发挥硬件的加速能力。", "pitfall": "硬件加速与模型类型需匹配，有树模型加速则选树模型。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "复杂系统设计中，多级正交模型主要用于解决什么问题？", "options": ["算力不足问题", "数据标注不全问题", "极速要求Recall的复杂系统问题", "模型过拟合问题"], "answer": 2, "explanation": "对于极速要求Recall的复杂系统问题，受限于数据量以及各种Corner Case问题，可以先使用多级正交模型组合的思路进行建模。", "pitfall": "多级正交模型是为了在复杂系统中达到类似E2E模型的效果，解决Recall要求高的问题。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "自监督大模型的优势不包括？", "options": ["数据标注成本低", "泛化能力优于监督学习模型", "天然的多任务属性", "推理资源要求低"], "answer": 3, "explanation": "自监督大模型的优势包括：预训练自监督无需标注成本低、天然多任务属性、泛化能力优于监督学习、减少维护代价。大模型通常算力要求高，而非推理资源要求低。", "pitfall": "大模型通常需要巨大的算力和资源，推理资源要求低不是其优势。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "AI算法建模的核心问题包括哪些？", "options": ["如何分析原始业务需求，对现实、复杂的系统进行分析和拆解", "定义合理的算法目标和可靠的检验方法", "关注数据的可获得性、数量、质量等问题", "选择合适的AI算法模型以及求解方法、训练方法"], "answer": [0, 1, 2, 3], "explanation": "AI算法建模的核心问题包括：分析原始业务需求并拆解、定义算法目标和检验方法、关注数据问题、选择合适的AI算法模型及求解和训练方法。", "pitfall": "四个选项均属于AI算法建模的核心问题，需全选。"}, {"kc_id": "kc5.1", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "需求分析过程包含哪些层级？", "options": ["原始需求IR", "系统需求SR", "分配需求AR", "算法需求AR"], "answer": [0, 1, 2], "explanation": "需求分析过程包含：原始需求IR（客户诉求/业务问题）、系统需求SR（系统/产品视角）、分配需求AR（内部模块视角）。", "pitfall": "注意区分需求层级，没有“算法需求AR”这个标准层级。"}, {"kc_id": "kc5.1", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "算法目标的定义包含哪些维度？", "options": ["评价方式", "准确率目标", "性能目标", "算力目标"], "answer": [0, 1, 2, 3], "explanation": "算法目标的定义包含：评价方式、准确率目标、性能目标、算力目标。", "pitfall": "算法目标不仅是准确率，还包括性能和算力等维度。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "AI适合解决以下哪些场景？", "options": ["数据容易获取", "规则难以描述", "结果受到复杂的物理世界规律影响", "不要求极高的可靠性（99.99%）的场景"], "answer": [0, 1, 2, 3], "explanation": "AI适合数据容易获取、规则难以描述、结果受复杂物理世界规律影响、不要求极高可靠性的场景。", "pitfall": "AI不适合要求极高可靠性的场景，因为模型存在不确定性。"}, {"kc_id": "kc5.1", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "按照模型构造划分，模型可以分为？", "options": ["数据模型", "算法模型", "参数模型", "非参数模型"], "answer": [2, 3], "explanation": "按照模型构造划分，模型可以分为参数模型（参数有限，形式预先设定）和非参数模型（参数随数据量增长而增长）。", "pitfall": "数据模型和算法模型是从模型构造来区分的，而参数模型和非参数模型是按照模型构造划分的。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "生成式模型的优点包括？", "options": ["过拟合可能性较小", "当观察的数据的分布与真实世界的整体数据集的分布接近时，有较好的泛化能力", "在小数据集上的表现较好", "计算量小于判别式模型"], "answer": [0, 1], "explanation": "生成式模型的优点是过拟合可能性较小，且当数据分布接近真实世界时有较好的泛化能力。选项C和D是判别式模型的优点。", "pitfall": "生成式模型需要大量数据进行复杂计算，计算量大于判别式模型，容易混淆两者的优缺点。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "判别式模型的缺点包括？", "options": ["鲁棒性较差，容易受到异常数据的影响", "更加容易过拟合", "需要大量数据进行复杂计算", "在小数据集上的表现不如生成式模型"], "answer": [1, 3], "explanation": "判别式模型的缺点是更加容易过拟合，在小数据集上的表现不如生成式模型。选项A和C是生成式模型的缺点。", "pitfall": "判别式模型计算量小，在小数据集上表现较好，但更容易过拟合。"}, {"kc_id": "kc5.1", "cognitive_level": "remember", "difficulty": "hard", "type": "multi", "points": 6, "question": "半监督学习的典型假设包括？", "options": ["平滑假设", "聚类假设", "流形假设", "独立同分布假设"], "answer": [0, 1, 2], "explanation": "半监督学习的典型假设包括：平滑假设、聚类假设、流形假设。", "pitfall": "独立同分布假设是机器学习的一般假设，不是半监督学习特有的典型假设。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "强化学习不适用的场景有？", "options": ["环境无法给出反馈或者无法及时给出反馈", "反馈的状态错误或者不准确", "环境快速变化，需要能够快速获得准确的应对", "试错成本高的场景"], "answer": [0, 1, 2, 3], "explanation": "强化学习不适用于环境无法反馈、反馈错误、环境快速变化以及试错成本高的场景。", "pitfall": "强化学习需要环境提供准确及时的反馈，且试错成本不能太高。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "数据缺乏场景下的应对策略有？", "options": ["数据生成", "数据增强", "无监督/自监督", "主动学习"], "answer": [0, 1, 2, 3], "explanation": "数据缺乏的应对策略包括数据生成、数据增强、数据仿真、无监督/自监督、主动学习、置信学习等。", "pitfall": "主动学习和置信学习也属于应对数据缺乏和标注受限的策略。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "数据标注受限场景下，针对“数据标注错误”可以采用哪些方法？", "options": ["多示例学习", "带噪学习", "众包模式", "置信学习"], "answer": [0, 1, 2, 3], "explanation": "针对数据标注错误（不准确监督），可以采用多示例学习、带噪学习、众包模式、置信学习等方法。", "pitfall": "注意区分标注不全（半监督学习）和标注错误（带噪学习、置信学习等）的应对方法。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "针对数据不均衡问题，可以采用的其他方法有？", "options": ["自监督预训练与独立的分类器", "异常检测", "自监督+少样本迁移", "对比学习"], "answer": [0, 1, 2, 3], "explanation": "针对数据不均衡，其他方法包括自监督预训练与独立分类器、异常检测、自监督+少样本迁移、对比学习等。", "pitfall": "除了数据方法和模型方法，还有这些其他方法可以应对数据不均衡。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "复杂系统的均衡问题主要涉及哪些维度？", "options": ["误报与漏报", "成本与性能", "准确率与性能", "准确率与泛化性"], "answer": [0, 1, 2, 3], "explanation": "复杂系统的主要均衡维度包括：误报与漏报、成本与性能、准确率与性能、准确率与泛化性、当期与长尾均衡等。", "pitfall": "复杂系统设计需要综合考虑多个维度的Trade-off。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "自监督大模型的优势有哪些？", "options": ["预训练自监督，无需标注，数据标注成本低", "天然的多任务属性，下游不同任务可以共用无标注领域数据", "泛化能力优于监督学习模型", "减少维护代价，下游任务变化仅需标注少量数据"], "answer": [0, 1, 2, 3], "explanation": "自监督大模型的优势包括：无需标注成本低、多任务属性、泛化能力优于监督学习、减少维护代价等。", "pitfall": "大模型的优势主要体现在数据、泛化和维护成本上。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述生成式模型和判别式模型的学习对象区别。", "options": [], "answer": "生成式模型的学习对象是输入x和输出y的联合分布p(x, y)，它是学习数据的分布，可以生成新数据。判别式模型的学习对象是输入x的条件下，输出y的条件分布p(y|x)，它是学习输入数据和输出数据之间的关系，可以预测新的输出数据。", "explanation": "生成式模型学习联合分布，判别式模型学习条件分布。", "pitfall": "容易混淆联合分布和条件分布的概念。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "在数据量受限场景下，如何通过增加数据来解决建模问题？请列举解决思路。", "options": [], "answer": "解决思路包括：1. 实际数据（海纳百川）：通过数据采集、压缩、存储等技术获取更多真实数据；2. 数据增强（举一反三）：对已有数据进行变换生成更多样本；3. 仿真数据（无中生有）：利用仿真技术或GAN、Diffusion等模型生成数据。通过实际数据+数据增强+仿真数据相结合的方式解决数据问题。", "explanation": "增加数据的思路包括实际采集、数据增强和仿真生成。", "pitfall": "不仅要提到数据增强，还要提到实际数据采集和仿真数据生成。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述主动学习的整体过程。", "options": [], "answer": "1. 从未标注样本中选择部分样本，由专家进行标注；2. 专家完成标注，生成已标注样本；3. 基于已标注样本训练算法模型；4. 算法模型对未标注数据进行预测，并且按照某种原则选择未标注样本给专家进行标注；5. 专家完成标注，更新已标注样本；6. 重新更新模型，重复上述过程。", "explanation": "主动学习是一个迭代式的选择、标注、训练过程。", "pitfall": "注意主动学习是一个闭环迭代过程，核心是选择高价值样本进行标注。"}, {"kc_id": "kc5.1", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "在复杂系统的均衡问题中，主要的均衡维度有哪些？解决策略是什么？", "options": [], "answer": "主要均衡维度包括：误报与漏报、成本与性能、准确率与性能、准确率与泛化性、当期与长尾均衡。解决策略是：抓住主要矛盾，解决客户的关键诉求，适当牺牲次要目标；升维思考，从更高维度解决问题。", "explanation": "复杂系统设计需要权衡各种约束，解决策略是抓主要矛盾和升维思考。", "pitfall": "解决策略不是面面俱到，而是抓住主要矛盾，适当牺牲次要目标。"}, {"kc_id": "kc5.35", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "综合设计在关注准确性、实时性等多方面均衡问题时，需要采用什么策略？", "options": ["一次性集成", "渐进式集成和全局优化", "仅关注准确性", "仅关注实时性"], "answer": 1, "explanation": "综合设计需要渐进式集成和全局优化，同时关注准确性、实时性、可解释性等多方面均衡问题。", "pitfall": "容易忽略全局优化，只关注局部性能。"}, {"kc_id": "kc5.35", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "在产品生命周期的初期（验证期），推荐的建模策略是？", "options": ["系统化调优，完善运维机制", "模型迭代，技术栈平滑迁移", "快速原型验证，简单模型先行", "持续优化模型，引入更复杂算法"], "answer": 2, "explanation": "初期（验证期）需求验证，数据量少，建模策略应为快速原型验证，简单模型先行。", "pitfall": "容易在初期过度设计复杂模型。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "开放世界建模中，识别并拒绝未知类别输入的能力被称为？", "options": ["增量学习", "开集识别", "持续学习", "人机协同循环"], "answer": 1, "explanation": "开集识别是指系统能够识别并拒绝未知类别的输入。", "pitfall": "容易与增量学习混淆，增量学习是学习新知识。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "basic", "type": "choice", "points": 4, "question": "传统软件算法与AI算法的主要区别在于？", "options": ["传统软件算法基于明确规则，AI算法从数据中生成模型", "传统软件算法不需要代码，AI算法需要代码", "AI算法基于明确规则，传统软件算法从数据中生成模型", "两者没有区别"], "answer": 0, "explanation": "传统软件算法通过if-else等明确规则编写，AI算法则是通过数据训练生成业务模型。", "pitfall": "误认为AI算法也是基于人工编写的规则。"}, {"kc_id": "kc5.35", "cognitive_level": "apply", "difficulty": "medium", "type": "choice", "points": 4, "question": "对于能够使用明确规则描述的问题，应该选择哪种方法解决？", "options": ["AI算法", "传统软件方法", "强化学习", "无监督学习"], "answer": 1, "explanation": "如果规则明确且容易描述，可以使用传统软件方法解决；如果规则无法明确描述，则考虑AI算法。", "pitfall": "盲目追求AI算法而忽略传统方法的高效性。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "AI算法适合解决安全性、可靠性要求如何的场景？", "options": ["极高（大于99.99%）", "中等以下", "100%", "无要求"], "answer": 1, "explanation": "AI算法基于概率模型，适合安全性、可靠性要求中等以下的场景，极高可靠性场景不适合。", "pitfall": "误认为AI算法可以解决所有可靠性要求的问题。"}, {"kc_id": "kc5.35", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "ICT领域的数据集获取通常需要怎么做？", "options": ["通过开放渠道免费获得", "跟运营商签署许可协议进行合法采集", "不需要数据集", "只能通过实验场构造"], "answer": 1, "explanation": "ICT领域的数据集一般无法通过开放渠道获得，需要跟运营商签署许可协议进行合法采集。", "pitfall": "误以为可以随意从网上下载ICT数据。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "算力评估中，离线训练阶段不包括以下哪个子阶段？", "options": ["特征工程", "特征处理", "模型训练", "后端处理"], "answer": 3, "explanation": "后端处理属于在线推理阶段的子阶段，不属于离线训练阶段。", "pitfall": "混淆离线训练和在线推理的子阶段。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "算法目标定义中，运维故障定位的例子主要说明了什么？", "options": ["AI必须达到100%准确率才能商用", "合理定义目标即使准确率不高也能带来巨大收益", "故障定位只能依靠人工", "查准率比查全率更重要"], "answer": 1, "explanation": "大部分问题并非需要极高准确率才能商用，只要满足用户需求即可，合理定义目标能带来明显的效率提升。", "pitfall": "过度追求高准确率而忽略业务实际需求。"}, {"kc_id": "kc5.35", "cognitive_level": "apply", "difficulty": "hard", "type": "choice", "points": 4, "question": "多次检测任务中，多轮次检测的检出能力计算基于什么假设？", "options": ["每次检测相互独立", "检测准确率随次数递减", "多次抽样之间是独立同分布", "检测时间越长准确率越高"], "answer": 2, "explanation": "虽然算法检出能力不是随机抽样概率问题，但可以近似认为多次抽样之间是独立同分布的，从而计算累计检出能力。", "pitfall": "误认为多次检测是简单的概率相加。"}, {"kc_id": "kc5.35", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "按模型构造划分，模型可以分为？", "options": ["生成式模型和判别式模型", "参数模型和非参数模型", "数据模型和算法模型", "监督学习和无监督学习"], "answer": 2, "explanation": "分类模型从模型构造来区分，可以分成数据模型和算法模型。", "pitfall": "容易与按学习对象划分（生成式/判别式）混淆。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "线性回归模型属于哪种模型？", "options": ["算法模型", "数据模型", "生成式模型", "无监督学习模型"], "answer": 1, "explanation": "线性回归模型是一个数据模型，因为其黑盒内的函数关系确定，而参数不确定，通过数据学习参数。", "pitfall": "误认为需要学习参数的就是算法模型。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "生成式模型学习的对象是？", "options": ["条件分布 p(y|x)", "联合分布 p(x, y)", "输入分布 p(x)", "输出分布 p(y)"], "answer": 1, "explanation": "生成式模型学习的对象是输入x和输出y的联合分布p(x, y)。", "pitfall": "与判别式模型的p(y|x)混淆。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "判别式模型的优点是？", "options": ["较小的过拟合可能", "鲁棒性强", "在小数据集上表现较好，计算量小", "需要大量数据进行复杂计算"], "answer": 2, "explanation": "判别式模型的优点是在小数据集上表现较好，计算量小于生成式模型。", "pitfall": "将生成式模型和判别式模型的优缺点记反。"}, {"kc_id": "kc5.35", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "无监督学习算法可以进一步分为哪两类问题？", "options": ["回归和分类", "聚类和关联", "生成和判别", "监督和强化"], "answer": 1, "explanation": "无监督学习算法可以进一步分为聚类和关联两类问题。", "pitfall": "混淆监督学习和无监督学习的子分类。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "自监督学习的核心思想是？", "options": ["基于完全标注的信息实现近似", "自身规律的学习和理解", "内部数据的规律及少量参考信息揭示未知规律", "数据内部的维度间关系是其外在表现的本源信息"], "answer": 3, "explanation": "自监督学习的核心思想是数据内部的维度间关系是其外在表现的本源信息，即内因决定外在表现。", "pitfall": "容易与半监督学习的核心思想混淆。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "强化学习本质上是一个什么过程？", "options": ["马尔可夫决策过程", "线性回归过程", "聚类过程", "生成式对抗过程"], "answer": 0, "explanation": "基础的强化学习本质上是一个马尔可夫决策过程，再叠加机器学习成为具备学习能力的MDP过程。", "pitfall": "忽略其马尔可夫决策过程的本质。"}, {"kc_id": "kc5.35", "cognitive_level": "apply", "difficulty": "hard", "type": "choice", "points": 4, "question": "以下哪个场景不适合使用强化学习？", "options": ["环境能给出及时反馈", "试错成本低的场景", "环境快速变化且需要快速准确应对", "智能体通过观察环境获得状态"], "answer": 2, "explanation": "环境快速变化，需要能够快速获得准确的应对的场景不适合强化学习，因为强化学习需要迭代探索。", "pitfall": "误认为强化学习能适应所有动态环境。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "回归模型与分类模型相比，哪个求解难度普遍更高？", "options": ["分类模型", "回归模型", "两者一样", "无法比较"], "answer": 1, "explanation": "回归模型需要定量的预测结果，具备更大的难度，同等条件下求解难度普遍高于分类问题。", "pitfall": "误以为分类问题因为类别多而更难。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "原始GAN在数据生成方向上的局限是什么？", "options": ["无法生成逼真样本", "无法进行控制，随机生成样本", "训练过程过于稳定", "只能用于NLP领域"], "answer": 1, "explanation": "原始GAN在数据生成方向上无法进行控制，随机生成样本，因此生成的样本难以用于后端任务训练。", "pitfall": "误认为原始GAN可以按需生成特定样本。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "基于开放世界的演进建模思路包括哪些？", "options": ["增量学习", "开集识别", "持续学习", "人机协同循环"], "answer": [0, 1, 2, 3], "explanation": "开放世界建模包括增量学习、开集识别、持续学习和人机协同循环。", "pitfall": "遗漏人机协同循环。"}, {"kc_id": "kc5.35", "cognitive_level": "apply", "difficulty": "medium", "type": "multi", "points": 6, "question": "AI算法适合解决哪些场景的问题？", "options": ["数据容易获取", "规则难以描述", "结果受复杂物理世界规律影响", "要求极高可靠性（99.99%）"], "answer": [0, 1, 2], "explanation": "AI适合数据容易获取、规则难以描述，并且结果受到复杂的物理世界规律影响，且不要求极高可靠性的场景。", "pitfall": "误选极高可靠性场景。"}, {"kc_id": "kc5.35", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "数据评价维度包括哪些具体内容？", "options": ["数据定义", "数据来源", "数据采集方案", "数据标注策略"], "answer": [0, 1, 2, 3], "explanation": "数据评价维度包括数据定义、数据来源、数据采集方案、数据标注策略、当前已有数据量、数据积累计划等。", "pitfall": "遗漏数据积累计划等长期维度。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "数据评估注意事项中，如果缺乏数据可以考虑哪些方法？", "options": ["审视是否适合用机器学习解决", "通过外部渠道采购图片、视频等数据", "使用开源数据集进行预训练", "考虑自监督、半监督学习减少标注依赖"], "answer": [0, 1, 2, 3], "explanation": "缺乏数据时需审视适用性，可采购外部数据，使用开源数据集预训练，或采用自监督、半监督学习减少标注依赖。", "pitfall": "忽略对问题适用性的重新审视。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "算力评价需要考虑哪些开销？", "options": ["算力开销", "内存带宽", "IO开销", "人工标注开销"], "answer": [0, 1, 2], "explanation": "算力评价需要考虑各种异构硬件的算力开销，以及内存带宽、IO开销等问题。", "pitfall": "将人工标注开销误算入算力评价。"}, {"kc_id": "kc5.35", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "按学习方法划分，模型可以分为哪些？", "options": ["监督学习", "无监督学习", "半监督学习", "自监督学习", "强化学习"], "answer": [0, 1, 2, 3, 4], "explanation": "按学习方法划分，包括监督学习、无监督学习、半监督学习、自监督学习和强化学习。", "pitfall": "遗漏自监督学习或强化学习。"}, {"kc_id": "kc5.35", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "生成式模型的典型模型包括哪些？", "options": ["朴素贝叶斯法", "高斯混合模型", "马尔可夫模型", "支持向量机"], "answer": [0, 1, 2], "explanation": "生成式模型的典型模型包括朴素贝叶斯法、高斯混合模型、马尔可夫模型等。支持向量机属于判别式模型。", "pitfall": "将支持向量机误认为生成式模型。"}, {"kc_id": "kc5.35", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "判别式模型的典型模型包括哪些？", "options": ["线性回归", "k近邻法", "决策树", "最大熵模型"], "answer": [0, 1, 2, 3], "explanation": "判别式模型的典型模型包括线性回归、k近邻法、决策树、最大熵模型、支持向量机等。", "pitfall": "将线性回归误认为生成式模型。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "半监督学习的典型假设包括哪些？", "options": ["平滑假设", "聚类假设", "流形假设", "独立同分布假设"], "answer": [0, 1, 2], "explanation": "半监督学习的典型假设包括平滑假设、聚类假设和流形假设。", "pitfall": "将独立同分布假设误认为是半监督学习的假设。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "强化学习的核心要素包括哪些？", "options": ["智能体", "状态", "奖赏", "动作", "环境"], "answer": [0, 1, 2, 3, 4], "explanation": "强化学习包含要素：智能体、状态、奖赏、动作、环境。", "pitfall": "遗漏环境或奖赏要素。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "数据量受限场景下增加数据的关键技术有哪些？", "options": ["数据采集、压缩、存储能力", "数据生成技术、数据合成技术、风格迁移", "物理仿真数据", "增加人工标注团队"], "answer": [0, 1, 2], "explanation": "关键技术包括数据采集压缩存储、数据生成合成与风格迁移、物理仿真数据。", "pitfall": "误认为单纯增加标注人员是关键技术。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "CycleGAN的损失函数包括哪些？", "options": ["生成损失", "判别损失", "交叉熵损失", "对比损失"], "answer": [0, 1], "explanation": "CycleGAN有两类损失函数：生成损失（采用L2 Loss）和判别损失。", "pitfall": "混淆其他GAN变体的损失函数。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "Diffusion Model的工作原理包括哪些过程？", "options": ["前向扩散过程", "反向扩散过程", "对抗博弈过程", "强化学习过程"], "answer": [0, 1], "explanation": "Diffusion Model包括前向扩散过程（加噪）和反向扩散过程（去噪还原）。", "pitfall": "与GAN的对抗博弈过程混淆。"}, {"kc_id": "kc5.35", "cognitive_level": "apply", "difficulty": "hard", "type": "multi", "points": 6, "question": "强化学习不适用的场景有哪些？", "options": ["环境无法给出反馈", "反馈的状态错误或不准确", "环境快速变化，需要快速准确应对", "试错成本高的场景"], "answer": [0, 1, 2, 3], "explanation": "不适用场景包括：环境无法反馈或反馈不及时、反馈状态错误、环境快速变化需快速应对、试错成本高。", "pitfall": "忽略试错成本高的场景不适合强化学习。"}, {"kc_id": "kc5.35", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "AI算法设计面临的实际困难包括哪些？", "options": ["数据缺乏", "标注受限", "数据不均衡", "推理资源受限"], "answer": [0, 1, 2, 3], "explanation": "实际困难包括数据缺乏、标注受限、数据不均衡、推理资源受限。", "pitfall": "遗漏推理资源受限。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述数据模型和算法模型的区别及选择原则。", "answer": "区别：数据模型认为黑盒里装着一组未知的参数，算法结构已知而参数未知，学习的对象是这组参数（如线性回归）；算法模型认为黑盒里装着一个未知的映射，算法结构与参数都未知，学习的对象也是这个映射（如随机森林）。\n选择原则：如果某个问题的数据分布满足一个已知的分布，则可以直接使用数据模型；一般复杂的问题，往往其分布未知或遵循复杂的分布，则可以使用算法模型进行求解。", "explanation": "考察对数据模型和算法模型定义及适用场景的理解。", "pitfall": "容易混淆两者学习的对象。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述生成式模型和判别式模型的区别。", "answer": "生成式模型学习的对象是输入x和输出y的联合分布p(x, y)，强调数据自身分布，优点是较小的过拟合可能，缺点是鲁棒性较差且需要大量数据；判别式模型学习的对象是输入x的条件下输出y的条件分布p(y|x)，强调数据边界，优点是在小数据集上表现较好且计算量小，缺点是更容易过拟合。", "explanation": "考察生成式和判别式模型的学习对象、建模过程及优缺点对比。", "pitfall": "容易将两者的优缺点记反。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述监督学习、无监督学习、半监督学习和自监督学习的核心思想。", "answer": "监督学习：基于完全标注的信息，实现模型与数据分布的近似。\n无监督学习：自身规律的学习和理解，结合人的认知，完成学习过程。\n半监督学习：内部数据的规律以及少量参考信息之间的关系，能够揭示未知的规律和分布。\n自监督学习：数据内部的维度间关系是其外在表现的本源信息，或者说，内因决定外在表现。", "explanation": "考察四种学习方法的本质区别和核心思想。", "pitfall": "容易混淆半监督和自监督的核心思想。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述强化学习的适用范围及不适用的场景。", "answer": "适用范围：包含智能体、状态、奖赏、动作、环境要素，理论上只要能够形成反馈的环境都适合使用强化学习方法。\n不适用场景：1. 环境无法给出反馈或者无法及时给出反馈；2. 反馈的状态错误或者不准确；3. 环境快速变化，需要能够快速获得准确的应对；4. 试错成本高的场景。", "explanation": "考察强化学习的应用边界和限制条件。", "pitfall": "忽略试错成本对强化学习适用性的影响。"}, {"kc_id": "kc5.35", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述Diffusion Model的工作原理和训练思路。", "answer": "工作原理：定义了一个类似变分后验的马尔可夫链的平稳分布。前向扩散过程向真实图片逐步加入纯高斯噪声，T次加噪后变为纯高斯噪声；反向扩散过程学习从纯高斯噪声逐步还原到真实图片。\n训练思路：通过人为构造一个新的分布p，目标转为缩小分布p和分布q（真实分布）之间的差距。通过不断修改p的参数去缩小差距，当p和q足够相似时，就可以用p替代q。", "explanation": "考察Diffusion Model的前向加噪、反向去噪过程及训练目标。", "pitfall": "容易将前向和反向过程混淆，或忽略训练思路中的分布逼近。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "Diffusion Model的本质是什么？", "options": ["基于梯度的 encoder-decoder 架构", "SDE（Stochastic Differential Equation）/ Markov 架构", "生成对抗网络架构", "自回归模型架构"], "answer": 1, "explanation": "根据文档，Diffusion Model本质是 SDE（Stochastic Differential Equation）/ Markov 架构。", "pitfall": "容易与VAE的基于梯度的encoder-decoder架构混淆。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "Diffusion Model当前最大的缺点是？", "options": ["训练困难", "表现不如GAN", "采样速度较慢", "无法生成高分辨率图像"], "answer": 2, "explanation": "文档指出，Diffusion Model当前最大的缺点是采样速度较慢。", "pitfall": "注意区分训练阶段和采样阶段的优缺点。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "对抗数据生成方法中，编码器En和解码器De的基础架构是？", "options": ["GAN", "AutoEncoder", "Transformer", "RNN"], "answer": 1, "explanation": "文档提到，关键技术1是基于 AutoEncoder，设计实现数据编码器 En 和解码器 De。", "pitfall": "虽然名为对抗数据生成，但En和De的基础是AutoEncoder。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "CV数据仿真的核心优势不包括以下哪项？", "options": ["自由控制场景", "零成本", "零误差", "真实物理反馈"], "answer": 3, "explanation": "文档列出的核心优势为：自由控制场景、零成本、零误差。真实物理反馈未提及。", "pitfall": "零误差是仿真自动标注的优势，容易被误认为不可能而选错。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "sklearn传统机器学习方法建议的最低数据量门槛是多少？", "options": ["10个", "50个", "100个", "1000个"], "answer": 1, "explanation": "文档明确指出，sklearn 建议的最低门槛是50个样本以上，少于50个建议先获取更多数据。", "pitfall": "容易与10万样本的分界线混淆。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "根据sklearn选择地图，数据量大于10万且有标签的分类问题，建议选择哪种分类器？", "options": ["SGD分类器", "线性SVM分类器", "kNN", "朴素贝叶斯"], "answer": 0, "explanation": "文档指出，数据量 > 10万时，选择SGD分类器。", "pitfall": "数据量小于10万时才先尝试线性SVM或kNN。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "数据标注不全对应的不确切监督方法是？", "options": ["半监督学习", "主动学习", "多示例学习", "带噪学习"], "answer": 2, "explanation": "文档中标注不全对应不确切监督，其方法是多示例学习。", "pitfall": "基本无标注对应不完全监督（半监督、主动学习），标注错误对应不准确监督（带噪学习等）。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "主动学习中，选择待标注高价值样本的策略不包括？", "options": ["Margin sampling（边缘采样）", "Least confident（最低置信度）", "Entropy（熵）", "Random sampling（随机采样）"], "answer": 3, "explanation": "文档列出的策略为Margin sampling、Least confident、Entropy。随机采样不属于高价值样本选择策略。", "pitfall": "主动学习的核心是选择最有价值的样本，随机采样违背了这一初衷。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "数据不均衡导致交叉熵损失函数倾斜时，哪类样本会在损失函数中占据主导地位？", "options": ["正样本", "负样本", "样本多的类别", "样本少的类别"], "answer": 2, "explanation": "文档指出，当样本分布失衡时，损失函数的分布也会发生倾斜，模型训练过程中会倾向于样本多的类别。", "pitfall": "不要局限于正负样本，而是样本数量多的类别。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "以下哪项不属于解决数据不均衡的过采样方法？", "options": ["SMOTE", "ADASYN", "Tomeklink", "Mixup"], "answer": 2, "explanation": "Tomeklink属于欠采样方法，其余均为过采样方法。", "pitfall": "Tomeklink常与SMOTE结合使用，容易混淆其属于欠采样。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "算力受限场景下，如果硬件有树模型加速能力，应尽量选择什么模型？", "options": ["多矩阵计算的模型", "树类模型", "图神经网络", "循环神经网络"], "answer": 1, "explanation": "文档决策流程指出，如果有树模型加速能力，尽量选择树类模型。", "pitfall": "需根据硬件的特定加速能力选择对应的模型结构。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "入侵检测的高性能设计思路采用了什么架构？", "options": ["单级深度模型", "多级漏斗形架构", "并行计算架构", "分布式架构"], "answer": 1, "explanation": "文档提到，整体算法设计可以根据计算时间以及特征的正交性，设计多级的漏斗形架构。", "pitfall": "漏斗形架构的核心是逐级过滤，降低计算量。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "medium", "type": "choice", "points": 4, "question": "复杂系统分解原则中，AI系统相比传统软件系统增加了什么目标？", "options": ["功能目标", "性能目标", "准确率目标", "可靠性目标"], "answer": 2, "explanation": "文档指出，相比于传统软件系统，AI相关的系统往往增加了准确率的目标。", "pitfall": "功能、性能、可靠性等目标传统软件也有，准确率是AI系统的特殊目标。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "在优化类问题中，AI算法与传统算法配合的常用策略不包括？", "options": ["分区而治", "安全边界", "集成学习", "端到端替换"], "answer": 3, "explanation": "文档列出的策略为分区而治、安全边界、集成学习。端到端替换不是配合策略。", "pitfall": "AI与传统算法是配合关系，而非完全替换。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "hard", "type": "choice", "points": 4, "question": "微观特征与宏观特征融合建模中，为了解决移动性目标判决能力不足，需要提取什么特征？", "options": ["高频信息", "时域细部特征", "大范围长周期特征信息", "频域特征"], "answer": 2, "explanation": "文档指出，单防区单帧数据对移动性目标判决能力不足，需要优化数据采集能力，提取大范围长周期的特征信息。", "pitfall": "高频信息解决的是相似信号区分问题，大范围长周期特征才解决移动性问题。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "VAE和Diffusion Model的对比中，VAE的特点有哪些？", "options": ["基于梯度的 encoder-decoder 架构", "本质是 SDE/Markov 架构", "encoder 学高斯分布的均值和方差", "隐变量 Z 作为变分先验"], "answer": [0, 2, 3], "explanation": "VAE是基于梯度的encoder-decoder架构，encoder学高斯分布的均值和方差，隐变量Z作为先验条件（变分先验）。SDE/Markov是Diffusion Model的本质。", "pitfall": "需准确区分VAE和Diffusion Model在本质、学习方式和隐变量上的区别。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "对抗数据生成方法的关键技术包括哪些？", "options": ["编码器和解码器生成数据", "入侵特征和环境特征可拆分合并", "特定入侵语义和特定背景语义组合数据", "基于CG技术的3D建模"], "answer": [0, 1, 2], "explanation": "文档中关键技术分解为：En和De生成数据、入侵特征和环境特征可拆分合并、特定入侵语义和特定背景语义组合数据。CG技术属于CV数据仿真。", "pitfall": "注意区分对抗数据生成与CV数据仿真的技术手段。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "CV数据仿真的仿真要素包括哪些？", "options": ["3D模型", "渲染图像", "自动标注", "真实场景采集"], "answer": [0, 1, 2], "explanation": "文档列出的仿真要素包括：3D模型、渲染图像、自动标注。", "pitfall": "真实场景采集不属于仿真要素，仿真是通过CG技术生成。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "主动学习的整体过程包含哪些关键要素？", "options": ["未标注样本", "已标注样本", "模型迭代", "领域专家"], "answer": [0, 1, 2, 3], "explanation": "文档中流程关键要素包括：未标注样本、已标注样本、模型迭代、算法模型、在未标注数据上预测、选出样本、领域专家。", "pitfall": "主动学习是一个闭环迭代过程，专家参与是重要环节。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "数据不均衡场景下，可以采用异常检测模型代替分类模型的情况有哪些？", "options": ["极少异常样本的场景", "大部分为正常样本，少量异常样本，并且未标注", "变化趋势的检测", "正常样本稳定，异常样本难以穷举"], "answer": [0, 1, 2, 3], "explanation": "文档列举了四种可以采用异常检测模型代替分类模型的情况，选项均符合。", "pitfall": "异常检测不仅适用于样本少，也适用于无标注或趋势检测等场景。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "样本类别不均衡场景下的模型方法包括哪些？", "options": ["多模型融合", "损失函数设计", "自监督+少样本迁移", "对比学习"], "answer": [0, 1, 2, 3], "explanation": "文档中模型方法包括：多模型融合、损失函数设计、自监督+少样本迁移、对比学习。", "pitfall": "不要遗漏自监督和对比学习，它们也是解决不均衡的重要思路。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "NAS（神经架构搜索）的搜索算法包括哪些？", "options": ["强化学习", "进化算法", "梯度优化", "贝叶斯优化"], "answer": [0, 1, 2, 3], "explanation": "文档指出，搜索算法包括：强化学习、进化算法、梯度优化、贝叶斯优化。", "pitfall": "NAS的搜索算法种类繁多，需全面记忆。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "复杂系统的综合设计原则中，多个模型集成学习的常用策略有哪些？", "options": ["不同模型的集成学习", "相同模型的不同初始值集成", "不同迭代checkpoint的集成", "权重均值集成"], "answer": [0, 1, 2, 3], "explanation": "文档列出的深度学习集成学习策略包括：不同模型的集成、不同初始值集成、交叉验证超参寻优的多模型集成、不同迭代checkpoint的集成、权重均值集成。", "pitfall": "权重均值集成是在网络层面直接平均权值，容易遗漏。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "medium", "type": "multi", "points": 6, "question": "E2E多特征融合建模中，特征融合一般分为哪几种？", "options": ["前端融合", "中间融合", "后端融合", "随机融合"], "answer": [0, 1, 2], "explanation": "文档指出，一般分为前端融合、中间融合和后端融合。", "pitfall": "随机融合不是标准的特征融合方式。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "hard", "type": "multi", "points": 6, "question": "微观特征与宏观特征融合建模的优势有哪些？", "options": ["复杂性优势", "稳定性优势", "持续学习能力演进优势", "计算量小"], "answer": [0, 1, 2], "explanation": "文档列出的优势为：复杂性优势、稳定性优势、持续学习能力演进优势。", "pitfall": "融合模型通常计算量更大，计算量小不是其优势。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述Diffusion Model的优势和不足。", "answer": "优势：训练简单，在很多任务中的表现已经超过GAN。不足：当前最大的缺点是采样速度较慢。", "explanation": "考察对Diffusion Model优缺点的记忆。", "pitfall": "注意不要遗漏“训练简单”这一优势。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "medium", "type": "short", "points": 10, "question": "简述主动学习选择待标注高价值样本的三种策略。", "answer": "1. Margin sampling（边缘采样）；2. Least confident（最低置信度）；3. Entropy（熵）。", "explanation": "考察主动学习中选择策略的知识点。", "pitfall": "需准确写出三种策略的名称。"}, {"kc_id": "kc5.75", "cognitive_level": "analyze", "difficulty": "hard", "type": "short", "points": 10, "question": "简述数据不均衡场景下，通过自监督预训练与独立分类器解决建模问题的思路。", "answer": "通过自监督的学习方式（如GAN、DAE、MAE、对比学习等），获得该任务的普适表征能力，训练特征提取器。然后增加一个有监督的分类器，通过特征提取与分类器分离，获得一个对类别不均衡敏感程度降低的模型。这种方法不仅解决了样本不均衡问题，还解决了长尾泛化问题，对开放世界未知样本具有较好的泛化和适应能力。", "explanation": "考察自监督预训练解决数据不均衡的原理和流程。", "pitfall": "关键在于特征提取与分类器的分离，以及自监督方法获取普适表征。"}, {"kc_id": "kc5.75", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述算力受限场景下，选择亲和硬件模型的决策流程。", "answer": "1. 首先判断是否有矩阵计算加速能力，如果有则尽量选择多矩阵计算的模型；2. 如果没有，判断是否有树模型加速能力，如果有则尽量选择树类模型；3. 如果没有，判断是否有其他类型的加速硬件，如果有则尽量选择硬件亲和的算法结构；4. 如果都没有，则根据实际硬件能力权衡选择。", "explanation": "考察端侧推理算力受限时的模型选择决策树。", "pitfall": "需按顺序描述判断逻辑。"}, {"kc_id": "kc5.75", "cognitive_level": "remember", "difficulty": "medium", "type": "short", "points": 10, "question": "简述复杂系统分解原则中，系统目标包含哪些维度。", "answer": "系统目标包含：准确率目标、功能目标、性能目标、可靠性目标、安全性目标、其他DFX目标（如可维护性、可测试性等）。", "explanation": "考察复杂系统分解的系统目标维度。", "pitfall": "容易遗漏准确率目标或其他DFX目标。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "初识别模型输出的候选区间不包括以下哪一项？", "options": ["疑似冲击类", "疑似机械", "疑似伴行", "精细识别防区列表"], "answer": 3, "explanation": "初识别模型输出疑似冲击类、疑似机械、疑似伴行、正常等候选区间。精细识别防区列表是多周期识别的输出。", "pitfall": "易将多周期识别的输出与初识别模型的输出混淆。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "在产品生命周期的孵化阶段，建模思路主要关注什么？", "options": ["多场景适应能力", "差异化竞争力构筑", "利用内外部可获得的开放数据集和已有预训练模型快速进行原型验证", "采集多样性数据，结合数据合成"], "answer": 2, "explanation": "孵化阶段关注场景可行性、快速验证，利用内外部可获得的开放数据集和已有预训练模型快速进行原型验证，完成可行性论证。", "pitfall": "容易将孵化阶段与大批量阶段的数据策略混淆。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "传统学习方式的关键假设是？", "options": ["Non-IID", "IID（独立同分布）", "小样本学习", "对比学习"], "answer": 1, "explanation": "传统学习方式的关键假设是IID（Independently and Identically Distributed，独立同分布）数据集，即要求训练数据集和实际工作数据集是IID的。", "pitfall": "容易将IID与Non-IID混淆，实际商用环境往往是Non-IID的。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "基础模型（大数据离线训练）的数据规模要求是多少？", "options": ["百量级样本", "千量级样本", "万量级样本", "TB级数据"], "answer": 2, "explanation": "基础模型（大数据离线训练）的数据规模为万量级样本，数据来源为多站数据联合。", "pitfall": "易将基础模型的万量级样本与自监督大模型的TB级数据混淆。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "自监督大模型预训练中，将不同 view 之间的什么作为损失函数？", "options": ["均方误差", "交叉熵", "对比损失", "重构误差"], "answer": 1, "explanation": "通过数据增强方法获得同一个数据的多个不同 view，将不同 view 之间的交叉熵作为损失函数，进行大模型的预训练。", "pitfall": "可能会误选重构误差，重构误差是开放场景学习中区分已知/未知类别使用的。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "在开放场景学习中，如何区分已知与未知类别？", "options": ["通过I级分类模型", "通过II级分类模型", "使用Encoder-Decoder计算还原误差并设定阈值", "通过Cluster聚类"], "answer": 2, "explanation": "使用Encoder-Decoder（自编码器/解码器）计算还原误差，见过的样本重构误差小，没见过的样本重构误差大，通过设定还原误差阈值区分已知与未知类别。", "pitfall": "易将重构误差与交叉熵混淆。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "Lifelong Learning System中，知识精炼的作用是？", "options": ["选择对当前任务学习最相关的历史知识", "利用从知识库中选择的知识和当前任务，学习新知识", "将学习到的新知识存储到知识库", "对现有的历史知识库进行提炼和更新"], "answer": 3, "explanation": "知识精炼是对现有的历史知识库进行提炼和更新。知识选择、知识学习、知识存储是其他步骤。", "pitfall": "容易将知识精炼与知识存储混淆。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "事件分级通过什么方法进行？", "options": ["NCE（噪声对比估计）", "GAN降噪", "多轮投票", "弧度判断"], "answer": 0, "explanation": "通过NCE（噪声对比估计）进行事件分级，输出入侵事件。", "pitfall": "后处理包含远距离判断、弧度判断、多轮投票，但事件分级使用NCE。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "产品上量阶段的建模思路是？", "options": ["利用开放数据集快速进行原型验证", "关注主流单场景进行突破，通过简单模型组合形成基本可用的算法能力", "关注多场景适应能力，模型泛化性，可以通过E2E建模提升竞争力", "关注多场景复制能力，差异化竞争力构筑"], "answer": 2, "explanation": "产品上量阶段关注多场景适应能力，模型泛化性，可以通过E2E建模提升竞争力，实现算法能力领先。", "pitfall": "易将产品上量与产品成熟阶段的思路混淆。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "单站在线学习（小样本在线训练）的数据来源是？", "options": ["多站数据联合", "单站数据", "多站联合数据", "开放数据集"], "answer": 1, "explanation": "单站在线学习的数据来源是单站数据，目的是提升环境适应性，降低研发投入。", "pitfall": "注意区分单站在线学习与网络级在线学习的数据来源。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "自监督大模型前端任务分类器采用什么学习方式？", "options": ["监督学习", "无监督学习", "Few-shot learning", "强化学习"], "answer": 2, "explanation": "前端任务分类器针对不同下游场景进行Few-shot learning，下游任务变化仅需标注少量数据。", "pitfall": "容易误选监督学习，虽然分类器是监督的，但强调的是小样本学习。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "大模型训练依赖的综合能力不包括以下哪项？", "options": ["内存调度能力", "分布式计算能力", "通讯调度能力", "数据标注能力"], "answer": 3, "explanation": "大模型训练依赖内存调度能力、分布式计算能力、通讯调度能力、调优能力。自监督预训练无需标注，数据标注成本低。", "pitfall": "大模型自监督预训练不需要大量数据标注。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "记忆回放 & 记忆唤醒的核心思想是什么？", "options": ["参数隔离", "正则化", "经验回放", "知识精炼"], "answer": 2, "explanation": "记忆回放 & 记忆唤醒的原则是经验回放，维护少量历史任务数据子集或生成器，结合新任务进行回放。", "pitfall": "容易将三种持续学习范式的原则混淆。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "在开放场景学习中，对未知类别进行聚类的目的是？", "options": ["区分威胁与非威胁", "发现新类别", "计算还原误差", "进行人工标注"], "answer": 1, "explanation": "对未知类别进行Cluster聚类，是为了发现新类别1、新类别2等，随后再进行人工标签标注。", "pitfall": "聚类是为了发现新类别，人工标注是后续步骤。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "复杂场景的均衡问题解决思路中，针对不同的约束进行什么设计？", "options": ["硬件架构", "算法和模型", "网络拓扑", "数据存储"], "answer": 1, "explanation": "针对不同的约束进行算法和模型的设计，结合软件架构和模型选型，综合解决复杂系统的各种冲突问题。", "pitfall": "无特殊易错点。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "自监督大模型的参数规模是多少？", "options": ["百亿级参数", "千亿级参数", "200B级参数", "万亿级参数"], "answer": 2, "explanation": "后端特征提取器是基于无标签时序多维数据训练的200B级参数大模型。", "pitfall": "注意200B即2000亿，属于千亿级范畴，但文档明确表述为200B级。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "choice", "points": 4, "question": "多周期识别进入什么模式，输出精细识别防区列表？", "options": ["直通模式", "降噪模式", "回放模式", "微调模式"], "answer": 0, "explanation": "多周期识别使用模板匹配模型，关注多周期、多防区，进入直通模式，输出精细识别防区列表。", "pitfall": "无特殊易错点。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "choice", "points": 4, "question": "I级分类模型的作用是？", "options": ["区分已知与未知类别", "区分威胁与非威胁", "对已知类别进行细分", "对未知类别进行聚类"], "answer": 1, "explanation": "I级分类模型用于区分威胁与非威胁，II级分类模型对已知类别和未知类别进行细分。", "pitfall": "易将I级和II级分类模型的作用混淆。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "初识别模型输出的候选区间包括哪些？", "options": ["疑似冲击类", "疑似机械", "疑似伴行", "正常"], "answer": [0, 1, 2, 3], "explanation": "初识别模型输出疑似冲击类、疑似机械、疑似伴行、正常等候选区间。", "pitfall": "注意“正常”也是候选区间之一。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "降噪增强（方案1：强化相位数据的识别能力）的方向包括哪些？", "options": ["带通滤波", "GAN降噪", "麦克风阵列降噪", "声音分离"], "answer": [0, 1, 2, 3], "explanation": "降噪增强方案1的方向包括带通滤波、GAN降噪、麦克风阵列降噪、声音分离。", "pitfall": "无特殊易错点。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "后处理包括哪些步骤？", "options": ["远距离判断", "弧度判断", "多轮投票", "事件分级"], "answer": [0, 1, 2], "explanation": "后处理包括远距离判断、弧度判断、多轮投票。事件分级是后处理之后的步骤。", "pitfall": "事件分级属于后续步骤，不属于后处理。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "微观与宏观相结合的思路包括哪些阶段？", "options": ["单周期识别", "多周期识别", "精细识别", "后处理"], "answer": [0, 1, 2, 3], "explanation": "微观与宏观相结合的思路包括：微观（单周期识别）→ 宏观（多周期识别）→ 宏观+微观（精细识别）→ 后处理。", "pitfall": "无特殊易错点。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "AI泛化增强措施框架包括哪些方向？", "options": ["数据层面", "基础模型泛化能力提升", "快速模型迁移", "硬件加速"], "answer": [0, 1, 2], "explanation": "AI泛化增强措施框架包括：数据层面、基础模型泛化能力提升、快速模型迁移。", "pitfall": "硬件加速不属于AI泛化增强措施。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "快速模型迁移涉及的技术有哪些？", "options": ["域适应（DA）", "小样本迁移", "对比学习", "稳定学习"], "answer": [0, 1, 2], "explanation": "快速模型迁移涉及域适应（DA）、小样本迁移、对比学习。稳定学习属于基础模型泛化能力提升。", "pitfall": "稳定学习属于基础模型泛化能力提升方向。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "泛化性提升路径包括哪些阶段？", "options": ["基础模型阶段", "单站在线学习阶段", "网络级在线学习阶段", "自监督大模型阶段"], "answer": [0, 1, 2], "explanation": "泛化性提升路径包括基础模型阶段、单站在线学习阶段、网络级在线学习阶段。", "pitfall": "自监督大模型是另一种技术路线，不属于泛化性提升路径的三个阶段。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "自监督大模型的数据增强方式包括哪些？", "options": ["Multi-crops（多裁剪）", "遮蔽", "裁剪", "加噪"], "answer": [0, 1, 2, 3], "explanation": "数据增强方式包括Multi-crops（多裁剪）、遮蔽、裁剪、缩放、加噪。", "pitfall": "无特殊易错点。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "自监督大模型的核心优势有哪些？", "options": ["低成本", "多任务属性", "强泛化能力", "低维护代价"], "answer": [0, 1, 2, 3], "explanation": "自监督大模型的核心优势包括低成本、多任务属性、强泛化能力、低维护代价以及技术壁垒。", "pitfall": "无特殊易错点。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "Lifelong Learning System的主要组成部分包括哪些？", "options": ["知识选择", "知识学习", "知识存储", "知识精炼"], "answer": [0, 1, 2], "explanation": "主要组成部分包括知识选择、知识学习、知识存储。知识精炼是对历史知识库的提炼和更新，属于流程的一部分，但主要组成部分为前三者。", "pitfall": "知识精炼是流程步骤，主要组成部分是知识选择、知识学习、知识存储。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "常见持续学习范式包括哪些？", "options": ["直接扩展新记忆体", "固化重要记忆体", "记忆回放 & 记忆唤醒", "知识蒸馏"], "answer": [0, 1, 2], "explanation": "常见持续学习范式包括直接扩展新记忆体（参数隔离）、固化重要记忆体（正则化）、记忆回放 & 记忆唤醒（经验回放）。", "pitfall": "知识蒸馏不属于文中提到的三种持续学习范式。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "开放场景学习中的已知类别包括哪些？", "options": ["挖机", "人工挖掘", "夯土机", "环境背景"], "answer": [0, 1, 2, 3], "explanation": "已知类别包括挖机、人工挖掘、夯土机、环境背景。未知类别如地质勘探机、盾构机。", "pitfall": "注意环境背景也属于已知类别。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "multi", "points": 6, "question": "开放场景学习中的持续学习策略有哪些？", "options": ["新老数据重新训练", "正则方式", "模型隔离/fine-tune", "强化学习"], "answer": [0, 1, 2], "explanation": "持续学习策略包括新老数据重新训练、正则方式、模型隔离/fine-tune。", "pitfall": "强化学习不属于文中提到的三种模型更新策略。"}, {"kc_id": "kc5.105", "cognitive_level": "remember", "difficulty": "basic", "type": "multi", "points": 6, "question": "大模型训练依赖的综合能力包括哪些？", "options": ["内存调度能力", "分布式计算能力", "通讯调度能力", "调优能力"], "answer": [0, 1, 2, 3], "explanation": "大模型训练依赖内存调度能力、分布式计算能力、通讯调度能力、调优能力。", "pitfall": "无特殊易错点。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述从原始数据到精细识别的具体步骤。", "answer": "1. 原始数据：获取相位数据、强度数据。2. 初识别模型：异常检测+分类模型，进行单周期识别，关注细节。输出疑似冲击类、疑似机械、疑似伴行、正常等候选区间。3. 多周期识别：模板匹配模型，关注多周期、多防区，进入直通模式，输出精细识别防区列表。4. 降噪增强：强化相位数据的识别能力。5. 精细识别：迁移学习、引入频率特征、减少细节特征。6. 大尺度模型：大尺度强度数据识别，降低误报。", "explanation": "考察对整体识别流程的掌握。", "pitfall": "容易遗漏降噪增强或大尺度模型步骤。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "从产品生命周期视角看，数据积累策略是如何演进的？", "answer": "1. 孵化阶段：产品启动阶段，数据缺乏，需要关注如何快速获得启动数据集。2. 试点阶段：重点关注如何采集更加全面的数据集。3. 小批量阶段：重点关注采集多样性数据，结合数据合成，进行泛化实验。4. 大批量阶段：重点关注长尾数据采集，关注单场景共性Top问题解决。5. 场景复制：重点关注多场景共享数据与差异数据的构建，快速场景复制能力。", "explanation": "考察产品生命周期各阶段的数据关注点。", "pitfall": "容易将各阶段的数据关注点混淆。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述独立同分布（IID）假设的局限及其导致的后果。", "answer": "传统学习方式的关键假设是IID（独立同分布）数据集，即要求训练数据集和实际工作数据集是IID的。模型在IID数据集上学习特征，能在IID数据上实现良好的泛化。然而，实际商用环境中各个局点的数据往往呈现Non-IID特征，训练数据与实际部署环境的数据分布不一致，导致模型泛化能力急剧下降，即单个局点训练得到的模型迁移到其他局点时准确率劣化严重。", "explanation": "考察IID假设的局限及Non-IID问题的影响。", "pitfall": "需明确指出Non-IID导致泛化能力下降。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述泛化性提升路径的三个阶段及其目的。", "answer": "1. 基础模型（大数据离线训练）：万量级样本，多站数据联合，离线训练（Stable learning），目的是保证模型基础泛化性，快速满足样本量要求。2. 单站在线学习（小样本在线训练）：百量级样本，单站数据，在线训练，目的是提升环境适应性，降低研发投入。3. 网络级在线学习：多站联合数据，多站数据，联合在线训练，目的是持续优化，随时间推移不断提升。", "explanation": "考察泛化性提升路径的三个阶段。", "pitfall": "容易混淆各阶段的数据规模和训练方式。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述自监督大模型的架构示意。", "answer": "时序多维数据（光纤传感）输入到后端特征提取器（大模型预训练），输出Codes（特征编码）。后端特征提取器基于无标签时序多维数据训练。然后前端任务分类器（针对不同下游场景Few-shot learning）接收特征编码，输出针对不同下游场景（如A场景：挖机/人工/连续振动/正常，B场景：翻越/敲击/正常）的分类结果。", "explanation": "考察自监督大模型的架构组成。", "pitfall": "容易遗漏后端特征提取器或前端任务分类器的具体作用。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述Lifelong Learning System的流程。", "answer": "1. 任务按序到达：接收带标签的数据。2. 知识迁移：从之前学习的任务中迁移知识，学习新模型。3. 知识存储：将新知识存储到知识库供未来使用。4. 知识精炼：对现有的历史知识库进行提炼和更新。", "explanation": "考察终身学习系统的流程步骤。", "pitfall": "容易遗漏知识精炼步骤。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "hard", "type": "short", "points": 10, "question": "简述开放场景学习的整体流程。", "answer": "1. 区分是否见过（已知/未知识别）：使用Encoder-Decoder计算还原误差，通过设定还原误差阈值，区分已知与未知类别。2. I级与II级分类：I级分类模型区分威胁与非威胁，II级分类模型对已知类别和未知类别进行细分。3. Cluster聚类：对未知类别进行聚类，发现新类别。4. 人工标签：人工参与对新类别进行标注。5. 持续学习：采用策略进行模型更新。6. 模型自动更新：完成新知识的融入并自动更新部署。", "explanation": "考察开放场景学习的完整流程。", "pitfall": "容易混淆I级和II级分类的作用，或遗漏聚类和人工标注步骤。"}, {"kc_id": "kc5.105", "cognitive_level": "understand", "difficulty": "medium", "type": "short", "points": 10, "question": "简述复杂场景的均衡问题解决思路。", "answer": "复杂系统需要对各种约束进行分析，提炼出关键要素和次要约束。针对不同的约束进行算法和模型的设计，结合软件架构和模型选型，综合解决复杂系统的各种冲突问题。", "explanation": "考察复杂场景均衡问题的解决思路。", "pitfall": "需包含约束分析、算法模型设计、软件架构和模型选型等关键点。"}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "multi": "二、多选题", "tf": "三、判断题", "fill": "四、填空题", "short": "五、简答题", "calc": "六、计算题", "code": "七、代码题", "essay": "八、问答题", "comprehensive": "九、综合题"}, "section_order": ["choice", "multi", "tf", "fill", "short", "calc", "code", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "code_placeholder": "在此编写代码...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "partial_label": "部分正确", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+var __epaImages = {}; // { qid: [dataUrl, ...] } — pasted images per answer field
+
+// ─── Answer normalization (robust to how the JSON was authored) ──────
+// tf / choice answers may arrive as int index, boolean, letter ("A"),
+// or label string ("正确"/"错误"/"对"/"错"). All are coerced to an
+// option index so grading never silently fails on a type mismatch.
+
+function tfAnswerIndex(ans) {
+  // option 0 = true_label (正确), option 1 = false_label (错误)
+  // boolean: true → 正确(0), false → 错误(1)
+  if (typeof ans === 'boolean') return ans ? 0 : 1;
+  // number: treat as boolean (0=false→错误(1), non-zero=true→正确(0))
+  if (typeof ans === 'number') return ans ? 0 : 1;
+  var s = ('' + ans).trim().toLowerCase();
+  var truthy = ['t', 'true', '正确', '对', '是', 'yes', 'y', '√', '✓'];
+  var falsy  = ['f', 'false', '错误', '错', '否', 'no', 'n', '×', 'x'];
+  if (truthy.indexOf(s) !== -1) return 0;
+  if (falsy.indexOf(s) !== -1) return 1;
+  return ans ? 0 : 1;
+}
+
+function choiceAnswerIndex(ans, options) {
+  if (typeof ans === 'number') return ans;
+  var s = ('' + ans).trim();
+  if (/^[A-Za-z]$/.test(s)) return s.toUpperCase().charCodeAt(0) - 65;
+  if (/^\d+$/.test(s)) return parseInt(s, 10);
+  if (options) {
+    for (var i = 0; i < options.length; i++) {
+      if (('' + options[i]).trim() === s) return i;
+    }
+  }
+  return parseInt(s, 10);
+}
+
+function multiAnswerSet(ans, options) {
+  var arr = Array.isArray(ans) ? ans : [ans];
+  var set = {};
+  for (var i = 0; i < arr.length; i++) {
+    set[choiceAnswerIndex(arr[i], options)] = true;
+  }
+  return set;
+}
+
+// Normalize free text for fill-in-the-blank comparison: trim, lowercase,
+// drop surrounding whitespace and common punctuation, unify full/half width.
+function normText(s) {
+  s = ('' + s).trim().toLowerCase();
+  s = s.replace(/[\s　]+/g, '');
+  s = s.replace(/[.,;:!?。，、；：！？“”"'（）()【】\[\]<>《》]/g, '');
+  // full-width ASCII -> half-width
+  s = s.replace(/[！-～]/g, function (c) {
+    return String.fromCharCode(c.charCodeAt(0) - 0xfee0);
+  });
+  return s;
+}
+
+// How many blanks does a fill question have? Count underscore / ＿ runs.
+function fillBlankCount(question) {
+  var m = ('' + question).match(/(_{2,}|＿+)/g);
+  return m ? m.length : 0;
+}
+
+// Coerce a fill `answer` into an array (one entry per blank) of accepted
+// answer lists. Handles: string, [synonyms], [[blank1 syns],[blank2 syns]].
+function fillBlankAnswers(ans, nBlanks) {
+  if (nBlanks < 1) nBlanks = 1;
+  if (!Array.isArray(ans)) return padBlanks([[ans]], nBlanks);
+  if (ans.length && Array.isArray(ans[0])) return padBlanks(ans, nBlanks);
+  // flat array of strings
+  if (nBlanks === 1) return [ans];                 // synonyms for one blank
+  if (ans.length === nBlanks) {                    // one answer per blank
+    return ans.map(function (a) { return [a]; });
+  }
+  return padBlanks([ans], nBlanks);                // ambiguous -> all on blank 1
+}
+
+function padBlanks(arr, n) {
+  var out = arr.slice(0, n);
+  while (out.length < n) out.push(['']);
+  return out;
+}
+
+// ─── Build ───────────────────────────────────────────────────────────
+
+function build() {
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+
+  // Stable-sort questions by section order so headings group correctly
+  // regardless of input order.
+  var order = LABELS.section_order || [];
+  Q.forEach(function (q, i) { q._i = i; });
+  Q.sort(function (a, b) {
+    var oa = order.indexOf(a.type); if (oa === -1) oa = 99;
+    var ob = order.indexOf(b.type); if (ob === -1) ob = 99;
+    return oa - ob || a._i - b._i;
+  });
+
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    if (q.type !== sec) {
+      sec = q.type;
+      if (titles[q.type]) h += '<h3 id="sec-auto-11">' + titles[q.type] + '</h3>';
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i + 1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+
+    if (q.type === 'fill') {
+      h += '<div class="q-text">' + renderFill(q, qid) + '</div>';
+    } else {
+      h += '<div class="q-text">' + q.question + '</div>';
+    }
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65 + j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'multi') {
+      var mopts = q.options || [];
+      for (var k = 0; k < mopts.length; k++) {
+        h += '<label class="option" id="opt-' + qid + '-' + k + '" onclick="toggle(\'' + qid + '\',' + k + ')">';
+        h += '<input type="checkbox" name="' + qid + '" value="' + k + '">' + String.fromCharCode(65 + k) + '. ' + mopts[k] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else if (q.type === 'fill') {
+      // inputs already rendered inline inside q-text
+    } else if (q.type === 'code') {
+      h += '<textarea class="q-textarea q-code" id="text-' + qid + '" placeholder="' + (LABELS.code_placeholder || LABELS.placeholder) + '" rows="8" spellcheck="false"></textarea>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + (q.explanation || '') + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+  __epaPasteListeners(container);
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function (err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+// Render fill question text with inline <input> boxes replacing blanks.
+function renderFill(q, qid) {
+  var nBlanks = fillBlankCount(q.question);
+  var k = 0;
+  var html = ('' + q.question).replace(/(_{2,}|＿+)/g, function () {
+    var inp = '<input type="text" class="fill-input" id="fill-' + qid + '-' + k + '" autocomplete="off" spellcheck="false">';
+    k++;
+    return inp;
+  });
+  if (k === 0) {
+    // No markers in text -> append boxes based on answer shape, one per line
+    var n = fillBlankAnswers(q.answer, 1).length;
+    var ans = q.answer;
+    if (Array.isArray(ans)) n = Array.isArray(ans[0]) ? ans.length : (ans.length || 1);
+    if (n < 1) n = 1;
+    html += '<div>';
+    for (var b = 0; b < n; b++) {
+      html += '<div class="fill-blank-row">';
+      if (n > 1) html += '<span class="fill-tag">' + (b + 1) + '.</span>';
+      html += '<input type="text" class="fill-input" id="fill-' + qid + '-' + b + '" autocomplete="off" spellcheck="false">';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+// ─── Selection handlers ──────────────────────────────────────────────
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) all[i].classList.remove('selected');
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) target.classList.add('selected');
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) radio.checked = true;
+}
+
+function toggle(qid, idx) {
+  var box = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  var label = document.getElementById('opt-' + qid + '-' + idx);
+  if (!box) return;
+  box.checked = !box.checked;
+  if (label) label.classList.toggle('selected', box.checked);
+}
+
+// ─── Grading ─────────────────────────────────────────────────────────
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      score += gradeSingle(q, qid, card, badge, correctEl);
+    } else if (q.type === 'multi') {
+      score += gradeMulti(q, qid, card, badge, correctEl);
+    } else if (q.type === 'fill') {
+      score += gradeFill(q, qid, card, badge, correctEl);
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = roundScore(score);
+    sb.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var a = 0; a < opts.length; a++) opts[a].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var b = 0; b < tas.length; b++) tas[b].disabled = true;
+  var fis = document.querySelectorAll('.fill-input');
+  for (var c = 0; c < fis.length; c++) fis[c].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) { btn.disabled = true; btn.textContent = LABELS.graded_label; }
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function (err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+function roundScore(s) {
+  return Math.round(s * 10) / 10;
+}
+
+function gradeSingle(q, qid, card, badge, correctEl) {
+  var ansIdx = q.type === 'tf' ? tfAnswerIndex(q.answer) : choiceAnswerIndex(q.answer, q.options);
+  var radio = document.querySelector('input[name="' + qid + '"]:checked');
+  if (radio && parseInt(radio.value, 10) === ansIdx) {
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+    correctEl.innerHTML = '';
+    var ok = document.getElementById('opt-' + qid + '-' + ansIdx);
+    if (ok) ok.classList.add('correct-answer');
+    return q.points;
+  }
+  card.classList.add('wrong');
+  badge.className = 'badge badge-no';
+  badge.textContent = LABELS.wrong_label;
+  var ansText = q.type === 'choice'
+    ? String.fromCharCode(65 + ansIdx) + '. ' + (q.options ? q.options[ansIdx] : '')
+    : (ansIdx === 0 ? LABELS.true_label : LABELS.false_label);
+  correctEl.innerHTML = LABELS.answer_prefix + ansText;
+  if (radio) {
+    var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+    if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+  }
+  var corr = document.getElementById('opt-' + qid + '-' + ansIdx);
+  if (corr) corr.classList.add('correct-answer');
+  return 0;
+}
+
+function gradeMulti(q, qid, card, badge, correctEl) {
+  var want = multiAnswerSet(q.answer, q.options);
+  var wantKeys = Object.keys(want).map(Number);
+  var checked = document.querySelectorAll('input[name="' + qid + '"]:checked');
+  var picked = [];
+  for (var i = 0; i < checked.length; i++) picked.push(parseInt(checked[i].value, 10));
+
+  var anyWrong = false, hitCorrect = 0;
+  for (var p = 0; p < picked.length; p++) {
+    if (want[picked[p]]) hitCorrect++;
+    else anyWrong = true;
+  }
+
+  // reveal correct / wrong option markers
+  var mopts = q.options || [];
+  for (var j = 0; j < mopts.length; j++) {
+    var el = document.getElementById('opt-' + qid + '-' + j);
+    if (!el) continue;
+    if (want[j]) el.classList.add('correct-answer');
+    else if (picked.indexOf(j) !== -1) el.classList.add('wrong-answer');
+  }
+
+  var earned;
+  if (!anyWrong && hitCorrect === wantKeys.length && picked.length === wantKeys.length) {
+    earned = q.points;
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+    correctEl.innerHTML = '';
+  } else if (!anyWrong && hitCorrect > 0) {
+    // 少选不错选 -> partial credit
+    earned = roundScore(q.points * hitCorrect / wantKeys.length);
+    card.classList.add('partial');
+    badge.className = 'badge badge-partial';
+    badge.textContent = LABELS.partial_label;
+    correctEl.innerHTML = LABELS.answer_prefix + multiAnswerText(wantKeys, mopts);
+  } else {
+    earned = 0;
+    card.classList.add('wrong');
+    badge.className = 'badge badge-no';
+    badge.textContent = LABELS.wrong_label;
+    correctEl.innerHTML = LABELS.answer_prefix + multiAnswerText(wantKeys, mopts);
+  }
+  return earned;
+}
+
+function multiAnswerText(keys, options) {
+  return keys.sort(function (a, b) { return a - b; }).map(function (k) {
+    return String.fromCharCode(65 + k) + '. ' + (options ? options[k] : '');
+  }).join('  ');
+}
+
+// ─── Image paste support ─────────────────────────────────────────────
+
+function __epaPasteListeners(container) {
+  var tas = container.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) {
+    (function(ta) {
+      var qid = ta.id.replace('text-', '');
+      ta.addEventListener('paste', function(e) {
+        var items = e.clipboardData && e.clipboardData.items;
+        if (!items) return;
+        for (var j = 0; j < items.length; j++) {
+          if (items[j].type.indexOf('image') !== -1) {
+            e.preventDefault();
+            var file = items[j].getAsFile();
+            var reader = new FileReader();
+            reader.onload = (function(id, anchor) {
+              return function(ev) {
+                var dataUrl = ev.target.result;
+                if (!__epaImages[id]) __epaImages[id] = [];
+                __epaImages[id].push(dataUrl);
+
+                var wrap = document.createElement('div');
+                wrap.className = 'paste-img-wrap';
+                var img = document.createElement('img');
+                img.src = dataUrl;
+                var rm = document.createElement('button');
+                rm.className = 'paste-img-remove';
+                rm.title = '移除图片';
+                rm.textContent = '×';
+                rm.onclick = (function(url, w) {
+                  return function() {
+                    var idx = __epaImages[id].indexOf(url);
+                    if (idx !== -1) __epaImages[id].splice(idx, 1);
+                    w.parentNode.removeChild(w);
+                  };
+                })(dataUrl, wrap);
+                wrap.appendChild(img);
+                wrap.appendChild(rm);
+                anchor.parentNode.insertBefore(wrap, anchor.nextSibling);
+              };
+            })(qid, ta);
+            reader.readAsDataURL(file);
+          }
+        }
+      });
+    })(tas[i]);
+  }
+}
+
+// ─── Collect all user answers for export ─────────────────────────────
+
+function collectAnswers() {
+  var out = [];
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var userAnswer = null;
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      userAnswer = radio ? parseInt(radio.value, 10) : null;
+    } else if (q.type === 'multi') {
+      var checked = document.querySelectorAll('input[name="' + qid + '"]:checked');
+      userAnswer = [];
+      for (var c = 0; c < checked.length; c++) {
+        userAnswer.push(parseInt(checked[c].value, 10));
+      }
+    } else if (q.type === 'fill') {
+      var nBlanks = fillBlankCount(q.question);
+      var blanks = fillBlankAnswers(q.answer, nBlanks);
+      userAnswer = [];
+      for (var b = 0; b < blanks.length; b++) {
+        var inp = document.getElementById('fill-' + qid + '-' + b);
+        userAnswer.push(inp ? inp.value : '');
+      }
+    } else {
+      var ta = document.getElementById('text-' + qid);
+      userAnswer = ta ? ta.value : '';
+    }
+
+    out.push({
+      index: i,
+      type: q.type,
+      question: q.question,
+      options: q.options || null,
+      correct_answer: q.answer,
+      user_answer: userAnswer,
+      points: q.points,
+      explanation: q.explanation || '',
+      kc_id: q.kc_id || '',
+      images: (__epaImages[qid] || []).slice()
+    });
+  }
+  return out;
+}
+
+// ─── Save answers for AI grading ─────────────────────────────────────
+
+function saveForGrading() {
+  var answers = collectAnswers();
+  var chapterTitle = (document.title || '章节').replace(/\s+/g, '_');
+  var nowStr = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  var filename = chapterTitle + '_answers_' + nowStr + '.json';
+
+  var data = JSON.stringify({
+    chapter: document.title || '',
+    saved_at: new Date().toISOString(),
+    questions: answers
+  }, null, 2);
+
+  var blob = new Blob([data], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  var cmdEl = document.getElementById('epa-grade-cmd-text');
+  if (cmdEl) cmdEl.textContent = '/exampass grade "<下载目录>/' + filename + '"';
+  var modal = document.getElementById('epa-grade-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function __epaCloseGradeModal() {
+  var modal = document.getElementById('epa-grade-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function __epaCopyGradeCmd() {
+  var cmdEl = document.getElementById('epa-grade-cmd-text');
+  if (!cmdEl) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmdEl.textContent);
+  } else {
+    var range = document.createRange();
+    range.selectNodeContents(cmdEl);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('copy');
+    sel.removeAllRanges();
+  }
+  var btn = document.getElementById('epa-grade-copy-btn');
+  if (btn) { btn.textContent = '已复制'; setTimeout(function(){ btn.textContent = '复制命令'; }, 2000); }
+}
+
+function gradeFill(q, qid, card, badge, correctEl) {
+  var nBlanks = fillBlankCount(q.question);
+  var blanks = fillBlankAnswers(q.answer, nBlanks);
+  var n = blanks.length;
+  var hit = 0;
+  var displays = [];
+
+  for (var b = 0; b < n; b++) {
+    var inp = document.getElementById('fill-' + qid + '-' + b);
+    var accepted = blanks[b] || [''];
+    var user = inp ? normText(inp.value) : '';
+    var ok = false;
+    for (var a = 0; a < accepted.length; a++) {
+      if (accepted[a] !== '' && normText(accepted[a]) === user && user !== '') { ok = true; break; }
+    }
+    if (inp) inp.classList.add(ok ? 'fill-ok' : 'fill-no');
+    if (ok) hit++;
+    displays.push((n > 1 ? (b + 1) + '. ' : '') + accepted.filter(function (x) { return x !== ''; }).join(' / '));
+  }
+
+  var earned = roundScore(q.points * hit / n);
+  correctEl.innerHTML = LABELS.answer_prefix + displays.join('   ');
+
+  if (hit === n) {
+    card.classList.add('correct');
+    badge.className = 'badge badge-ok';
+    badge.textContent = LABELS.correct_label;
+  } else if (hit > 0) {
+    card.classList.add('partial');
+    badge.className = 'badge badge-partial';
+    badge.textContent = LABELS.partial_label;
+  } else {
+    card.classList.add('wrong');
+    badge.className = 'badge badge-no';
+    badge.textContent = LABELS.wrong_label;
+  }
+  return earned;
+}
+
+</script>
+<script>
+function __epaSwitch(tab) {
+  document.querySelectorAll('#epa-tabs .tab-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-tab') === tab); });
+  document.querySelectorAll('.tab-panel').forEach(function(p){
+    p.classList.toggle('active', p.id === 'panel-' + tab); });
+  // The test panel is display:none on load, so build()'s MathJax typeset ran
+  // on hidden content. Re-run build() the first time the panel is visible so
+  // it renders + typesets at the real size. Guarded so answers aren't wiped.
+  if(tab === 'test' && !window.__epaTestBuilt){
+    window.__epaTestBuilt = true;
+    if(typeof build === 'function'){ try { build(); } catch(err){} }
+  } else if(tab === 'test' && window.MathJax && MathJax.typesetPromise){
+    var panel = document.getElementById('panel-test');
+    if(panel) MathJax.typesetPromise([panel]).catch(function(){});
+  }
+  if(window.__epaFitFormulas) setTimeout(window.__epaFitFormulas, 50);
+  window.scrollTo(0, 0);
+}
+document.addEventListener('click', function(e){
+  var btn = e.target.closest('#epa-tabs .tab-btn'); if(!btn) return;
+  __epaSwitch(btn.getAttribute('data-tab'));
+});
+</script></div>
+</div>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/Blog/tags/%E5%86%B3%E7%AD%96%E6%8E%A8%E7%90%86/" rel="tag"># 决策推理</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Blog/2026/10/11/%E7%AC%AC6%E7%AB%A0-AUTOML%E8%B6%85%E5%8F%82%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" rel="prev" title="第6章 AUTOML超参优化算法">
+                  <i class="fa fa-angle-left"></i> 第6章 AUTOML超参优化算法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Blog/2026/10/12/%E7%AC%AC4%E7%AB%A0-%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA/" rel="next" title="第4章 时序数据增强">
+                  第4章 时序数据增强 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments giscus">
+  <script src="https://giscus.app/client.js"
+          data-repo="Agnon1573/Blog"
+          data-repo-id="R_kgDOVFbcMg"
+          data-category="Announcements"
+          data-category-id="DIC_kwDOVFbcMs4DH9pc"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="top"
+          data-theme="light"
+          data-lang="zh-CN"
+          crossorigin="anonymous"
+          async>
+  </script>
+</div>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Agnon1573</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
