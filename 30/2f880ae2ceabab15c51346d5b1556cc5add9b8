@@ -1,0 +1,36 @@
+source/_posts/第10章-AI模型压缩算法.html
+  h_74cbe42fcea19d 52-53,166-171,176
+source/_posts/第11章-AI分布式训练加速算法.html
+  h_74cbe42fcea19d 52-53,166-171,176
+source/_posts/第12章-随机梯度优化算法.html
+  h_74cbe42fcea19d 52-53,166-171,176
+source/_posts/第1章-时间序列预测算法.html
+  h_74cbe42fcea19d 52-53,166-171,176,511
+source/_posts/第2章-状态感知与知识推理算法.html
+  h_74cbe42fcea19d 52-53,166-171,176
+source/_posts/第3章-强化学习.html
+  h_74cbe42fcea19d 52-53,166-171,176,2401,2438
+source/_posts/第4章-时序数据增强.html
+  h_74cbe42fcea19d 52-53,166-171,176
+source/_posts/第5章-AI系统设计与算法建模.html
+  h_74cbe42fcea19d 52-53,166-171,176
+source/_posts/第6章-AUTOML超参优化算法.html
+  h_74cbe42fcea19d 52-53,166-171,176
+source/_posts/第7章-AI模型评估与优化.html
+  h_74cbe42fcea19d 52-53,166-171,176
+source/_posts/第8章-LLM关键技术详解.html
+  h_74cbe42fcea19d 52-53,166-171,176
+source/_posts/第9章-向量检索算法.html
+  h_74cbe42fcea19d 52-53,166-171,176
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "302f880ae2ceabab15c51346d5b1556cc5add9b8",
+  "prompts": {},
+  "humans": {
+    "h_74cbe42fcea19d": {
+      "author": "z00504240 <zhaoqiming@huawei.com>"
+    }
+  }
+}
