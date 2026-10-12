@@ -219,165 +219,11 @@ description: 本章核心主题：课后题与模拟自测、1.1 时序数据增
 </style>
 <style>
 .epa-scope [id] { scroll-margin-top: 14px; }
-.epa-scope #panel-kn > h1:empty { display: none; }
-@media (min-width: 1280px) {
-  .epa-scope #panel-kn.active { display: flex; gap: 24px; align-items: flex-start; }
-  .epa-scope #panel-kn > .toc {
-    position: sticky; top: 12px;
-    width: 230px; min-width: 230px; box-sizing: border-box;
-    max-height: calc(100vh - 24px); overflow-y: auto;
-    margin: 0;
-  }
-  .epa-scope #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
-}
 .epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
-/* NexT 布局适配：EPA 文章页隐藏主题右侧栏（正文自带 sticky TOC 侧栏），并加宽主列 */
-body:has(.epa-scope) .sidebar,
-body:has(.epa-scope) .sidebar-toggle { display: none !important; }
-body:has(.epa-scope) main,
-body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-width: 1160px !important; }
 </style>
-<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
-<div class="toc">
-<h2>目录</h2>
-<ul>
-<li><a href="#s49126511">课后题与模拟自测</a></li>
-  <li><a href="#s15916288">1.1 时序数据增强</a></li>
-  <li><a href="#s53570083">1.2 AutoML 超参调优</a></li>
-  <li><a href="#s28135418">1.3 AI 分布式训练加速算法</a></li>
-  <li><a href="#s22208788">1.4 AI 模型压缩算法</a></li>
-  <li><a href="#s30182649">1.5 随机梯度优化算法</a></li>
-  <li><a href="#s54865705">2.1 模拟自测单选题及知识点</a></li>
-  <li><a href="#s67971018">2.2 时序数据增强典型算法_Time GAN</a></li>
-  <li><a href="#s31018918">2.3 时域时序数据增强典型算法_DBA算法</a></li>
-  <li><a href="#s41519011">2.4 常用的平滑优化方法一：下降法</a></li>
-  <li><a href="#s90822409">2.1.7 模型量化算法</a></li>
-  <li><a href="#s15168427">2.1.8 AI 方法与模型</a></li>
-  <li><a href="#s67518365">2.1.9 α 剪枝自动增强</a></li>
-  <li><a href="#s79536293">2.1.10 网络结构搜索（NAS）</a></li>
-  <li><a href="#s84372656">2.1.11 凸集</a></li>
-  <li><a href="#s33523937">2.1.12 算法超参数</a></li>
-<li><a href="#s23483013">常见ML算法的超参数及优化算法选择 重点</a></li>
-<li><a href="#s53003708">时间序列分析 高频</a></li>
-  <li><a href="#s58536721">时间序列分析应用</a></li>
-  <li><a href="#s14039574">什么是时间序列数据？</a></li>
-<li><a href="#s43706125">知识蒸馏 重点</a></li>
-  <li><a href="#s14837424">自蒸馏算法</a></li>
-<li><a href="#s58548838">随机平均梯度方法（SAG） 必考</a></li>
-  <li><a href="#s16581899">SAG迭代过程</a></li>
-  <li><a href="#s28418748">随机梯度方法线性收敛原理——方差减少 重点</a></li>
-<li><a href="#s81628366">超参数优化基础 必考</a></li>
-  <li><a href="#s82334346">超参数的基本概念</a></li>
-  <li><a href="#s20083687">网格搜索 高频</a></li>
-  <li><a href="#s29846823">随机搜索 高频</a></li>
-  <li><a href="#s49518612">贝叶斯优化 重点</a></li>
-<li><a href="#s61699775">内存优化算法 重点</a></li>
-  <li><a href="#s69731274">重计算</a></li>
-  <li><a href="#s83839236">CPU offloading与ZeRO-offload</a></li>
-  <li><a href="#s87011833">计算加速与通信优化小结</a></li>
-<li><a href="#s49371243">时序数据增强方法概览 高频</a></li>
-  <li><a href="#s19754998">时域、频域与时频域增强</a></li>
-<li><a href="#s30684348">数学优化基础 了解</a></li>
-  <li><a href="#s63119043">数学优化简介</a></li>
-<li><a href="#s17452277">模型量化 了解</a></li>
-  <li><a href="#s10490373">模型量化的背景和原理</a></li>
-<li><a href="#s59417599">数据受限场景下的建模 了解</a></li>
-  <li><a href="#s66461790">增加数据</a></li>
-<li><a href="#s67936683">4.1 数据采集与关键技术</a></li>
-  <li><a href="#s17230659">4.1.1 主要挑战</a></li>
-  <li><a href="#s46925502">4.1.2 关键技术</a></li>
-<li><a href="#s26598908">4.2 数据量受限场景下的建模问题 -- CV数据仿真</a></li>
-<li><a href="#s29051194">4.3 基于产品演进的建模思路 - 多种下游任务场景下的建模问题</a></li>
-  <li><a href="#s88970898">4.3.1 自监督大模型的优势</a></li>
-<li><a href="#s33142519">4.4 时序数据自动增强—α剪枝自动增强</a></li>
-<li><a href="#s61568956">5. 标注不完备场景下的建模问题 - 主动学习</a></li>
-  <li><a href="#s89987877">5.1 整体过程</a></li>
-  <li><a href="#s47424040">5.2 选择待标注高价值样本的策略</a></li>
-  <li><a href="#s69956035">5.3 实际业务问题中应用主动学习的限制</a></li>
-<li><a href="#s51629255">6. 原始问题需求分析</a></li>
-  <li><a href="#s78099985">6.1 原始需求分析中加入AI需求分析过程</a></li>
-<li><a href="#s85284479">7. 选择题汇总与知识点解析</a></li>
-  <li><a href="#s72179076">2.1.21 昇腾 Ascend310P NPU 的 AI Core 支持的数值类型</a></li>
-  <li><a href="#s36150992">2.1.22 数据增加方法</a></li>
-  <li><a href="#s91619648">2.1.23 自监督学习</a></li>
-  <li><a href="#s19071084">2.1.24 数学优化问题的要素</a></li>
-  <li><a href="#s18253822">2.1.25 α剪枝增强使用的步骤</a></li>
-  <li><a href="#s26614196">2.1.26 主动学习</a></li>
-  <li><a href="#s22892295">2.1.27 原始问题需求分析</a></li>
-  <li><a href="#s15539057">2.1.28 AI 算法目标</a></li>
-  <li><a href="#s15537632">2.1.29 说法错误</a></li>
-  <li><a href="#s73816877">2.1.30 大规模机器学习中凸优化问题中的线性收敛率</a></li>
-  <li><a href="#s65152535">2.1.31 PyTorch(1.8.0 版本)支持的技术</a></li>
-  <li><a href="#s49975993">2.1.32 对训练数据直接在原始数据域进行基础数据增强的方法</a></li>
-<li><a href="#s80923423">2.1 单选题</a></li>
-  <li><a href="#s90235376">2.1.39 STL 算法关键要素 重点</a></li>
-  <li><a href="#s80812936">2.1.40 自蒸馏算法使用的原因 高频</a></li>
-<li><a href="#s70829774">2.2 多选题</a></li>
-  <li><a href="#s23350155">2.2.1 时序数据增强（基于自相关性） 重点</a></li>
-  <li><a href="#s89613236">2.2.2 监督学习和无监督学习 必考</a></li>
-  <li><a href="#s13630128">2.2.3 知识蒸馏算法 高频</a></li>
-  <li><a href="#s32249361">2.2.4 DBSCAN 中的超参数 eps 适合采用的超参数算法 了解</a></li>
-  <li><a href="#s55772957">2.2.5 数据并行训练流程 重点</a></li>
-  <li><a href="#s73737502">2.2.6 Data Free 蒸馏 重点</a></li>
-  <li><a href="#s19743360">2.2.7 生成式模型 高频</a></li>
-  <li><a href="#s88560285">2.2.8 AI算法模型与传统软件方法 重点</a></li>
-  <li><a href="#s21172207">2.2.9 数据增强子策略中的缩放操作 了解</a></li>
-  <li><a href="#s50999509">2.2.10 时域增强算法 高频</a></li>
-<li><a href="#s58410513">知识补充：自蒸馏算法详解 重点</a></li>
-<li><a href="#s84036629">数学优化与AI算法题目汇总</a></li>
-  <li><a href="#s12506567">1.1 数学优化简介 了解</a></li>
-  <li><a href="#s70283294">2.2.11 PSO 和 GA 高频</a></li>
-  <li><a href="#s14535228">4.3 小结 了解</a></li>
-<li><a href="#s63034727">算法差异 重点</a></li>
-  <li><a href="#s87302378">PSO与GA的算法差异</a></li>
-<li><a href="#s54728648">2.2.12 数学优化手段解决实际问题的完整流程包含的必要步骤 高频</a></li>
-<li><a href="#s30703673">2.2.13 适应性随机梯度方法 重点</a></li>
-  <li><a href="#s40190513">适应性随机梯度方法分类</a></li>
-<li><a href="#s62726717">2.2.14 深度神经网络中可以帮助加速训练改善泛化的经典 trick 高频</a></li>
-  <li><a href="#s75680416">4.5 小结</a></li>
-<li><a href="#s53134818">2.2.15 盘古大模型训练中采用的技术 必考</a></li>
-<li><a href="#s50813978">6.1 鹏程-盘古大模型</a></li>
-  <li><a href="#s63200026">盘古大模型的训练</a></li>
-<li><a href="#s26777390">2.2.16 针对每个场景对模型单独进行剪枝的评估准则 重点</a></li>
-  <li><a href="#s29009652">2.2.1 参数驱动的评估准则：谱聚类</a></li>
-  <li><a href="#s31569553">2.2.2 数据驱动的评估准则：特征层面</a></li>
-<li><a href="#s24567344">2.2.17 属于时态特征的 高频</a></li>
-<li><a href="#s85850094">华为AI认证考试题目汇总</a></li>
-<li><a href="#s79763340">1 分布式训练基础</a></li>
-  <li><a href="#s89669851">1.1 同步训练和异步训练</a></li>
-  <li><a href="#s19868217">1.2 通信集合原语</a></li>
-  <li><a href="#s11299868">1.3 流水线并行（模型并行）</a></li>
-  <li><a href="#s77306394">1.4 记忆考点</a></li>
-<li><a href="#s57246446">2 0715 真题</a></li>
-  <li><a href="#s80923423">2.1 单选题</a></li>
-  <li><a href="#s70829774">2.2 多选题</a></li>
-<li><a href="#s44270821">3 TimeGAN 概述</a></li>
-<li><a href="#s29858592">深度生成模型与TimeGAN</a></li>
-<li><a href="#s22119836">内存优化与CPU Offloading</a></li>
-  <li><a href="#s27017313">内存优化概述</a></li>
-  <li><a href="#s64842023">CPU Offloading / Paging 高频</a></li>
-<li><a href="#s30003862">模型量化算法：训练后量化（PTQ）</a></li>
-  <li><a href="#s27201087">Data-free 训练后量化 重点</a></li>
-  <li><a href="#s71257759">Label-free 训练后量化 重点</a></li>
-<li><a href="#s49545484">时序数据自动增强</a></li>
-  <li><a href="#s77026343">问题背景</a></li>
-  <li><a href="#s35425895">α剪枝自动增强 必考</a></li>
-  <li><a href="#s49371243">时序数据增强方法概览 高频</a></li>
-<li><a href="#s11221442">强化学习基础</a></li>
-<li><a href="#s48806140">题目汇总与考点解析</a></li>
-  <li><a href="#s43064368">BO-SMAC 算法 重点</a></li>
-  <li><a href="#s74755491">并行训练库 了解</a></li>
-  <li><a href="#s87799222">复杂系统的分析原则 了解</a></li>
-  <li><a href="#s59307933">高斯回归过程 高频</a></li>
-  <li><a href="#s45843461">模型量化与推理性能 重点</a></li>
-  <li><a href="#s51275710">BO-TPE 流程 高频</a></li>
-  <li><a href="#s87435178">凸优化基础 了解</a></li>
-  <li><a href="#s40378634">模型并行 重点</a></li>
-  <li><a href="#s59299350">大模型监督学习的特点 了解</a></li>
-</ul>
-</div><div class="epa-main">
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><div class="epa-main">
 <h2 id="s49126511">课后题与模拟自测</h2>
 
 <h3 id="s15916288">1.1 时序数据增强</h3>
@@ -866,12 +712,12 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 
 <h2 id="s79763340">1 分布式训练基础</h2>
 <h3 id="s89669851">1.1 同步训练和异步训练</h3>
-<h4>同步训练和异步训练性能比较</h4>
+<h4 id="sec-auto-1">同步训练和异步训练性能比较</h4>
 <p>假设其余条件一致，相同epochs，异步训练花费时间少，但精度可能会低于同步训练。原因是异步训练的梯度存在延时问题，即更新模型时用到的是老旧的梯度，而非当前模型的梯度。</p>
 <p><strong>Global Model：</strong> w_t → w_{t+1} ... → w_{t+τ} → w_{t+τ+1}</p>
 <p><strong>Worker(m)：</strong> (x_t, y_t) → w_t → g_t ... → w_{t+τ+1}</p>
 <p><strong>Worker(m')：</strong> (x_{t+1}, y_{t+1}) → w_{t+1} → g_{t+1} ...</p>
-<h4>如何解决异步训练中的梯度延时问题</h4>
+<h4 id="sec-auto-2">如何解决异步训练中的梯度延时问题</h4>
 <p>从算法层面对延时梯度进行处理，如 <span class="kp">delay compensation</span>。</p>
 <p>采用半异步训练，通过在异步训练中适当的同步以减小延时梯度的影响。</p>
 
@@ -896,11 +742,11 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 
 <h2 id="s57246446">2 0715 真题</h2>
 <h3 id="s80923423">2.1 单选题</h3>
-<h4>2.1.1 知识蒸馏领域，模型容量越大，往往模型精度越高。学生模型选择教师模型时，尽可能寻找容量大、精度高的模型作为教师模型：</h4>
+<h4 id="sec-auto-3">2.1.1 知识蒸馏领域，模型容量越大，往往模型精度越高。学生模型选择教师模型时，尽可能寻找容量大、精度高的模型作为教师模型：</h4>
 <div class="checkpoint">A、错误 B、正确<details class="cp-answer"><summary>参考答案</summary>A</details></div>
 <blockquote>易错：教师模型大小对学生模型精度影响：随着教师模型容量增大，教师模型的分类精度是逐步提升的，然而当他们作为教师对学生模型进行蒸馏时，学生模型的精度随教师模型容量变大先增大后减小。因此，并不是教师模型精度越高，蒸馏效果越好。蒸馏需要选择合适大小的教师模型，当教师模型容量与学生模型gap过大时，需要引入合适大小的助教模型进行蒸馏。</blockquote>
 
-<h4>2.1.2 每经过若干个 epochs 成倍减少学习率（）</h4>
+<h4 id="sec-auto-4">2.1.2 每经过若干个 epochs 成倍减少学习率（）</h4>
 <div class="checkpoint">A、线性学习率 B、余弦学习率 C、多阶段学习率 D、固定学习率<details class="cp-answer"><summary>参考答案</summary>C</details></div>
 <p><strong>学习率调节方式</strong>：</p>
 <ul>
@@ -910,7 +756,7 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 </ul>
 <div class="tldr">一般而言，在训练过程中，随着迭代次数的增加，学习率应该越来越小。</div>
 
-<h4>2.1.3 实际业务问题中，正确的是（）</h4>
+<h4 id="sec-auto-5">2.1.3 实际业务问题中，正确的是（）</h4>
 <div class="checkpoint">A、欠采样是模型方法 B、少样本迁移是数据方法 C、过采样是数据方法 D、多模型融合是数据方法<details class="cp-answer"><summary>参考答案</summary>C</details></div>
 <p><strong>样本类别不均衡（正例极少）</strong></p>
 <ul>
@@ -918,86 +764,86 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <li><strong>模型方法</strong>：多模型融合（EasyEnsemble等）、损失函数设计（类别加权Loss、Focal loss、GHM loss）、自监督+少样本迁移、对比学习</li>
 </ul>
 
-<h4>2.1.4 适合做混合比特量化的自动采样方法（）</h4>
+<h4 id="sec-auto-6">2.1.4 适合做混合比特量化的自动采样方法（）</h4>
 <div class="checkpoint">A、EMA算法 B、KL散度 C、进化搜索 D、反向传播<details class="cp-answer"><summary>参考答案</summary>C</details></div>
 <p><strong>混合比特量化</strong>：基于不同的量化比特数设置（如FP16、INT8、INT4）进行模型量化，并为不同group选择合适的量化比特数。Group的粒度可以是Block-wise、Layer-wise、Channel-wise等。混合比特的搜索方法，包括贪心搜索、进化搜索、强化学习搜索、基于Hessian信息的优化搜索、可微分搜索等。QAT与PTQ均可以进行混合比特量化，其中QAT算法如HAWQ等，PTQ算法如HAQ、Zero-Q等。</p>
 
-<h4>2.1.5 单卡内存有限的情况下进行大样本的分布式训练，不正确的是（）</h4>
+<h4 id="sec-auto-7">2.1.5 单卡内存有限的情况下进行大样本的分布式训练，不正确的是（）</h4>
 <div class="checkpoint">A、可以考虑error feedback B、可以尝试tensor并行 C、可以尝试流水线并行 D、可以尝试优化器并行<details class="cp-answer"><summary>参考答案</summary>A</details></div>
 
-<h4>2.1.6 确定性和随机方法比较，不正确的是（）</h4>
+<h4 id="sec-auto-8">2.1.6 确定性和随机方法比较，不正确的是（）</h4>
 <div class="checkpoint">A、都是无偏的 B、都能收敛到最优点 C、确定单步迭代时间与样本个数有关 D、随机方法满足的假设打破一致性的下界<details class="cp-answer"><summary>参考答案</summary>A</details></div>
 
-<h4>2.1.7 不属于量化误差的是（）</h4>
+<h4 id="sec-auto-9">2.1.7 不属于量化误差的是（）</h4>
 <div class="checkpoint">A、clip截断 B、Relu激活函数的使用 C、Round取整<details class="cp-answer"><summary>参考答案</summary>B</details></div>
 
-<h4>2.1.8 流水线并行通信，正确的是（）</h4>
+<h4 id="sec-auto-10">2.1.8 流水线并行通信，正确的是（）</h4>
 <div class="checkpoint">A、通信的内容主要是正反向的中间结果 B、假定使用GPipe，GPU 1正向计算与反向计算时与同一个GPU通信 C、通信量与micro-batch大小无关 D、主要通过一对多通信<details class="cp-answer"><summary>参考答案</summary>C</details></div>
 
-<h4>2.1.9 All reduce 不正确的是（）</h4>
+<h4 id="sec-auto-11">2.1.9 All reduce 不正确的是（）</h4>
 <div class="checkpoint">A、tensor需要all reduce B、流水线需要all reduce C、不采用优化器并行，数据并行需要all reduce<details class="cp-answer"><summary>参考答案</summary>C</details></div>
 
-<h4>2.1.10 成本函数不正确的是（）</h4>
+<h4 id="sec-auto-12">2.1.10 成本函数不正确的是（）</h4>
 <div class="checkpoint">A、成本函数数值的大小刻画了对数据的拟合程度 B、用于分类问题的常用成本函数有logistic成本函数 C、成本函数都是凸函数 D、用于回归问题的常用成本函数有least square函数<details class="cp-answer"><summary>参考答案</summary>C</details></div>
 <p>回归：y ∈ R，平方成本函数：ℓ(y, h(x, θ)) = 1/2(y - h(x, θ))^2</p>
 <p>分类：y ∈ {-1, 1}，Logistic成本函数：ℓ(y, h(x, θ)) = log(1 + exp(-yh(x, θ)))</p>
 <div class="tldr">大规模机器学习的典型特征是样本的维度和数量都很大。常用的成本函数一般是凸函数。凸函数的平滑性和强凸性对算法设计和算法求解效率都有重要影响。常用的平滑优化方法包括下降法和动量法。</div>
 
-<h4>2.1.11 PyTorch 1.10 不支持的是（）</h4>
+<h4 id="sec-auto-13">2.1.11 PyTorch 1.10 不支持的是（）</h4>
 <div class="checkpoint">A、低精度 B、混合并行 C、Error feedback D、重计算<details class="cp-answer"><summary>参考答案</summary>B</details></div>
 <p><strong>并行模式支持</strong>：数据并行支持；流水线并行、Tensor并行、ZeRO（>1.9.0支持）、混合并行、自动并行均不支持。</p>
 <p><strong>计算加速支持</strong>：低精度训练支持（torch.amp支持fp16，需torch>1.6，不支持int8）；稀疏化、低秩不支持。</p>
 <p><strong>内存优化支持</strong>：重计算支持（torch.utils.checkpoint）；CPU offloading不支持。</p>
 <p><strong>通信优化支持</strong>：torch.DistributedDataParallel支持部分gradient compressors（如PowerSGD），支持error feedback以及LocalSGD。</p>
 
-<h4>2.1.12 Auto Augment 流程不包含（）</h4>
+<h4 id="sec-auto-14">2.1.12 Auto Augment 流程不包含（）</h4>
 <div class="checkpoint">A、用策略S训练一个子网络得到验证精度R B、为每个样本都执行所有增强策略 C、用R更新控制器 D、选择一个增强策略S<details class="cp-answer"><summary>参考答案</summary>B</details></div>
 <p><strong>时序数据自动增强</strong>：图像领域通过强化学习、元学习或者进化搜索自动搜索最佳数据增强策略。流程为：选择一个增强策略S -> 控制器 -> 用策略S训练一个子网络得到验证精度R -> 用R更新控制器。UC Berkeley提出PBA算法，Google提出Rand Augmentation。</p>
 
-<h4>2.1.13 用α剪枝自动增强中增强样本正确的是（）</h4>
+<h4 id="sec-auto-15">2.1.13 用α剪枝自动增强中增强样本正确的是（）</h4>
 <div class="checkpoint">A、选择预测误差大和误差小的样本，保证困难样本和容易样本的平衡性 B、只选择预测误差大的样本，因为误差大的样本更新贡献大 C、只选择预测误差小的样本，因为误差小的样本更新贡献大 D、只选择预测误差小的样本，因为误差小的样本更新贡献小<details class="cp-answer"><summary>参考答案</summary>A</details></div>
 
-<h4>2.1.14 原始需求出发，分析是否具有AI需求，正确的是（）</h4>
+<h4 id="sec-auto-16">2.1.14 原始需求出发，分析是否具有AI需求，正确的是（）</h4>
 <div class="checkpoint">A、分配需求需要考虑是否有系统级的AI需求 B、一般原始需求无法直接推导出AI需求 C、系统需求层面比较适合AI的需求分析<details class="cp-answer"><summary>参考答案</summary>B</details></div>
 
-<h4>2.1.15 不是遗传算法的优点的是（）</h4>
+<h4 id="sec-auto-17">2.1.15 不是遗传算法的优点的是（）</h4>
 <div class="checkpoint">A、不会陷入局部最优解，能够得到全局最优解 B、全局搜索能力强，适用于各类问题 C、可以加入先验知识对搜索进行指导，提高搜索效率 D、可并行实现，在多处理器或分布式环境下能够快速地搜索出最优解<details class="cp-answer"><summary>参考答案</summary>D</details></div>
 <blockquote>易错：GA算法特点：适用于所有类型超参，不依赖初始化，并行化较难，O(n^2)</blockquote>
 
-<h4>2.1.16 哪个算法需要代理函数（）</h4>
+<h4 id="sec-auto-18">2.1.16 哪个算法需要代理函数（）</h4>
 <div class="checkpoint">A、随机搜索 B、粒子群算法 C、遗传算法 D、BO-SMAC<details class="cp-answer"><summary>参考答案</summary>D</details></div>
 <p><strong>BO算法分类</strong>：BO-GP（代理函数为高斯过程GP）、BO-SMAC（代理函数为随机森林RF）、BO-TPE（代理函数为TPE）。</p>
 
-<h4>2.1.17 数学问题的集合不正确的是（）</h4>
+<h4 id="sec-auto-19">2.1.17 数学问题的集合不正确的是（）</h4>
 <div class="checkpoint">A、最优解可出现在集合之外 B、该集合由变量的约束条件定义 C、该集合可以是变量所在的整个欧氏空间 D、该集合为变量的可行域<details class="cp-answer"><summary>参考答案</summary>A</details></div>
 
-<h4>2.1.18 时序数据增强描述不正确的是？</h4>
+<h4 id="sec-auto-20">2.1.18 时序数据增强描述不正确的是？</h4>
 <div class="checkpoint">A、STFT时频域数据增强方法 B、STL是基于统计的方法 C、α剪枝算法是基于学习方法的时序数据增强 D、DBA是时域时序数据增强方法<details class="cp-answer"><summary>参考答案</summary>B</details></div>
 
-<h4>2.1.19 关于条件数不正确的是</h4>
+<h4 id="sec-auto-21">2.1.19 关于条件数不正确的是</h4>
 <div class="checkpoint">A、条件数是平滑性常数与强凸性常数的比值 B、条件数大于等于1 C、条件数定义在强平滑性常数上 D、条件数越小说明函数可解性越差<details class="cp-answer"><summary>参考答案</summary>D</details></div>
 
-<h4>2.1.20 关于时序数据增强，不正确的是（）</h4>
+<h4 id="sec-auto-22">2.1.20 关于时序数据增强，不正确的是（）</h4>
 <div class="checkpoint">A、Auto Augmentation所有样本采用相同增强策略，忽略了样本间的差异性 B、PBA是数据集级的自动增强 C、α剪枝自动增强算法为数据集级问题用差异化的 D、α剪枝自动增强算法是样本级自适应的<details class="cp-answer"><summary>参考答案</summary>C</details></div>
 <blockquote>易错：α剪枝自动增强：时序数据增强的千人千面，样本级增强，为每个时序样本选择最合适的增强策略。</blockquote>
 
-<h4>2.1.21 有关 SignSGD 的说法正确的是（）</h4>
+<h4 id="sec-auto-23">2.1.21 有关 SignSGD 的说法正确的是（）</h4>
 <div class="checkpoint">A、不能与error feedback共用 B、对比fp16的深度，可以减少通信32倍 C、主要目的是为了节省内存 D、数据并行下，单步耗时可能高于SGD<details class="cp-answer"><summary>参考答案</summary>D</details></div>
 
-<h4>2.1.22 有关 TimeGAN 不正确的是（）</h4>
+<h4 id="sec-auto-24">2.1.22 有关 TimeGAN 不正确的是（）</h4>
 <div class="checkpoint">A、基于随机向量生成嵌入式空间数据 B、真实时间序列Embedding得到嵌入式空间表达 C、Sequence Discriminator评判生成数据和真实数据的分布 D、Embedding Function恢复得到的原始维度数据<details class="cp-answer"><summary>参考答案</summary>D</details></div>
 
-<h4>2.1.23 不是粒子群的步骤的是（）</h4>
+<h4 id="sec-auto-25">2.1.23 不是粒子群的步骤的是（）</h4>
 <div class="checkpoint">A、将选择、交叉和突变的遗传因子应用到种群中，产生新一代 B、初始化一群微粒（规模为N），包括随机质量和速度 C、对于每个微粒，将其适应值与其经过的最好位置gbest作比较，如果较好，则将其作为当前的最好位置gbest D、对于每个微粒，将其适应值与其经过的最好位置pbest作比较，如果较好，则将其作为当前的最好位置pbest<details class="cp-answer"><summary>参考答案</summary>A</details></div>
 
-<h4>2.1.24 关于半监督和自监督正确的是（）</h4>
+<h4 id="sec-auto-26">2.1.24 关于半监督和自监督正确的是（）</h4>
 <div class="checkpoint">A、半监督的核心思想：数据内部的维度间关系是其外在表现的本源信息 B、流形假设是半监督学习的典型假设 C、自监督学习使用大量的未标记数据，以及同时使用标记数据，来进行模式识别工作 D、半监督学习通过设计辅助任务来挖掘数据自身的表征特性作为监督信息，来提升模型的特征提取能力<details class="cp-answer"><summary>参考答案</summary>B</details></div>
 
-<h4>2.1.25 基于相关性蒸馏的特点是（）</h4>
+<h4 id="sec-auto-27">2.1.25 基于相关性蒸馏的特点是（）</h4>
 <div class="checkpoint">A、更加关注样本在网络的中间层特征信息 B、更加关注样本在网络最后一层的响应值信息 C、关注样本在网络中的特征信息 D、更加关注不同数据样本之间的关系<details class="cp-answer"><summary>参考答案</summary>D</details></div>
 
 <h3 id="s70829774">2.2 多选题</h3>
-<h4>2.2.1 基于搜索的剪枝算法（）</h4>
+<h4 id="sec-auto-28">2.2.1 基于搜索的剪枝算法（）</h4>
 <div class="checkpoint">A、Network Adjustment B、ABCPruner C、MetaPruning D、DMCP<details class="cp-answer"><summary>参考答案</summary>ABCD</details></div>
 <p><strong>剪枝方法：基于搜索</strong></p>
 <p><span class="kp">ABCPruner</span>：使用人工蜂群算法来寻找最优的剪枝结构。寻找每层的通道数量，而不是去选择相对重要的通道。直接使用子模型在数据集上的表现作为其适应度。</p>
@@ -1005,17 +851,17 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <p><span class="kp">NetworkAdjustment</span>：将模型准确率当成是关于计算量 FLOPs 的一个方程，由此来计算出每层的 FLOPs 利用率，最终根据这个利用率来自动调整每层的通道数。</p>
 <p><span class="kp">DMCP</span>：将剪枝建模成一个可微分的马尔可夫过程，然后直接对网络进行梯度下降进行优化。每一层通道的剪枝构造成一个单独的马尔可夫过程，通道数量的增加和减少对应着马尔可夫状态的转移。</p>
 
-<h4>2.2.2 用于解决异步训练中梯度延时的方法包括（）</h4>
+<h4 id="sec-auto-29">2.2.2 用于解决异步训练中梯度延时的方法包括（）</h4>
 <div class="checkpoint">A. delay compensation等相关算法 B. 半异步训练 C. 低精度训练 D. 流水线并行<details class="cp-answer"><summary>参考答案</summary>AB</details></div>
 
-<h4>2.2.3 以下属于多对多通信的有？</h4>
+<h4 id="sec-auto-30">2.2.3 以下属于多对多通信的有？</h4>
 <div class="checkpoint">A. Broadcast B. AlltoAll C. AllReduce D. AllGather<details class="cp-answer"><summary>参考答案</summary>BCD</details></div>
 
-<h4>2.2.4 下面哪些算法是多保真优化算法（）？</h4>
+<h4 id="sec-auto-31">2.2.4 下面哪些算法是多保真优化算法（）？</h4>
 <div class="checkpoint">A. Hyperband B. BOHB C. Halving D. SGD<details class="cp-answer"><summary>参考答案</summary>ABC</details></div>
 <p><strong>多保真优化算法</strong>：多保真度优化是被提出用来加快评估速度的方法，思想是只使用一部分资源来训练模型，不同资源的分配对应保真度大小，多保真就是高保真和低保真的综合运用。主流的bandit-based优化策略包括：Successive Halving (SH)、Hyperband (HB)、BOHB。</p>
 
-<h4>2.2.5 CPU offloading 不正确的是（）</h4>
+<h4 id="sec-auto-32">2.2.5 CPU offloading 不正确的是（）</h4>
 <div class="checkpoint">A、用于缓解大模型训练NPU显存不足的问题 B、GPU V100训练ResNet18一般无需CPU Offloading C、将优化器状态放到CPU上 D、通过计算换通信<details class="cp-answer"><summary>参考答案</summary>CD</details></div>
 
 <h2 id="s44270821">3 TimeGAN 概述</h2>
@@ -1104,14 +950,14 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <div class="checkpoint">关于模型并行正确的是？<details class="cp-answer"><summary>参考答案</summary>AD。</details></div>
 
 <h3 id="s59299350">大模型监督学习的特点 <span class="tag-info">了解</span></h3>
-<div class="checkpoint">大模型监督学习的特点包括？<details class="cp-answer"><summary>参考答案</summary>ABCD。A样本维度可以很高，B预测函数可以是神经网络，C回归类问题的一个典型应用，D预测函数可以是线性函数。</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<div class="checkpoint">大模型监督学习的特点包括？<details class="cp-answer"><summary>参考答案</summary>ABCD。A样本维度可以很高，B预测函数可以是神经网络，C回归类问题的一个典型应用，D预测函数可以是线性函数。</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center" id="sec-auto-33">章节测试</h2>
 <p style="text-align:center;color:var(--ink-light);font-size:0.95em">252题 · 满分1330分</p>
 
 <div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
 <div id="questions-container"></div>
 <div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
 <div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
-<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3>📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3 id="sec-auto-34">📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
 
 
 <script>
@@ -1223,7 +1069,7 @@ function build() {
     var q = Q[i];
     if (q.type !== sec) {
       sec = q.type;
-      if (titles[q.type]) h += '<h3>' + titles[q.type] + '</h3>';
+      if (titles[q.type]) h += '<h3 id="sec-auto-35">' + titles[q.type] + '</h3>';
     }
 
     var qid = 'q' + i;

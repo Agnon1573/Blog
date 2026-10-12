@@ -219,121 +219,11 @@ description: 本章核心主题：一、AI算法目标定义、原始业务需�
 </style>
 <style>
 .epa-scope [id] { scroll-margin-top: 14px; }
-.epa-scope #panel-kn > h1:empty { display: none; }
-@media (min-width: 1280px) {
-  .epa-scope #panel-kn.active { display: flex; gap: 24px; align-items: flex-start; }
-  .epa-scope #panel-kn > .toc {
-    position: sticky; top: 12px;
-    width: 230px; min-width: 230px; box-sizing: border-box;
-    max-height: calc(100vh - 24px); overflow-y: auto;
-    margin: 0;
-  }
-  .epa-scope #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
-}
 .epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
-/* NexT 布局适配：EPA 文章页隐藏主题右侧栏（正文自带 sticky TOC 侧栏），并加宽主列 */
-body:has(.epa-scope) .sidebar,
-body:has(.epa-scope) .sidebar-toggle { display: none !important; }
-body:has(.epa-scope) main,
-body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-width: 1160px !important; }
 </style>
-<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
-<div class="toc">
-<h2>目录</h2>
-<ul>
-<li><a href="#s49634596">一、AI算法目标定义</a></li>
-  <li><a href="#s91816092">原始业务需求到AI算法建模</a></li>
-  <li><a href="#s63668436">需求分析过程</a></li>
-  <li><a href="#s91202452">算法目标的定义</a></li>
-  <li><a href="#s79541885">如何评价一个问题是否适合用AI算法解决</a></li>
-<li><a href="#s60993490">二、AI算法建模分类</a></li>
-  <li><a href="#s51925902">按照业务问题划分</a></li>
-  <li><a href="#s78452439">从模型构造来区分</a></li>
-  <li><a href="#s91240439">按照模型构造划分</a></li>
-  <li><a href="#s81042709">按照学习对象划分 重点</a></li>
-  <li><a href="#s18019889">按照学习方法划分</a></li>
-<li><a href="#s88298718">三、模型选择方法和原则</a></li>
-  <li><a href="#s11657652">常见困难及应对策略 高频</a></li>
-  <li><a href="#s39344775">数据量受限场景下的建模问题</a></li>
-  <li><a href="#s67765843">标注不完备场景下的建模问题</a></li>
-  <li><a href="#s44089805">数据不均衡场景的建模</a></li>
-  <li><a href="#s13023715">算力受限场景下的建模问题</a></li>
-<li><a href="#s85227581">四、复杂场景的系统设计</a></li>
-  <li><a href="#s43273952">复杂系统的分解原则</a></li>
-  <li><a href="#s31500724">复杂系统的综合设计原则</a></li>
-  <li><a href="#s90256260">复杂系统的均衡问题</a></li>
-<li><a href="#s81557133">五、基于演进思路的建模方法</a></li>
-  <li><a href="#s15265920">自监督大模型的优势 重点</a></li>
-<li><a href="#s21423494">5. 基于演进思路的建模方法（高阶） 重点</a></li>
-  <li><a href="#s78998961">5.1 基于产品生命周期的演进建模思路</a></li>
-  <li><a href="#s26852355">5.2 基于开放世界的演进建模思路</a></li>
-  <li><a href="#s32721399">5.3 小结</a></li>
-<li><a href="#s66959226">如何评价一个问题是否适合用AI算法解决？ 必考</a></li>
-  <li><a href="#s87685413">传统软件算法 vs AI算法</a></li>
-  <li><a href="#s20859233">评估维度对比</a></li>
-<li><a href="#s22240164">数据评价维度 高频</a></li>
-  <li><a href="#s27146494">数据维度总览</a></li>
-  <li><a href="#s81381479">数据评估注意事项</a></li>
-<li><a href="#s72931587">算力评价维度 了解</a></li>
-  <li><a href="#s91442449">各阶段算力评估总表</a></li>
-  <li><a href="#s10557973">算力评估要点</a></li>
-<li><a href="#s29413876">算法目标定义 重点</a></li>
-  <li><a href="#s60798674">算法目标定义的重要性</a></li>
-  <li><a href="#s12001073">例1：运维故障定位</a></li>
-  <li><a href="#s91052637">例2：多次检测任务</a></li>
-  <li><a href="#s25863455">关键权衡</a></li>
-<li><a href="#s27313311">如何选择合适的模型？各种维度的建模方法划分 高频</a></li>
-<li><a href="#s90689970">数据模型和算法模型 重点</a></li>
-  <li><a href="#s84261855">数据模型</a></li>
-  <li><a href="#s76505481">算法模型</a></li>
-  <li><a href="#s73573983">选择原则</a></li>
-<li><a href="#s36997956">生成式模型和判别式模型 必考</a></li>
-  <li><a href="#s19580295">生成式模型</a></li>
-  <li><a href="#s35696399">判别式模型</a></li>
-<li><a href="#s79306743">监督学习与无监督学习 高频</a></li>
-  <li><a href="#s68966930">监督学习</a></li>
-  <li><a href="#s57565425">无监督学习</a></li>
-<li><a href="#s67961340">半监督学习与自监督学习 重点</a></li>
-  <li><a href="#s12810055">半监督学习</a></li>
-  <li><a href="#s31321138">自监督学习</a></li>
-<li><a href="#s38557894">强化学习的思路和适用范围 了解</a></li>
-  <li><a href="#s81893958">强化学习的核心要素</a></li>
-  <li><a href="#s28850460">强化学习的适用范围</a></li>
-<li><a href="#s49871632">典型的业务问题分类 高频</a></li>
-<li><a href="#s82412467">AI算法设计面临的实际困难 重点</a></li>
-<li><a href="#s77815531">数据量受限场景下的建模问题 必考</a></li>
-  <li><a href="#s87598008">一、增加数据</a></li>
-  <li><a href="#s32101579">二、GAN数据生成技术</a></li>
-  <li><a href="#s10782048">三、Diffusion Model数据生成技术</a></li>
-<li><a href="#s18098791">与VAE的关系</a></li>
-<li><a href="#s14836219">四、对抗数据生成方法案例</a></li>
-  <li><a href="#s14402665">方案框架</a></li>
-  <li><a href="#s21353154">关键技术分解</a></li>
-<li><a href="#s23047502">五、CV数据仿真</a></li>
-  <li><a href="#s40112373">核心流程</a></li>
-  <li><a href="#s32437732">仿真要素</a></li>
-  <li><a href="#s24784139">应用输出流程</a></li>
-  <li><a href="#s27105023">核心优势</a></li>
-<li><a href="#s71721594">六、选择合适的模型</a></li>
-  <li><a href="#s43361937">sklearn传统机器学习方法选择地图</a></li>
-  <li><a href="#s31052154">选择建议总结</a></li>
-<li><a href="#s20515188">4.3 复杂场景的均衡问题</a></li>
-<li><a href="#s74181351">5. 基于演进思路的建模方法（高阶）</a></li>
-  <li><a href="#s78998961">5.1 基于产品生命周期的演进建模思路</a></li>
-  <li><a href="#s80707789">5.1.1 从产品生命周期视角看数据积累策略</a></li>
-  <li><a href="#s91024600">5.1.2 从产品生命周期视角看建模思路</a></li>
-  <li><a href="#s26852355">5.2 基于开放世界的演进建模思路</a></li>
-<li><a href="#s55202312">基于产品生命周期的演进建模思路——如何将有限数据集的模型推广到各种商用环境</a></li>
-  <li><a href="#s89779537">一、问题的根源</a></li>
-  <li><a href="#s84887064">二、解决策略</a></li>
-  <li><a href="#s90293954">三、基于产品演进的建模思路——多种下游任务场景下的建模问题</a></li>
-  <li><a href="#s52905167">四、基于开放世界的持续演进问题</a></li>
-  <li><a href="#s19553890">五、基于开放场景的学习问题</a></li>
-  <li><a href="#s61038959">六、小结</a></li>
-</ul>
-</div><div class="epa-main">
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><div class="epa-main">
 <h2 id="s49634596">一、AI算法目标定义</h2>
 <h3 id="s91816092">原始业务需求到AI算法建模</h3>
 <p>核心流程为：<span class="kp">原始业务需求</span> → 问题定义 → AI算法建模。AI算法建模的核心问题包括：如何分析原始业务需求，对现实、复杂的系统进行分析和拆解；定义合理的算法目标和可靠的检验方法；关注数据的可获得性、数量、质量等问题；选择合适的AI算法模型以及求解方法、训练方法。</p>
@@ -705,20 +595,20 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <h3 id="s84887064">二、解决策略</h3>
 <p><span class="kp">总体目标</span>：一般局点无需重训模型，特殊局点可由渠道现场完成重训，无需将数据回传研发进行重训。</p>
 <p>AI泛化增强措施框架：<span class="kp">基础模型泛化提升</span> + <span class="kp">支持在线微调</span></p>
-<h4>1. 不同方向的解决措施</h4>
+<h4 id="sec-auto-1">1. 不同方向的解决措施</h4>
 <ul>
 <li><span class="kp">数据层面</span>：真实采集 + 数据生成，解决数据多样性问题。</li>
 <li><span class="kp">基础模型泛化能力提升</span>：域泛化（DG, Domain Generalization）、Stable learning（稳定学习）、提升基础模型的泛化能力。</li>
 <li><span class="kp">快速模型迁移</span>：域适应（DA, Domain Adaptation）、小样本迁移、对比学习、实现快速模型迁移。</li>
 </ul>
-<h4>2. 泛化性提升路径与演进阶段</h4>
+<h4 id="sec-auto-2">2. 泛化性提升路径与演进阶段</h4>
 <ul>
 <li><span class="kp">基础模型（大数据离线训练）</span>：万量级样本，多站数据联合，离线训练，保证模型基础泛化性，快速满足样本量要求。</li>
 <li><span class="kp">单站在线学习（小样本在线训练）</span>：百量级样本，单站数据，在线训练，提升环境适应性，降低研发投入。</li>
 <li><span class="kp">网络级在线学习</span>：多站联合数据，多站数据，联合在线训练，持续优化，随时间推移不断提升。</li>
 </ul>
 <div class="tldr">演进阶段效果：基础模型阶段已覆盖环境准确率满足要求；单站在线学习阶段未覆盖特殊环境准确率提升至满足要求；网络级在线学习阶段随着时间推移持续优化。</div>
-<h4>3. 其他技术路线汇总</h4>
+<h4 id="sec-auto-3">3. 其他技术路线汇总</h4>
 <ul>
 <li><span class="kp">提升样本统计范围</span>：形成训练与实际IID。</li>
 <li><span class="kp">学习多种IID组成的数据集</span>：提升基础模型的 Non-IID 泛化性。</li>
@@ -727,7 +617,7 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 
 <h3 id="s90293954">三、基于产品演进的建模思路——多种下游任务场景下的建模问题</h3>
 <p><span class="tag-freq">高频</span> 背景：商用产品需要持续更新迭代，AI系统需要面对场景的不断扩展和延伸，如何构建持续演进的能力是关键。</p>
-<h4>自监督大模型方案</h4>
+<h4 id="sec-auto-4">自监督大模型方案</h4>
 <p><span class="tag-key">重点</span> 1. 训练方式：通过<span class="kp">数据增强方法</span>获得同一个数据的多个不同 view，将不同 view 之间的交叉熵作为损失函数，进行大模型的预训练，从而获得基于<span class="kp">多维时序振动特征</span>的特征提取大模型，减轻单个数据集过拟合。数据增强方式包括：Multi-crops（多裁剪）、遮蔽、裁剪、缩放、加噪。</p>
 <p>2. 架构示意：</p>
 <ul>
@@ -745,7 +635,7 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 
 <h3 id="s52905167">四、基于开放世界的持续演进问题</h3>
 <p><span class="tag-info">了解</span> AI系统面临的开放世界问题是普遍的，需要不断迭代更新，通过学习新的数据，获得持续演进的能力，或者<span class="kp">终身学习能力</span>。</p>
-<h4>Lifelong Learning System 流程</h4>
+<h4 id="sec-auto-5">Lifelong Learning System 流程</h4>
 <ol>
 <li><span class="kp">任务按序到达</span>：接收带标签的数据。</li>
 <li><span class="kp">知识迁移</span>：从之前学习的任务中迁移知识，学习新模型。</li>
@@ -753,7 +643,7 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <li><span class="kp">知识精炼</span>：对现有的历史知识库进行提炼和更新。</li>
 </ol>
 <p>主要组成部分：<span class="kp">知识选择</span>（选择最相关的历史知识）、<span class="kp">知识学习</span>（利用历史知识和当前任务学习）、<span class="kp">知识存储</span>（存储新知识）。</p>
-<h4>常见持续学习范式</h4>
+<h4 id="sec-auto-6">常见持续学习范式</h4>
 <ul>
 <li><span class="kp">学习方式1：直接扩展新记忆体</span>（参数隔离）：隔离历史任务参数，使其不再参与新任务的学习。</li>
 <li><span class="kp">学习方式2：固化重要记忆体</span>（正则化）：固定历史任务中重要的参数不更新，保持重要记忆体的Activations。</li>
@@ -762,7 +652,7 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 
 <h3 id="s19553890">五、基于开放场景的学习问题</h3>
 <p>场景背景：涉及多种工程机械类型，已知类别（挖机、人工挖掘、夯土机、环境背景）与未知类别（地质勘探机、盾构机）。</p>
-<h4>开放场景学习整体流程</h4>
+<h4 id="sec-auto-7">开放场景学习整体流程</h4>
 <ol>
 <li><span class="kp">区分是否见过（已知/未知识别）</span>：使用 Encoder-Decoder（自编码器/解码器）计算还原误差。见过的样本重构误差小，没见过的样本重构误差大。通过设定还原误差阈值，区分已知与未知类别。</li>
 <li><span class="kp">I级与II级分类</span>：I级分类模型区分威胁与非威胁；II级分类模型对已知类别和未知类别进行细分。</li>
@@ -772,7 +662,7 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <li><span class="kp">模型自动更新</span>：完成新知识的融入并自动更新部署。</li>
 </ol>
 <blockquote>易错：已知样本重构误差小，未知样本重构误差大，通过设定还原误差阈值来区分。</blockquote>
-<h4>持续学习策略（三种模型更新策略）</h4>
+<h4 id="sec-auto-8">持续学习策略（三种模型更新策略）</h4>
 <ul>
 <li><span class="kp">新老数据重新训练</span>：全量模型重新在线训练。</li>
 <li><span class="kp">正则方式</span>：仅用新数据训练，对模型参数进行监督。</li>
@@ -787,14 +677,14 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 </ul>
 
 <div class="checkpoint">IID假设在商用环境中面临什么挑战？<details class="cp-answer"><summary>参考答案</summary>传统学习假设训练数据与实际工作数据是独立同分布（IID）的，但实际商用环境数据往往呈现Non-IID特征，导致训练数据与部署环境数据分布不一致，模型泛化能力急剧下降，迁移到其他局点时准确率劣化严重。</details></div>
-<div class="checkpoint">自监督大模型的核心优势有哪些？<details class="cp-answer"><summary>参考答案</summary>1. 低成本：预训练自监督，无需标注；2. 多任务属性：下游不同任务可共用无标注领域数据；3. 强泛化能力：优于监督学习模型；4. 低维护代价：下游任务变化仅需少量标注；5. 技术壁垒：算力、数据、模型结构门槛高。</details></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<div class="checkpoint">自监督大模型的核心优势有哪些？<details class="cp-answer"><summary>参考答案</summary>1. 低成本：预训练自监督，无需标注；2. 多任务属性：下游不同任务可共用无标注领域数据；3. 强泛化能力：优于监督学习模型；4. 低维护代价：下游任务变化仅需少量标注；5. 技术壁垒：算力、数据、模型结构门槛高。</details></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center" id="sec-auto-9">章节测试</h2>
 <p style="text-align:center;color:var(--ink-light);font-size:0.95em">144题 · 满分814分</p>
 
 <div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
 <div id="questions-container"></div>
 <div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
 <div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
-<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3>📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3 id="sec-auto-10">📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
 
 
 <script>
@@ -906,7 +796,7 @@ function build() {
     var q = Q[i];
     if (q.type !== sec) {
       sec = q.type;
-      if (titles[q.type]) h += '<h3>' + titles[q.type] + '</h3>';
+      if (titles[q.type]) h += '<h3 id="sec-auto-11">' + titles[q.type] + '</h3>';
     }
 
     var qid = 'q' + i;

@@ -14,11 +14,13 @@
 - 源码（文章、配置、主题自定义）只进 `hexo` 分支，两者不混用。
 - 每次部署后，若源码有变动，同步提交 `hexo` 分支。
 
-## 规则 3：EPA 文章处理（2026-10-12 改版后）
+## 规则 3：EPA 文章处理（2026-10-12 改版 + 目录上侧边栏二次改版）
 
 - EPA 文章**不再使用 `layout: false`**，统一嵌入 NexT 布局（方案 A 全站统一框架改版）。
-- 站点内 `source/_posts/第*章-*.html` 是改写版（front-matter 去 layout + `mathjax: true` + `description` 摘要 + 正文包 `<div class="epa-scope">` + CSS 全部 scope 前缀化 + `#panel-kn` 预重排 `.epa-main`）；**原始文件**在 `D:\learning\决策推理科目二\EPA\` 保持 ExamPass 原样，两者已永久分叉，勿再互相同步覆盖。
-- 新增 EPA 章节：使用改写脚本 `C:\Users\Z00504~1\AppData\Local\Temp\opencode\next_embed.py`（若丢失按 feature.md「改写脚本要点」重建），流程：复制原始 HTML 到 source/_posts → 跑脚本 → hexo generate 验证。
+- **文章目录一律用 NexT 站点级右侧栏**（post-toc），不在内容区嵌 TOC 侧栏、不隐藏主题侧栏、不覆盖 `.main-inner` 宽度——内容与普通文章页同布局（Muse 默认 800px 内容列 + 320px 右侧栏），避免内容左偏/目录与内容混排。
+- 站点内 `source/_posts/第*章-*.html` 是改写版（front-matter 去 layout + `mathjax: true` + `description` 摘要 + 正文包 `<div class="epa-scope">` + CSS 全部 scope 前缀化 + `#panel-kn` 内容包 `.epa-main` + 第二个 `<style>` 只留 scroll-margin/overflow 极简 patch）；**原始文件**在 `D:\learning\决策推理科目二\EPA\` 保持 ExamPass 原样，两者已永久分叉，勿再互相同步覆盖。
+- **标题必须有 id**：改写后无 id 的 h2-h6 需补 `sec-auto-N`（否则侧栏 TOC 锚点全部回退父容器 `#panel-kn`，点击全跳同一处）。检查方法：生成产物中 `href="#panel-kn"` 应为 0。
+- 新增 EPA 章节：使用改写脚本 `C:\Users\Z00504~1\AppData\Local\Temp\opencode\next_embed.py` + 补 id 脚本 `add_heading_ids.py`（若丢失按 feature.md「改写脚本要点」重建），流程：复制原始 HTML 到 source/_posts → 跑脚本 → hexo generate 验证（含 `href="#panel-kn"`=0 断言）。
 - 公式文本中裸 `<` 后跟字母（如 `y_t<f_{p,t}`、`<S, A, R, S′>` 且位于数学环境中）必须转义为 `&lt;`（原始文件已修复，新章节需检查）。
 - 修改 EPA 原始文件（D:\learning\决策推理科目二\EPA\）前，先备份到 `C:\Users\Z00504~1\AppData\Local\Temp\opencode\epa-backup\`。
 

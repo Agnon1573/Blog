@@ -219,58 +219,11 @@ description: 本章核心主题：AutoML、概念 必考、优势、超参优化
 </style>
 <style>
 .epa-scope [id] { scroll-margin-top: 14px; }
-.epa-scope #panel-kn > h1:empty { display: none; }
-@media (min-width: 1280px) {
-  .epa-scope #panel-kn.active { display: flex; gap: 24px; align-items: flex-start; }
-  .epa-scope #panel-kn > .toc {
-    position: sticky; top: 12px;
-    width: 230px; min-width: 230px; box-sizing: border-box;
-    max-height: calc(100vh - 24px); overflow-y: auto;
-    margin: 0;
-  }
-  .epa-scope #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
-}
 .epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
-/* NexT 布局适配：EPA 文章页隐藏主题右侧栏（正文自带 sticky TOC 侧栏），并加宽主列 */
-body:has(.epa-scope) .sidebar,
-body:has(.epa-scope) .sidebar-toggle { display: none !important; }
-body:has(.epa-scope) main,
-body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-width: 1160px !important; }
 </style>
-<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
-<div class="toc">
-<h2>目录</h2>
-<ul>
-<li><a href="#s39733014">AutoML</a></li>
-  <li><a href="#s83465207">概念 必考</a></li>
-  <li><a href="#s40273098">优势</a></li>
-<li><a href="#s17179954">超参优化</a></li>
-  <li><a href="#s62231214">超参数的概念 重点</a></li>
-  <li><a href="#s35515961">常见的机器学习超参数</a></li>
-  <li><a href="#s86985643">超参数优化（HPO）的作用</a></li>
-<li><a href="#s49128246">简单优化算法</a></li>
-  <li><a href="#s20083687">网格搜索 高频</a></li>
-  <li><a href="#s29846823">随机搜索 高频</a></li>
-<li><a href="#s48262406">贝叶斯优化算法</a></li>
-  <li><a href="#s24051725">贝叶斯优化（Bayesian Optimization，简称BO算法） 必考</a></li>
-  <li><a href="#s66704591">采集函数 重点</a></li>
-  <li><a href="#s45292482">基于高斯过程的贝叶斯优化算法（BO-GP） 高频</a></li>
-  <li><a href="#s33189382">基于随机森林的贝叶斯优化算法（BO-SMAC） 重点</a></li>
-  <li><a href="#s43611432">基于TPE的贝叶斯优化算法（BO-TPE） 重点</a></li>
-<li><a href="#s18146962">启发式优化算法</a></li>
-  <li><a href="#s52941859">遗传算法（Genetic Algorithm，GA） 高频</a></li>
-  <li><a href="#s27065810">粒子群算法（Particle Swarm Optimization，简称PSO） 高频</a></li>
-  <li><a href="#s46693503">算法小结</a></li>
-<li><a href="#s64568209">多保真优化算法</a></li>
-  <li><a href="#s42682650">连续减半算法 重点</a></li>
-  <li><a href="#s46676265">Hyperband（HB）算法 重点</a></li>
-  <li><a href="#s87800527">BOHB算法 重点</a></li>
-<li><a href="#s45420900">超参数优化算法小结 必考</a></li>
-<li><a href="#s90525484">神经网络架构搜索（NAS）算法 了解</a></li>
-</ul>
-</div><div class="epa-main">
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><div class="epa-main">
 <h2 id="s39733014">AutoML</h2>
 
 <h3 id="s83465207">概念 <span class="tag-must">必考</span></h3>
@@ -420,14 +373,14 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <p>1. <span class="kp">搜索空间</span>：定义了可能发现的所有网络结构。比如定义残差网络结构的搜索空间为层数、每层可以执行的操作类型、与操作相关的超参数等。</p>
 <p>2. <span class="kp">搜索策略</span>：定义如何搜索搜索空间。比如经典的Exploration-Exploitation策略，快速发现好的结构，同时避免因快速收敛得到一个次优结构。</p>
 <p>3. <span class="kp">性能评估策略</span>：定义如何评估一个网络结构的性能。一般直接在目标数据、系统、硬件上评估成本较高，或者不能直接评估，需要考虑使用间接评估策略。</p>
-<p><strong>NAS流程示意：</strong>搜索空间 → 搜索策略 → 架构 $A \in \mathcal{A}$ → 性能评估策略 → 架构 $A$ 的性能估计。</p></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<p><strong>NAS流程示意：</strong>搜索空间 → 搜索策略 → 架构 $A \in \mathcal{A}$ → 性能评估策略 → 架构 $A$ 的性能估计。</p></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center" id="sec-auto-1">章节测试</h2>
 <p style="text-align:center;color:var(--ink-light);font-size:0.95em">40题 · 满分232分</p>
 
 <div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
 <div id="questions-container"></div>
 <div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
 <div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
-<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3>📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3 id="sec-auto-2">📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
 
 
 <script>
@@ -539,7 +492,7 @@ function build() {
     var q = Q[i];
     if (q.type !== sec) {
       sec = q.type;
-      if (titles[q.type]) h += '<h3>' + titles[q.type] + '</h3>';
+      if (titles[q.type]) h += '<h3 id="sec-auto-3">' + titles[q.type] + '</h3>';
     }
 
     var qid = 'q' + i;

@@ -219,210 +219,11 @@ description: 本章核心主题：1. 模型评估概念、1.1 模型评估技术
 </style>
 <style>
 .epa-scope [id] { scroll-margin-top: 14px; }
-.epa-scope #panel-kn > h1:empty { display: none; }
-@media (min-width: 1280px) {
-  .epa-scope #panel-kn.active { display: flex; gap: 24px; align-items: flex-start; }
-  .epa-scope #panel-kn > .toc {
-    position: sticky; top: 12px;
-    width: 230px; min-width: 230px; box-sizing: border-box;
-    max-height: calc(100vh - 24px); overflow-y: auto;
-    margin: 0;
-  }
-  .epa-scope #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
-}
 .epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
-/* NexT 布局适配：EPA 文章页隐藏主题右侧栏（正文自带 sticky TOC 侧栏），并加宽主列 */
-body:has(.epa-scope) .sidebar,
-body:has(.epa-scope) .sidebar-toggle { display: none !important; }
-body:has(.epa-scope) main,
-body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-width: 1160px !important; }
 </style>
-<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
-<div class="toc">
-<h2>目录</h2>
-<ul>
-<li><a href="#s77435734">1. 模型评估概念</a></li>
-  <li><a href="#s66398196">1.1 模型评估技术发展与概念介绍</a></li>
-  <li><a href="#s84545710">AI模型评估维度</a></li>
-  <li><a href="#s78809321">AI模型评估流程</a></li>
-  <li><a href="#s52907014">传统AI模型评估指标</a></li>
-  <li><a href="#s71412451">大语言模型评估维度</a></li>
-<li><a href="#s48300572">大语言模型评估维度 必考</a></li>
-  <li><a href="#s19360991">功能性</a></li>
-  <li><a href="#s69711487">可靠性</a></li>
-  <li><a href="#s70379417">易用性</a></li>
-  <li><a href="#s17929597">性能效率</a></li>
-  <li><a href="#s85689151">安全合规</a></li>
-<li><a href="#s38536486">准确率评估之绝对测评 重点</a></li>
-  <li><a href="#s66035308">客观题评估</a></li>
-  <li><a href="#s87879919">主观题评估</a></li>
-<li><a href="#s74656176">准确率评估之相对测评 高频</a></li>
-  <li><a href="#s80705370">直接算总分排名</a></li>
-  <li><a href="#s36495278">盲测对战胜率</a></li>
-<li><a href="#s84448083">准确率 pass@k 重点</a></li>
-  <li><a href="#s58057188">pass@k 概念</a></li>
-  <li><a href="#s44801038">pass@k 计算方法</a></li>
-<li><a href="#s60165098">性能评估 高频</a></li>
-<li><a href="#s79105373">安全评估 必考</a></li>
-  <li><a href="#s79835426">语料安全</a></li>
-  <li><a href="#s69360696">模型服务安全</a></li>
-  <li><a href="#s18634305">违规与风险内容</a></li>
-<li><a href="#s64045747">可靠性评估 重点</a></li>
-  <li><a href="#s21693443">内容/格式扰动鲁棒性</a></li>
-  <li><a href="#s35376314">抗干扰性</a></li>
-<li><a href="#s81294372">多模态模型评估维度 高频</a></li>
-  <li><a href="#s83142230">图生文评估指标</a></li>
-  <li><a href="#s48318207">文生图评估指标</a></li>
-  <li><a href="#s55238644">图生图评估指标</a></li>
-  <li><a href="#s54937646">图像检索评估指标</a></li>
-<li><a href="#s42262338">评估数据集规范和构建方法 重点</a></li>
-  <li><a href="#s34824360">设计方法论</a></li>
-  <li><a href="#s48879900">数据集格式</a></li>
-  <li><a href="#s87013937">数据集构成 (以MMLU为例)</a></li>
-<li><a href="#s18493967">课后习题 了解</a></li>
-<li><a href="#s42262338">评估数据集规范和构建方法 重点</a></li>
-  <li><a href="#s13729421">评估数据生成①：参数化自动生成（固定范式）</a></li>
-  <li><a href="#s43222644">评估数据生成②：人工生成+基于大模型生成（无固定范式）</a></li>
-  <li><a href="#s50455183">鲁棒性数据增强 高频</a></li>
-<li><a href="#s59564560">大模型基础评估方法 必考</a></li>
-  <li><a href="#s76492420">裁判模型</a></li>
-  <li><a href="#s29485598">Prompt 工程</a></li>
-<li><a href="#s31090792">大模型评估基准发展 重点</a></li>
-  <li><a href="#s80002784">演进方向与时间线</a></li>
-<li><a href="#s14359516">大模型评估基准：指令遵循评估基准 必考</a></li>
-  <li><a href="#s22276639">IFEval</a></li>
-  <li><a href="#s17334824">COLLIE</a></li>
-<li><a href="#s18493967">课后习题 了解</a></li>
-  <li><a href="#s27784728">单选题</a></li>
-<li><a href="#s95358572">指令渲染与评估</a></li>
-  <li><a href="#s33279211">数据合成与来源</a></li>
-  <li><a href="#s15145159">代表性任务示例</a></li>
-<li><a href="#s28579009">3.1 大模型评估基准</a></li>
-  <li><a href="#s57859330">指令遵循评估基准 Meeseeks</a></li>
-  <li><a href="#s76656410">中文通用评估基准 C-EVAL</a></li>
-  <li><a href="#s86373347">中文通用评估基准 SuperCLUE</a></li>
-  <li><a href="#s36163598">学科知识评估基准 MMLU</a></li>
-  <li><a href="#s50398190">学科知识评估基准 SuperGPQA</a></li>
-  <li><a href="#s77124273">数学评估基准</a></li>
-<li><a href="#s28468475">3.3 大模型评估基准：学科知识评估基准 SuperGPQA 必考</a></li>
-  <li><a href="#s54201594">核心特点</a></li>
-  <li><a href="#s25887113">构建方式</a></li>
-  <li><a href="#s76536667">多基准多维度对比</a></li>
-<li><a href="#s61410963">3.1 数学评估基准 重点</a></li>
-  <li><a href="#s22752636">GSM8K</a></li>
-  <li><a href="#s24525139">MATH</a></li>
-  <li><a href="#s26670973">MathQA</a></li>
-  <li><a href="#s81699559">AIME</a></li>
-<li><a href="#s90935297">3.1 大模型评估基准 必考</a></li>
-  <li><a href="#s38718932">代码评估基准：HumanEval & SWE-bench 重点</a></li>
-  <li><a href="#s11824369">工具调用 评估基准：BFCL 重点</a></li>
-  <li><a href="#s11540342">NL2SQL 评估基准 高频</a></li>
-<li><a href="#s64749553">3.2 领域评估基准 了解</a></li>
-  <li><a href="#s17512947">开源电信问答评测集：TeleQnA</a></li>
-  <li><a href="#s72789570">开源电信数学计算评测集：TeleMath</a></li>
-<li><a href="#s85760471">TeleMath 评估基准 必考</a></li>
-  <li><a href="#s72037733">各类别说明</a></li>
-  <li><a href="#s40909210">各类别示例 了解</a></li>
-<li><a href="#s68165710">通信领域自建 NetQAD 评估基准 重点</a></li>
-  <li><a href="#s64123042">问题与挑战</a></li>
-  <li><a href="#s73912737">测试设计（TSE / FDE）</a></li>
-  <li><a href="#s62039423">评测（TE）</a></li>
-  <li><a href="#s56685958">流水线（TE / TSE）</a></li>
-  <li><a href="#s15945549">评测集构建：定义能力维度 高频</a></li>
-  <li><a href="#s76754899">评估指标</a></li>
-  <li><a href="#s78428036">评测数据集构建 重点</a></li>
-<li><a href="#s69392524">自动驾驶评估基准案例：DriveLM 重点</a></li>
-  <li><a href="#s67346999">测评方式</a></li>
-<li><a href="#s79340818">自动驾驶领域多模态大模型评估基准 高频</a></li>
-  <li><a href="#s14711626">生成评估基准</a></li>
-  <li><a href="#s59827506">大模型评估</a></li>
-  <li><a href="#s67262627">大模型能力要求 了解</a></li>
-<li><a href="#s21673864">自动驾驶评估基准案例：DriveLM</a></li>
-  <li><a href="#s44953153">场景描述示例</a></li>
-  <li><a href="#s84861859">其他输入与评测集</a></li>
-  <li><a href="#s67346999">测评方式</a></li>
-  <li><a href="#s92020444">Graph Visual Question Answering</a></li>
-  <li><a href="#s38376029">DriveLM-Data</a></li>
-  <li><a href="#s61038512">DriveLM-Metrics</a></li>
-  <li><a href="#s15177204">Vision Language Models</a></li>
-<li><a href="#s38217022">课后习题</a></li>
-<li><a href="#s82760787">目录</a></li>
-<li><a href="#s72699859">4.1 模型高阶评估设计</a></li>
-  <li><a href="#s21638489">传统评估方法瓶颈</a></li>
-  <li><a href="#s51304041">高阶评估</a></li>
-<li><a href="#s65763372">4.1.1 模型高阶评估算法发展：从规则到多智能体协作</a></li>
-  <li><a href="#s51959086">算法对比</a></li>
-<li><a href="#s25395942">模型结果鲁棒性评估：AdvBench</a></li>
-  <li><a href="#s59471049">攻击目标及对应的指标</a></li>
-  <li><a href="#s19230882">对抗样本的作用</a></li>
-  <li><a href="#s43098934">攻击方法及示例</a></li>
-  <li><a href="#s72180938">真实世界对抗攻击案例</a></li>
-<li><a href="#s55133523">模型结果鲁棒性评估：模型可解释性研究</a></li>
-  <li><a href="#s16146282">可解释性研究的意义</a></li>
-  <li><a href="#s85654794">LLM的可解释性方法</a></li>
-  <li><a href="#s25206414">LLM Explainability 分类体系</a></li>
-<li><a href="#s50036810">模型训练过程评估</a></li>
-  <li><a href="#s11097733">为什么需要模型训练过程评估？</a></li>
-  <li><a href="#s26715652">如何进行训练过程评估？</a></li>
-  <li><a href="#s31558363">HawkEye 的调试工作流程</a></li>
-<li><a href="#s64335482">模型训练可解释性分析：数据层</a></li>
-  <li><a href="#s53842613">大模型训练特点</a></li>
-  <li><a href="#s22671844">大模型训练不稳定根因分解</a></li>
-  <li><a href="#s61637812">现象：Token分布偏斜</a></li>
-<li><a href="#s55416676">模型训练可解释性分析：算法层</a></li>
-  <li><a href="#s56808736">现象一：梯度断流</a></li>
-  <li><a href="#s75435561">现象二：梯度尖刺</a></li>
-  <li><a href="#s90257481">现象一：注意力熵塌陷</a></li>
-  <li><a href="#s44063362">现象二：Loss尖刺</a></li>
-<li><a href="#s60760642">模型训练可解释性分析：精度层</a></li>
-  <li><a href="#s42360904">现象一：精度漂移</a></li>
-  <li><a href="#s88290965">现象二：数值溢出NaN/Inf</a></li>
-<li><a href="#s38217022">课后习题</a></li>
-<li><a href="#s10885615">前沿模型评估研究</a></li>
-  <li><a href="#s30494040">代际模型能力评估研究</a></li>
-  <li><a href="#s22520027">各Level关键评测基准详解</a></li>
-<li><a href="#s89411279">评测基准与里程碑 重点</a></li>
-  <li><a href="#s68661808">Level-3 评测基准</a></li>
-  <li><a href="#s58933576">Level-4 & 5 评测方向（前沿评测牵引模型代际）</a></li>
-  <li><a href="#s92069264">其他关键里程碑</a></li>
-<li><a href="#s90315736">驱动模型弱点分析和数据优化方向 高频</a></li>
-<li><a href="#s71885108">模型推理能力评估研究 重点</a></li>
-  <li><a href="#s58799347">从任务特定到能力基础的评估</a></li>
-  <li><a href="#s60863171">从手动到自动化的评估</a></li>
-  <li><a href="#s54829421">从数据集的发展来看</a></li>
-  <li><a href="#s54280897">MATH相关数据集发展</a></li>
-  <li><a href="#s88054917">编程相关数据集发展</a></li>
-<li><a href="#s49725077">Agent能力评估研究 必考</a></li>
-  <li><a href="#s72007833">GAIA：通用AI助手评估</a></li>
-  <li><a href="#s89575508">OpenAI HealthBench：面向医疗Agent的模型能力评估基准</a></li>
-  <li><a href="#s65789548">Xbench：动态的、职业导向的评估Benchmark</a></li>
-<li><a href="#s15610094">代际模型能力评估研究 重点</a></li>
-  <li><a href="#s88844690">Agentic 工具评估基准 Tau-Bench</a></li>
-  <li><a href="#s41048895">DeepResearch 能力评估研究</a></li>
-<li><a href="#s80795094">5.1 代际模型能力评估研究：DeepResearch 能力评估研究</a></li>
-  <li><a href="#s57225574">OpenAI BrowseComp基准 重点</a></li>
-  <li><a href="#s27024572">数据构建方法与验证策略 高频</a></li>
-  <li><a href="#s18438274">数据领域分布 了解</a></li>
-<li><a href="#s22666765">5.2 评估驱动模型能力提升</a></li>
-  <li><a href="#s19799476">5.2.1 多维评测指标设计与基于评估的数据集优化 必考</a></li>
-  <li><a href="#s23969291">5.2.2 面向真实场景与模型代际发展的评估设计 重点</a></li>
-  <li><a href="#s89961189">5.2.3 面向真实开放场景的模型能力评估优化 高频</a></li>
-  <li><a href="#s34409442">5.2.4 基于模型评估的自优化方法 了解</a></li>
-<li><a href="#s38217022">课后习题</a></li>
-<li><a href="#s87797456">评估打分与原则 重点</a></li>
-  <li><a href="#s60429104">评估原则</a></li>
-<li><a href="#s25467979">多数投票算法优化 高频</a></li>
-  <li><a href="#s77026343">问题背景</a></li>
-  <li><a href="#s95397042">算法实现与效果</a></li>
-<li><a href="#s65236603">评估驱动数据优化：基于模型评估的自优化方法 必考</a></li>
-  <li><a href="#s54411326">AutoDetect算法</a></li>
-  <li><a href="#s38489347">基于模型弱点进行数据补偿</a></li>
-<li><a href="#s27231163">课后习题 重点</a></li>
-<li><a href="#s50494058">致谢与版权声明 了解</a></li>
-</ul>
-</div><div class="epa-main">
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><div class="epa-main">
 <h2 id="s77435734">1. 模型评估概念</h2>
 
 <h3 id="s66398196">1.1 模型评估技术发展与概念介绍</h3>
@@ -477,7 +278,7 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 
 <h3 id="s52907014">传统AI模型评估指标</h3>
 
-<h4>分类模型评估之混淆矩阵</h4>
+<h4 id="sec-auto-1">分类模型评估之混淆矩阵</h4>
 <p><span class="kp">混淆矩阵</span>（confusion matrix）是可视化工具，也被称为误差矩阵或列联表，特别用于监督学习。对于k元分类，它就是一个k×k的表格，用来记录分类器的预测结果。</p>
 <div class="tldr">
 混淆矩阵理解三步法：
@@ -486,7 +287,7 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 3. 分清所求与非所求：预测问题所求标Positive，非问题所求标Negative。
 </div>
 
-<h4>分类模型评估指标</h4>
+<h4 id="sec-auto-2">分类模型评估指标</h4>
 <ul>
 <li><span class="kp">Accuracy (准确率)</span>：正样本数与样本总数之比。总体上衡量预测性能，但对于样本分布不均衡的数据集而言并不是一个好指标。</li>
 <li><span class="kp">Precision (查准率/精确率)</span>：疑罪从无，宁愿漏掉，不可错杀。FP越多，Precision越低。</li>
@@ -496,11 +297,11 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 </ul>
 <blockquote>易错：P 和 R 是一对互斥的指标：P高，R就低；R高，P就低；TN不参与P和R的计算，不影响P和R的结果。</blockquote>
 
-<h4>分类模型图形化分析方法</h4>
+<h4 id="sec-auto-3">分类模型图形化分析方法</h4>
 <p><span class="kp">ROC曲线</span>与<span class="kp">AUC面积</span>：横坐标为假阳性率(FPR)，纵坐标为真阳性率(TPR)。越靠近左上方代表越准确。AUC区间在0-1之间，越大越好。</p>
 <p><span class="kp">PR曲线</span>：横坐标为Recall，纵坐标为Precision。PR曲线越往右上角凸越好、曲线下方面积越大越好。</p>
 
-<h4>聚类模型评估外部指标</h4>
+<h4 id="sec-auto-4">聚类模型评估外部指标</h4>
 <ul>
 <li><span class="kp">纯度 Purity</span>：聚类正确的样本数除以总样本数。取值范围[0, 1]，越大越好。</li>
 <li><span class="kp">兰德指数 RI</span>：量化聚类结果与真实类别的相似度。</li>
@@ -512,7 +313,7 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <li><span class="kp">调和平均 V-measure</span>：同质性和完整性的调和平均。</li>
 </ul>
 
-<h4>回归模型评估指标</h4>
+<h4 id="sec-auto-5">回归模型评估指标</h4>
 <ul>
 <li><span class="kp">MAE (平均绝对误差)</span>：误差绝对值的平均值。</li>
 <li><span class="kp">MSE (均方误差)</span>：误差平方的平均值。</li>
@@ -526,7 +327,7 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 
 <h3 id="s71412451">大语言模型评估维度</h3>
 
-<h4>一、功能性</h4>
+<h4 id="sec-auto-6">一、功能性</h4>
 <ul>
 <li><span class="kp">准确性/正确性</span>：意图识别正确、指令理解正确、回答符合范式、无事实性错误。</li>
 <li><span class="kp">相关性</span>：回答与问题/图片相关、与已有回复相似、与多轮对话历史相关。</li>
@@ -1218,19 +1019,19 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 </ul>
 
 <h3 id="s61038512">DriveLM-Metrics</h3>
-<h4>Graph Visual QA</h4>
+<h4 id="sec-auto-7">Graph Visual QA</h4>
 <ul>
 <li>问题: What are the important objects in the current scene?</li>
 <li>预测答案: There is a stopped pickup to the front of the ego car.</li>
 <li>真实答案: There is one moving truck to the front of the ego car.</li>
 <li>评估: GPT Score</li>
 </ul>
-<h4>轨迹预测</h4>
+<h4 id="sec-auto-8">轨迹预测</h4>
 <ul>
 <li>提示: Predict the motion of the ego vehicle.</li>
 <li>评估: 预测轨迹与真实轨迹对比，计算位移误差。</li>
 </ul>
-<h4>泛化能力</h4>
+<h4 id="sec-auto-9">泛化能力</h4>
 <ul>
 <li>训练数据: nuScenes</li>
 <li>测试场景: Waymo（未见场景与传感器设置）、无行人场景、有行人场景、未见物体。</li>
@@ -1815,14 +1616,14 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <p>感谢全球技术服务部（GTS）及云核心网产品线相关同事对本课程的付出和贡献（内容包含借鉴的测试分委会课程）。</p>
 <p><span class="kp">华为愿景</span>：把数字世界带入每个人、每个家庭、每个组织，构建万物互联的智能世界。</p>
 <p><span class="kp">版权声明</span>：Copyright © 2018 Huawei Technologies Co., Ltd. All Rights Reserved.</p>
-<p><span class="kp">免责声明</span>：本文件中的信息可能包含预测性陈述，有许多因素可能导致实际结果和发展与预测性陈述中明示或暗示的内容存在重大差异。此类信息仅供参考，既不构成要约，也不构成接受。华为可能随时更改信息，恕不另行通知。</p></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<p><span class="kp">免责声明</span>：本文件中的信息可能包含预测性陈述，有许多因素可能导致实际结果和发展与预测性陈述中明示或暗示的内容存在重大差异。此类信息仅供参考，既不构成要约，也不构成接受。华为可能随时更改信息，恕不另行通知。</p></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center" id="sec-auto-10">章节测试</h2>
 <p style="text-align:center;color:var(--ink-light);font-size:0.95em">391题 · 满分2004分</p>
 
 <div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
 <div id="questions-container"></div>
 <div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
 <div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
-<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3>📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3 id="sec-auto-11">📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
 
 
 <script>
@@ -1934,7 +1735,7 @@ function build() {
     var q = Q[i];
     if (q.type !== sec) {
       sec = q.type;
-      if (titles[q.type]) h += '<h3>' + titles[q.type] + '</h3>';
+      if (titles[q.type]) h += '<h3 id="sec-auto-12">' + titles[q.type] + '</h3>';
     }
 
     var qid = 'q' + i;

@@ -219,233 +219,11 @@ description: 本章核心主题：设备状态感知、异构数据建模与清�
 </style>
 <style>
 .epa-scope [id] { scroll-margin-top: 14px; }
-.epa-scope #panel-kn > h1:empty { display: none; }
-@media (min-width: 1280px) {
-  .epa-scope #panel-kn.active { display: flex; gap: 24px; align-items: flex-start; }
-  .epa-scope #panel-kn > .toc {
-    position: sticky; top: 12px;
-    width: 230px; min-width: 230px; box-sizing: border-box;
-    max-height: calc(100vh - 24px); overflow-y: auto;
-    margin: 0;
-  }
-  .epa-scope #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
-}
 .epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
-/* NexT 布局适配：EPA 文章页隐藏主题右侧栏（正文自带 sticky TOC 侧栏），并加宽主列 */
-body:has(.epa-scope) .sidebar,
-body:has(.epa-scope) .sidebar-toggle { display: none !important; }
-body:has(.epa-scope) main,
-body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-width: 1160px !important; }
 </style>
-<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
-<div class="toc">
-<h2>目录</h2>
-<ul>
-<li><a href="#s23064811">设备状态感知</a></li>
-  <li><a href="#s62096537">异构数据建模与清洗</a></li>
-  <li><a href="#s55562108">异构数据特征工程</a></li>
-  <li><a href="#s65597387">状态感知模型评估与选择</a></li>
-<li><a href="#s21527466">网络状态感知</a></li>
-  <li><a href="#s33862667">网络状态基本概念和组成元素</a></li>
-  <li><a href="#s28343051">网络模型与特征</a></li>
-  <li><a href="#s25349462">包级特征</a></li>
-<li><a href="#s31622667">流级特征</a></li>
-  <li><a href="#s21902754">包长序列、时间序列特征</a></li>
-  <li><a href="#s26967015">协议特征</a></li>
-  <li><a href="#s33907809">统计特征</a></li>
-<li><a href="#s47594140">用户级特征</a></li>
-  <li><a href="#s30568791">客观特征</a></li>
-  <li><a href="#s10631492">主观特征：体验指标</a></li>
-<li><a href="#s51180040">网络级特征</a></li>
-  <li><a href="#s75845107">网络拓扑</a></li>
-<li><a href="#s84809202">网络级特征与拓扑分析</a></li>
-  <li><a href="#s53691340">网络拓扑基本概念</a></li>
-  <li><a href="#s78375406">图方法</a></li>
-<li><a href="#s10354853">多流关联</a></li>
-  <li><a href="#s73360858">SSL关联</a></li>
-  <li><a href="#s37957548">DNS关联</a></li>
-  <li><a href="#s83690088">用户关联</a></li>
-<li><a href="#s91454196">知识表达与推理</a></li>
-  <li><a href="#s26068745">知识表示</a></li>
-  <li><a href="#s78757869">知识建模</a></li>
-  <li><a href="#s67422817">知识抽取</a></li>
-  <li><a href="#s70688264">知识存储</a></li>
-  <li><a href="#s13534565">知识融合与知识推理</a></li>
-<li><a href="#s23064811">设备状态感知</a></li>
-  <li><a href="#s62096537">异构数据建模与清洗</a></li>
-  <li><a href="#s14033724">数据清洗</a></li>
-<li><a href="#s15349913">本节习题</a></li>
-<li><a href="#s16104102">1.2 异构数据特征工程</a></li>
-  <li><a href="#s74035585">特征转换</a></li>
-  <li><a href="#s55453979">最小最大缩放/归一化 高频</a></li>
-  <li><a href="#s67688223">标准化 高频</a></li>
-  <li><a href="#s90920283">Box-Cox 转换 了解</a></li>
-  <li><a href="#s46132400">连续变量的离散化</a></li>
-  <li><a href="#s74671036">特征提取</a></li>
-<li><a href="#s27594654">1.2 异构数据特征工程：特征提取</a></li>
-  <li><a href="#s17678161">1. PCA——主成分分析 重点</a></li>
-  <li><a href="#s64093123">2. ICA——独立成分分析</a></li>
-  <li><a href="#s53906347">特征选择</a></li>
-<li><a href="#s15349913">本节习题</a></li>
-<li><a href="#s12099231">1.3 状态感知模型评估与选择</a></li>
-  <li><a href="#s61733393">模型评估的基本概念</a></li>
-  <li><a href="#s15192418">模型评估方法</a></li>
-<li><a href="#s87101843">1.3 状态感知模型评估与选择：模型评估方法</a></li>
-  <li><a href="#s12795454">交叉验证法 重点</a></li>
-<li><a href="#s84808938">1.3 状态感知模型评估与选择：性能度量</a></li>
-  <li><a href="#s36963239">错误率与精度</a></li>
-  <li><a href="#s70365629">准确率（查准率）和召回率（查全率） 必考</a></li>
-  <li><a href="#s63010942">F1度量</a></li>
-<li><a href="#s32530547">1.3 状态感知模型评估与选择：模型选择与评估流程</a></li>
-<li><a href="#s32238971">1.3 状态感知模型评估与选择：本节习题</a></li>
-<li><a href="#s38502966">1.4 应用案例1：数通网络安全领域</a></li>
-  <li><a href="#s79917486">安全AI告警的特征工程</a></li>
-<li><a href="#s17827494">1.4 案例2：IoT异常终端识别 了解</a></li>
-<li><a href="#s12089121">本章小结</a></li>
-<li><a href="#s67934723">1.4 应用案例1：安全AI告警的特征工程 必考</a></li>
-  <li><a href="#s25004061">原始输入</a></li>
-  <li><a href="#s68642618">1.4.1 基础特征</a></li>
-  <li><a href="#s67772436">1.4.2 聚合特征</a></li>
-  <li><a href="#s57446719">1.4.3 情报特征</a></li>
-  <li><a href="#s29306943">1.4.4 融合特征 重点</a></li>
-<li><a href="#s53751257">1.5 应用案例2：IoT异常终端识别 高频</a></li>
-  <li><a href="#s67677565">1.5.1 业务背景</a></li>
-  <li><a href="#s91243006">1.5.2 解决方案</a></li>
-  <li><a href="#s25818876">1.5.3 场景示例：水表行业</a></li>
-  <li><a href="#s86885773">1.5.4 异常检测分析</a></li>
-  <li><a href="#s22481907">1.5.5 算法效果</a></li>
-<li><a href="#s68627579">本章小结 了解</a></li>
-<li><a href="#s74512770">目录 了解</a></li>
-<li><a href="#s84576414">2 网络状态感知 必考</a></li>
-  <li><a href="#s26809148">2.1 网络状态基本概念和组成元素</a></li>
-  <li><a href="#s42834183">2.2 包级特征 重点</a></li>
-<li><a href="#s54764589">网络流量特征概述 重点</a></li>
-  <li><a href="#s63235118">一、包级特征 高频</a></li>
-  <li><a href="#s72072140">二、流级特征 必考</a></li>
-  <li><a href="#s52806924">流级特征处理流程</a></li>
-  <li><a href="#s86945086">2.1 包长序列、时间序列特征</a></li>
-  <li><a href="#s67152978">2.2 协议特征</a></li>
-  <li><a href="#s91338963">2.3 统计特征计算说明 高频</a></li>
-  <li><a href="#s46631769">三、用户特征 重点</a></li>
-  <li><a href="#s62303936">3.1 突发特征</a></li>
-<li><a href="#s34065763">网络流量特征分析 重点</a></li>
-  <li><a href="#s48692104">一、用户级特征</a></li>
-  <li><a href="#s44983257">二、体验指标 必考</a></li>
-  <li><a href="#s63080682">三、网络级特征 了解</a></li>
-<li><a href="#s37660607">常见拓扑分析方法</a></li>
-<li><a href="#s78375406">图方法</a></li>
-  <li><a href="#s10508107">节点特征</a></li>
-  <li><a href="#s42672829">边特征</a></li>
-<li><a href="#s10354853">多流关联</a></li>
-  <li><a href="#s73360858">SSL关联</a></li>
-  <li><a href="#s37957548">DNS关联</a></li>
-  <li><a href="#s83690088">用户关联</a></li>
-<li><a href="#s66230572">案例：加密流量识别</a></li>
-  <li><a href="#s24632045">业务背景</a></li>
-  <li><a href="#s40608487">挑战</a></li>
-  <li><a href="#s36002211">网络特征</a></li>
-  <li><a href="#s29833399">基于网络状态的识别方案</a></li>
-  <li><a href="#s58120990">加密流量交互过程</a></li>
-  <li><a href="#s35946476">用于加密流量识别的网络特征</a></li>
-<li><a href="#s14071498">案例与小结</a></li>
-  <li><a href="#s29539316">随机森林算法</a></li>
-  <li><a href="#s69873170">特征重要度</a></li>
-  <li><a href="#s85517837">最小处理包长对整体精度影响</a></li>
-<li><a href="#s12089121">本章小结</a></li>
-  <li><a href="#s33862667">网络状态基本概念和组成元素</a></li>
-<li><a href="#s67817550">课堂练习</a></li>
-<li><a href="#s82760787">目录</a></li>
-  <li><a href="#s24406703">1 设备状态感知</a></li>
-  <li><a href="#s31913405">2 网络状态感知</a></li>
-  <li><a href="#s39518179">3 知识表达与推理</a></li>
-<li><a href="#s16244327">知识的定义</a></li>
-  <li><a href="#s12686179">什么是知识？</a></li>
-  <li><a href="#s50875393">什么是知识图谱？</a></li>
-<li><a href="#s91427382">知识表示——RDF</a></li>
-  <li><a href="#s88473960">定义与存储</a></li>
-  <li><a href="#s37713913">知识的基本构成单元</a></li>
-  <li><a href="#s81101142">知识图谱结构</a></li>
-  <li><a href="#s39075070">RDF的标识与结构</a></li>
-  <li><a href="#s74801551">RDF的设计目标</a></li>
-  <li><a href="#s56408916">RDF的优缺点</a></li>
-<li><a href="#s61875961">知识表示——OWL</a></li>
-  <li><a href="#s44791453">语义分层</a></li>
-  <li><a href="#s47408182">OWL 的3个子类</a></li>
-<li><a href="#s78757869">知识建模</a></li>
-  <li><a href="#s11064144">知识建模概述</a></li>
-  <li><a href="#s48568602">知识建模的意义和目标</a></li>
-  <li><a href="#s26455582">知识建模的方式和方法</a></li>
-  <li><a href="#s79182285">知识图谱建模工具——Protege</a></li>
-<li><a href="#s67422817">知识抽取</a></li>
-  <li><a href="#s83860364">数据来源与抽取方式</a></li>
-<li><a href="#s34445313">面向结构化数据的知识抽取</a></li>
-  <li><a href="#s79193279">R2RML</a></li>
-  <li><a href="#s67882606">D2RQ平台</a></li>
-  <li><a href="#s55031691">RDB到RDF的映射机制</a></li>
-  <li><a href="#s72765430">D2RQ架构</a></li>
-<li><a href="#s41803845">面向半结构化数据的知识抽取</a></li>
-  <li><a href="#s16781495">从百科里提取知识</a></li>
-  <li><a href="#s56211526">百科页面结构示例（以"南京"为例）</a></li>
-  <li><a href="#s68216250">知识抽取与表示流程</a></li>
-  <li><a href="#s75178610">相关技术与服务</a></li>
-<li><a href="#s23529008">面向非结构化数据的知识抽取</a></li>
-  <li><a href="#s39940369">引言</a></li>
-  <li><a href="#s11499807">命名实体识别 (Named Entity Recognition, NER)</a></li>
-  <li><a href="#s67671712">命名实体识别方法</a></li>
-  <li><a href="#s72041310">实体关系抽取</a></li>
-  <li><a href="#s60207649">文档级关系抽取</a></li>
-  <li><a href="#s27808820">关系抽取工具</a></li>
-<li><a href="#s70688264">知识存储</a></li>
-  <li><a href="#s73900558">表结构存储</a></li>
-<li><a href="#s41067461">知识存储：表结构存储 重点</a></li>
-  <li><a href="#s17150135">三元组表</a></li>
-  <li><a href="#s22945052">属性表</a></li>
-<li><a href="#s76861268">知识存储：图结构存储 高频</a></li>
-  <li><a href="#s53721455">属性图模型</a></li>
-<li><a href="#s54060353">知识图谱查询语言 必考</a></li>
-<li><a href="#s32452454">知识存储：图数据库 重点</a></li>
-  <li><a href="#s39949235">主流数据库对比</a></li>
-  <li><a href="#s92830932">领域数据库选型</a></li>
-  <li><a href="#s55086708">性能测试维度</a></li>
-<li><a href="#s47805519">知识融合 高频</a></li>
-  <li><a href="#s25772999">问题背景与实体属性冲突</a></li>
-  <li><a href="#s26849944">真值发现</a></li>
-  <li><a href="#s59028031">知识融合方法分类 了解</a></li>
-<li><a href="#s84570804">知识推理 必考</a></li>
-  <li><a href="#s77775679">知识推理概述</a></li>
-  <li><a href="#s23487249">基于本体的推理</a></li>
-  <li><a href="#s74009668">基于规则的推理</a></li>
-  <li><a href="#s21229397">基于表示学习的知识推理</a></li>
-  <li><a href="#s22952017">基于图结构的知识推理</a></li>
-  <li><a href="#s37416932">知识推理方法总结</a></li>
-  <li><a href="#s48455623">知识推理的应用</a></li>
-  <li><a href="#s71177599">应用案例：构建KBQA问答引擎</a></li>
-<li><a href="#s16087503">路径排序算法(PRA)与知识推理方法 必考</a></li>
-  <li><a href="#s52635672">PRA核心步骤 重点</a></li>
-  <li><a href="#s31743574">PRA计算公式 高频</a></li>
-  <li><a href="#s15132473">知识推理方法总结 必考</a></li>
-<li><a href="#s17130046">推理示例 了解</a></li>
-  <li><a href="#s78661265">本体与类型推理示例</a></li>
-  <li><a href="#s92770874">关系定义与推理示例</a></li>
-  <li><a href="#s54533617">实体关系图谱示例</a></li>
-<li><a href="#s26863375">知识推理的应用 重点</a></li>
-  <li><a href="#s67585148">知识补全</a></li>
-  <li><a href="#s42837084">知识纠错</a></li>
-  <li><a href="#s91501497">推理问答</a></li>
-<li><a href="#s67632716">应用案例：构建KBQA问答引擎 了解</a></li>
-  <li><a href="#s74253129">基本业务需求与算法抽象</a></li>
-  <li><a href="#s81026392">知识源头与文档结构</a></li>
-<li><a href="#s78062586">构建KBQA问答引擎实践 重点</a></li>
-  <li><a href="#s39502143">应用场景概述</a></li>
-  <li><a href="#s88184652">(半)结构化知识抽取</a></li>
-  <li><a href="#s73075910">非结构化知识抽取 高频</a></li>
-  <li><a href="#s81112162">Schema构建流程 必考</a></li>
-  <li><a href="#s56955442">关于Schema构建的思考</a></li>
-  <li><a href="#s30457232">KBQA查询示例</a></li>
-</ul>
-</div><div class="epa-main">
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><div class="epa-main">
 <h2 id="s23064811">设备状态感知</h2>
 
 <h3 id="s62096537">异构数据建模与清洗</h3>
@@ -1653,14 +1431,14 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <p><strong>Query</strong>：BBU5900是否适配UBB Pg2单板</p>
 <p><strong>数据源</strong>：案例库、无线网络、数通、产品知识、业务知识、5G知识收割专题、5G协议。</p>
 <p><strong>KBQA搜索结果</strong>：返回名称、适配的单板、版本、电子标签/BOM编码、支持的无线制式等结构化信息，以及相关文档摘要、相关术语和图谱展示结果。</p>
-<div class="checkpoint">Schema构建流程包含哪些主要步骤？<details class="cp-answer"><summary>参考答案</summary>1. 确定领域及任务；2. 体系复用；3. 罗列要素；4. 确定分类体系；5. 定义属性及关系；6. 定义约束。</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<div class="checkpoint">Schema构建流程包含哪些主要步骤？<details class="cp-answer"><summary>参考答案</summary>1. 确定领域及任务；2. 体系复用；3. 罗列要素；4. 确定分类体系；5. 定义属性及关系；6. 定义约束。</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center" id="sec-auto-1">章节测试</h2>
 <p style="text-align:center;color:var(--ink-light);font-size:0.95em">337题 · 满分1868分</p>
 
 <div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
 <div id="questions-container"></div>
 <div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
 <div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
-<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3>📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3 id="sec-auto-2">📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
 
 
 <script>
@@ -1772,7 +1550,7 @@ function build() {
     var q = Q[i];
     if (q.type !== sec) {
       sec = q.type;
-      if (titles[q.type]) h += '<h3>' + titles[q.type] + '</h3>';
+      if (titles[q.type]) h += '<h3 id="sec-auto-3">' + titles[q.type] + '</h3>';
     }
 
     var qid = 'q' + i;

@@ -219,136 +219,20 @@ description: 本章核心主题：时间序列预测算法、时间序列预测�
 </style>
 <style>
 .epa-scope [id] { scroll-margin-top: 14px; }
-.epa-scope #panel-kn > h1:empty { display: none; }
-@media (min-width: 1280px) {
-  .epa-scope #panel-kn.active { display: flex; gap: 24px; align-items: flex-start; }
-  .epa-scope #panel-kn > .toc {
-    position: sticky; top: 12px;
-    width: 230px; min-width: 230px; box-sizing: border-box;
-    max-height: calc(100vh - 24px); overflow-y: auto;
-    margin: 0;
-  }
-  .epa-scope #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
-}
 .epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
-/* NexT 布局适配：EPA 文章页隐藏主题右侧栏（正文自带 sticky TOC 侧栏），并加宽主列 */
-body:has(.epa-scope) .sidebar,
-body:has(.epa-scope) .sidebar-toggle { display: none !important; }
-body:has(.epa-scope) main,
-body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-width: 1160px !important; }
 </style>
-<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
-<div class="toc">
-<h2>目录</h2>
-<ul>
-<li><a href="#s77171517">时间序列预测算法</a></li>
-  <li><a href="#s28478421">时间序列预测简介</a></li>
-  <li><a href="#s39200640">传统时间序列预测方法</a></li>
-  <li><a href="#s33880738">基于特征工程+机器学习的时间序列预测方法</a></li>
-  <li><a href="#s64574688">基于深度学习的时间序列预测方法</a></li>
-<li><a href="#s56215283">基于树模型的回归方法</a></li>
-  <li><a href="#s69259264">基于随机森林回归的方法</a></li>
-  <li><a href="#s31581586">基于梯度提升回归树的方法</a></li>
-<li><a href="#s27861572">基于Stacking/Blending集成学习的方法</a></li>
-  <li><a href="#s81723279">Stacking集成学习</a></li>
-  <li><a href="#s58138645">Blending集成学习</a></li>
-<li><a href="#s56162907">循环神经网络（RNN）与LSTM</a></li>
-  <li><a href="#s28277372">RNN基本概念 必考</a></li>
-  <li><a href="#s37429985">传统RNN存在的问题 重点</a></li>
-  <li><a href="#s83973275">长短期记忆（LSTM） 必考</a></li>
-<li><a href="#s57812401">基于卷积神经网络的时间序列预测方法</a></li>
-  <li><a href="#s73749422">CNN基本结构 重点</a></li>
-  <li><a href="#s25086805">CNN在时序预测中的应用 高频</a></li>
-<li><a href="#s18226375">基于Transformer的时间序列预测方法</a></li>
-  <li><a href="#s35237112">Encoder-Decoder 重点</a></li>
-  <li><a href="#s45842208">Attention Model 必考</a></li>
-<li><a href="#s57298168">基于图神经网络的时间序列预测方法</a></li>
-  <li><a href="#s54746624">图神经网络（GNN） 了解</a></li>
-  <li><a href="#s47352668">卷积图神经网络（GCN） 了解</a></li>
-  <li><a href="#s60110532">T-GCN 了解</a></li>
-<li><a href="#s54418684">时间序列概率预测方法</a></li>
-  <li><a href="#s58791005">点预测+统计学习的方法——时间序列区间预测 重点</a></li>
-  <li><a href="#s46551853">分位数损失函数法——时间序列分位数预测 必考</a></li>
-  <li><a href="#s22191562">对数似然函数方法——时间序列概率分布预测 高频</a></li>
-<li><a href="#s55407648">时间序列预测方法体系小结</a></li>
-<li><a href="#s11819994">时间序列预测应用案例</a></li>
-<li><a href="#s55396270">课程简介与目标</a></li>
-<li><a href="#s30850006">1. 时间序列预测简介</a></li>
-  <li><a href="#s70414105">1.1 时间序列预测的基本概念 必考</a></li>
-  <li><a href="#s69820350">时间序列（弱）平稳性 重点</a></li>
-  <li><a href="#s98032783">时间序列（弱）平稳性检验方法 高频</a></li>
-  <li><a href="#s70497038">1.2 时间序列预测的挑战 了解</a></li>
-  <li><a href="#s44411942">1.3 时间序列预测的评估方法 必考</a></li>
-<li><a href="#s48315951">2. 传统时间序列预测方法</a></li>
-  <li><a href="#s91192287">2.1 & 2.2 简单规则法 了解</a></li>
-  <li><a href="#s51345381">2.3 基于时间序列分解的方法 重点</a></li>
-  <li><a href="#s50599963">2.4 基于经典统计学的方法 必考</a></li>
-<li><a href="#s41473746">3. 基于特征工程+机器学习的时间序列预测方法</a></li>
-  <li><a href="#s62640335">特征工程概述 重点</a></li>
-  <li><a href="#s43007126">3.1 基于支持向量回归机（SVR）的时间序列预测方法 高频</a></li>
-<li><a href="#s33880738">基于特征工程+机器学习的时间序列预测方法</a></li>
-  <li><a href="#s86370881">基于支持向量机回归机的时间序列预测方法 重点</a></li>
-  <li><a href="#s64474826">基于随机森林回归的方法 高频</a></li>
-  <li><a href="#s77008346">基于梯度提升回归树的方法 必考</a></li>
-  <li><a href="#s40173289">基于Stacking/Blending集成学习的方法 重点</a></li>
-<li><a href="#s64574688">基于深度学习的时间序列预测方法</a></li>
-  <li><a href="#s24531713">基于循环神经网络的时间序列预测方法 必考</a></li>
-  <li><a href="#s17784478">基于卷积神经网络的时间序列预测方法 高频</a></li>
-  <li><a href="#s51786944">基于Transformer的时间序列预测方法 重点</a></li>
-<li><a href="#s88341069">Global Attention 与 Local Attention</a></li>
-<li><a href="#s53682184">Attention模型仍存在的问题</a></li>
-<li><a href="#s13705982">Attention函数的本质</a></li>
-<li><a href="#s14104833">Transformer网络结构</a></li>
-  <li><a href="#s54201594">核心特点</a></li>
-  <li><a href="#s72312394">Encoder结构</a></li>
-  <li><a href="#s74370363">Decoder结构</a></li>
-  <li><a href="#s61053065">Scaled Dot-Product Attention</a></li>
-  <li><a href="#s34430510">Multi-Head Attention</a></li>
-<li><a href="#s38630476">Transformer改进版</a></li>
-  <li><a href="#s38096685">Adversarial Sparse Transformer</a></li>
-  <li><a href="#s59920112">Informer</a></li>
-<li><a href="#s89659455">电力变压器数据集（ETDataset）</a></li>
-  <li><a href="#s30992587">数据列表</a></li>
-<li><a href="#s57298168">基于图神经网络的时间序列预测方法</a></li>
-  <li><a href="#s11381011">图的基础知识</a></li>
-  <li><a href="#s10792881">图神经网络（GNN）</a></li>
-  <li><a href="#s21763266">将图与神经网络结合</a></li>
-  <li><a href="#s35729740">图连接信息的利用与优化</a></li>
-<li><a href="#s83916146">图卷积神经网络 (GCN)</a></li>
-<li><a href="#s11724533">基于图神经网络的交通流量预测：T-GCN</a></li>
-<li><a href="#s11500279">事件分类与节假日预测模型 重点</a></li>
-<li><a href="#s62432846">6.2 时间序列预测案例——整网流量负载预测 必考</a></li>
-  <li><a href="#s40994366">6.2.1 OBP立项关键竞争力指标</a></li>
-  <li><a href="#s34324228">6.2.2 数据集</a></li>
-  <li><a href="#s29565130">6.2.3 算法评估指标</a></li>
-  <li><a href="#s19625793">6.2.4 现有技术与短板场景</a></li>
-  <li><a href="#s83758253">6.2.5 算法方案对比 高频</a></li>
-  <li><a href="#s22955099">6.2.6 实验对比与结果分析</a></li>
-<li><a href="#s38865638">6.3 时间序列预测案例——新能源光伏发电功率预测 重点</a></li>
-  <li><a href="#s19854577">收益产品与应用场景</a></li>
-  <li><a href="#s74951109">价值分析</a></li>
-  <li><a href="#s79678453">预测挑战与方案对比</a></li>
-  <li><a href="#s47288088">场景预测效果</a></li>
-  <li><a href="#s68526578">AI光储协同优化</a></li>
-<li><a href="#s18410490">6.4 时间序列预测案例——微电网用电负荷预测 了解</a></li>
-  <li><a href="#s36870611">背景概述</a></li>
-  <li><a href="#s23346581">技术沙盘（微电网EMS架构）</a></li>
-  <li><a href="#s29343238">核心技术点</a></li>
-  <li><a href="#s15923775">负荷预测方案与效果</a></li>
-<li><a href="#s12566718">小结 了解</a></li>
-</ul>
-</div><div class="epa-main">
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><div class="epa-main">
 <h2 id="s77171517">时间序列预测算法</h2>
 
 <h3 id="s28478421">时间序列预测简介</h3>
 
-<h4>基本概念</h4>
+<h4 id="sec-auto-1">基本概念</h4>
 <p><span class="kp">时间序列</span>：指按照时间先后顺序排列的数据序列。</p>
 <p><span class="kp">时间序列预测</span>：指根据历史时间序列数据提取规律、特征，建立模型对该序列未来变化趋势进行预测的过程，也即时间序列回归预测，可分为单步预测或者多步预测。</p>
 
-<h4>时间序列分解</h4>
+<h4 id="sec-auto-2">时间序列分解</h4>
 <p>一个时间序列一般可以分解为由趋势项、季节项、残差项等成分：</p>
 <ul>
 <li><span class="kp">趋势项</span>：指时间序列在较长一段时间内呈现出来的持续向上或者持续向下的变动。</li>
@@ -356,16 +240,16 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <li><span class="kp">残差项</span>：也称为不规则波动，指除去趋势、季节性、周期性外的随机波动。</li>
 </ul>
 
-<h4>时间序列平稳性</h4>
+<h4 id="sec-auto-3">时间序列平稳性</h4>
 <p><span class="kp">时间序列（弱）平稳</span>：序列中任意时刻数据的期望、方差和协方差不随时间而变。并不是所有的时间序列都是可预测的，而当一个时间序列的变化特征维持稳定，数据的历史分布和未来分布就会趋于一致，这时我们就可以根据历史数据对未来作出预测。</p>
 <blockquote>易错：“不是弱平稳的时间序列无法进行时间序列预测”该说法是错误的。</blockquote>
 <p><span class="kp">时间序列（弱）平稳性检验方法</span>：当一个时间序列的滞后算子多项式方程存在单位根时，我们认为该时间序列是非平稳的；反之，当该方程不存在单位根时，我们认为该时间序列是平稳的。常见的单位根检验方法有DF检验、ADF检验和PP检验。<span class="tag-key">重点</span></p>
 
-<h4>时间序列预测的评估方法</h4>
+<h4 id="sec-auto-4">时间序列预测的评估方法</h4>
 <p><span class="kp">数据集划分</span>：时间序列的数据集划分为训练集和测试集时，要确保测试集的时间戳要晚于训练集时间戳，否则容易数据泄露和无法实际应用。</p>
 <p><span class="kp">划分方法</span>：常见方法有简单划分方法和时间序列K-Fold交叉验证划分方法。</p>
 
-<h4>时间序列预测的评价指标</h4>
+<h4 id="sec-auto-5">时间序列预测的评价指标</h4>
 
 <p><span class="tag-must">必考</span> <strong>点预测评价指标</strong></p>
 <ul>
@@ -390,26 +274,26 @@ $$W_{\alpha, t}=\left\{\begin{array}{ll}\left(u_{\alpha, t}-\ell_{\alpha, t}\rig
 
 <h3 id="s39200640">传统时间序列预测方法</h3>
 
-<h4>简单规则法</h4>
+<h4 id="sec-auto-6">简单规则法</h4>
 <p>包括朴素预测法、简单平均法。</p>
 <ul>
 <li><strong>优点</strong>：在较少数据的情况下即可进行预测。</li>
 <li><strong>缺点</strong>：预测精度不高。</li>
 </ul>
 
-<h4>基于时间序列分解的方法</h4>
+<h4 id="sec-auto-7">基于时间序列分解的方法</h4>
 <p>对时间序列进行分解后，若发现分解时序项存在明显的可预测性，可以通过对分解时序项分别预测，然后再组合各预测分项即可获得原始时间序列的预测。一个时间序列往往由长期趋势（Trend，T）、季节性、随机波动组成，部分场景下可能包含相对季节性更细粒度的周期性。</p>
 <ul>
 <li><span class="kp">加法模型</span>：$Y_{t}=T_{t}+S_{t}+C_{t}+I_{t}$</li>
 <li><span class="kp">乘法模型</span>：$Y_{t}=T_{t} \times S_{t} \times C_{t} \times I_{t}$</li>
 </ul>
 
-<h4>Facebook Prophet 时序预测算法</h4>
+<h4 id="sec-auto-8">Facebook Prophet 时序预测算法</h4>
 <p><span class="kp">Prophet</span>针对一维时间序列进行建模，将时间序列分为趋势、季节、节日三部分特征，是自动特征提取的线性回归模型。适用于少特征、规律性高、单维度的时间序列场景，同时能够考虑外部特征数据。</p>
 <p>$$y(t)=g(t)+s(t)+h(t)+\epsilon_{t}$$</p>
 <p>其中，$g(t)$为趋势项，$s(t)$为季节项，$h(t)$为节日项，$\epsilon_{t}$为随机项。</p>
 
-<h4>基于经典统计学的方法</h4>
+<h4 id="sec-auto-9">基于经典统计学的方法</h4>
 
 <p><span class="tag-key">重点</span> <strong>指数平滑</strong></p>
 <p>预测值使用加权平均值进行计算，其中权重随观测时间的久远程度呈指数型下降——最早的观察值被赋予最小的权值。</p>
@@ -436,13 +320,13 @@ $$\phi_p(L) \tilde{\phi}_P(L^s) \Delta^d \Delta_s^D u_t = A(t) + \theta_q(L) \ti
 
 <h3 id="s33880738">基于特征工程+机器学习的时间序列预测方法</h3>
 
-<h4>基本思路</h4>
+<h4 id="sec-auto-10">基本思路</h4>
 <p>基于时间序列的特征工程，可将时间序列预测问题转化为回归预测问题，然后采用机器学习回归算法解决。</p>
 
-<h4>时间序列特征工程常用特征</h4>
+<h4 id="sec-auto-11">时间序列特征工程常用特征</h4>
 <p>日期时间特征、节假日特征、滞后特征、滑窗/扩展窗特征、同期值特征、交叉特征、业务域特征。</p>
 
-<h4>交叉特征</h4>
+<h4 id="sec-auto-12">交叉特征</h4>
 <ul>
 <li><span class="kp">类别特征间组合</span>：构成新特征，比如星期和小时组合为 `Mon_10`（星期一的十点）。</li>
 <li><span class="kp">类别特征和连续特征</span>：
@@ -460,7 +344,7 @@ $$\phi_p(L) \tilde{\phi}_P(L^s) \Delta^d \Delta_s^D u_t = A(t) + \theta_q(L) \ti
 </li>
 </ul>
 
-<h4>基于支持向量回归机的方法（SVR）</h4>
+<h4 id="sec-auto-13">基于支持向量回归机的方法（SVR）</h4>
 <p><span class="kp">支持向量机回归算法（SVR）</span>是一种常见的多元拟合算法，也可以用于时间序列预测。</p>
 <p><strong>基本原理</strong>：给定容忍偏差 $\varepsilon$，给定训练集 $\{(x_1, y_1), (x_2, y_2), \cdots, (x_m, y_m)\}$，希望学习到拟合模型 $f(x) = w^T x + b$，使训练集中所有样本点尽可能在 $f(x) \pm \varepsilon$ 的间隔带内。</p>
 <p><strong>Loss 定义</strong>：对于带内样本点，误差在容忍范围内，无需统计loss；对于带外样本点，误差需要扣除容忍偏差 $\varepsilon$。
@@ -514,7 +398,7 @@ $$f(x) = \sum_{i=1}^{n} (\alpha_i - \alpha_i^*) x_i^T x + b$$
 </table>
 <blockquote>易错：核函数选择是SVR的最大变数，若核函数选择不当，则样本可能映射到不合适的特征空间，很可能导致性能不佳。</blockquote>
 
-<h4>基于随机森林回归的方法</h4>
+<h4 id="sec-auto-14">基于随机森林回归的方法</h4>
 <p><span class="kp">随机森林回归算法</span>是决策树回归的组合算法，将许多回归决策树组合到一起，以降低过拟合的风险，是一种典型的 <span class="kp">bagging 集成算法</span>。</p>
 <p>随机森林构建过程主要有两类随机：</p>
 <ol>
@@ -523,12 +407,12 @@ $$f(x) = \sum_{i=1}^{n} (\alpha_i - \alpha_i^*) x_i^T x + b$$
 </ol>
 <p><strong>优点</strong>：算法简单、易于并行执行、可以减小预测方差。<br><strong>缺点</strong>：可解释性差、模型计算量大。</p>
 
-<h4>基于梯度提升回归树的方法</h4>
+<h4 id="sec-auto-15">基于梯度提升回归树的方法</h4>
 <p><span class="kp">梯度提升回归树</span>是<strong>弱预测模型的集成</strong>，如采用典型的决策树作为弱预测模型，这时则为梯度提升树（GBT或GBDT），用于解决回归问题。像其他提升方法一样，它以分阶段的方式构建模型，但它通过允许对任意可微分损失函数进行优化作为对一般提升方法的推广，应用广泛。</p>
 <p>常见梯度提升回归树算法有：GBDT、XGBoost、LightGBM、CatBoost。</p>
 <div class="tldr">在数据量和计算机配置够的情况下，CatBoost 是精度最好的梯度提升算法开源框架。</div>
 
-<h4>基于 Stacking/Blending 集成学习的方法</h4>
+<h4 id="sec-auto-16">基于 Stacking/Blending 集成学习的方法</h4>
 <p><span class="kp">Stacking 和 Blending 模型</span>都是一种<strong>层次模型集成框架</strong>。与 bagging 和 boosting 方法不同（后两者建立在相同算法（通常是CART）的基本模型上），Stacking 和 Blending 的<strong>基础模型和元模型可以是任何机器学习算法</strong>，如决策树、随机森林、支持向量机等。</p>
 
 <p><strong>Stacking 集成学习</strong>：Stacking 模型通过结合各种分类器或回归器来提高建模精度。最简单的堆叠模型通常包含2个层次：</p>
@@ -554,7 +438,7 @@ $$f(x) = \sum_{i=1}^{n} (\alpha_i - \alpha_i^*) x_i^T x + b$$
 
 <h3 id="s64574688">基于深度学习的时间序列预测方法</h3>
 
-<h4>基于循环神经网络的时间序列预测方法</h4>
+<h4 id="sec-auto-17">基于循环神经网络的时间序列预测方法</h4>
 
 <p><span class="kp">循环神经网络（RNN）</span>，该算法是一种常见的神经网络类算法，常用于序列预测。</p>
 <ul>
@@ -592,7 +476,7 @@ $$f(x) = \sum_{i=1}^{n} (\alpha_i - \alpha_i^*) x_i^T x + b$$
 <p><strong>优势</strong>：能够有选择性地保留、遗忘部分信息，能够处理有效的长期信息。</p>
 <p><strong>缺点</strong>：能够缓解梯度消失和梯度爆炸，但网络结构更为复杂，待训练参数增加，导致复杂度上升。由于递归迭代的网络结构，难以通过并行化实现效率提升（RNN 类算法通病）。</p>
 
-<h4>基于卷积神经网络的时间序列预测方法</h4>
+<h4 id="sec-auto-18">基于卷积神经网络的时间序列预测方法</h4>
 <p><span class="kp">卷积神经网络（CNN）</span>，该算法是一种常见的神经网络类算法，常用于二维数据（如图像）处理与分析。</p>
 <p>CNN 一般由<strong>卷积层</strong>和<strong>池化层</strong>交错叠加，并在最后拼接<strong>全连接层</strong>而成，其中：</p>
 <ul>
@@ -608,7 +492,7 @@ $$f(x) = \sum_{i=1}^{n} (\alpha_i - \alpha_i^*) x_i^T x + b$$
 <li>方便通过<strong>并行化</strong>提升训练、推理效率。</li>
 </ol>
 
-<h4>基于 Transformer 的时间序列预测方法</h4>
+<h4 id="sec-auto-19">基于 Transformer 的时间序列预测方法</h4>
 
 <p><span class="kp">Encoder-Decoder</span> 之间唯一的联系是一个<strong>固定长度的语境向量</strong>，Encoder 要将整个序列的信息压缩进一个固定长度的向量中。这样做存在两个弊端：</p>
 <ol>
@@ -624,7 +508,7 @@ $$f(x) = \sum_{i=1}^{n} (\alpha_i - \alpha_i^*) x_i^T x + b$$
 <li>仍然无法解决序列间长距离的依赖性。</li>
 </ol>
 
-<h4>基于图神经网络的时间序列预测方法</h4>
+<h4 id="sec-auto-20">基于图神经网络的时间序列预测方法</h4>
 
 <p><span class="kp">图神经网络（GNN）</span>可以对图上所有属性（节点、边、全局信息）进行优化变化，同时保持住图的对称信息。使用<strong>信息传递的框架</strong>，输入是图，输出也是图。</p>
 <p>GNN 的输入包含以下几个部分：顶点信息、边信息、全局信息、顶点之间的连接信息。</p>
@@ -1054,14 +938,14 @@ q=0.05：预测值尽可能小于真实值，预测区间的下限。</p>
 <p>本章涉及的案例包括：基于深度学习方法的时空流量预测案例、基于改进ARIMA的整网流量负载案例、基于特征工程 + 机器学习方法的新能源光功率预测案例、基于特征工程 + 机器学习方法的微电网用电负荷预测案例。</p>
 
 <div class="checkpoint">微电网EMS架构中预测模块包含哪些内容？<details class="cp-answer"><summary>参考答案</summary>预测模块包含负荷预测、价格预测（Price Forecasting）和分布式能源预测（DER Forecasting）。</details></div>
-<div class="checkpoint">华为在光伏发电功率预测中的方案相比传统方案有何优势？<details class="cp-answer"><summary>参考答案</summary>华为方案采用特征工程 + 机器学习 + 滚动预测，仅需1-3个月数据和单一气象源即可获得不错效果，模型轻量化且支持在线学习适应数据漂移，而传统方案需要数年数据和多种高精度气象源，且模型复杂易受数据漂移影响。</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<div class="checkpoint">华为在光伏发电功率预测中的方案相比传统方案有何优势？<details class="cp-answer"><summary>参考答案</summary>华为方案采用特征工程 + 机器学习 + 滚动预测，仅需1-3个月数据和单一气象源即可获得不错效果，模型轻量化且支持在线学习适应数据漂移，而传统方案需要数年数据和多种高精度气象源，且模型复杂易受数据漂移影响。</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center" id="sec-auto-21">章节测试</h2>
 <p style="text-align:center;color:var(--ink-light);font-size:0.95em">190题 · 满分952分</p>
 
 <div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
 <div id="questions-container"></div>
 <div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
 <div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
-<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3>📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3 id="sec-auto-22">📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
 
 
 <script>
@@ -1173,7 +1057,7 @@ function build() {
     var q = Q[i];
     if (q.type !== sec) {
       sec = q.type;
-      if (titles[q.type]) h += '<h3>' + titles[q.type] + '</h3>';
+      if (titles[q.type]) h += '<h3 id="sec-auto-23">' + titles[q.type] + '</h3>';
     }
 
     var qid = 'q' + i;

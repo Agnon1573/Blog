@@ -219,280 +219,11 @@ description: 本章核心主题：课程简介与培训目标、1. 业界典型L
 </style>
 <style>
 .epa-scope [id] { scroll-margin-top: 14px; }
-.epa-scope #panel-kn > h1:empty { display: none; }
-@media (min-width: 1280px) {
-  .epa-scope #panel-kn.active { display: flex; gap: 24px; align-items: flex-start; }
-  .epa-scope #panel-kn > .toc {
-    position: sticky; top: 12px;
-    width: 230px; min-width: 230px; box-sizing: border-box;
-    max-height: calc(100vh - 24px); overflow-y: auto;
-    margin: 0;
-  }
-  .epa-scope #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
-}
 .epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
-/* NexT 布局适配：EPA 文章页隐藏主题右侧栏（正文自带 sticky TOC 侧栏），并加宽主列 */
-body:has(.epa-scope) .sidebar,
-body:has(.epa-scope) .sidebar-toggle { display: none !important; }
-body:has(.epa-scope) main,
-body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-width: 1160px !important; }
 </style>
-<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
-<div class="toc">
-<h2>目录</h2>
-<ul>
-<li><a href="#s12041101">课程简介与培训目标</a></li>
-<li><a href="#s68038508">1. 业界典型LLM关键技术详解</a></li>
-  <li><a href="#s52501256">1.1 GPT系列模型</a></li>
-  <li><a href="#s11597269">GPT-1：无监督预训练 + Fine-tune</a></li>
-  <li><a href="#s22169002">GPT-2：纯无监督预训练</a></li>
-  <li><a href="#s24286201">GPT-3 / GPT-3.5：监督微调预训练 + RLHF</a></li>
-  <li><a href="#s18409880">GPT-3结构与大语言模型发展逻辑</a></li>
-  <li><a href="#s88394606">GPT-4关键能力</a></li>
-  <li><a href="#s76581574">1.6 LLaMA系列模型</a></li>
-  <li><a href="#s33206116">Layer Normalization模块</a></li>
-<li><a href="#s31167313">InstructGPT训练流程 必考</a></li>
-<li><a href="#s33931710">多模态（图片输入） 重点</a></li>
-  <li><a href="#s23218588">GPT-4 视觉输入示例</a></li>
-  <li><a href="#s48654944">多模态处理方式</a></li>
-<li><a href="#s48200486">GPT-4关键能力与局限性 必考</a></li>
-  <li><a href="#s68564847">GPT-4关键能力——逻辑推导能力大幅提升</a></li>
-  <li><a href="#s71383040">GPT-4的局限性</a></li>
-<li><a href="#s58843684">LLaMA系列模型 必考</a></li>
-  <li><a href="#s17597150">LLaMA系列发展脉络</a></li>
-  <li><a href="#s33012803">整体结构</a></li>
-  <li><a href="#s59297146">Layer Normalization 模块 重点</a></li>
-  <li><a href="#s56373303">激活函数SwiGLU模块 高频</a></li>
-  <li><a href="#s19080338">位置编码RoPE模块 重点</a></li>
-<li><a href="#s66958741">RoPE旋转位置编码 重点</a></li>
-  <li><a href="#s87844440">RoPE的主要特性</a></li>
-<li><a href="#s83373147">MHA、MQA、GQA注意力机制 必考</a></li>
-  <li><a href="#s79615121">MHA（Multi Head Attention，多头自注意力机制）</a></li>
-  <li><a href="#s79124650">MQA（Multi Query Attention）</a></li>
-  <li><a href="#s29102592">GQA（Grouped Query Attention）</a></li>
-<li><a href="#s65320212">Mistral系列模型 高频</a></li>
-  <li><a href="#s70327508">模型介绍</a></li>
-  <li><a href="#s53672152">MoE（Mixture of Experts）模块 重点</a></li>
-  <li><a href="#s18731844">MoE模块——Switch Transformer（ST） 重点</a></li>
-<li><a href="#s28084881">1.3 Mistral系列模型</a></li>
-  <li><a href="#s64729828">MOE模块 — Expert Choice (EC)</a></li>
-  <li><a href="#s39017269">MOE优缺点</a></li>
-<li><a href="#s89597159">1.4 Phi系列小模型：小型语言模型（SLM）</a></li>
-  <li><a href="#s61297494">Phi系列小模型：模型版本概览</a></li>
-  <li><a href="#s15621957">Phi系列小模型：语料治理</a></li>
-<li><a href="#s58448473">1.5 中文模型：常见中文LLM介绍</a></li>
-  <li><a href="#s66419512">通义千问</a></li>
-  <li><a href="#s16535883">GLM-4</a></li>
-  <li><a href="#s14504816">Chinese LLaMA & Alpaca详解</a></li>
-  <li><a href="#s54531129">GLM详解</a></li>
-<li><a href="#s34458652">模型能力评测对比</a></li>
-<li><a href="#s69951543">中文LLaMA & Alpaca大模型</a></li>
-<li><a href="#s13885324">1.5 中文模型：Chinese LLaMA & Alpaca详解</a></li>
-  <li><a href="#s33096420">训练框架</a></li>
-  <li><a href="#s81512793">三步走策略</a></li>
-<li><a href="#s72556262">1.5 中文模型：GLM详解</a></li>
-  <li><a href="#s75453307">预训练</a></li>
-  <li><a href="#s87711880">模型结构</a></li>
-  <li><a href="#s68994905">微调</a></li>
-<li><a href="#s16262891">2. LLM微调及对齐原理</a></li>
-  <li><a href="#s78799811">2.1 微调技术：微调技术分类</a></li>
-  <li><a href="#s30629970">2.2 BitFit</a></li>
-  <li><a href="#s14292335">2.3 Prefix-Tuning</a></li>
-  <li><a href="#s45347020">2.4 Prompt-Tuning</a></li>
-  <li><a href="#s58057200">2.5 P-Tuning</a></li>
-  <li><a href="#s11376653">2.6 P-Tuning v2</a></li>
-<li><a href="#s31664997">2.1.2 P-Tuning</a></li>
-  <li><a href="#s31865891">背景</a></li>
-  <li><a href="#s63149625">原理</a></li>
-  <li><a href="#s83197714">结构与公式说明</a></li>
-  <li><a href="#s50732736">效果</a></li>
-<li><a href="#s84281559">2.1.3 P-Tuning v2</a></li>
-  <li><a href="#s31865891">背景</a></li>
-  <li><a href="#s63149625">原理</a></li>
-  <li><a href="#s77911467">结构与效果</a></li>
-<li><a href="#s12569741">2.1 微调技术：LoRA（Low-Rank Adaptation）</a></li>
-  <li><a href="#s31865891">背景</a></li>
-  <li><a href="#s63149625">原理</a></li>
-  <li><a href="#s50732736">效果</a></li>
-<li><a href="#s90117607">2.1 微调技术：QLoRA（LoRA变体）</a></li>
-  <li><a href="#s63149625">原理</a></li>
-<li><a href="#s14280890">2.1 大模型微调技术：总结</a></li>
-  <li><a href="#s32957290">各类微调技术对比</a></li>
-<li><a href="#s51874379">2.2 对齐技术：RLHF-训练流程组成部分</a></li>
-  <li><a href="#s68723426">偏好对齐的意义</a></li>
-  <li><a href="#s85537371">RLHF算法的三个关键组成部分</a></li>
-<li><a href="#s53953438">2.2 对齐技术：RLHF-人类反馈数据收集</a></li>
-  <li><a href="#s13574560">标注人员选择</a></li>
-  <li><a href="#s17660573">人类反馈形式</a></li>
-<li><a href="#s97425459">2.2 对齐技术：RLHF-奖励模型训练</a></li>
-  <li><a href="#s73146786">训练方式</a></li>
-<li><a href="#s70526996">2.2 对齐技术：强化学习微调（RLHF）</a></li>
-  <li><a href="#s32266375">2.2.0 强化学习基础</a></li>
-  <li><a href="#s12149426">2.2.1 四个核心模型</a></li>
-  <li><a href="#s45288682">2.2.2 交互过程</a></li>
-  <li><a href="#s83564642">2.2.3 优化目标</a></li>
-  <li><a href="#s18366676">2.2.4 强化学习微调流程（DeepSpeed-Chat）</a></li>
-<li><a href="#s17892235">2.2 对齐技术：PPO算法及训练流程</a></li>
-  <li><a href="#s49364560">优势函数</a></li>
-  <li><a href="#s74512055">RLHF优势函数的一种设计方式</a></li>
-  <li><a href="#s94896694">训练步骤</a></li>
-<li><a href="#s82607840">PPO（近端策略优化）算法 必考</a></li>
-  <li><a href="#s35820079">核心思想与梯度求解</a></li>
-  <li><a href="#s39974190">似然函数与完整过程</a></li>
-  <li><a href="#s45749677">PPO 训练流程图解</a></li>
-<li><a href="#s32599488">对齐技术：DPO（直接偏好优化）算法 必考</a></li>
-  <li><a href="#s80384913">为什么要引入DPO算法</a></li>
-  <li><a href="#s18326647">神经网络基础概念</a></li>
-  <li><a href="#s91398636">DPO：原理与训练方法</a></li>
-  <li><a href="#s50468852">DPO：loss 损失函数</a></li>
-<li><a href="#s67648355">RLHF 与 DPO 总结对比 重点</a></li>
-<li><a href="#s18450767">其他偏好对齐算法 高频</a></li>
-  <li><a href="#s84975423">KTO（Kahneman-Taversky Optimization）</a></li>
-  <li><a href="#s97002985">SteerLM</a></li>
-<li><a href="#s73345237">课程目录 了解</a></li>
-<li><a href="#s82545999">偏好对齐算法评估与SteerLM</a></li>
-  <li><a href="#s20500100">2.2 其他偏好对齐算法: SteerLM</a></li>
-<li><a href="#s77088417">训练加速算法：分布式并行算法</a></li>
-  <li><a href="#s31865891">背景</a></li>
-  <li><a href="#s44264220">基础概念</a></li>
-  <li><a href="#s72668673">数据并行</a></li>
-  <li><a href="#s90823097">流水线并行</a></li>
-  <li><a href="#s77001068">虚拟流水线并行 (VPP)</a></li>
-  <li><a href="#s76705364">张量并行 (TP)</a></li>
-  <li><a href="#s68160215">DeepSpeed Ulysses长序列并行</a></li>
-  <li><a href="#s27627891">多维自动并行</a></li>
-<li><a href="#s25691685">训练内存优化算法</a></li>
-  <li><a href="#s69212975">背景与基础概念</a></li>
-  <li><a href="#s66053363">静态内存优化</a></li>
-  <li><a href="#s31493874">动态内存优化</a></li>
-  <li><a href="#s16138070">内存碎片优化/异构内存</a></li>
-<li><a href="#s75965412">计算效率提升算法</a></li>
-  <li><a href="#s15855157">基本概念</a></li>
-  <li><a href="#s42632991">混合精度训练</a></li>
-<li><a href="#s82768417">计算效率提升算法——Flash Attention系列</a></li>
-  <li><a href="#s45508644">Flash Attention</a></li>
-  <li><a href="#s55365033">Flash Attention 2</a></li>
-  <li><a href="#s38835990">内存层级与带宽</a></li>
-  <li><a href="#s84097745">FlashAttention 循环结构</a></li>
-  <li><a href="#s44927187">Flash Attention 2 改进点：Warp划分对比</a></li>
-<li><a href="#s67996694">计算效率提升算法——混合精度训练</a></li>
-  <li><a href="#s31995239">核心原理</a></li>
-  <li><a href="#s89290414">具体步骤（以FP16为例）</a></li>
-  <li><a href="#s70794877">算法效果</a></li>
-  <li><a href="#s78884881">混合精度训练进一步优化：微软 FP8-LLM</a></li>
-<li><a href="#s82422961">训练加速算法总结</a></li>
-  <li><a href="#s79859676">分布式并行加速算法</a></li>
-  <li><a href="#s39718574">训练内存优化加速算法</a></li>
-  <li><a href="#s75965412">计算效率提升算法</a></li>
-<li><a href="#s17412788">推理加速算法背景与概述</a></li>
-  <li><a href="#s50682729">大模型推理分阶段步骤说明</a></li>
-  <li><a href="#s35096252">加速技术与推理阶段关系</a></li>
-<li><a href="#s24046868">推理加速算法：量化压缩加速算法——背景</a></li>
-  <li><a href="#s40311768">大模型带来的推理挑战与训练后量化的优势</a></li>
-  <li><a href="#s51350067">业界大模型压缩工具现状</a></li>
-<li><a href="#s57448251">推理加速算法：量化压缩加速算法——基本概念</a></li>
-  <li><a href="#s78650308">量化与反量化</a></li>
-  <li><a href="#s71666041">4bit数据量化-反量化示例</a></li>
-<li><a href="#s28240224">推理加速算法：量化压缩加速算法——算法分类</a></li>
-  <li><a href="#s44286733">1. 仅权重量化（精度高，收益低）</a></li>
-  <li><a href="#s63058071">2. 权重激活全量化（精度低，收益高）</a></li>
-<li><a href="#s52421584">大模型W8A8量化经典算法—— SmoothQuant</a></li>
-  <li><a href="#s31995239">核心原理</a></li>
-  <li><a href="#s78614455">具体步骤</a></li>
-  <li><a href="#s70794877">算法效果</a></li>
-<li><a href="#s55532392">大模型W8A8量化经典算法—— Outlier Suppression+</a></li>
-  <li><a href="#s31995239">核心原理</a></li>
-  <li><a href="#s78614455">具体步骤</a></li>
-  <li><a href="#s70794877">算法效果</a></li>
-<li><a href="#s44000836">大模型权重量化业界算法—— AWQ</a></li>
-  <li><a href="#s31995239">核心原理</a></li>
-<li><a href="#s10745169">AWQ量化算法 必考</a></li>
-<li><a href="#s44784019">3.2 推理加速算法</a></li>
-  <li><a href="#s66564733">并行解码——基本概念 重点</a></li>
-  <li><a href="#s54121569">并行解码——技术方案概述 高频</a></li>
-  <li><a href="#s92211326">基于大小模型投机的并行解码——Big Little Decoder 重点</a></li>
-  <li><a href="#s72684210">基于多头注意力的并行解码——Medusa 重点</a></li>
-  <li><a href="#s50670301">基于自投机的并行解码——Lookahead（前瞻解码） 高频</a></li>
-  <li><a href="#s19897445">长序列压缩加速算法——背景 了解</a></li>
-  <li><a href="#s51110960">长序列压缩加速算法——基本概念 重点</a></li>
-  <li><a href="#s50134134">长序列压缩加速算法——方案概述 高频</a></li>
-  <li><a href="#s21707839">长序列压缩加速算法——具体算法 必考</a></li>
-  <li><a href="#s62105945">推理加速算法总结 重点</a></li>
-<li><a href="#s79379065">4.1 检索增强生成（RAG）概述 必考</a></li>
-<li><a href="#s57866435">4.2 主流 RAG 算法 高频</a></li>
-<li><a href="#s42832531">RAG应用领域</a></li>
-<li><a href="#s11630643">4. RAG技术详解</a></li>
-  <li><a href="#s52161050">4.1 传统Transformer模型与文档嵌入流程</a></li>
-  <li><a href="#s27775416">4.2 主流RAG算法</a></li>
-  <li><a href="#s31894776">4.2.1 RAG Embedding</a></li>
-  <li><a href="#s74790678">4.2.2 RAG Index</a></li>
-  <li><a href="#s74848185">4.2.3 RAG Reranker（重排序）</a></li>
-  <li><a href="#s82334679">4.2.4 GraphRAG</a></li>
-<li><a href="#s51874288">4.3 向量检索概述</a></li>
-  <li><a href="#s57688863">4.3.1 什么是向量检索</a></li>
-  <li><a href="#s15240347">4.3.2 业界向量检索技术应用</a></li>
-  <li><a href="#s49414050">4.3.3 业界经典ANN算法选型</a></li>
-<li><a href="#s26042183">4.4 主流向量检索算法</a></li>
-  <li><a href="#s12307720">基于划分的算法</a></li>
-  <li><a href="#s82046701">量化算法</a></li>
-  <li><a href="#s44161219">图算法（HNSW）</a></li>
-  <li><a href="#s18893768">图算法（NSG、SSG）</a></li>
-  <li><a href="#s19803762">混存算法</a></li>
-  <li><a href="#s45127340">GPU加速-CAGRA算法（建图）</a></li>
-  <li><a href="#s21198755">GPU加速-CAGRA算法（检索）</a></li>
-<li><a href="#s33403860">5.1 分布式训练与GPU/NPU框架</a></li>
-  <li><a href="#s45193062">NVIDIA Megatron</a></li>
-  <li><a href="#s53095370">Microsoft DeepSpeed（ZeRO, ZeRO++）</a></li>
-<li><a href="#s63851509">DeepSpeed特性与ZeRO内存消耗对比</a></li>
-  <li><a href="#s64372022">ZeRO 内存消耗对比 重点</a></li>
-<li><a href="#s18033250">分布式训练与GPU/NPU框架</a></li>
-  <li><a href="#s34421587">昇腾上的Megatron训练新手大礼包：MindSpeed ModelLink 了解</a></li>
-  <li><a href="#s53155982">GPU 上的 DeepSpeed 训练新手大礼包：LLaMA-Factory 高频</a></li>
-  <li><a href="#s82328857">如何量化训练的性能（速度）？ 必考</a></li>
-<li><a href="#s34078584">昇腾实战（基于 ModelLink）</a></li>
-  <li><a href="#s65641555">环境准备</a></li>
-  <li><a href="#s15462036">语料准备 重点</a></li>
-<li><a href="#s59575791">训练性能评估与监控</a></li>
-  <li><a href="#s34710196">训练吞吐量计算</a></li>
-  <li><a href="#s40515514">MFU（Model FLOPS Utilization）</a></li>
-<li><a href="#s11627507">5.2 昇腾实战（基于ModelLink）</a></li>
-  <li><a href="#s66992241">ModelLink 简介</a></li>
-  <li><a href="#s65641555">环境准备</a></li>
-  <li><a href="#s35622195">语料准备</a></li>
-  <li><a href="#s34747131">语料准备 - 预训练</a></li>
-  <li><a href="#s63771049">语料准备 - SFT</a></li>
-  <li><a href="#s40025313">5.2.1 分布式训练-预训练</a></li>
-  <li><a href="#s35898712">5.2.2 分布式训练-SFT</a></li>
-  <li><a href="#s75343751">5.2.3 训练日志与性能监控</a></li>
-<li><a href="#s39012872">5.3 分布式推理框架与实战：推理策略</a></li>
-  <li><a href="#s14838530">推理整体流程</a></li>
-<li><a href="#s43167468">文本生成解码策略 必考</a></li>
-  <li><a href="#s84750884">贪心搜索 重点</a></li>
-  <li><a href="#s29188603">Beam Search（波束搜索） 重点</a></li>
-  <li><a href="#s41377727">采样 高频</a></li>
-  <li><a href="#s68852967">Top-K 采样 重点</a></li>
-  <li><a href="#s59141925">Top-p 采样（核采样） 必考</a></li>
-  <li><a href="#s48906021">不同场景的最佳参数配置 了解</a></li>
-<li><a href="#s52249643">分布式训练日志分析 高频</a></li>
-  <li><a href="#s16213978">启动及配置阶段</a></li>
-  <li><a href="#s46518462">检查点（权重）加载</a></li>
-  <li><a href="#s75686331">数据集加载</a></li>
-  <li><a href="#s69330891">训练过程与性能指标计算 重点</a></li>
-<li><a href="#s52130395">分布式推理框架与实战：推理流程 必考</a></li>
-  <li><a href="#s10117970">推理流程步骤</a></li>
-<li><a href="#s74358081">代码场景（beam search）—— 更准确、无语法错误</a></li>
-<li><a href="#s76280709">ModelLink 在线推理</a></li>
-  <li><a href="#s61658538">配置与启动步骤</a></li>
-<li><a href="#s24153968">推理并行、加速框架</a></li>
-  <li><a href="#s36669111">Text Generation Inference (TGI)</a></li>
-  <li><a href="#s53258085">vLLM</a></li>
-<li><a href="#s81151669">权重转换与 vLLM 服务启动</a></li>
-  <li><a href="#s73637682">ModelLink 权重转回 HuggingFace 权重</a></li>
-  <li><a href="#s11073035">按 vLLM 框架方式启动服务</a></li>
-</ul>
-</div><div class="epa-main">
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><div class="epa-main">
 <h2 id="s12041101">课程简介与培训目标</h2>
 <p>《LLM技术剖析与应用创新进阶》课程主要介绍业界主流LLM关键技术详解、微调及对齐原理解析、RAG与向量检索算法、大模型训练和推理加速算法、大模型应用实践。学完后应掌握GPT系列、LLaMA系列、Mistral、Phi等大模型技术，LoRA、QLoRA等微调算法，RLHF、DPO等对齐算法，主流RAG与向量检索算法，以及基于昇腾NPU和ModelLink框架的训推实践。</p>
 
@@ -1652,19 +1383,19 @@ for name, param in model_bitfit.named_parameters():
 
 <h3 id="s21707839">长序列压缩加速算法——具体算法 <span class="tag-must">必考</span></h3>
 
-<h4>Streaming LLM</h4>
+<h4 id="sec-auto-1">Streaming LLM</h4>
 <p><strong>核心原理</strong>：主要作用于decoding阶段。LLM会缓存之前所有token的KV，导致内存使用过多或增加推理时延。<span class="kp">关键现象</span>——首Token的价值较高且比较关键：由于删除初始token的KV，SoftMax函数中的分母会被极大改变，导致attention的分布偏离正常推理的预期。</p>
 <p><strong>具体步骤</strong>：固定前4个token的KV；滑动KV窗口来保留最新的token的KV；无需重新进行训练。</p>
 <div class="tldr">可提升增量推理性能，在同精度下，相比Sliding Window Re-computation性能提升近22X；但在LongBench数据集精度损失较大。</div>
 <p><strong>算法示意图说明</strong>：在生成Token 7、8、9的过程中，通过保留Attention Sinks（初始token）和Rolling KV Cache（最新token），驱逐中间的Evicted Tokens，实现长序列流式生成。</p>
 
-<h4>TopK Attention 重要性得分</h4>
+<h4 id="sec-auto-2">TopK Attention 重要性得分</h4>
 <p><strong>核心原理</strong>：主要作用于prefill阶段。为了压缩预填充阶段的KV Cache，通过计算token的attention分数并进行累加，作为Token的得分，只保留其中重要的token，对KV Cache进行压缩。</p>
 <p><strong>具体步骤</strong>：对attention矩阵按列求和，得到attention score；固定最开始的与最新的attention score；针对中间部分求取TopK；保留TopK的attention score；将固定的与TopK的attention score进行组合。</p>
 <div class="tldr">精度基本保持无损，KV Cache压缩50%以上。</div>
 <p><strong>算法示意图说明</strong>：在Self-Attention中，通过Query、Key、Value计算Attention矩阵。对Attention矩阵按列求和得到Attention score，对中间部分求取TopK，结合首尾固定的得分，丢弃其余不重要的得分。</p>
 
-<h4>H2O (Heavy-Hitter Oracle)</h4>
+<h4 id="sec-auto-3">H2O (Heavy-Hitter Oracle)</h4>
 <p><strong>核心原理</strong>：主要作用于prefill + decoding阶段。<span class="kp">Attention稀疏假设</span>：尽管LLM是密集训练的，但是结果的attention分数矩阵是高度稀疏的，几乎所有层中稀疏度超过95%。<span class="kp">关键Token假设</span>：所有token累计attention得分遵循幂律分布。</p>
 <p><strong>具体步骤</strong>：初始化KV缓存列表，将前k个条目设为重命中，后k个条目设为最近使用的令牌；在每次解码迭代中，计算每个令牌的注意力分数，并根据这些分数更新H2列表。</p>
 <div class="tldr">最高可减少80%的KV缓存，保持与使用全量KV缓存相当的推理精度。</div>
@@ -2068,14 +1799,14 @@ for name, param in model_bitfit.named_parameters():
 <p>--trust-remote-code 允许执行远程代码</p>
 <p>--dtype 指定数据类型（如float16）</p>
 <p>--port 指定服务端口</p>
-<div class="checkpoint">ModelLink权重转回HuggingFace权重时，新权重会保存在哪个目录下？<details class="cp-answer"><summary>参考答案</summary>保存在--save-dir指定路径下的 mg2hg/ 子目录中。</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<div class="checkpoint">ModelLink权重转回HuggingFace权重时，新权重会保存在哪个目录下？<details class="cp-answer"><summary>参考答案</summary>保存在--save-dir指定路径下的 mg2hg/ 子目录中。</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center" id="sec-auto-4">章节测试</h2>
 <p style="text-align:center;color:var(--ink-light);font-size:0.95em">566题 · 满分3056分</p>
 
 <div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
 <div id="questions-container"></div>
 <div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
 <div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
-<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3>📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3 id="sec-auto-5">📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
 
 
 <script>
@@ -2187,7 +1918,7 @@ function build() {
     var q = Q[i];
     if (q.type !== sec) {
       sec = q.type;
-      if (titles[q.type]) h += '<h3>' + titles[q.type] + '</h3>';
+      if (titles[q.type]) h += '<h3 id="sec-auto-6">' + titles[q.type] + '</h3>';
     }
 
     var qid = 'q' + i;

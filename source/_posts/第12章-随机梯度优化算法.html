@@ -219,172 +219,11 @@ description: 本章核心主题：课后题与模拟自测、1 课后题、1.1 �
 </style>
 <style>
 .epa-scope [id] { scroll-margin-top: 14px; }
-.epa-scope #panel-kn > h1:empty { display: none; }
-@media (min-width: 1280px) {
-  .epa-scope #panel-kn.active { display: flex; gap: 24px; align-items: flex-start; }
-  .epa-scope #panel-kn > .toc {
-    position: sticky; top: 12px;
-    width: 230px; min-width: 230px; box-sizing: border-box;
-    max-height: calc(100vh - 24px); overflow-y: auto;
-    margin: 0;
-  }
-  .epa-scope #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
-}
 .epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
-/* NexT 布局适配：EPA 文章页隐藏主题右侧栏（正文自带 sticky TOC 侧栏），并加宽主列 */
-body:has(.epa-scope) .sidebar,
-body:has(.epa-scope) .sidebar-toggle { display: none !important; }
-body:has(.epa-scope) main,
-body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-width: 1160px !important; }
 </style>
-<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
-<div class="toc">
-<h2>目录</h2>
-<ul>
-<li><a href="#s49126511">课后题与模拟自测</a></li>
-  <li><a href="#s71299623">1 课后题</a></li>
-  <li><a href="#s15916288">1.1 时序数据增强</a></li>
-  <li><a href="#s53570083">1.2 AutoML 超参调优</a></li>
-  <li><a href="#s28135418">1.3 AI 分布式训练加速算法</a></li>
-  <li><a href="#s22208788">1.4 AI 模型压缩算法</a></li>
-  <li><a href="#s30182649">1.5 随机梯度优化算法</a></li>
-  <li><a href="#s86521908">2 模拟自测</a></li>
-  <li><a href="#s80923423">2.1 单选题</a></li>
-  <li><a href="#s67971018">2.2 时序数据增强典型算法_Time GAN</a></li>
-  <li><a href="#s31018918">2.3 时域时序数据增强典型算法_DBA算法</a></li>
-  <li><a href="#s41519011">2.4 常用的平滑优化方法一：下降法</a></li>
-<li><a href="#s50221952">科目二 - AI基础算法 - 题目汇总（2.1.8 ~ 2.1.20）</a></li>
-  <li><a href="#s46893449">1 模型量化算法</a></li>
-  <li><a href="#s53534428">1.1 量化感知训练（QAT: Quantization-Aware Training）</a></li>
-  <li><a href="#s18341488">1.2 训练后量化（PTQ: Post-training Quantization）</a></li>
-  <li><a href="#s22151668">2 AI方法与模型</a></li>
-  <li><a href="#s67984760">2.1.8 AI 方法有丰富的模型</a></li>
-  <li><a href="#s66632388">3 数据增强</a></li>
-  <li><a href="#s67518365">2.1.9 α 剪枝自动增强</a></li>
-  <li><a href="#s82212150">3.1 时序数据自动增强 — α剪枝自动增强</a></li>
-  <li><a href="#s39744944">4 网络结构搜索（NAS）</a></li>
-  <li><a href="#s19201408">2.1.10 NAS 技术的关键技术点</a></li>
-  <li><a href="#s54849340">4.1 NAS 定义和原理</a></li>
-  <li><a href="#s79544559">5 数学优化基础</a></li>
-  <li><a href="#s84372656">2.1.11 凸集</a></li>
-  <li><a href="#s75177926">5.1 凸集详细定义</a></li>
-  <li><a href="#s80831244">6 超参数优化</a></li>
-  <li><a href="#s33523937">2.1.12 算法超参数</a></li>
-<li><a href="#s23483013">常见ML算法的超参数及优化算法选择 重点</a></li>
-<li><a href="#s53003708">时间序列分析 高频</a></li>
-  <li><a href="#s30228603">时间序列数据的概念与应用</a></li>
-<li><a href="#s34536068">知识蒸馏 了解</a></li>
-  <li><a href="#s14837424">自蒸馏算法</a></li>
-<li><a href="#s64295674">随机梯度与方差减少方法 必考</a></li>
-  <li><a href="#s45966342">随机平均梯度（SAG）</a></li>
-  <li><a href="#s58827147">随机梯度方法线性收敛原理——方差减少</a></li>
-<li><a href="#s35977308">超参数优化基础 重点</a></li>
-  <li><a href="#s82334346">超参数的基本概念</a></li>
-  <li><a href="#s19438524">网格搜索</a></li>
-  <li><a href="#s31489864">随机搜索</a></li>
-  <li><a href="#s89613868">贝叶斯优化</a></li>
-<li><a href="#s74160284">内存与计算优化 高频</a></li>
-  <li><a href="#s31407935">内存优化算法</a></li>
-  <li><a href="#s12506568">计算加速与通信优化</a></li>
-<li><a href="#s76608749">时序数据增强方法 重点</a></li>
-<li><a href="#s30684348">数学优化基础 了解</a></li>
-<li><a href="#s17452277">模型量化 了解</a></li>
-<li><a href="#s59417599">数据受限场景下的建模 了解</a></li>
-<li><a href="#s70351781">4. 数据与建模挑战及关键技术</a></li>
-  <li><a href="#s17230659">4.1.1 主要挑战</a></li>
-  <li><a href="#s46925502">4.1.2 关键技术</a></li>
-  <li><a href="#s26598908">4.2 数据量受限场景下的建模问题 -- CV数据仿真</a></li>
-  <li><a href="#s29051194">4.3 基于产品演进的建模思路 - 多种下游任务场景下的建模问题</a></li>
-  <li><a href="#s88970898">4.3.1 自监督大模型的优势</a></li>
-  <li><a href="#s33142519">4.4 时序数据自动增强—α剪枝自动增强</a></li>
-<li><a href="#s61568956">5. 标注不完备场景下的建模问题 - 主动学习</a></li>
-  <li><a href="#s89987877">5.1 整体过程</a></li>
-  <li><a href="#s47424040">5.2 选择待标注高价值样本的策略</a></li>
-  <li><a href="#s69956035">5.3 实际业务问题中应用主动学习的限制</a></li>
-<li><a href="#s51629255">6. 原始问题需求分析</a></li>
-  <li><a href="#s78099985">6.1 原始需求分析中加入AI需求分析过程</a></li>
-<li><a href="#s75679780">7. 选择题汇总与考点解析</a></li>
-  <li><a href="#s72179076">2.1.21 昇腾 Ascend310P NPU 的 AI Core 支持的数值类型</a></li>
-  <li><a href="#s36150992">2.1.22 数据增加方法</a></li>
-  <li><a href="#s91619648">2.1.23 自监督学习</a></li>
-  <li><a href="#s19071084">2.1.24 数学优化问题的要素</a></li>
-  <li><a href="#s18253822">2.1.25 α剪枝增强使用的步骤</a></li>
-  <li><a href="#s26614196">2.1.26 主动学习</a></li>
-  <li><a href="#s22892295">2.1.27 原始问题需求分析</a></li>
-  <li><a href="#s15539057">2.1.28 AI 算法目标</a></li>
-  <li><a href="#s15537632">2.1.29 说法错误</a></li>
-  <li><a href="#s73816877">2.1.30 大规模机器学习中凸优化问题中的线性收敛率</a></li>
-  <li><a href="#s65152535">2.1.31 PyTorch(1.8.0 版本)支持的技术</a></li>
-  <li><a href="#s49975993">2.1.32 对训练数据直接在原始数据域进行基础数据增强的方法</a></li>
-  <li><a href="#s59476629">2.1.33 2 个超参数优化算法的时间复杂度</a></li>
-  <li><a href="#s45159088">2.1.34 内存足够大的情况下使用数据并行，通信优化的收益最大的场景</a></li>
-  <li><a href="#s74375307">2.1.35 条件数的描述</a></li>
-  <li><a href="#s82139401">2.1.36 量化分辨率</a></li>
-  <li><a href="#s41716800">2.1.37 低精度(fp16 混合精度)训练</a></li>
-  <li><a href="#s32795408">2.1.38 树模型相对更常用的剪枝算法</a></li>
-<li><a href="#s14637775">STL算法与自蒸馏算法</a></li>
-  <li><a href="#s38401549">STL算法关键要素 重点</a></li>
-  <li><a href="#s26436145">自蒸馏算法使用的原因 高频</a></li>
-  <li><a href="#s35713163">自蒸馏算法流程 了解</a></li>
-<li><a href="#s41102048">时序数据增强</a></li>
-  <li><a href="#s33669962">基于自相关性的时序数据增强 重点</a></li>
-  <li><a href="#s64611044">时序数据增强方法概览 必考</a></li>
-  <li><a href="#s12304479">基础时序数据增强 重点</a></li>
-  <li><a href="#s84972117">时序数据自动增强 高频</a></li>
-<li><a href="#s89014415">监督学习与无监督学习</a></li>
-  <li><a href="#s16815929">无监督学习 重点</a></li>
-  <li><a href="#s62436678">监督学习 重点</a></li>
-  <li><a href="#s21219135">半监督学习与自监督学习 高频</a></li>
-<li><a href="#s59092099">知识蒸馏算法</a></li>
-  <li><a href="#s71522687">知识蒸馏分类 重点</a></li>
-  <li><a href="#s78048883">Data Free 蒸馏 高频</a></li>
-<li><a href="#s31734953">超参数优化与分布式训练</a></li>
-  <li><a href="#s33223140">DBSCAN中的超参数eps 重点</a></li>
-  <li><a href="#s31026137">常见ML算法的超参数及优化算法选择 了解</a></li>
-  <li><a href="#s38563572">数据并行训练流程 高频</a></li>
-<li><a href="#s28879405">生成式模型与判别式模型</a></li>
-  <li><a href="#s29038594">生成式模型 重点</a></li>
-<li><a href="#s88525262">AI算法模型与传统软件方法</a></li>
-  <li><a href="#s67627439">AI算法与传统软件的区别 高频</a></li>
-<li><a href="#s54184948">数学优化与AI算法</a></li>
-  <li><a href="#s20650336">数学优化简介 重点</a></li>
-  <li><a href="#s20112258">PSO和GA 高频</a></li>
-  <li><a href="#s58607140">其他AI算法考点 了解</a></li>
-<li><a href="#s14752551">算法差异与优化基础</a></li>
-  <li><a href="#s41360252">PSO与GA算法差异</a></li>
-<li><a href="#s84498116">数学优化手段解决实际问题的完整流程</a></li>
-<li><a href="#s53088157">适应性随机梯度方法</a></li>
-<li><a href="#s41276262">深度神经网络中加速训练改善泛化的经典trick</a></li>
-<li><a href="#s91609393">盘古大模型训练技术</a></li>
-  <li><a href="#s63200026">盘古大模型的训练</a></li>
-<li><a href="#s11322491">模型剪枝评估准则</a></li>
-  <li><a href="#s30562756">参数驱动的评估准则：谱聚类</a></li>
-  <li><a href="#s77677339">数据驱动的评估准则：特征层面</a></li>
-<li><a href="#s35057257">时态特征识别</a></li>
-<li><a href="#s62904044">分布式训练基础</a></li>
-  <li><a href="#s82385093">同步训练和异步训练</a></li>
-  <li><a href="#s78207923">通信集合原语</a></li>
-  <li><a href="#s25558802">流水线并行（模型并行）</a></li>
-  <li><a href="#s55432048">记忆考点</a></li>
-<li><a href="#s74579094">0715 真题</a></li>
-  <li><a href="#s27784728">单选题</a></li>
-  <li><a href="#s89269545">多选题</a></li>
-<li><a href="#s84252552">TimeGAN 概述</a></li>
-<li><a href="#s29858592">深度生成模型与TimeGAN</a></li>
-<li><a href="#s14018220">内存优化：CPU Offloading</a></li>
-  <li><a href="#s14521339">3.2.2 CPU Offloading 不正确的是（）</a></li>
-  <li><a href="#s60381937">知识点补充：内存优化——CPU Offloading / Paging</a></li>
-<li><a href="#s42736327">科目二-AI基础算法-题目汇总（Part 6）</a></li>
-  <li><a href="#s25837844">一、内存优化概述</a></li>
-  <li><a href="#s37890619">二、模型量化算法：训练后量化（PTQ）</a></li>
-  <li><a href="#s74420483">三、时序数据自动增强</a></li>
-  <li><a href="#s85959250">四、强化学习基础</a></li>
-  <li><a href="#s35115889">五、题目汇总</a></li>
-  <li><a href="#s65394779">六、附录：关键知识点详解</a></li>
-</ul>
-</div><div class="epa-main">
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><div class="epa-main">
 <h2 id="s49126511">课后题与模拟自测</h2>
 
 <h3 id="s71299623">1 课后题</h3>
@@ -1056,22 +895,22 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 
 <h3 id="s37890619">二、模型量化算法：训练后量化（PTQ）</h3>
 <p><span class="tag-key">重点</span></p>
-<h4>1. Data-free 训练后量化</h4>
+<h4 id="sec-auto-1">1. Data-free 训练后量化</h4>
 <p>不依赖真实数据，对模型进行量化参数的离线校准，包括：</p>
 <p><span class="kp">基于假设分布与统计</span>：为模型输入随机数据，根据 Activation 的假设分布与统计，计算量化参数。假设激活分布服从正态分布（如 BN 层输出），采用 3σ 统计确定量化的饱和截断区间。</p>
 <p><span class="kp">基于伪样本生成</span>：借助预训练模型提供的内蕴信息与预测信息，构建并训练样本生成模型（如基于 GAN），以生成用于离线校准的伪样本。伪样本合成质量影响量化效果，并存在一定的时间成本；模型量化参数的微调可与生成模型的训练一同进行。</p>
-<h4>2. Label-free 训练后量化</h4>
+<h4 id="sec-auto-2">2. Label-free 训练后量化</h4>
 <p>依赖少量无标注数据，对模型进行量化参数的离线校准。校准数据集可以选取一部分训练数据，或者其他与场景域一致或相关的数据。常见算法包括 <span class="kp">Absmax 算法</span>、<span class="kp">Min-Max EMA 算法</span>、<span class="kp">KL 算法</span>等。</p>
 
 <h3 id="s74420483">三、时序数据自动增强</h3>
-<h4>1. 问题背景</h4>
+<h4 id="sec-auto-3">1. 问题背景</h4>
 <p>自动数据增强按数据集探索最优策略，所有样本采用相同增强策略，忽略了样本间的差异性。</p>
-<h4>2. α剪枝自动增强</h4>
+<h4 id="sec-auto-4">2. α剪枝自动增强</h4>
 <p><span class="tag-must">必考</span></p>
 <p><span class="kp">α剪枝自动增强</span>：时序数据增强的千人千面，样本级增强，为每个时序样本选择最合适的增强策略。</p>
 <p>流程步骤：1. Augment sample（增强样本）；2. Evaluate and calculate loss（评估并计算 loss）；3. Rank and trim（排序和修剪，筛选 Top α loss 样本和 Bottom α loss 样本）；4. 增强样本汇总。</p>
 <blockquote>易错：对 MLP 模型而言，loss 较小样本对模型更新信息小，loss 较大样本对模型更新贡献度大，然而这样会导致更新后的模型在容易样本上性能受损。</blockquote>
-<h4>3. 时序数据增强方法概览</h4>
+<h4 id="sec-auto-5">3. 时序数据增强方法概览</h4>
 <p><span class="tag-freq">高频</span></p>
 <p><span class="kp">基于统计生成模型</span>：核心思想是用统计学方法模拟时序数据（基于时序数据的自相关性，给初始点一个扰动，后续数据点随之扰动）。方法：MAR（mixture of autoregressive models）。</p>
 <p><span class="kp">基于分解的时序数据增强</span>：核心思想是把时序数据分解为某些成分，再对每个成分设计增强方法。方法：STL 算法（分解为 trend/seasonality/residual，调整基础、趋势和季节性的权重，重构确定性部分，对 residual 进行随机性调整）。</p>
@@ -1086,69 +925,69 @@ body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-widt
 <p>不适用的场景：1. 环境无法给出反馈或者无法及时给出反馈；2. 反馈的状态错误或者不准确；3. 环境快速变化，需要能够快速获得准确的应对；4. 试错成本高的场景。</p>
 
 <h3 id="s35115889">五、题目汇总</h3>
-<h4>3.2.3 BO-SMAC 正确的是（　）</h4>
+<h4 id="sec-auto-6">3.2.3 BO-SMAC 正确的是（　）</h4>
 <p>选项：A、适合处理高维输入参数、同时适合离散和连续输入参数；B、探索能力强；C、不易过拟合；D、训练快、易实现。</p>
 <p>正确答案：ABCD</p>
-<h4>3.2.4 α剪枝自动增强算法（　）</h4>
+<h4 id="sec-auto-7">3.2.4 α剪枝自动增强算法（　）</h4>
 <p>选项：A、为每个时序样本选择最合适的增强策略；B、计算每个生成样本的loss；C、保留loss最小样本；D、保留loss最大样本。</p>
 <p>正确答案：ABCD</p>
 <blockquote>易错：考察α剪枝算法流程：样本级增强算法，对每个样本执行多个增强策略并选优，需要完全掌握算法原理。</blockquote>
-<h4>3.2.5 属于高阶时序数据增强方法的是（　）</h4>
+<h4 id="sec-auto-8">3.2.5 属于高阶时序数据增强方法的是（　）</h4>
 <p>选项：A、基于统计生成模型；B、频域数据增强；C、基于学习方法的时序数据增强；D、时域数据增强。</p>
 <p>正确答案：AC</p>
-<h4>3.2.6 支持并行训练库包括（　）</h4>
+<h4 id="sec-auto-9">3.2.6 支持并行训练库包括（　）</h4>
 <p>选项：A、torch.DistributedDataParallel；B、DeepSpeed；C、OpenMPI；D、Megatron。</p>
 <p>正确答案：ABD</p>
-<h4>3.2.7 关于复杂系统的分析原则正确的是（　）</h4>
+<h4 id="sec-auto-10">3.2.7 关于复杂系统的分析原则正确的是（　）</h4>
 <p>选项：A、系统目标可分解为功能目标、性能目标、可靠性目标；B、相比传统软件，AI系统往往增加了可靠性目标；C、功能目标由功能实体组合来实现；D、复杂系统分目标建立关键功能和模块。</p>
 <p>正确答案：ACD</p>
-<h4>3.2.8 关于高斯回归过程正确的是（　）</h4>
+<h4 id="sec-auto-11">3.2.8 关于高斯回归过程正确的是（　）</h4>
 <p>选项：A、使用高斯过程对数据进行回归的非参数模型。B、假设2022年，每日天气各自符合一个特定的多元高斯分布（温度、湿度、风力），则全年天气情况是一个高斯过程。C、假设一个区域下方有煤炭，假设每个点能挖掘的煤炭量符合一个特定的一元高斯分布，则该区域煤炭挖掘量是一个高斯过程。D、BO-GP是代理函数为高斯过程回归算法，是贝叶斯优化算法中效果最优的，在各种场合下都适用。</p>
 <p>正确答案：ABC</p>
-<h4>3.2.9 量化能够提升模型的推理性能（　）</h4>
+<h4 id="sec-auto-12">3.2.9 量化能够提升模型的推理性能（　）</h4>
 <p>选项：A、量化的数据加载更快；B、量化改变了模型结构；C、量化增加了模型精度；D、NPU的INT8算力比FP16高。</p>
 <p>正确答案：AD</p>
 <blockquote>易错：原卷标注 ABC 及“ABC错”均存在争议；通常认为量化不改变模型结构（B错），但会使精度降低而非增加（C错），故选 AD。</blockquote>
-<h4>3.2.10 BO-TPE 流程包括（　）</h4>
+<h4 id="sec-auto-13">3.2.10 BO-TPE 流程包括（　）</h4>
 <p>选项：A、计算观测点之间的协方差矩阵；B、生成g(x)和l(x)；C、生成采样点，通过计算log(g(x))-log(l(x))最小值；D、训练集分为好、坏两类。</p>
 <p>正确答案：BCD</p>
 <blockquote>易错：原卷标注 ABCD 有误，真题答案为 BCD。BO-TPE 流程图：1. t = 0；2. 判断 t < T？否：结束；是：将结果加入训练集；3. 切分训练集为好、坏两类；4. 评估超参；5. 拟合两个 KDE g(x), l(x)；6. 生成采样点，并求出 log(g(x)) - log(l(x)) 最小的点作为下个迭代的超参。</blockquote>
-<h4>3.2.11 凸集描述正确的是（　）</h4>
+<h4 id="sec-auto-14">3.2.11 凸集描述正确的是（　）</h4>
 <p>选项：A、凸集任意两个点之间的线段上的点也属于该集合；B、一个凸包是点的凸组合；C、范数球不是凸集；D、多面体是半平面（即线性不等式）和超平面（即线性等式）的交集。</p>
 <p>正确答案：ABD</p>
-<h4>3.2.12 全局最优解和局部最优解（　）</h4>
+<h4 id="sec-auto-15">3.2.12 全局最优解和局部最优解（　）</h4>
 <p>选项：A、凸优化问题的局部最优解与全局最优解等价；B、全局最优解是优化的终极目标；C、全局最优解一般多项式时间可解；D、在一般优化问题中两者不等价。</p>
 <p>正确答案：ABD</p>
 <blockquote>易错：C 为错误选项，全局最优解在一般优化问题（非凸）中通常无法在多项式时间内找到。</blockquote>
-<h4>3.2.13 强化学习正确的是（　）</h4>
+<h4 id="sec-auto-16">3.2.13 强化学习正确的是（　）</h4>
 <p>选项：A、不适用环境快速变化的；B、能适用于试错成本高的场景；C、理论上只要能够形成反馈的环境都适合使用强化学习方法；D、本质上是一个马尔科夫决策过程。</p>
 <p>正确答案：ACD</p>
-<h4>3.2.14 模型并行正确的是（　）</h4>
+<h4 id="sec-auto-17">3.2.14 模型并行正确的是（　）</h4>
 <p>选项：A、可分为横向并行和纵向并行；B、每个NPU上拷贝一份完整模型；C、数据并行属于模型并行的一种形式；D、解决大模型难以在单卡上存储以及训练的问题。</p>
 <p>正确答案：AD</p>
-<h4>3.2.15 Data-free 训练后的量化包含（　）</h4>
+<h4 id="sec-auto-18">3.2.15 Data-free 训练后的量化包含（　）</h4>
 <p>选项：A、基于伪样本生成；B、基于假设分布与统计；C、KL算法；D、Min-Max EMA算法。</p>
 <p>正确答案：AB</p>
 <blockquote>易错：C、D 属于 Label-free 训练后量化的常见算法。</blockquote>
-<h4>3.2.16 大模型监督学习的特点（　）</h4>
+<h4 id="sec-auto-19">3.2.16 大模型监督学习的特点（　）</h4>
 <p>选项：A、样本维度可以很高；B、预测函数可以是神经网络；C、回归类问题的一个典型应用；D、预测函数可以是线性函数。</p>
 <p>正确答案：ABCD</p>
 
 <h3 id="s65394779">六、附录：关键知识点详解</h3>
-<h4>BO-SMAC 算法</h4>
+<h4 id="sec-auto-20">BO-SMAC 算法</h4>
 <p><span class="tag-info">了解</span></p>
 <p>SMAC 全称 Sequential Model-Based Optimization for General Algorithm Configuration，算法在 2011 年被 Hutter 等人提出。该算法的提出即解决高斯回归过程中参数类型不能为离散的情况。</p>
 <p>定义：以<span class="kp">随机森林</span>为代理函数：用每棵子树的输出计算均值，方差作为代理模型的输出。采用 <span class="kp">EI（expected improvement）</span> 作为其采集函数生成新的采样点。采集函数会根据代理模型选取均值小或方差大的点进行采样。</p>
 <p>随机森林：由多个随机生成的决策树组成的决策模型。不同树的不同决策结果可反映输出结果的随机分布。适合处理高维输入参数、同时适合离散和连续输入参数、训练快、易实现、不易过拟合。</p>
 <p>方法特性：随机森林擅长处理离散值输入，因此 SMAC 对离散值多的优化问题比较擅长。随机森林的子树有非常大的多样性，对于探索次数较少的点会产生较大的方差，使得 SMAC 具有较优的探索能力。</p>
-<div class="checkpoint">BO-SMAC算法的代理函数是什么？<details class="cp-answer"><summary>参考答案</summary>随机森林</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<div class="checkpoint">BO-SMAC算法的代理函数是什么？<details class="cp-answer"><summary>参考答案</summary>随机森林</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center" id="sec-auto-21">章节测试</h2>
 <p style="text-align:center;color:var(--ink-light);font-size:0.95em">205题 · 满分1082分</p>
 
 <div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
 <div id="questions-container"></div>
 <div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
 <div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
-<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3>📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3 id="sec-auto-22">📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
 
 
 <script>
@@ -1260,7 +1099,7 @@ function build() {
     var q = Q[i];
     if (q.type !== sec) {
       sec = q.type;
-      if (titles[q.type]) h += '<h3>' + titles[q.type] + '</h3>';
+      if (titles[q.type]) h += '<h3 id="sec-auto-23">' + titles[q.type] + '</h3>';
     }
 
     var qid = 'q' + i;

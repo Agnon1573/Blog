@@ -51,31 +51,32 @@ hexo clean; hexo g
 - [ ] scope = true，bg 纸色、fontSize 18px、padding 含 28px 36px
 - [ ] NexT 全局无污染：导航字体仍为 Lato/PingFang（非微软雅黑），`document.querySelector('.menu-item a')` fontFamily 不含 "Microsoft YaHei" 开头
 
-### 3.1 目录侧边栏 + 布局测试（视口 1440px，EPA 文章）
+### 3.1 侧栏目录 + 布局测试（EPA 文章，2026-10-12 目录上侧边栏改版）
 
 ```js
 () => {
-  const panel = document.getElementById('panel-kn');
-  const toc = document.querySelector('#panel-kn > .toc');
-  const main = document.querySelector('#panel-kn > .epa-main');
   const inner = document.querySelector('.main-inner');
   const sidebar = document.querySelector('.sidebar');
+  const toc = document.querySelector('.post-toc');
+  const ir = inner.getBoundingClientRect(), sr = sidebar.getBoundingClientRect();
   return JSON.stringify({
-    flex: getComputedStyle(panel).display === 'flex',
-    tocSticky: getComputedStyle(toc).position === 'sticky',
-    tocW: Math.round(toc.getBoundingClientRect().width),          // ≈230
-    mainW: Math.round(main.getBoundingClientRect().width),        // ≥700（1440 视口）
-    innerW: Math.round(inner.getBoundingClientRect().width),      // ≈1105（Muse 加宽后）
-    nexTSidebarHidden: !sidebar || getComputedStyle(sidebar).display === 'none'
+    innerW: Math.round(ir.width),                 // 800（Muse 默认）
+    innerLeft: Math.round(ir.left),               // ≈45
+    sidebarVisible: getComputedStyle(sidebar).display === 'block',
+    sidebarW: Math.round(sr.width),               // 320
+    sidebarToc: !!toc,
+    tocEntries: document.querySelectorAll('.post-toc .nav-item').length,
+    tocBogusAnchor: !!document.querySelector('.post-toc a[href="#panel-kn"]'),  // 必须为 false
+    inContentToc: !!document.querySelector('.epa-scope .toc')                    // 必须为 false
   });
 }
 ```
 
-- [ ] 全部符合注释值
-- [ ] tab 切换：切到"章节测试" panel-kn 隐藏、题卡渲染（.q-card > 0）、可作答（.option.selected）；切回恢复 flex
-- [ ] 锚点跳转：点击 TOC 链接 scrollY 变化
-- [ ] 视口 <1280px：panel-kn display=`block`、toc position=`static`（回落叠放）
-- [ ] 非 EPA 页（归档/分类/首页）：NexT sidebar 正常显示（站点概览）
+- [ ] innerW=800、innerLeft≈45（与普通文章页 hello-world 几何一致，内容不再左偏）
+- [ ] sidebar 正常显示且含文章目录；无 `#panel-kn` 假锚点、无页内 `.toc`
+- [ ] tab 切换：切到"章节测试" panel-kn 隐藏、题卡渲染（.q-card > 0）、可作答（.option.selected）
+- [ ] 锚点跳转：点击侧栏目录链接（如 `#sXXXX` / `#sec-auto-N`）目标元素 getBoundingClientRect().top 落在 0~50
+- [ ] 非 EPA 页（归档/分类/首页）：NexT sidebar 显示站点概览
 
 ### 3.2 首页摘要测试
 
@@ -86,7 +87,7 @@ hexo clean; hexo g
 
 - [ ] 首页 https://agnon1573.github.io/Blog/ 正常列出文章摘要（见 3.2）
 - [ ] 分类页 `/Blog/categories/决策推理/` 可访问
-- [ ] 抽查文章页（建议第3章，公式最多）：NexT article 框架（标题/日期/分类/摘要）、TOC 侧栏、公式（见第 2 节）、tab 作答、giscus 评论区加载（新文章显示"Discussion not found"属正常，首评自动创建）
+- [ ] 抽查文章页（建议第3章，公式最多）：NexT article 框架（标题/日期/分类/摘要）、侧栏文章目录（见 3.1）、公式（见第 2 节）、tab 作答、giscus 评论区加载（新文章显示"Discussion not found"属正常，首评自动创建）
 - [ ] 部署后 GitHub Pages 构建需 1~3 分钟，未生效时用 `?v=N` 参数刷新并等待重试
 
 ## 5. Git 同步测试（框架变更后必做，见 rule.md 规则 1）

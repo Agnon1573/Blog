@@ -219,282 +219,11 @@ description: 本章核心主题：一、基本概念、1. 强化学习与机器�
 </style>
 <style>
 .epa-scope [id] { scroll-margin-top: 14px; }
-.epa-scope #panel-kn > h1:empty { display: none; }
-@media (min-width: 1280px) {
-  .epa-scope #panel-kn.active { display: flex; gap: 24px; align-items: flex-start; }
-  .epa-scope #panel-kn > .toc {
-    position: sticky; top: 12px;
-    width: 230px; min-width: 230px; box-sizing: border-box;
-    max-height: calc(100vh - 24px); overflow-y: auto;
-    margin: 0;
-  }
-  .epa-scope #panel-kn > .epa-main { flex: 1 1 auto; min-width: 0; }
-}
 .epa-scope .epa-main table { display: block; max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main pre { max-width: 100%; overflow-x: auto; }
 .epa-scope .epa-main mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
-/* NexT 布局适配：EPA 文章页隐藏主题右侧栏（正文自带 sticky TOC 侧栏），并加宽主列 */
-body:has(.epa-scope) .sidebar,
-body:has(.epa-scope) .sidebar-toggle { display: none !important; }
-body:has(.epa-scope) main,
-body:has(.epa-scope) .main-inner { width: min(1160px, 100%) !important; max-width: 1160px !important; }
 </style>
-<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><h1></h1>
-<div class="toc">
-<h2>目录</h2>
-<ul>
-<li><a href="#s52053759">一、基本概念</a></li>
-  <li><a href="#s61434321">1. 强化学习与机器学习 重点</a></li>
-  <li><a href="#s80614191">2. 强化学习的分类 高频</a></li>
-  <li><a href="#s34240417">3. 马尔科夫决策过程（MDP） 必考</a></li>
-  <li><a href="#s22655114">4. 强化学习基本概念 重点</a></li>
-<li><a href="#s61035161">二、贝尔曼方程</a></li>
-  <li><a href="#s78309267">1. 贝尔曼方程简介 高频</a></li>
-  <li><a href="#s47090681">2. 价值函数的贝尔曼方程</a></li>
-  <li><a href="#s68479539">3. 状态与动作的期望关系</a></li>
-  <li><a href="#s69258138">4. Bellman 期望方程 重点</a></li>
-<li><a href="#s67519315">三、多臂老虎机</a></li>
-  <li><a href="#s90431491">1. 探索与利用 必考</a></li>
-  <li><a href="#s55086826">2. 常见算法</a></li>
-<li><a href="#s29798120">四、表格解决方法</a></li>
-  <li><a href="#s44330524">1. 动态规划 重点</a></li>
-  <li><a href="#s84736960">2. 蒙特卡洛方法（MC） 高频</a></li>
-  <li><a href="#s39185199">3. 时序差分学习（TD） 必考</a></li>
-  <li><a href="#s33450530">4. SARSA —— 在线策略TD控制算法 重点</a></li>
-  <li><a href="#s58638886">5. Q-Learning —— 离线策略TD控制算法 必考</a></li>
-  <li><a href="#s73030591">6. Double Q-Learning 高频</a></li>
-  <li><a href="#s40230283">7. 基于重要性采样的多步离线学习法 了解</a></li>
-<li><a href="#s23405406">五、模型与规划</a></li>
-  <li><a href="#s61336852">1. 基本概念 了解</a></li>
-<li><a href="#s32833146">规划与学习</a></li>
-  <li><a href="#s77702596">规划空间的规划</a></li>
-  <li><a href="#s81419176">规划与学习的区别与联系</a></li>
-  <li><a href="#s24241144">Dyna —— 基于模型的算法</a></li>
-  <li><a href="#s64689319">规划之采样方法</a></li>
-  <li><a href="#s84354036">蒙特卡洛树搜索</a></li>
-<li><a href="#s86400757">近似解决方法</a></li>
-  <li><a href="#s11896285">价值函数近似</a></li>
-  <li><a href="#s13299612">参数化策略（REINFORCE）</a></li>
-  <li><a href="#s61969215">近似带 baseline 的 MC 策略梯度</a></li>
-  <li><a href="#s65633619">Actor-Critic 网络（AC）</a></li>
-<li><a href="#s81367790">深度强化学习分类</a></li>
-  <li><a href="#s44092255">DQN（深度Q网络）</a></li>
-  <li><a href="#s28104870">DQN 相关改进</a></li>
-  <li><a href="#s74205769">DDPG（Deep Deterministic Policy Gradient）</a></li>
-  <li><a href="#s15752031">TRPO 与 PPO</a></li>
-<li><a href="#s53507175">前沿技术</a></li>
-<li><a href="#s10794190">强化学习的基本概念</a></li>
-  <li><a href="#s44025808">强化学习与机器学习</a></li>
-  <li><a href="#s71461940">马尔可夫决策过程（MDP）</a></li>
-  <li><a href="#s76735018">强化学习概述</a></li>
-  <li><a href="#s18059661">强化学习系统要素</a></li>
-  <li><a href="#s41460984">贝尔曼方程</a></li>
-  <li><a href="#s72530815">多臂老虎机</a></li>
-<li><a href="#s55645217">多臂老虎机基础 必考</a></li>
-  <li><a href="#s29065794">动作价值与增量式求解</a></li>
-  <li><a href="#s64821815">贪婪策略与伪代码</a></li>
-<li><a href="#s36350475">探索与利用 重点</a></li>
-  <li><a href="#s15855157">基本概念</a></li>
-  <li><a href="#s43126731">贪婪算法及其变种</a></li>
-  <li><a href="#s63967526">乐观初始化 高频</a></li>
-  <li><a href="#s81854006">上置信界（UCB） 重点</a></li>
-  <li><a href="#s85625522">Thompson Sampling 方法 了解</a></li>
-<li><a href="#s43797957">贝尔曼方程 必考</a></li>
-  <li><a href="#s49799061">价值函数的贝尔曼方程</a></li>
-  <li><a href="#s95816980">贝尔曼期望方程的分解</a></li>
-<li><a href="#s13500567">蒙特卡洛 重点</a></li>
-  <li><a href="#s36089575">离线策略增量式MC策略评估</a></li>
-  <li><a href="#s42112272">离线策略增量式MC策略控制</a></li>
-<li><a href="#s53064605">时序差分学习 了解</a></li>
-  <li><a href="#s75360639">基于值函数的强化学习</a></li>
-<li><a href="#s68938534">章节总结与课程目录</a></li>
-  <li><a href="#s63044532">核心知识点回顾</a></li>
-  <li><a href="#s79449187">课程目录与示例数据</a></li>
-<li><a href="#s32362864">值函数与最优策略</a></li>
-  <li><a href="#s28546625">最优策略</a></li>
-<li><a href="#s66050714">模型无关的强化学习</a></li>
-  <li><a href="#s25673435">蒙特卡洛算法 重点</a></li>
-<li><a href="#s14760319">时序差分 必考</a></li>
-  <li><a href="#s23774579">蒙特卡洛算法与时序差分学习对比</a></li>
-  <li><a href="#s46617737">Tabular TD(0) for estimating $v_{\pi}$</a></li>
-<li><a href="#s67284053">多步时序差分学习与强化学习控制算法</a></li>
-  <li><a href="#s10398697">一、多步时序差分学习</a></li>
-  <li><a href="#s44003409">二、平均n步累计奖励的TD(λ)算法 重点</a></li>
-  <li><a href="#s22409983">三、SARSA：在线策略TD控制算法 必考</a></li>
-  <li><a href="#s66613140">四、Q-learning：离线策略TD控制算法 必考</a></li>
-  <li><a href="#s81178738">五、Double Q-Learning 高频</a></li>
-  <li><a href="#s47479190">六、基于重要性采样的多步离线学习法 重点</a></li>
-<li><a href="#s47948043">Q-learning与重要性采样</a></li>
-  <li><a href="#s42096869">Q-learning伪代码</a></li>
-  <li><a href="#s75336637">悬崖行走的例子</a></li>
-<li><a href="#s67132334">Double Q-Learning</a></li>
-  <li><a href="#s74303080">最大化偏差</a></li>
-  <li><a href="#s15968780">最大化偏差例子</a></li>
-  <li><a href="#s26350384">Double Q-Learning算法</a></li>
-  <li><a href="#s50225237">Double Q-learning伪代码</a></li>
-<li><a href="#s23069688">基于重要性采样的多步离线学习法 (n-step Off-policy Learning)</a></li>
-  <li><a href="#s45918681">重要性采样</a></li>
-  <li><a href="#s52029433">算法伪代码</a></li>
-<li><a href="#s28107685">多步树回溯算法 (n-step Tree Backup Algorithm)</a></li>
-  <li><a href="#s53923563">n步目标计算</a></li>
-  <li><a href="#s52029433">算法伪代码</a></li>
-<li><a href="#s19618255">模型与规划</a></li>
-  <li><a href="#s84803582">模型</a></li>
-  <li><a href="#s10077387">规划</a></li>
-  <li><a href="#s32833146">规划与学习</a></li>
-<li><a href="#s52708747">Dyna</a></li>
-  <li><a href="#s52029433">算法伪代码</a></li>
-  <li><a href="#s41627552">迷宫的例子</a></li>
-  <li><a href="#s77217959">环境中途发生改变怎么办？</a></li>
-<li><a href="#s53526668">规划之优先级采样</a></li>
-  <li><a href="#s56968177">规划过程中的采样方法</a></li>
-<li><a href="#s64689319">规划之采样方法</a></li>
-  <li><a href="#s39860865">期望更新与采样更新</a></li>
-  <li><a href="#s46081310">轨迹采样</a></li>
-<li><a href="#s27918759">实时动态规划</a></li>
-  <li><a href="#s19511452">跑道问题</a></li>
-<li><a href="#s19871089">蒙特卡洛树搜索 (Monte Carlo Tree Search, MCTS)</a></li>
-  <li><a href="#s81434690">Rollout 算法</a></li>
-  <li><a href="#s73763994">决策时规划</a></li>
-  <li><a href="#s58705585">Rollout 算法加速方法：并行、剪枝</a></li>
-  <li><a href="#s19611864">MCTS 算
-
-Dyna 框架
-1. Dyna：集成规划、行动和学习</a></li>
-  <li><a href="#s55504317">1.3 环境发生改变时的处理：Dyna-Q+</a></li>
-<li><a href="#s55768292">2. 规划之优先级采样</a></li>
-  <li><a href="#s62549051">2.1 优先级采样</a></li>
-  <li><a href="#s71936645">2.2 确定性环境下的优先级扫描算法</a></li>
-  <li><a href="#s58765759">2.3 迷宫的例子</a></li>
-<li><a href="#s80433993">3. 规划之采样方法</a></li>
-  <li><a href="#s71576546">3.1 期望更新与采样更新</a></li>
-  <li><a href="#s41203320">3.2 轨迹采样</a></li>
-<li><a href="#s18618654">4. 实时动态规划</a></li>
-  <li><a href="#s17365761">4.1 跑道问题</a></li>
-  <li><a href="#s30189111">4.2 DP 与 RTDP 对比</a></li>
-<li><a href="#s84354036">蒙特卡洛树搜索</a></li>
-  <li><a href="#s73763994">决策时规划</a></li>
-  <li><a href="#s13171499">Rollout算法</a></li>
-<li><a href="#s44888550">核心直觉与策略梯度基础 必考</a></li>
-  <li><a href="#s26207156">策略的价值期望</a></li>
-  <li><a href="#s17534175">似然比（Likelihood Ratio）</a></li>
-<li><a href="#s66225093">Softmax随机策略与MC策略梯度 重点</a></li>
-  <li><a href="#s69577736">Softmax策略</a></li>
-  <li><a href="#s64382930">蒙特卡洛策略梯度（REINFORCE）</a></li>
-<li><a href="#s75681459">近似带Baseline的MC策略梯度 高频</a></li>
-  <li><a href="#s43945596">带baseline的策略梯度公式</a></li>
-  <li><a href="#s31739927">REINFORCE with baseline 伪代码</a></li>
-  <li><a href="#s51235044">短走廊网格示例</a></li>
-<li><a href="#s74786570">Actor-Critic网络（AC） 必考</a></li>
-  <li><a href="#s68439546">REINFORCE 存在的问题</a></li>
-  <li><a href="#s18236604">演员和评论家</a></li>
-  <li><a href="#s32653900">Actor-Critic 训练</a></li>
-  <li><a href="#s64867189">One-step Actor-Critic 伪代码</a></li>
-<li><a href="#s82091642">A3C（Asynchronous Advantage Actor Critic） 重点</a></li>
-  <li><a href="#s63206729">优势Actor-Critic（A2C）</a></li>
-  <li><a href="#s63030652">A3C 简介</a></li>
-<li><a href="#s72895714">A3C: Asynchronous advantage actor-critic 重点</a></li>
-  <li><a href="#s79983682">A3C 对比实验 了解</a></li>
-<li><a href="#s33172364">深度Q网络（DQN） 必考</a></li>
-  <li><a href="#s83444300">深度强化学习的分类</a></li>
-  <li><a href="#s59300015">DQN基础与相关迭代算法</a></li>
-  <li><a href="#s68467156">DQN关键技术</a></li>
-  <li><a href="#s56129416">DQN算法流程与伪代码</a></li>
-<li><a href="#s55958471">DQN 的改进方法 高频</a></li>
-  <li><a href="#s31242007">Q-learning 中的过估计问题与 Double DQN</a></li>
-  <li><a href="#s92050775">Dueling DQN</a></li>
-  <li><a href="#s70177460">优先经验回放（Prioritized Experience Replay，PER）</a></li>
-<li><a href="#s28339883">多种强化学习算法的性能对比：Rainbow 了解</a></li>
-<li><a href="#s12644970">深度确定性策略梯度（DDPG, Deep Deterministic Policy Gradient） 重点</a></li>
-  <li><a href="#s56028988">随机策略与确定性策略</a></li>
-  <li><a href="#s89829365">确定性策略梯度定理</a></li>
-  <li><a href="#s34757450">DDPG的改进与模块框架</a></li>
-<li><a href="#s83124051">确定性策略梯度实验效果</a></li>
-<li><a href="#s32419267">信赖域策略优化 (TRPO, Trust Region Policy Optimization)</a></li>
-  <li><a href="#s74209422">策略梯度的缺点 必考</a></li>
-  <li><a href="#s85868089">信任区域</a></li>
-  <li><a href="#s53197334">TRPO 优化公式 重点</a></li>
-  <li><a href="#s91506744">TRPO 的近似求解</a></li>
-  <li><a href="#s57657932">TRPO 算法（On-Policy）伪代码</a></li>
-<li><a href="#s40835521">深度确定性策略梯度 (DDPG)</a></li>
-  <li><a href="#s75387721">算法概述 必考</a></li>
-  <li><a href="#s25370245">网络结构与功能</a></li>
-  <li><a href="#s13884200">DQN与DDPG目标函数对比 重点</a></li>
-  <li><a href="#s84458013">模块框架与伪代码</a></li>
-<li><a href="#s37096684">近端策略优化（PPO, Proximal Policy Optimization）</a></li>
-  <li><a href="#s28156480">TRPO的不足与PPO概述 高频</a></li>
-  <li><a href="#s90633767">PPO-惩罚</a></li>
-  <li><a href="#s47734447">PPO-截断 必考</a></li>
-<li><a href="#s40065994">近似算法演进关系</a></li>
-  <li><a href="#s87825356">基于价值的近似算法</a></li>
-  <li><a href="#s44595425">基于策略的近似算法</a></li>
-<li><a href="#s46274052">第三章节总结</a></li>
-<li><a href="#s76195788">模仿学习</a></li>
-  <li><a href="#s35937691">模仿学习概述 了解</a></li>
-<li><a href="#s76195788">模仿学习</a></li>
-  <li><a href="#s90309006">行为克隆 必考</a></li>
-  <li><a href="#s49865027">数据集聚合 重点</a></li>
-  <li><a href="#s60921052">模仿学习的分类 了解</a></li>
-<li><a href="#s86781807">逆向强化学习</a></li>
-  <li><a href="#s27907755">IRL定义 必考</a></li>
-  <li><a href="#s53680600">IRL方法结构 高频</a></li>
-  <li><a href="#s70212434">强化学习与逆向强化学习的区别 重点</a></li>
-  <li><a href="#s29129818">IRL的局限性 了解</a></li>
-<li><a href="#s19020020">生成对抗模仿学习</a></li>
-  <li><a href="#s37298247">判别器结构 高频</a></li>
-  <li><a href="#s33036546">GAIL的特点 重点</a></li>
-  <li><a href="#s80468729">GAIL的核心思想 必考</a></li>
-<li><a href="#s43013475">离线强化学习</a></li>
-  <li><a href="#s59133519">动机 了解</a></li>
-  <li><a href="#s34327625">离线强化学习定义 必考</a></li>
-  <li><a href="#s10853540">在线/离线（策略）强化学习的区别 重点</a></li>
-  <li><a href="#s30165573">离线强化学习的优势 高频</a></li>
-  <li><a href="#s59405207">离线强化学习的挑战 必考</a></li>
-  <li><a href="#s82308029">方法分类 了解</a></li>
-<li><a href="#s51829721">逆强化学习与模仿学习</a></li>
-  <li><a href="#s40940513">逆强化学习 (IRL)</a></li>
-  <li><a href="#s75448042">生成对抗模仿学习 (GAIL)</a></li>
-  <li><a href="#s43013475">离线强化学习</a></li>
-<li><a href="#s45830757">离线强化学习：BCQ与CQL算法详解</a></li>
-  <li><a href="#s46566200">批量限制Q学习（BCQ） 必考</a></li>
-  <li><a href="#s40521688">保守Q学习（CQL） 重点</a></li>
-<li><a href="#s34443278">策略提升与保守策略评估 必考</a></li>
-  <li><a href="#s58706453">策略提升</a></li>
-  <li><a href="#s20417091">保守策略评估 重点</a></li>
-  <li><a href="#s32232573">改进的保守策略评估 高频</a></li>
-  <li><a href="#s64028703">CQL算法伪代码 了解</a></li>
-<li><a href="#s23479367">第四章总结 必考</a></li>
-<li><a href="#s73345237">课程目录 了解</a></li>
-<li><a href="#s69881071">应用案例 Case 1: 光传送强化学习算路 高频</a></li>
-  <li><a href="#s90586113">问题背景与动机</a></li>
-  <li><a href="#s23983306">问题分析</a></li>
-  <li><a href="#s97342020">问题建模</a></li>
-  <li><a href="#s88391355">求解过程</a></li>
-  <li><a href="#s53582920">业务示例：OTN业务权重 $(w_1, ..., w_9)$</a></li>
-  <li><a href="#s21409372">关键技术1：CH算法加速 重点</a></li>
-  <li><a href="#s29405260">关键技术2：强化学习优化CH算法 重点</a></li>
-<li><a href="#s15328487">应用案例 Case 2: WLAN AI漫游 高频</a></li>
-  <li><a href="#s31865891">背景</a></li>
-  <li><a href="#s68673622">漫游过程</a></li>
-  <li><a href="#s40361418">问题分析与建模</a></li>
-  <li><a href="#s59620280">问题求解</a></li>
-<li><a href="#s64285292">应用案例 Case 3: 4T波束优化 高频</a></li>
-  <li><a href="#s17911910">背景与挑战</a></li>
-  <li><a href="#s59693489">系统架构与波束赋形</a></li>
-  <li><a href="#s97342020">问题建模</a></li>
-  <li><a href="#s88391355">求解过程</a></li>
-<li><a href="#s84892813">应用案例 Case 4: 基于深度强化学习的复杂移动网络参数优化 重点</a></li>
-  <li><a href="#s35739780">问题背景与技术挑战</a></li>
-  <li><a href="#s37999787">基于DRL的大规模复杂网络参数优化</a></li>
-  <li><a href="#s97342020">问题建模</a></li>
-  <li><a href="#s88391355">求解过程</a></li>
-<li><a href="#s29394671">论文与文档信息 了解</a></li>
-  <li><a href="#s31134566">论文引用信息</a></li>
-<li><a href="#s49809794">企业愿景与版权声明 了解</a></li>
-  <li><a href="#s17930323">华为愿景</a></li>
-  <li><a href="#s22632170">版权与免责声明</a></li>
-</ul>
-</div><div class="epa-main">
+<div id="epa-tabs" class="no-print"><button class="tab-btn active" data-tab="kn">📖 知识清单</button><button class="tab-btn" data-tab="test">📝 章节测试</button></div><div id="panel-kn" class="tab-panel active"><div class="epa-main">
 <h2 id="s52053759">一、基本概念</h2>
 
 <h3 id="s61434321">1. 强化学习与机器学习 <span class="tag-key">重点</span></h3>
@@ -513,17 +242,17 @@ Dyna 框架
 
 <h3 id="s34240417">3. 马尔科夫决策过程（MDP） <span class="tag-must">必考</span></h3>
 
-<h4>3.1 随机过程与马尔科夫性</h4>
+<h4 id="sec-auto-1">3.1 随机过程与马尔科夫性</h4>
 <p><span class="kp">随机过程</span>：是一个或多个事件、随机系统或者随机现象随时间发生演变的过程，研究动态随机现象的统计规律，如布朗运动、天气变化、股市变化。</p>
 <p><span class="kp">马尔科夫性</span>：当处于状态 $S_t$ 时，下一时刻的状态 $S_{t+1}$ 可以由当前状态决定，而不需要考虑历史状态。未来独立于过去，仅仅与现在有关，当前状态是未来的充分统计量。公式表示：$P[S_{t+1}|S_t] = P[S_{t+1}|S_1, ..., S_t]$</p>
 <div class="tldr">马尔科夫性的核心是“未来独立于过去，仅仅与现在有关”，当前状态是未来的充分统计量。</div>
 
-<h4>3.2 马尔科夫过程</h4>
+<h4 id="sec-auto-2">3.2 马尔科夫过程</h4>
 <p><span class="kp">马尔科夫过程</span>（Markov Process, MP）也称为马尔科夫链，具有马尔可夫性质的随机过程。可以由元组 $(S, P)$ 表示：</p>
 <p>$S$ 是一个有限的状态集合。</p>
 <p>$P$ 是状态转移概率矩阵，$P_{ss'} = P[S_{t+1} = s' | S_t = s]$。</p>
 
-<h4>3.3 马尔科夫决策过程</h4>
+<h4 id="sec-auto-3">3.3 马尔科夫决策过程</h4>
 <p><span class="kp">马尔科夫决策过程</span>（Markov Decision Process, MDP）提供了一套为在结果部分随机、部分在决策者的控制下的决策过程建模的数学框架，形式化地描述了一种强化学习的环境，环境完全可观测。可以由五元组 $(S, A, P, R, \gamma)$ 表示：</p>
 <p>$S$：有限的状态集合。</p>
 <p>$A$：有限的动作集合。</p>
@@ -531,11 +260,11 @@ Dyna 框架
 <p>$R$：奖励函数，$R_s^a = E[R_{t+1} | S_t = s, A_t = a]$。</p>
 <p>$\gamma$：折扣因子，$\gamma \in [0, 1]$，体现了未来的奖励在当前时刻的价值比例。</p>
 
-<h4>3.4 总回报与MDP动态过程</h4>
+<h4 id="sec-auto-4">3.4 总回报与MDP动态过程</h4>
 <p>MDP的动态过程：从状态 $s_0$ 开始，智能体选择动作 $a_0 \in A$，得到奖励 $r(s_0, a_0)$，MDP随机转移到下一个状态 $s_1 = P_{s_0, s_1}^{a_0}$。过程不断进行直到终止状态或无止境进行。</p>
 <p>智能体的总回报 $G$ 为：$G = R(s_0, a_0) + \gamma R(s_1, a_1) + \gamma^2 R(s_2, a_2) + ...$</p>
 
-<h4>3.5 学生上课示例 <span class="tag-info">了解</span></h4>
+<h4 id="sec-auto-5">3.5 学生上课示例 <span class="tag-info">了解</span></h4>
 <p>假设下午只有三节课，Sleep是一个最终状态。通过不同状态链计算总回报（如 $\gamma = 0.5$ 时的计算），展示折扣因子对未来奖励的影响。</p>
 
 <h3 id="s22655114">4. 强化学习基本概念 <span class="tag-key">重点</span></h3>
@@ -1101,11 +830,11 @@ Initialize Q_1(s, a) and Q_2(s, a) arbitrarily, for all s ∈ S⁺, a ∈ A(s), 
 <p>针对离线策略学习，由于收集数据的行为策略和需要实际优化的目标策略并不是同一个策略，需要加上一项修正（以值函数为例）：</p>
 <p>$$\Delta V' = \frac{\pi(a_t|s_t)}{b(a_t|s_t)} \Delta V$$</p>
 
-<h4>对于状态值函数 V</h4>
+<h4 id="sec-auto-6">对于状态值函数 V</h4>
 <p>$$V_{t+n}(S_t) \doteq V_{t+n-1}(S_t) + \alpha \rho_{t:t+n-1} [G_{t:t+n} - V_{t+n-1}(S_t)]$$</p>
 <p>$$\rho_{t:h} \doteq \prod_{k=t}^{\min(h,T-1)} \frac{\pi(A_k|S_k)}{b(A_k|S_k)}$$</p>
 
-<h4>对于动作值函数 Q</h4>
+<h4 id="sec-auto-7">对于动作值函数 Q</h4>
 <p>$$Q_{t+n}(S_t, A_t) \doteq Q_{t+n-1}(S_t, A_t) + \alpha \rho_{t+1:t+n} [G_{t:t+n} - Q_{t+n-1}(S_t, A_t)]$$</p>
 <p>$$\rho_{t:h} \doteq \prod_{k=t}^{\min(h,T-1)} \frac{\pi(A_k|S_k)}{b(A_k|S_k)}$$</p>
 
@@ -1208,7 +937,7 @@ All store and access operations can take their index mod n + 1</p>
 <li>$s', r$：下一个状态和奖励</li>
 </ul>
 
-<h4>模型的分类</h4>
+<h4 id="sec-auto-8">模型的分类</h4>
 <ul>
 <li><span class="kp">分布模型</span>：描述了轨迹的所有可能性及其概率。</li>
 <li><span class="kp">样本模型</span>：根据概率进行采样，只产生一条可能的轨迹。</li>
@@ -1223,18 +952,18 @@ All store and access operations can take their index mod n + 1</p>
 <p><span class="kp">规划</span>：输入一个模型，输出一个策略的搜索过程。</p>
 <p>模型 $\xrightarrow{\text{规划}}$ 策略</p>
 
-<h4>规划的分类</h4>
+<h4 id="sec-auto-9">规划的分类</h4>
 <ul>
 <li><span class="kp">状态空间的规划</span>：在状态空间搜索最佳策略。</li>
 <li><span class="kp">规划空间的规划</span>：在规划空间搜索最佳策略，包括遗传算法和偏序规划。一个规划就是一个动作集合以及动作顺序的约束。</li>
 </ul>
 
-<h4>规划在强化学习中的应用框架</h4>
+<h4 id="sec-auto-10">规划在强化学习中的应用框架</h4>
 <p>通过模型采样得到模拟数据，利用模拟数据更新值函数从而改进策略：</p>
 <p>模型 $\xrightarrow{\text{采样}}$ 模拟经验 $\xrightarrow{\text{回溯}}$ 值函数 $\xrightarrow{\text{规划}}$ 策略</p>
 <p>如动态规划算法，搜索整个状态空间，生成所有的状态转移分布，状态转移分布回溯更新状态的值函数。RL使用规划的好处是，任何时间点可以被打断或者重定向，在复杂问题下，进行小而且增量式的时间步规划是很有效的。</p>
 
-<h4>Random-sample one-step tabular Q-planning</h4>
+<h4 id="sec-auto-11">Random-sample one-step tabular Q-planning</h4>
 <p>将Q-learning和planning结合：</p>
 <p>Loop forever:<br>
 1. Select a state, S ∈ S, and an action, A ∈ A(S), at random<br>
@@ -1243,12 +972,12 @@ All store and access operations can take their index mod n + 1</p>
 &nbsp;&nbsp;&nbsp;Q(S, A) ← Q(S, A) + α [ R + γ max_a Q(S', a) - Q(S, A) ]</p>
 
 <h3 id="s32833146">规划与学习</h3>
-<h4>不同点</h4>
+<h4 id="sec-auto-12">不同点</h4>
 <ul>
 <li><strong>规划</strong>：利用模型产生的模拟经验。</li>
 <li><strong>学习</strong>：利用环境产生的真实经验。</li>
 </ul>
-<h4>相同点</h4>
+<h4 id="sec-auto-13">相同点</h4>
 <p>通过回溯更新值函数的估计。统一来看，学习的方法可以用在模拟经验上。</p>
 
 <h2 id="s52708747">Dyna</h2>
@@ -1324,7 +1053,7 @@ All store and access operations can take their index mod n + 1</p>
 </li>
 </ol>
 
-<h4>迷宫的例子</h4>
+<h4 id="sec-auto-14">迷宫的例子</h4>
 <ul>
 <li>横轴代表格子世界的大小</li>
 <li>纵轴代表收敛到最优策略的更新次数</li>
@@ -1341,7 +1070,7 @@ All store and access operations can take their index mod n + 1</p>
 </ul>
 <p><span class="kp">期望更新</span>：需要分布模型，计算量更大，但无偏差、更准确。</p>
 <p><span class="kp">采样更新</span>：按照 π 进行采样，只需要采样模型，计算量需求更低，但受采样误差影响。</p>
-<h4>不同分支因子下的表现</h4>
+<h4 id="sec-auto-15">不同分支因子下的表现</h4>
 <ul>
 <li>b 表示当前状态有 b 个后续或前序状态</li>
 <li>初始估计误差为 1</li>
@@ -1390,8 +1119,8 @@ All store and access operations can take their index mod n + 1</p>
 
 <h3 id="s19611864">MCTS 算
 
-<h2>Dyna 框架</h2>
-<h3>1. Dyna：集成规划、行动和学习</h3>
+<h2 id="sec-auto-16">Dyna 框架</h2>
+<h3 id="sec-auto-17">1. Dyna：集成规划、行动和学习</h3>
 <p><span class="kp">Dyna框架</span>将规划、行动和学习集成于一体，其核心组件和流程如下：</p>
 <ul>
 <li><span class="kp">直接强化学习更新</span>：Agent与环境交互产生真实经验，直接更新值函数和策略。</li>
@@ -2331,14 +2060,14 @@ end for
 <p>文档中的信息可能包含预测性声明，包括但不限于关于未来财务和经营业绩、未来产品组合、新技术等方面的声明。</p>
 <div class="tldr">免责声明的核心要点：此类信息仅供参考，不构成要约或承诺。由于多种因素，实际结果可能与预测性声明存在重大差异。华为可能随时更改信息，恕不另行通知。</div>
 
-<div class="checkpoint">华为的企业愿景是什么？<details class="cp-answer"><summary>参考答案</summary>把数字世界带入每个人、每个家庭、每个组织，构建万物互联的智能世界。</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center">章节测试</h2>
+<div class="checkpoint">华为的企业愿景是什么？<details class="cp-answer"><summary>参考答案</summary>把数字世界带入每个人、每个家庭、每个组织，构建万物互联的智能世界。</details></div></div></div><div id="panel-test" class="tab-panel"><h2 style="text-align:center" id="sec-auto-18">章节测试</h2>
 <p style="text-align:center;color:var(--ink-light);font-size:0.95em">400题 · 满分2188分</p>
 
 <div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
 <div id="questions-container"></div>
 <div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
 <div class="save-bar no-print"><button onclick="saveForGrading()">🤖 AI一键批改</button></div>
-<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3>📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
+<div id="epa-grade-modal"><div class="epa-grade-dialog"><h3 id="sec-auto-19">📋 AI批改任务已生成</h3><p>答案已下载为 JSON 文件（通常在<strong>下载</strong>文件夹）。将以下命令发送给 Claude Code EPA skill，AI 会自动批改并生成报告：</p><div class="epa-grade-cmd" id="epa-grade-cmd-text">/exampass grade "&lt;路径&gt;"</div><p style="font-size:0.85em;color:#999;margin:0 0 14px">将 &lt;路径&gt; 替换为刚下载的 JSON 文件的完整路径。</p><div class="epa-grade-dialog-btns"><button class="btn-copy" id="epa-grade-copy-btn" onclick="__epaCopyGradeCmd()">复制命令</button><button class="btn-close-modal" onclick="__epaCloseGradeModal()">关闭</button></div></div></div></div>
 
 
 <script>
@@ -2450,7 +2179,7 @@ function build() {
     var q = Q[i];
     if (q.type !== sec) {
       sec = q.type;
-      if (titles[q.type]) h += '<h3>' + titles[q.type] + '</h3>';
+      if (titles[q.type]) h += '<h3 id="sec-auto-20">' + titles[q.type] + '</h3>';
     }
 
     var qid = 'q' + i;
